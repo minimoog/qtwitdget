@@ -1,0 +1,118 @@
+<ui version="4.0" >
+ <class>LangChangeDialogForm</class>
+ <widget class="QDialog" name="LangChangeDialogForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>203</width>
+    <height>125</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Change Language</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Languages</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" >
+       <widget class="QRadioButton" name="enButton" >
+        <property name="text" >
+         <string>English</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="mkButton" >
+        <property name="text" >
+         <string>Macedonian</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <spacer name="horizontalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>99</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QPushButton" name="okButton" >
+     <property name="text" >
+      <string>OK</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>enButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>LangChangeDialogForm</receiver>
+   <slot>languageChanged()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>45</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>5</x>
+     <y>48</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mkButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>LangChangeDialogForm</receiver>
+   <slot>languageChanged()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>32</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>199</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>LangChangeDialogForm</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>155</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>75</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>languageChanged()</slot>
+ </slots>
+</ui>
