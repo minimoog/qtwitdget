@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>709</height>
+    <width>443</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,34 +24,13 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>430</width>
-        <height>707</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <property name="margin">
-        <number>1</number>
-       </property>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>

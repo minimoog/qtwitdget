@@ -69,8 +69,6 @@ private:
 	QList<QTwitStatus> m_statuses;
 
 	int m_statusWidgetsPerPage;
-	
-	void setupStatusWidgets();
 };
 
 #endif //QTWITDGET_H

@@ -30,9 +30,6 @@ QTwitdget::QTwitdget(QWidget *parent)
 	ui.setupUi(this);
 	
 	m_statusWidgetsPerPage = 20; //should be programmable
-
-	//set StatusWidgets
-	setupStatusWidgets();
 }
 
 void QTwitdget::setImageDownloader(ImageDownloader *imgDown)
@@ -54,11 +51,6 @@ void QTwitdget::setStatuses(const QList<QTwitStatus>& statuses)
 void QTwitdget::setUserid(int id)
 {
 	m_userid = id;
-}
-
-void QTwitdget::setupStatusWidgets()
-{
-	ui.scrollAreaWidgetContents->adjustSize();
 }
 
 void QTwitdget::updateStatusWidgets()
