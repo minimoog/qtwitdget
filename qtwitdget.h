@@ -24,7 +24,6 @@
 #include <QWidget>
 #include "ui_qtwitdget.h"
 #include "imagedownloader.h"
-#include "statuswidget.h"
 
 class QTwitStatus;
 
@@ -64,8 +63,6 @@ private slots:
 private:
 	Ui::QTwitdgetForm ui;
 	int m_userid; //user id
-
-	QList<StatusWidget *> m_statusWidgets;
 
 	ImageDownloader *m_imageDownloader;
 

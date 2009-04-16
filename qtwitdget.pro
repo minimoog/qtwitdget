@@ -7,8 +7,7 @@ QT += network xml sql
 
 win32:LIBS += libeay32.lib
 
-HEADERS +=  statuswidget.h \
-			imagedownloader.h \
+HEADERS +=  imagedownloader.h \
 			texteditwithlimit.h \
 			shortenedurl.h \
 			mainwindow.h \
@@ -31,7 +30,6 @@ HEADERS +=  statuswidget.h \
 			oauth/oauthtwitter.h 
 			
 SOURCES +=  main.cpp \
-			statuswidget.cpp \
 			imagedownloader.cpp \
 			texteditwithlimit.cpp \
 			shortenedurl.cpp \
@@ -51,7 +49,6 @@ SOURCES +=  main.cpp \
 			oauth/oauthtwitter.cpp 
 			
 FORMS += 	forms/qtwitdget.ui \
-			forms/statusform.ui \
 			forms/mainwindowform.ui \
 			forms/langchangedialogform.ui
 			

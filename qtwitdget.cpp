@@ -58,53 +58,12 @@ void QTwitdget::setUserid(int id)
 
 void QTwitdget::setupStatusWidgets()
 {
-	for(int i = 0; i < m_statusWidgetsPerPage; ++i){
-		StatusWidget *sw = new StatusWidget(ui.scrollAreaWidgetContents);
-		ui.verticalLayout->addWidget(sw);
-		m_statusWidgets.append(sw);
-		connect(sw, SIGNAL(replyRequest(const QString&, int)), SIGNAL(requestReplyStatus(const QString&, int)));
-		connect(sw, SIGNAL(deleteRequest(int)), SIGNAL(requestDeleteStatus(int)));
-	}
-
 	ui.scrollAreaWidgetContents->adjustSize();
 }
 
 void QTwitdget::updateStatusWidgets()
 {
 	QList<QUrl> urlsImages;
-
-	QListIterator<QTwitStatus> iterStatus(m_statuses);
-	QListIterator<StatusWidget *> iterWidget(m_statusWidgets);
-	while(iterWidget.hasNext()){
-		StatusWidget* sw = iterWidget.next();
-
-		if(iterStatus.hasNext()){
-			QTwitStatus ts = iterStatus.next();
-			sw->setCreated(ts.created());
-			sw->setStatusId(ts.id());
-			sw->setText(ts.text());
-			sw->setScreenName(ts.screenName());
-			sw->setSource(ts.source());
-			sw->setEnabledReplyDeleteButton(true);
-			urlsImages << ts.profileImageUrl();
-
-			if(ts.userId() == m_userid){
-				sw->setUserOwnStatus(true);
-			} else {
-				sw->setUserOwnStatus(false);
-			}
-
-		} else {
-			sw->setCreated(QDateTime());
-			sw->setStatusId(0);
-			sw->setText(QString());
-			sw->setScreenName(QString());
-			sw->setSource(QString());
-			sw->setProfileImagePixmap(QPixmap());
-			sw->setUserOwnStatus(false);
-			sw->setEnabledReplyDeleteButton(false);
-		}
-	}
 
 	if(!urlsImages.isEmpty())
 		if(m_imageDownloader)
@@ -115,14 +74,11 @@ void QTwitdget::finishedDownloadImages()
 {
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 
-	QListIterator<StatusWidget *> iterWidget(m_statusWidgets);
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
 
 	while(iterStatus.hasNext()){
 		QTwitStatus ts = iterStatus.next();
-		StatusWidget *sw = iterWidget.next();
 		QImage img = images.value(ts.profileImageUrl());
-		sw->setProfileImagePixmap(QPixmap::fromImage(img));
 	}
 }
 
