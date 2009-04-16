@@ -154,7 +154,7 @@ QString ImageDownloader::decodeUrlToFilename(const QUrl &url)
 
 void ImageDownloader::resolveHomeAppPath()
 {
-	//QCoreApplication::setOrganizationName("QTwitdget");
+	QCoreApplication::setOrganizationName("QTwitdget");
 	homeAppImagesPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
 
 	//make directory if doesn't exist

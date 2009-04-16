@@ -22,6 +22,7 @@
 #define QTWITDGET_H
 
 #include <QWidget>
+#include <QGraphicsScene>
 #include "ui_qtwitdget.h"
 #include "imagedownloader.h"
 
@@ -56,6 +57,7 @@ signals:
 
 protected:
 	void changeEvent(QEvent *e);
+	void resizeEvent(QResizeEvent *e);
 	
 private slots:
 	void finishedDownloadImages();
@@ -69,6 +71,8 @@ private:
 	QList<QTwitStatus> m_statuses;
 
 	int m_statusWidgetsPerPage;
+
+	QGraphicsScene* m_graphicsScene;
 };
 
 #endif //QTWITDGET_H
