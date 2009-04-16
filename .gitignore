@@ -1,0 +1,10 @@
+*.vcproj
+*.ncb
+*.sln
+*.suo
+*.user
+*.idb
+*.pdb
+ui_*.h
+debug/*
+release/*
