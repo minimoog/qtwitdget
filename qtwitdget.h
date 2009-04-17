@@ -71,8 +71,6 @@ private:
 
 	QList<QTwitStatus> m_statuses;
 
-	int m_statusWidgetsPerPage;
-
 	QGraphicsScene* m_graphicsScene;
 	QList<QGraphicsTextItem*> m_textItems;
 };

@@ -32,8 +32,6 @@ QTwitdget::QTwitdget(QWidget *parent)
 	ui.setupUi(this);
 	ui.graphicsView->setScene(m_graphicsScene);
 	m_graphicsScene->setSceneRect(0, 0, width(), height());
-
-	m_statusWidgetsPerPage = 20; //should be programmable
 }
 
 void QTwitdget::setImageDownloader(ImageDownloader *imgDown)
@@ -44,9 +42,6 @@ void QTwitdget::setImageDownloader(ImageDownloader *imgDown)
 
 void QTwitdget::setStatuses(const QList<QTwitStatus>& statuses)
 {
-	if(statuses.count() > m_statusWidgetsPerPage)
-		qDebug() << "More status per page";
-
 	m_statuses = statuses;
 
 	updateStatusWidgets();
