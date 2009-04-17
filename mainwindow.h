@@ -73,7 +73,6 @@ private:
 	void createTwitGroups();
 	void createTabs();
 	bool isDatabaseEmpty();
-	void refreshPages();
 
 	Ui::MainWindowForm ui;
 

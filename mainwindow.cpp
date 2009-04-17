@@ -150,7 +150,6 @@ void MainWindow::startUp()
 		}
 
 		createTwitGroups();
-		refreshPages();
 		createTabs();
 
 		ui.twitsWidget->setUserid(userId);
@@ -216,7 +215,6 @@ void MainWindow::finishedFriendsTimeline()
 		query.finish();
 
 		//update scrolling cursor
-		refreshPages();
 		showTab(ui.tabBar->currentIndex());
 	}
 }
@@ -227,7 +225,6 @@ void MainWindow::statusDestroyed(int id)
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
 
-	refreshPages();
 	showTab(ui.tabBar->currentIndex());
 }
 
@@ -371,41 +368,6 @@ void MainWindow::closeTab(int i)
 {
 	ui.tabBar->removeTab(i);
 	m_twitTabGroups.removeAt(i);
-}
-
-/*
- * Updates scrolling cursor
- * Call this when new status arrives
- */
-
-void MainWindow::refreshPages()
-{
-	QSqlQuery query;
-
-	QMutableListIterator<TwitTabGroup> iter(m_twitTabGroups);
-	while(iter.hasNext()){
-		TwitTabGroup tg = iter.next();
-
-		tg.setLastStatusOnPage(m_lastStatusId + 1);
-
-		for(int i = 0; i <= tg.page(); ++i){
-			QString qs = QString("SELECT id "
-				"FROM status "
-				"WHERE id < %1 %2 "
-				"ORDER BY id DESC "
-				"LIMIT 20;").arg(tg.lastStatusOnPage()).arg(tg.query());
-
-			query.exec(qs);
-
-			if(query.last())
-				tg.setLastStatusOnPage(query.value(0).toInt());
-		}
-
-		query.first();
-		tg.setFirstStatusOnPage(query.value(0).toInt());
-		
-		iter.setValue(tg);
-	}	
 }
 
 void MainWindow::loadStyleSheet()
