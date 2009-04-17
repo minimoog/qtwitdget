@@ -57,8 +57,6 @@ private slots:
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void languageChanged();
-	void forwardButtonClicked();
-	void backButtonClicked();
 	void loadStyleSheet();
 	void showTab(int i);
 	void closeTab(int i);

@@ -64,9 +64,7 @@ MainWindow::MainWindow()
 			m_twitUpdate, SLOT(setUpdate(const QString&, int)));
 	connect(m_twitDestroy, SIGNAL(destroyed(int)), SLOT(statusDestroyed(int)));
 	connect(ui.twitsWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
-	connect(ui.forwardButton, SIGNAL(clicked()), SLOT(forwardButtonClicked()));
-	connect(ui.backButton, SIGNAL(clicked()), SLOT(backButtonClicked()));
-
+	
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -327,98 +325,6 @@ bool MainWindow::isDatabaseEmpty()
 	}
 
 	return true;
-}
-
-void MainWindow::forwardButtonClicked()
-{
-	//based on: http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor
-	
-	TwitTabGroup tg = m_twitTabGroups.at(ui.tabBar->currentIndex());
-
-	QSqlQuery query;
-	QString sq = QString("SELECT created, id, text, screenName, profileImageUrl, source "
-		"FROM status "
-		"WHERE id < %1 %2"
-		"ORDER BY id DESC "
-		"LIMIT 20;").arg(tg.lastStatusOnPage()).arg(tg.query());
-
-	query.exec(sq);
-
-	m_statuses.clear();
-
-	while(query.next()){
-		QTwitStatus s;
-		s.setCreated(query.value(0).toDateTime());
-		s.setId(query.value(1).toInt());
-		s.setText(query.value(2).toString());
-		s.setScreenName(query.value(3).toString());
-		s.setProfileImageUrl(query.value(4).toString());
-		s.setSource(query.value(5).toString());
-		m_statuses.append(s);		
-	}
-
-	ui.twitsWidget->setStatuses(m_statuses);
-
-	query.last();
-	tg.setLastStatusOnPage(query.value(1).toInt());
-	query.first();
-	tg.setFirstStatusOnPage(query.value(1).toInt());
-
-	if(m_statuses.count() < 20)
-		ui.forwardButton->setEnabled(false);
-	else
-		ui.forwardButton->setEnabled(true);
-
-	ui.backButton->setEnabled(true);
-
-	tg.increasePage();
-
-	m_twitTabGroups.replace(ui.tabBar->currentIndex(), tg);
-}
-
-void MainWindow::backButtonClicked()
-{
-	//based on: http://www.sqlite.org/cvstrac/wiki?p=ScrollingCursor
-	
-	TwitTabGroup tg = m_twitTabGroups.at(ui.tabBar->currentIndex());
-
-	QSqlQuery query;
-	QString sq = QString("SELECT created, id, text, screenName, profileImageUrl, source "
-		"FROM status "
-		"WHERE id > %1 %2 "
-		"ORDER BY id "
-		"LIMIT 20;").arg(tg.firstStatusOnPage()).arg(tg.query());
-
-	query.exec(sq);
-
-	m_statuses.clear();
-
-	//query results are backwards
-	while(query.next()){
-		QTwitStatus s;
-		s.setCreated(query.value(0).toDateTime());
-		s.setId(query.value(1).toInt());
-		s.setText(query.value(2).toString());
-		s.setScreenName(query.value(3).toString());
-		s.setProfileImageUrl(query.value(4).toString());
-		s.setSource(query.value(5).toString());
-		m_statuses.prepend(s);
-	}
-
-	ui.twitsWidget->setStatuses(m_statuses);
-
-	query.last();
-	tg.setFirstStatusOnPage(query.value(1).toInt());
-	query.first();
-	tg.setLastStatusOnPage(query.value(1).toInt());
-
-	ui.forwardButton->setEnabled(true);
-
-	tg.decreasePage();
-	if(tg.page() == 0)
-		ui.backButton->setEnabled(false);
-
-	m_twitTabGroups.replace(ui.tabBar->currentIndex(), tg);
 }
 
 void MainWindow::showTab(int i)
