@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QGraphicsPixmapItem>
+#include <QScrollBar>
 #include <QResizeEvent>
 #include "qtwit/qtwitstatus.h"
 #include "qtwitdget.h"
@@ -32,6 +33,9 @@ QTwitdget::QTwitdget(QWidget *parent)
 	ui.setupUi(this);
 	ui.graphicsView->setScene(m_graphicsScene);
 	m_graphicsScene->setSceneRect(0, 0, width(), height());
+
+	QScrollBar *vertScrollBar = ui.graphicsView->verticalScrollBar();
+	connect(vertScrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollbarPos(int)));
 }
 
 void QTwitdget::setImageDownloader(ImageDownloader *imgDown)
@@ -113,6 +117,13 @@ void QTwitdget::finishedDownloadImages()
 	//force resize
 	QResizeEvent *resizeEvent = new QResizeEvent(size(), size());
 	QCoreApplication::postEvent(this, resizeEvent);
+}
+
+void QTwitdget::scrollbarPos(int value)
+{
+	QScrollBar *vertScrollbar = ui.graphicsView->verticalScrollBar();
+	if(value == vertScrollbar->maximum())
+		emit scrollBarMaxPos();
 }
 
 void QTwitdget::changeEvent(QEvent *e)

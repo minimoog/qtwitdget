@@ -55,6 +55,7 @@ signals:
 	/*! emitted when user click delete button of status widget */
 	/*! \param statusId Id of status which should be deleted */
 	void requestDeleteStatus(int statusId);
+	void scrollBarMaxPos();
 
 protected:
 	void changeEvent(QEvent *e);
@@ -62,6 +63,7 @@ protected:
 	
 private slots:
 	void finishedDownloadImages();
+	void scrollbarPos(int value);
 
 private:
 	Ui::QTwitdgetForm ui;
