@@ -51,7 +51,6 @@ MainWindow::MainWindow()
 	ui.updateEdit->setLimit(140);
 	ui.twitsWidget->setImageDownloader(m_imageDownloader);
 	
-	//qApp->setApplicationName("QTwitdget");
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
@@ -213,7 +212,6 @@ void MainWindow::finishedFriendsTimeline()
 
 		query.finish();
 
-		//update scrolling cursor
 		showTab(ui.tabBar->currentIndex());
 	}
 }
@@ -333,9 +331,9 @@ void MainWindow::showTab(int i)
 	QSqlQuery query;
 	QString sq = QString("SELECT created, id, text, screenName, profileImageUrl, source "
 		"FROM status "
-		"WHERE id <= %1 %2"
+		"WHERE %1 "
 		"ORDER BY id DESC "
-		"LIMIT 20;").arg(tg.firstStatusOnPage()).arg(tg.query());
+		"LIMIT 50;").arg(tg.query());
 
 	query.exec(sq);
 
@@ -379,17 +377,16 @@ void MainWindow::loadStyleSheet()
 
 void MainWindow::createTwitGroups()
 {
-	//
 	m_twitTabGroups.clear();
 
 	//just testing
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
-	allfriends.setQuery(" AND screenName != \"minimoog77\" ");
+	allfriends.setQuery(" screenName != \"minimoog77\" ");
 
 	TwitTabGroup myTwits;
 	myTwits.setTabName(tr("My twits"));
-	myTwits.setQuery(" AND screenName == \"minimoog77\" ");
+	myTwits.setQuery(" screenName == \"minimoog77\" ");
 
 	m_twitTabGroups.append(allfriends);
 	m_twitTabGroups.append(myTwits);

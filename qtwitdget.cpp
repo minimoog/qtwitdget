@@ -136,7 +136,10 @@ void QTwitdget::changeEvent(QEvent *e)
 
 void QTwitdget::resizeEvent(QResizeEvent *)
 {
-	m_graphicsScene->setSceneRect(0, 0, width(), height());
+	QRectF boundingRect = m_graphicsScene->itemsBoundingRect();
+	qreal itemsHeight = boundingRect.height();
+	int viewportWidth = ui.graphicsView->viewport()->width();
+	m_graphicsScene->setSceneRect(0, 0, viewportWidth, itemsHeight);
 
 	QListIterator<QGraphicsTextItem*> iterTextItems(m_textItems);
 	while(iterTextItems.hasNext()){
