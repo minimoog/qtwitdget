@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
 #include "ui_qtwitdget.h"
 #include "imagedownloader.h"
 
@@ -73,6 +74,7 @@ private:
 	int m_statusWidgetsPerPage;
 
 	QGraphicsScene* m_graphicsScene;
+	QList<QGraphicsTextItem*> m_textItems;
 };
 
 #endif //QTWITDGET_H

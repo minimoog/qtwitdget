@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QGraphicsPixmapItem>
+#include <QResizeEvent>
 #include "qtwit/qtwitstatus.h"
 #include "qtwitdget.h"
 
@@ -73,7 +74,16 @@ void QTwitdget::updateStatusWidgets()
 
 void QTwitdget::finishedDownloadImages()
 {
-	//delete all items
+	//delete text items
+	QListIterator<QGraphicsTextItem*> iterTextItems(m_textItems);
+	while(iterTextItems.hasNext()){
+		QGraphicsTextItem *textItem = iterTextItems.next();
+		m_graphicsScene->removeItem(textItem);
+		delete textItem;
+	}
+	m_textItems.clear();
+
+	//delete rest of the items
 	QList<QGraphicsItem*> items = m_graphicsScene->items();
 	QListIterator<QGraphicsItem*> iterItems(items);
 	while(iterItems.hasNext()){
@@ -89,11 +99,25 @@ void QTwitdget::finishedDownloadImages()
 	float posY = 0.0f;
 	while(iterStatus.hasNext()){
 		QTwitStatus ts = iterStatus.next();
+
 		QImage img = images.value(ts.profileImageUrl());
+
 		QGraphicsPixmapItem* pixmapItem = m_graphicsScene->addPixmap(QPixmap::fromImage(img));
 		pixmapItem->setPos(0, posY);
+
+		QGraphicsTextItem* textItem = m_graphicsScene->addText(ts.text());
+		textItem->setOpenExternalLinks(true);
+		textItem->setPos(50, posY);
+		textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
+		textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
+		m_textItems << textItem;
+
 		posY += 50.0f;
 	}
+
+	//force resize
+	QResizeEvent *resizeEvent = new QResizeEvent(size(), size());
+	QCoreApplication::postEvent(this, resizeEvent);
 }
 
 void QTwitdget::changeEvent(QEvent *e)
@@ -107,4 +131,10 @@ void QTwitdget::changeEvent(QEvent *e)
 void QTwitdget::resizeEvent(QResizeEvent *)
 {
 	m_graphicsScene->setSceneRect(0, 0, width(), height());
+
+	QListIterator<QGraphicsTextItem*> iterTextItems(m_textItems);
+	while(iterTextItems.hasNext()){
+		QGraphicsTextItem *textItem = iterTextItems.next();
+		textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
+	}
 }
