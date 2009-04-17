@@ -50,8 +50,7 @@ MainWindow::MainWindow()
 	ui.groupWidget->hide();
 	ui.updateEdit->setLimit(140);
 	ui.twitsWidget->setImageDownloader(m_imageDownloader);
-	ui.backButton->setEnabled(false);
-
+	
 	//qApp->setApplicationName("QTwitdget");
 	qApp->setOrganizationName("QTwitdget");
 
@@ -81,7 +80,7 @@ MainWindow::MainWindow()
 	ui.tabBar->setTabsClosable(true);
 	ui.tabBar->setDocumentMode(true);
 	ui.tabBar->setDrawBase(false);
-	ui.tabBar->setElideMode(Qt::TextElideMode::ElideRight);
+	ui.tabBar->setElideMode(Qt::ElideRight);
 
 	setupTrayIcon();
 
@@ -331,9 +330,6 @@ void MainWindow::showTab(int i)
 
 	TwitTabGroup tg = m_twitTabGroups.at(i);
 
-	if(tg.page() == 0)
-		ui.backButton->setEnabled(false);
-
 	QSqlQuery query;
 	QString sq = QString("SELECT created, id, text, screenName, profileImageUrl, source "
 		"FROM status "
@@ -357,11 +353,6 @@ void MainWindow::showTab(int i)
 	}
 
 	ui.twitsWidget->setStatuses(m_statuses);
-
-	if(m_statuses.count() < 20)	//should be programmable
-		ui.forwardButton->setEnabled(false);
-	else
-		ui.forwardButton->setEnabled(true);
 }
 
 void MainWindow::closeTab(int i)
