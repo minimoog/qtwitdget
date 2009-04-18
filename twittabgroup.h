@@ -29,7 +29,7 @@ class TwitTabGroup
 {
 public:
 	/* Constructor */
-	TwitTabGroup() : m_page(0), m_statusesPerPage(0) {}
+	TwitTabGroup() : m_page(0), m_statusesPerPage(50) {}
 
 	/* Sets/gets page */
 	void setPage(int page) { m_page = page; }
@@ -37,11 +37,13 @@ public:
 
 	/* Increments/decrements the page number */
 	void increasePage() { m_page += 1; }
-	void decreasePage() { m_page -= 1; }
+	void decreasePage() { if(m_page > 0 ) m_page -= 1; }
 
-	/* Sets/gets number of statuses per page */
-	void setStatusePerPage(int n) { m_statusesPerPage = n; }
-	int statusePerPage() const { return m_statusesPerPage; }
+	/* Sets/gets number of statuses per page 
+	 * \remark default number is 50
+	 */
+	void setNumStatusesPerPage(int n) { m_statusesPerPage = n; }
+	int numStatusePerPage() const { return m_statusesPerPage; }
 
 	/* Gets number of statuses */
 	int numStatuses() const { return (m_page + 1) * m_statusesPerPage; }
