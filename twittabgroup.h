@@ -29,15 +29,7 @@ class TwitTabGroup
 {
 public:
 	/* Constructor */
-	TwitTabGroup() : m_firstStatusOnPage(0), m_lastStatusOnPage(0), m_page(0) {}
-
-	/* Sets/gets first status id on the page */
-	void setFirstStatusOnPage(int id) { m_firstStatusOnPage = id; }
-	int firstStatusOnPage() const { return m_firstStatusOnPage; }
-
-	/* Sets/gets last status id on the page */
-	void setLastStatusOnPage(int id) { m_lastStatusOnPage = id; }
-	int lastStatusOnPage() const { return m_lastStatusOnPage; }
+	TwitTabGroup() : m_page(0), m_statusesPerPage(0) {}
 
 	/* Sets/gets page */
 	void setPage(int page) { m_page = page; }
@@ -46,6 +38,13 @@ public:
 	/* Increments/decrements the page number */
 	void increasePage() { m_page += 1; }
 	void decreasePage() { m_page -= 1; }
+
+	/* Sets/gets number of statuses per page */
+	void setStatusePerPage(int n) { m_statusesPerPage = n; }
+	int statusePerPage() const { return m_statusesPerPage; }
+
+	/* Gets number of statuses */
+	int numStatuses() const { return (m_page + 1) * m_statusesPerPage; }
 
 	/* Sets/gets additional query for tab group */
 	void setQuery(const QString& query) { m_queryString = query; }
@@ -56,9 +55,8 @@ public:
 	QString tabName() const { return m_tabName; }
 
 private:
-	int m_firstStatusOnPage;
-	int m_lastStatusOnPage;
 	int m_page;
+	int m_statusesPerPage;
 	QString m_queryString;
 	QString m_tabName;
 };
