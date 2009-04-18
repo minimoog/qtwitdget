@@ -335,7 +335,7 @@ void MainWindow::showTab(int i)
 		"FROM status "
 		"WHERE %1 "
 		"ORDER BY id DESC "
-		"LIMIT 50;").arg(tg.query());
+		"LIMIT %2;").arg(tg.query()).arg(tg.numStatuses());
 
 	query.exec(sq);
 
@@ -415,29 +415,7 @@ void MainWindow::nextStatuses()
 	if(i == -1)
 		return;
 
-	TwitTabGroup tg = m_twitTabGroups.at(i);
+	m_twitTabGroups[i].increasePage();
 
-	QSqlQuery query;
-	QString sq = QString("SELECT created, id, text, screenName, profileImageUrl, source "
-		"FROM status "
-		"WHERE %1 "
-		"ORDER BY id DESC "
-		"LIMIT 100;").arg(tg.query());
-
-	query.exec(sq);
-
-	m_statuses.clear();
-
-	while(query.next()){
-		QTwitStatus s;
-		s.setCreated(query.value(0).toDateTime());
-		s.setId(query.value(1).toInt());
-		s.setText(query.value(2).toString());
-		s.setScreenName(query.value(3).toString());
-		s.setProfileImageUrl(query.value(4).toString());
-		s.setSource(query.value(5).toString());
-		m_statuses.append(s);		
-	}
-
-	ui.twitsWidget->setStatuses(m_statuses);
+	showTab(i);
 }
