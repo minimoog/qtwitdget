@@ -72,6 +72,8 @@ MainWindow::MainWindow()
 	connect(ui.tabBar, SIGNAL(currentChanged(int)), SLOT(showTab(int)));
 	connect(ui.tabBar, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
 
+	connect(ui.twitsWidget, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
+
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
 
@@ -83,7 +85,7 @@ MainWindow::MainWindow()
 
 	setupTrayIcon();
 
-	startUp();
+	//startUp();
 }
 
 void MainWindow::authorize()
@@ -404,4 +406,38 @@ void MainWindow::createTabs()
 		TwitTabGroup tg = iter.next();
 		ui.tabBar->addTab(tg.tabName());
 	}
+}
+
+void MainWindow::nextStatuses()
+{
+	int i = ui.tabBar->currentIndex();
+
+	if(i == -1)
+		return;
+
+	TwitTabGroup tg = m_twitTabGroups.at(i);
+
+	QSqlQuery query;
+	QString sq = QString("SELECT created, id, text, screenName, profileImageUrl, source "
+		"FROM status "
+		"WHERE %1 "
+		"ORDER BY id DESC "
+		"LIMIT 100;").arg(tg.query());
+
+	query.exec(sq);
+
+	m_statuses.clear();
+
+	while(query.next()){
+		QTwitStatus s;
+		s.setCreated(query.value(0).toDateTime());
+		s.setId(query.value(1).toInt());
+		s.setText(query.value(2).toString());
+		s.setScreenName(query.value(3).toString());
+		s.setProfileImageUrl(query.value(4).toString());
+		s.setSource(query.value(5).toString());
+		m_statuses.append(s);		
+	}
+
+	ui.twitsWidget->setStatuses(m_statuses);
 }

@@ -32,7 +32,6 @@ QTwitdget::QTwitdget(QWidget *parent)
 {
 	ui.setupUi(this);
 	ui.graphicsView->setScene(m_graphicsScene);
-	m_graphicsScene->setSceneRect(0, 0, width(), height());
 
 	QScrollBar *vertScrollBar = ui.graphicsView->verticalScrollBar();
 	connect(vertScrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollbarPos(int)));
@@ -114,9 +113,8 @@ void QTwitdget::finishedDownloadImages()
 		posY += 50.0f;
 	}
 
-	//force resize
-	QResizeEvent *resizeEvent = new QResizeEvent(size(), size());
-	QCoreApplication::postEvent(this, resizeEvent);
+	int viewportWidth = ui.graphicsView->viewport()->width();
+	m_graphicsScene->setSceneRect(0, 0, viewportWidth, posY);
 }
 
 void QTwitdget::scrollbarPos(int value)
@@ -144,6 +142,6 @@ void QTwitdget::resizeEvent(QResizeEvent *)
 	QListIterator<QGraphicsTextItem*> iterTextItems(m_textItems);
 	while(iterTextItems.hasNext()){
 		QGraphicsTextItem *textItem = iterTextItems.next();
-		textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
+		textItem->setTextWidth(viewportWidth - 50);
 	}
 }

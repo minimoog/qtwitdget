@@ -44,6 +44,7 @@ class MainWindow : public QMainWindow
 public:
 	/*! Constructor */
 	MainWindow();
+	void startUp();
 	
 private slots:
 	void authorize();
@@ -60,6 +61,7 @@ private slots:
 	void loadStyleSheet();
 	void showTab(int i);
 	void closeTab(int i);
+	void nextStatuses();
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -67,7 +69,6 @@ protected:
 
 private:
 	void setupTrayIcon();
-	void startUp();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
 	void createTwitGroups();
