@@ -18,10 +18,13 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideMiddle</enum>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
       </property>
       <property name="tabsClosable">
        <bool>true</bool>
@@ -29,14 +32,9 @@
       <property name="movable">
        <bool>true</bool>
       </property>
-      <widget class="QTwitdget" name="tab">
+      <widget class="QWidget" name="tab_1">
        <attribute name="title">
         <string>Tab 1</string>
-       </attribute>
-      </widget>
-      <widget class="QTwitdget" name="tab_2">
-       <attribute name="title">
-        <string>Tab 2</string>
        </attribute>
       </widget>
      </widget>
@@ -248,12 +246,6 @@
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QTwitdget</class>
-   <extends>QWidget</extends>
-   <header>qtwitdget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>TextEditWithLimit</class>
    <extends>QPlainTextEdit</extends>

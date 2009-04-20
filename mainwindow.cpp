@@ -25,6 +25,7 @@
 #include "mainwindow.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
+#include "qtwitdget.h"
 #include "shortenedurl.h"
 
 MainWindow::MainWindow()
@@ -49,8 +50,12 @@ MainWindow::MainWindow()
 	ui.setupUi(this);
 	ui.groupWidget->hide();
 	ui.updateEdit->setLimit(140);
-	//ui.twitsWidget->setImageDownloader(m_imageDownloader);
 	
+	//remove tab that Designer creates
+	QWidget* tab1Widget = ui.tabWidget->widget(0);
+	ui.tabWidget->clear();
+	delete tab1Widget;
+
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
@@ -58,18 +63,13 @@ MainWindow::MainWindow()
 	connect(m_twitFriendsTimeline, SIGNAL(finished()), SLOT(finishedFriendsTimeline()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
-	//connect(ui.twitsWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
-			//m_twitUpdate, SLOT(setUpdate(const QString&, int)));
 	connect(m_twitDestroy, SIGNAL(destroyed(int)), SLOT(statusDestroyed(int)));
-	//connect(ui.twitsWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
 	
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
 	connect(ui.actionAuthorize, SIGNAL(triggered()), SLOT(authorize()));
-
-	//connect(ui.twitsWidget, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
@@ -384,16 +384,19 @@ void MainWindow::createTwitGroups()
 }
 
 void MainWindow::createTabs()
-{
-	//remove all tabs;
-	//for(int i = 0; i < ui.tabBar->count(); ++i)
-		//ui.tabBar->removeTab(i);
-
+{	
 	//add tabs
 	QListIterator<TwitTabGroup> iter(m_twitTabGroups);
 	while(iter.hasNext()){
 		TwitTabGroup tg = iter.next();
-		//ui.tabBar->addTab(tg.tabName());
+		
+		QTwitdget *statusesWidget = new QTwitdget();
+		statusesWidget->setImageDownloader(m_imageDownloader);
+		connect(statusesWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
+				m_twitUpdate, SLOT(setUpdate(const QString&, int)));
+		connect(statusesWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
+		connect(statusesWidget, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
+		ui.tabWidget->addTab(statusesWidget, tg.tabName());
 	}
 }
 
