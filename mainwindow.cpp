@@ -410,12 +410,12 @@ void MainWindow::createTabs()
 
 void MainWindow::nextStatuses()
 {
-	//int i = ui.tabBar->currentIndex();
+	int i = ui.tabWidget->currentIndex();
 
-	//if(i == -1)
-		//return;
+	if(i == -1)
+		return;
 
-	//m_twitTabGroups[i].increasePage();
+	m_twitTabGroups[i].increasePage();
 
-	//showTab(i);
+	showTab(i);
 }
