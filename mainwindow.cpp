@@ -65,6 +65,9 @@ MainWindow::MainWindow()
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(int)), SLOT(statusDestroyed(int)));
 	
+	connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(showTab(int)));
+	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -203,7 +206,7 @@ void MainWindow::finishedFriendsTimeline()
 
 		query.finish();
 
-		//showTab(ui.tabBar->currentIndex());
+		showTab(ui.tabWidget->currentIndex());
 	}
 }
 
@@ -213,7 +216,7 @@ void MainWindow::statusDestroyed(int id)
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
 
-	//showTab(ui.tabBar->currentIndex());
+	showTab(ui.tabWidget->currentIndex());
 }
 
 void MainWindow::languageChanged()
@@ -341,12 +344,17 @@ void MainWindow::showTab(int i)
 		m_statuses.append(s);		
 	}
 
-	//ui.twitsWidget->setStatuses(m_statuses);
+	QTwitdget *statusesWidget = qobject_cast<QTwitdget*>(ui.tabWidget->currentWidget());
+	Q_ASSERT(statusesWidget != 0);
+	statusesWidget->setStatuses(m_statuses);
 }
 
 void MainWindow::closeTab(int i)
 {
-	//ui.tabBar->removeTab(i);
+	QWidget *widget = ui.tabWidget->widget(i);
+	ui.tabWidget->removeTab(i);
+	delete widget;
+
 	m_twitTabGroups.removeAt(i);
 }
 
