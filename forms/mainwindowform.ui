@@ -6,39 +6,42 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>491</width>
-    <height>774</height>
+    <width>550</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QTwitdget</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>0</number>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>1</number>
       </property>
-      <item>
-       <widget class="QTabBar" name="tabBar" native="true"/>
-      </item>
-      <item>
-       <widget class="QTwitdget" name="twitsWidget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-       </widget>
-      </item>
-     </layout>
+      <property name="elideMode">
+       <enum>Qt::ElideMiddle</enum>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <widget class="QTwitdget" name="tab">
+       <attribute name="title">
+        <string>Tab 1</string>
+       </attribute>
+      </widget>
+      <widget class="QTwitdget" name="tab_2">
+       <attribute name="title">
+        <string>Tab 2</string>
+       </attribute>
+      </widget>
+     </widget>
     </item>
-    <item row="1" column="0">
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="margin">
        <number>1</number>
@@ -81,7 +84,7 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
+    <item>
      <widget class="QWidget" name="groupWidget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
@@ -163,7 +166,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>491</width>
+     <width>550</width>
      <height>21</height>
     </rect>
    </property>
@@ -258,12 +261,6 @@
    <slots>
     <slot>shortUrls()</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>QTabBar</class>
-   <extends>QWidget</extends>
-   <header location="global">QTabBar</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

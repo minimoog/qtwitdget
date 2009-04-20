@@ -49,7 +49,7 @@ MainWindow::MainWindow()
 	ui.setupUi(this);
 	ui.groupWidget->hide();
 	ui.updateEdit->setLimit(140);
-	ui.twitsWidget->setImageDownloader(m_imageDownloader);
+	//ui.twitsWidget->setImageDownloader(m_imageDownloader);
 	
 	qApp->setOrganizationName("QTwitdget");
 
@@ -58,10 +58,10 @@ MainWindow::MainWindow()
 	connect(m_twitFriendsTimeline, SIGNAL(finished()), SLOT(finishedFriendsTimeline()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
-	connect(ui.twitsWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
-			m_twitUpdate, SLOT(setUpdate(const QString&, int)));
+	//connect(ui.twitsWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
+			//m_twitUpdate, SLOT(setUpdate(const QString&, int)));
 	connect(m_twitDestroy, SIGNAL(destroyed(int)), SLOT(statusDestroyed(int)));
-	connect(ui.twitsWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
+	//connect(ui.twitsWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
 	
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 
@@ -69,23 +69,12 @@ MainWindow::MainWindow()
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
 	connect(ui.actionAuthorize, SIGNAL(triggered()), SLOT(authorize()));
 
-	connect(ui.tabBar, SIGNAL(currentChanged(int)), SLOT(showTab(int)));
-	connect(ui.tabBar, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
-
-	connect(ui.twitsWidget, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
+	//connect(ui.twitsWidget, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
-
-	//tabBar settings
-	ui.tabBar->setTabsClosable(true);
-	ui.tabBar->setDocumentMode(true);
-	ui.tabBar->setDrawBase(false);
-	ui.tabBar->setElideMode(Qt::ElideRight);
-
+	
 	setupTrayIcon();
-
-	//startUp();
 }
 
 void MainWindow::authorize()
@@ -152,7 +141,7 @@ void MainWindow::startUp()
 		createTwitGroups();
 		createTabs();
 
-		ui.twitsWidget->setUserid(userId);
+		//ui.twitsWidget->setUserid(userId);
 
 		//start update timer
 		m_timer->start(60000);
@@ -214,7 +203,7 @@ void MainWindow::finishedFriendsTimeline()
 
 		query.finish();
 
-		showTab(ui.tabBar->currentIndex());
+		//showTab(ui.tabBar->currentIndex());
 	}
 }
 
@@ -224,14 +213,14 @@ void MainWindow::statusDestroyed(int id)
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
 
-	showTab(ui.tabBar->currentIndex());
+	//showTab(ui.tabBar->currentIndex());
 }
 
 void MainWindow::languageChanged()
 {
 	LangChangeDialog lcd(this);
 	lcd.exec();
-	ui.twitsWidget->updateStatusWidgets();
+	//ui.twitsWidget->updateStatusWidgets();
 }
 
 void MainWindow::setupTrayIcon()
@@ -352,12 +341,12 @@ void MainWindow::showTab(int i)
 		m_statuses.append(s);		
 	}
 
-	ui.twitsWidget->setStatuses(m_statuses);
+	//ui.twitsWidget->setStatuses(m_statuses);
 }
 
 void MainWindow::closeTab(int i)
 {
-	ui.tabBar->removeTab(i);
+	//ui.tabBar->removeTab(i);
 	m_twitTabGroups.removeAt(i);
 }
 
@@ -397,25 +386,25 @@ void MainWindow::createTwitGroups()
 void MainWindow::createTabs()
 {
 	//remove all tabs;
-	for(int i = 0; i < ui.tabBar->count(); ++i)
-		ui.tabBar->removeTab(i);
+	//for(int i = 0; i < ui.tabBar->count(); ++i)
+		//ui.tabBar->removeTab(i);
 
 	//add tabs
 	QListIterator<TwitTabGroup> iter(m_twitTabGroups);
 	while(iter.hasNext()){
 		TwitTabGroup tg = iter.next();
-		ui.tabBar->addTab(tg.tabName());
+		//ui.tabBar->addTab(tg.tabName());
 	}
 }
 
 void MainWindow::nextStatuses()
 {
-	int i = ui.tabBar->currentIndex();
+	//int i = ui.tabBar->currentIndex();
 
-	if(i == -1)
-		return;
+	//if(i == -1)
+		//return;
 
-	m_twitTabGroups[i].increasePage();
+	//m_twitTabGroups[i].increasePage();
 
-	showTab(i);
+	//showTab(i);
 }
