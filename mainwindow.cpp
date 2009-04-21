@@ -65,7 +65,6 @@ MainWindow::MainWindow()
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(int)), SLOT(statusDestroyed(int)));
 	
-	connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(showTab(int)));
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));

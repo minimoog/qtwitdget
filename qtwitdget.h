@@ -44,8 +44,6 @@ public:
 	void setStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
 	void setUserid(int id);
-	/*! updates/refresh status widgets */
-	void updateStatusWidgets();
 
 signals:
 	/*! emitted when user clicks reply button of status widget */
@@ -66,6 +64,8 @@ private slots:
 	void scrollbarPos(int value);
 
 private:
+	void updateStatusWidgets();
+
 	Ui::QTwitdgetForm ui;
 	int m_userid; //user id
 
