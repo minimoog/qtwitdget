@@ -98,9 +98,6 @@ void QTwitdget::updateStatusWidgets()
 
 void QTwitdget::finishedDownloadImages()
 {
-	Q_ASSERT(m_statuses.count() != m_textItems.count());
-	Q_ASSERT(m_statuses.count() != m_pixmapItems.count());
-
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 
 	QListIterator<QTwitStatus> iterStatus(m_statuses);

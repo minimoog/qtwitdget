@@ -145,6 +145,9 @@ void MainWindow::startUp()
 
 		//ui.twitsWidget->setUserid(userId);
 
+		for(int i = 0; i < ui.tabWidget->count(); ++i)
+			refreshTab(i);
+
 		//start update timer
 		m_timer->start(60000);
 
@@ -205,7 +208,9 @@ void MainWindow::finishedFriendsTimeline()
 
 		query.finish();
 
-		refreshTab(ui.tabWidget->currentIndex());
+		//refresh all tabs
+		for(int i = 0; i < ui.tabWidget->count(); ++i)
+			refreshTab(i);
 	}
 }
 
@@ -343,7 +348,7 @@ void MainWindow::refreshTab(int i)
 		m_statuses.append(s);		
 	}
 
-	QTwitdget *statusesWidget = qobject_cast<QTwitdget*>(ui.tabWidget->currentWidget());
+	QTwitdget *statusesWidget = qobject_cast<QTwitdget*>(ui.tabWidget->widget(i));
 	Q_ASSERT(statusesWidget != 0);
 	statusesWidget->setStatuses(m_statuses);
 }
@@ -398,6 +403,7 @@ void MainWindow::createTabs()
 		TwitTabGroup tg = iter.next();
 		
 		QTwitdget *statusesWidget = new QTwitdget();
+		statusesWidget->setObjectName(tg.tabName());
 		statusesWidget->setImageDownloader(m_imageDownloader);
 		connect(statusesWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
 				m_twitUpdate, SLOT(setUpdate(const QString&, int)));
