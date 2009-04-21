@@ -75,6 +75,7 @@ private:
 
 	QGraphicsScene* m_graphicsScene;
 	QList<QGraphicsTextItem*> m_textItems;
+	QList<QGraphicsPixmapItem*> m_pixmapItems;
 };
 
 #endif //QTWITDGET_H

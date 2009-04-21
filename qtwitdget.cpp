@@ -57,6 +57,8 @@ void QTwitdget::setUserid(int id)
 
 void QTwitdget::updateStatusWidgets()
 {
+	Q_ASSERT(m_imageDownloader != 0);
+
 	QList<QUrl> urlsImages;
 
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
