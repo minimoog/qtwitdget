@@ -15,6 +15,7 @@ HEADERS +=  imagedownloader.h \
 			langchangedialog.h \
 			twittabgroup.h \
 			qtwitdget.h \
+			qtwitview.h \
 			qtwit/qtwitupdate.h \
 			qtwit/qtwitstatusdata.h \
 			qtwit/qtwitstatus.h \
@@ -37,6 +38,7 @@ SOURCES +=  main.cpp \
 			mainwindow.cpp \
 			langchangedialog.cpp \
 			qtwitdget.cpp \
+			qtwitview.cpp \
 			qtwit/qtwitbase.cpp \
 			qtwit/qtwitfriendstimeline.cpp \
 			qtwit/qtwitupdate.cpp \
