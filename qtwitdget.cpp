@@ -134,7 +134,7 @@ void QTwitdget::changeEvent(QEvent *e)
 	QWidget::changeEvent(e);
 }
 
-void QTwitdget::resizeEvent(QResizeEvent *)
+void QTwitdget::resizeEvent(QResizeEvent *e)
 {
 	QRectF boundingRect = m_graphicsScene->itemsBoundingRect();
 	qreal itemsHeight = boundingRect.height();
@@ -146,4 +146,6 @@ void QTwitdget::resizeEvent(QResizeEvent *)
 		QGraphicsTextItem *textItem = iterTextItems.next();
 		textItem->setTextWidth(viewportWidth - 50);
 	}
+
+	QWidget::resizeEvent(e);
 }
