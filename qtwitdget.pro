@@ -6,6 +6,7 @@ INCLUDEPATH += .
 QT += network xml sql
 
 win32:LIBS += libeay32.lib
+unix:LIBS += -lcrypto
 
 HEADERS +=  imagedownloader.h \
 			texteditwithlimit.h \
@@ -48,8 +49,7 @@ SOURCES +=  main.cpp \
 			oauth/oauth.cpp \
 			oauth/oauthtwitter.cpp 
 			
-FORMS += 	forms/qtwitdget.ui \
-			forms/mainwindowform.ui \
+FORMS += 	forms/mainwindowform.ui \
 			forms/langchangedialogform.ui
 			
 TRANSLATIONS += translations/qtwitdget_en.ts \
