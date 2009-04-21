@@ -205,7 +205,7 @@ void MainWindow::finishedFriendsTimeline()
 
 		query.finish();
 
-		showTab(ui.tabWidget->currentIndex());
+		refreshTab(ui.tabWidget->currentIndex());
 	}
 }
 
@@ -215,7 +215,7 @@ void MainWindow::statusDestroyed(int id)
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
 
-	showTab(ui.tabWidget->currentIndex());
+	refreshTab(ui.tabWidget->currentIndex());
 }
 
 void MainWindow::languageChanged()
@@ -314,7 +314,7 @@ bool MainWindow::isDatabaseEmpty()
 	return true;
 }
 
-void MainWindow::showTab(int i)
+void MainWindow::refreshTab(int i)
 {
 	if(i == -1)
 		return;
@@ -416,5 +416,5 @@ void MainWindow::nextStatuses()
 
 	m_twitTabGroups[i].increasePage();
 
-	showTab(i);
+	refreshTab(i);
 }

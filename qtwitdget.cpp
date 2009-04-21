@@ -64,7 +64,9 @@ void QTwitdget::updateStatusWidgets()
 	//if number of statuses is bigger than text items create new 
 	if(m_statuses.count() > m_textItems.count()){
 		int numCreated = m_statuses.count() - m_textItems.count();
-		for(int i = 0, float posY = 50.0f * m_textItems.count(); i < numCreated; ++i, posY += 50.0f){
+		float posY = 50.0f * m_textItems.count();
+
+		for(int i = 0; i < numCreated; ++i){
 			QGraphicsPixmapItem* pixmapItem = m_graphicsScene->addPixmap(QPixmap());
 			pixmapItem->setPos(0, posY);
 			m_pixmapItems << pixmapItem;
@@ -75,6 +77,8 @@ void QTwitdget::updateStatusWidgets()
 			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
 			textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
 			m_textItems << textItem;
+
+			posY += 50.0f;
 		}
 	}
 
@@ -115,7 +119,7 @@ void QTwitdget::finishedDownloadImages()
 	}
 
 	int viewportWidth = ui.graphicsView->viewport()->width();
-	m_graphicsScene->setSceneRect(0, 0, viewportWidth, posY);
+	m_graphicsScene->setSceneRect(0, 0, viewportWidth, 50.0f * m_textItems.count());
 }
 
 void QTwitdget::scrollbarPos(int value)

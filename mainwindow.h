@@ -59,7 +59,7 @@ private slots:
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void languageChanged();
 	void loadStyleSheet();
-	void showTab(int i);
+	void refreshTab(int i);
 	void closeTab(int i);
 	void nextStatuses();
 
