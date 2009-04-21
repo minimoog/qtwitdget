@@ -61,6 +61,27 @@ void QTwitdget::updateStatusWidgets()
 
 	QList<QUrl> urlsImages;
 
+	//if number of statuses is bigger than text items create new 
+	if(m_statuses.count() > m_textItems.count()){
+		int numCreated = m_statuses.count() - m_textItems.count();
+		for(int i = 0, float posY = 50.0f * m_textItems.count(); i < numCreated; ++i, posY += 50.0f){
+			QGraphicsPixmapItem* pixmapItem = m_graphicsScene->addPixmap(QPixmap());
+			pixmapItem->setPos(0, posY);
+			m_pixmapItems << pixmapItem;
+
+			QGraphicsTextItem* textItem = m_graphicsScene->addText(QString());
+			textItem->setOpenExternalLinks(true);
+			textItem->setPos(50, posY);
+			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
+			textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
+			m_textItems << textItem;
+		}
+	}
+
+	//check
+	if(m_statuses.count() < m_textItems.count())
+		qDebug() << "This shouldn't be";
+
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
 	while(iterStatus.hasNext()){
 		QTwitStatus ts = iterStatus.next();
@@ -68,51 +89,29 @@ void QTwitdget::updateStatusWidgets()
 	}
 
 	if(!urlsImages.isEmpty())
-		if(m_imageDownloader)
-			m_imageDownloader->downloadImages(urlsImages);
+		m_imageDownloader->downloadImages(urlsImages);
 }
 
 void QTwitdget::finishedDownloadImages()
 {
-	//delete text items
-	QListIterator<QGraphicsTextItem*> iterTextItems(m_textItems);
-	while(iterTextItems.hasNext()){
-		QGraphicsTextItem *textItem = iterTextItems.next();
-		m_graphicsScene->removeItem(textItem);
-		delete textItem;
-	}
-	m_textItems.clear();
-
-	//delete rest of the items
-	QList<QGraphicsItem*> items = m_graphicsScene->items();
-	QListIterator<QGraphicsItem*> iterItems(items);
-	while(iterItems.hasNext()){
-		QGraphicsItem *it = iterItems.next();
-		m_graphicsScene->removeItem(it);
-		delete it;
-	}
+	Q_ASSERT(m_statuses.count() != m_textItems.count());
+	Q_ASSERT(m_statuses.count() != m_pixmapItems.count());
 
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
+	QListIterator<QGraphicsPixmapItem*> iterPixmapItem(m_pixmapItems);
+	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
 
-	float posY = 0.0f;
 	while(iterStatus.hasNext()){
 		QTwitStatus ts = iterStatus.next();
+		QGraphicsPixmapItem* pixmapItem = iterPixmapItem.next();
+		QGraphicsTextItem* textItem = iterTextItem.next();
 
 		QImage img = images.value(ts.profileImageUrl());
 
-		QGraphicsPixmapItem* pixmapItem = m_graphicsScene->addPixmap(QPixmap::fromImage(img));
-		pixmapItem->setPos(0, posY);
-
-		QGraphicsTextItem* textItem = m_graphicsScene->addText(ts.text());
-		textItem->setOpenExternalLinks(true);
-		textItem->setPos(50, posY);
-		textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
-		textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
-		m_textItems << textItem;
-
-		posY += 50.0f;
+		pixmapItem->setPixmap(QPixmap::fromImage(img));
+		textItem->setHtml(ts.text());
 	}
 
 	int viewportWidth = ui.graphicsView->viewport()->width();
