@@ -21,7 +21,6 @@
 #ifndef QTWITDGET_H
 #define QTWITDGET_H
 
-#include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 #include "imagedownloader.h"
@@ -29,13 +28,13 @@
 class QTwitStatus;
 
 /*! class QTwitdget */
-class QTwitdget : public QWidget
+class QTwitdget : public QGraphicsScene
 {
 	Q_OBJECT
 	
 public:
 	/*! Constructor */
-	QTwitdget(QWidget *parent = 0);
+	QTwitdget(ImageDownloader *imgDown = 0, QObject *parent = 0);
 	/*! Sets image downloader */
 	/*! must be set to see images */
 	void setImageDownloader(ImageDownloader *imgDown);
@@ -45,23 +44,12 @@ public:
 	void setUserid(int id);
 
 signals:
-	/*! emitted when user clicks reply button of status widget */
-	/*! \param replyText replying text */
-	/*! \param replyToStatus Id of status in which is replying */
 	void requestReplyStatus(const QString& replyText, int replyToStatus);
-	/*! emitted when user click delete button of status widget */
-	/*! \param statusId Id of status which should be deleted */
 	void requestDeleteStatus(int statusId);
-	void scrollBarMaxPos();
-
-protected:
-	void changeEvent(QEvent *e);
-	void resizeEvent(QResizeEvent *e);
 	
 private slots:
 	void finishedDownloadImages();
-	void scrollbarPos(int value);
-
+	
 private:
 	void updateStatusWidgets();
 
@@ -71,7 +59,6 @@ private:
 
 	QList<QTwitStatus> m_statuses;
 
-	QGraphicsScene* m_graphicsScene;
 	QList<QGraphicsTextItem*> m_textItems;
 	QList<QGraphicsPixmapItem*> m_pixmapItems;
 };

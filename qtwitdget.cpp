@@ -27,14 +27,9 @@
 #include "qtwit/qtwitstatus.h"
 #include "qtwitdget.h"
 
-QTwitdget::QTwitdget(QWidget *parent)
-	:	QWidget(parent), m_graphicsScene(new QGraphicsScene(this))
+QTwitdget::QTwitdget(ImageDownloader *imgDown, QObject *parent)
+	:	QGraphicsScene(parent), m_imageDownloader(imgDown)
 {
-	ui.setupUi(this);
-	ui.graphicsView->setScene(m_graphicsScene);
-
-	QScrollBar *vertScrollBar = ui.graphicsView->verticalScrollBar();
-	connect(vertScrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollbarPos(int)));
 }
 
 void QTwitdget::setImageDownloader(ImageDownloader *imgDown)
@@ -67,15 +62,15 @@ void QTwitdget::updateStatusWidgets()
 		float posY = 50.0f * m_textItems.count();
 
 		for(int i = 0; i < numCreated; ++i){
-			QGraphicsPixmapItem* pixmapItem = m_graphicsScene->addPixmap(QPixmap());
+			QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
 			pixmapItem->setPos(0, posY);
 			m_pixmapItems << pixmapItem;
 
-			QGraphicsTextItem* textItem = m_graphicsScene->addText(QString());
+			QGraphicsTextItem* textItem = addText(QString());
 			textItem->setOpenExternalLinks(true);
 			textItem->setPos(50, posY);
 			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
-			textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
+			//textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
 			m_textItems << textItem;
 
 			posY += 50.0f;
@@ -115,37 +110,6 @@ void QTwitdget::finishedDownloadImages()
 		textItem->setHtml(ts.text());
 	}
 
-	int viewportWidth = ui.graphicsView->viewport()->width();
-	m_graphicsScene->setSceneRect(0, 0, viewportWidth, 50.0f * m_textItems.count());
-}
-
-void QTwitdget::scrollbarPos(int value)
-{
-	QScrollBar *vertScrollbar = ui.graphicsView->verticalScrollBar();
-	if(value == vertScrollbar->maximum())
-		emit scrollBarMaxPos();
-}
-
-void QTwitdget::changeEvent(QEvent *e)
-{
-	if(e->type() == QEvent::LanguageChange)
-		ui.retranslateUi(this);
-
-	QWidget::changeEvent(e);
-}
-
-void QTwitdget::resizeEvent(QResizeEvent *e)
-{
-	QRectF boundingRect = m_graphicsScene->itemsBoundingRect();
-	qreal itemsHeight = boundingRect.height();
-	int viewportWidth = ui.graphicsView->viewport()->width();
-	m_graphicsScene->setSceneRect(0, 0, viewportWidth, itemsHeight);
-
-	QListIterator<QGraphicsTextItem*> iterTextItems(m_textItems);
-	while(iterTextItems.hasNext()){
-		QGraphicsTextItem *textItem = iterTextItems.next();
-		textItem->setTextWidth(viewportWidth - 50);
-	}
-
-	QWidget::resizeEvent(e);
+	//int viewportWidth = ui.graphicsView->viewport()->width();
+	//m_graphicsScene->setSceneRect(0, 0, viewportWidth, 50.0f * m_textItems.count());
 }
