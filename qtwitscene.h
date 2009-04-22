@@ -18,23 +18,24 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
  */
 
-#ifndef QTWITDGET_H
-#define QTWITDGET_H
+#ifndef QTWITSCENE_H
+#define QTWITSCENE_H
 
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
+#include <QGraphicsPixmapItem>
 #include "imagedownloader.h"
 
 class QTwitStatus;
 
 /*! class QTwitdget */
-class QTwitdget : public QGraphicsScene
+class QTwitScene : public QGraphicsScene
 {
 	Q_OBJECT
 	
 public:
 	/*! Constructor */
-	QTwitdget(ImageDownloader *imgDown = 0, QObject *parent = 0);
+	QTwitScene(ImageDownloader *imgDown = 0, QObject *parent = 0);
 	/*! Sets image downloader */
 	/*! must be set to see images */
 	void setImageDownloader(ImageDownloader *imgDown);
@@ -63,4 +64,4 @@ private:
 	QList<QGraphicsPixmapItem*> m_pixmapItems;
 };
 
-#endif //QTWITDGET_H
+#endif //QTWITSCENE_H

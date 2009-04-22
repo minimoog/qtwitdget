@@ -19,38 +19,37 @@
  */
 
 #include <QtDebug>
-#include <QMessageBox>
-#include <QPainter>
-#include <QGraphicsPixmapItem>
 #include <QScrollBar>
-#include <QResizeEvent>
 #include "qtwit/qtwitstatus.h"
 #include "qtwitdget.h"
 
-QTwitdget::QTwitdget(ImageDownloader *imgDown, QObject *parent)
+QTwitScene::QTwitScene(ImageDownloader *imgDown, QObject *parent)
 	:	QGraphicsScene(parent), m_imageDownloader(imgDown)
 {
+	if(m_imageDownloader){
+		connect(m_imageDownloader, SIGNAL(finished()), this, SLOT(finishedDownloadImages()));
+	}
 }
 
-void QTwitdget::setImageDownloader(ImageDownloader *imgDown)
+void QTwitScene::setImageDownloader(ImageDownloader *imgDown)
 {	
 	m_imageDownloader = imgDown;
-	connect(m_imageDownloader, SIGNAL(finished()), SLOT(finishedDownloadImages()));
+	connect(m_imageDownloader, SIGNAL(finished()), this, SLOT(finishedDownloadImages()));
 }
 
-void QTwitdget::setStatuses(const QList<QTwitStatus>& statuses)
+void QTwitScene::setStatuses(const QList<QTwitStatus>& statuses)
 {
 	m_statuses = statuses;
 
 	updateStatusWidgets();
 }
 
-void QTwitdget::setUserid(int id)
+void QTwitScene::setUserid(int id)
 {
 	m_userid = id;
 }
 
-void QTwitdget::updateStatusWidgets()
+void QTwitScene::updateStatusWidgets()
 {
 	Q_ASSERT(m_imageDownloader != 0);
 
@@ -91,7 +90,7 @@ void QTwitdget::updateStatusWidgets()
 		m_imageDownloader->downloadImages(urlsImages);
 }
 
-void QTwitdget::finishedDownloadImages()
+void QTwitScene::finishedDownloadImages()
 {
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 

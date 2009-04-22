@@ -348,7 +348,7 @@ void MainWindow::refreshTab(int i)
 		m_statuses.append(s);		
 	}
 
-	QTwitdget *statusesWidget = qobject_cast<QTwitdget*>(ui.tabWidget->widget(i));
+	QTwitScene *statusesWidget = qobject_cast<QTwitScene*>(ui.tabWidget->widget(i));
 	Q_ASSERT(statusesWidget != 0);
 	statusesWidget->setStatuses(m_statuses);
 }
@@ -402,7 +402,7 @@ void MainWindow::createTabs()
 	while(iter.hasNext()){
 		TwitTabGroup tg = iter.next();
 		
-		QTwitdget *statusesWidget = new QTwitdget();
+		QTwitScene *statusesWidget = new QTwitScene();
 		statusesWidget->setObjectName(tg.tabName());
 		statusesWidget->setImageDownloader(m_imageDownloader);
 		connect(statusesWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
