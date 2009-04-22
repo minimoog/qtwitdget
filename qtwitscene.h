@@ -44,6 +44,7 @@ public:
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeTextItems(int w);
+	float boundingWidth() const;
 
 signals:
 	void requestReplyStatus(const QString& replyText, int replyToStatus);

@@ -34,7 +34,7 @@ QTwitView::QTwitView(QWidget *parent)
 
 void QTwitView::scrollBarPos(int pos)
 {
-	if(pos == verticalScrollBar()->maximum())
+	if(pos == verticalScrollBar()->maximum() && verticalScrollBar()->isEnabled())
 		emit scrollBarMaxPos();
 }
 
@@ -43,7 +43,10 @@ void QTwitView::resizeEvent(QResizeEvent *e)
 	QSize s = e->size();
 	QTwitScene* twitScene = qobject_cast<QTwitScene*>(scene());
 	if(twitScene){
-		int widthVertScrollBar = verticalScrollBar()->width();
-		twitScene->resizeTextItems(s.width() - widthVertScrollBar - 30);
+		//int widthVertScrollBar = verticalScrollBar()->width();
+		twitScene->resizeTextItems(s.width() - 50);
+		twitScene->setSceneRect(0, 0, s.width(), twitScene->boundingWidth());
 	}
+
+	QWidget::resizeEvent(e);
 }

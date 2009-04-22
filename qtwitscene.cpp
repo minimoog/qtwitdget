@@ -114,3 +114,8 @@ void QTwitScene::resizeTextItems(int w)
 		textItem->setTextWidth(w);
 	}
 }
+
+float QTwitScene::boundingWidth() const
+{
+	return 50.0f * m_textItems.count();
+}
