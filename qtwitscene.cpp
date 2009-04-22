@@ -20,6 +20,7 @@
 
 #include <QtDebug>
 #include <QScrollBar>
+#include <QGraphicsView>
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
 
@@ -104,6 +105,12 @@ void QTwitScene::finishedDownloadImages()
 		pixmapItem->setPixmap(QPixmap::fromImage(img));
 		textItem->setHtml(ts.text());
 	}
+
+	QList<QGraphicsView*> graphicsViews = views();
+	QGraphicsView* twitView = graphicsViews.at(0);
+	
+	setSceneRect(0, 0, twitView->viewport()->width(), boundingWidth());
+	resizeTextItems(twitView->viewport()->width() - 50);
 }
 
 void QTwitScene::resizeTextItems(int w)

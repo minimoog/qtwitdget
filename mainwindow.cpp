@@ -350,7 +350,6 @@ void MainWindow::refreshTab(int i)
 
 	QTwitScene *statusScene = m_twitScenes.at(i);
 	statusScene->setStatuses(m_statuses);
-	//statusScene->setSceneRect(0, 0, ui.tabWidget->widget(i)->width() - 50, statusScene->boundingWidth());
 }
 
 void MainWindow::closeTab(int i)
