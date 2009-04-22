@@ -66,7 +66,6 @@ void QTwitScene::updateStatusWidgets()
 			textItem->setOpenExternalLinks(true);
 			textItem->setPos(50, posY);
 			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
-			//textItem->setTextWidth(ui.graphicsView->viewport()->width() - 50);
 			m_textItems << textItem;
 
 			posY += 50.0f;
@@ -105,7 +104,13 @@ void QTwitScene::finishedDownloadImages()
 		pixmapItem->setPixmap(QPixmap::fromImage(img));
 		textItem->setHtml(ts.text());
 	}
+}
 
-	//int viewportWidth = ui.graphicsView->viewport()->width();
-	//m_graphicsScene->setSceneRect(0, 0, viewportWidth, 50.0f * m_textItems.count());
+void QTwitScene::resizeTextItems(int w)
+{
+	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
+	while(iterTextItem.hasNext()){
+		QGraphicsTextItem* textItem = iterTextItem.next();
+		textItem->setTextWidth(w);
+	}
 }

@@ -17,8 +17,10 @@
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
  */
- 
+
+#include <QResizeEvent>
 #include "qtwitview.h"
+#include "qtwitscene.h"
 
 QTwitView::QTwitView(QWidget *parent) 
 	: QGraphicsView(parent)
@@ -34,4 +36,14 @@ void QTwitView::scrollBarPos(int pos)
 {
 	if(pos == verticalScrollBar()->maximum())
 		emit scrollBarMaxPos();
+}
+
+void QTwitView::resizeEvent(QResizeEvent *e)
+{
+	QSize s = e->size();
+	QTwitScene* twitScene = qobject_cast<QTwitScene*>(scene());
+	if(twitScene){
+		int widthVertScrollBar = verticalScrollBar()->width();
+		twitScene->resizeTextItems(s.width() - widthVertScrollBar - 30);
+	}
 }

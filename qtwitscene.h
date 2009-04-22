@@ -43,6 +43,7 @@ public:
 	void setStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
 	void setUserid(int id);
+	void resizeTextItems(int w);
 
 signals:
 	void requestReplyStatus(const QString& replyText, int replyToStatus);

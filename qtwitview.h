@@ -31,6 +31,8 @@ public:
 	QTwitView(QWidget *parent = 0);
 signals:
 	void scrollBarMaxPos();
+protected:
+	void resizeEvent(QResizeEvent *e);
 private slots:
 	void scrollBarPos(int pos);
 };
