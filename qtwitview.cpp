@@ -19,7 +19,7 @@
  */
  
 #include "qtwitview.h"
- 
+
 QTwitView::QTwitView(QWidget *parent) 
 	: QGraphicsView(parent)
 {

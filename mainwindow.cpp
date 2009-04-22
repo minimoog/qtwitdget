@@ -25,8 +25,9 @@
 #include "mainwindow.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
-#include "qtwitdget.h"
+#include "qtwitscene.h"
 #include "shortenedurl.h"
+#include "qtwitview.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
@@ -227,7 +228,6 @@ void MainWindow::languageChanged()
 {
 	LangChangeDialog lcd(this);
 	lcd.exec();
-	//ui.twitsWidget->updateStatusWidgets();
 }
 
 void MainWindow::setupTrayIcon()
@@ -348,9 +348,8 @@ void MainWindow::refreshTab(int i)
 		m_statuses.append(s);		
 	}
 
-	QTwitScene *statusesWidget = qobject_cast<QTwitScene*>(ui.tabWidget->widget(i));
-	Q_ASSERT(statusesWidget != 0);
-	statusesWidget->setStatuses(m_statuses);
+	QTwitScene *statusScene = m_twitScenes.at(i);
+	statusScene->setStatuses(m_statuses);
 }
 
 void MainWindow::closeTab(int i)
@@ -402,14 +401,18 @@ void MainWindow::createTabs()
 	while(iter.hasNext()){
 		TwitTabGroup tg = iter.next();
 		
-		QTwitScene *statusesWidget = new QTwitScene();
-		statusesWidget->setObjectName(tg.tabName());
-		statusesWidget->setImageDownloader(m_imageDownloader);
-		connect(statusesWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
-				m_twitUpdate, SLOT(setUpdate(const QString&, int)));
-		connect(statusesWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
-		connect(statusesWidget, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
-		ui.tabWidget->addTab(statusesWidget, tg.tabName());
+		QTwitScene *statusScene = new QTwitScene(this);
+		statusScene->setImageDownloader(m_imageDownloader);
+		m_twitScenes << statusScene;
+
+		//connect(statusesWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
+		//	m_twitUpdate, SLOT(setUpdate(const QString&, int)));
+		//connect(statusesWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
+
+		QTwitView *statusView = new QTwitView;
+		statusView->setScene(statusScene);
+		connect(statusView, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
+		ui.tabWidget->addTab(statusView, tg.tabName());
 	}
 }
 

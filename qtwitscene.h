@@ -35,7 +35,7 @@ class QTwitScene : public QGraphicsScene
 	
 public:
 	/*! Constructor */
-	QTwitScene(ImageDownloader *imgDown = 0, QObject *parent = 0);
+	QTwitScene(QObject *parent = 0);
 	/*! Sets image downloader */
 	/*! must be set to see images */
 	void setImageDownloader(ImageDownloader *imgDown);

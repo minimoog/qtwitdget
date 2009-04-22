@@ -33,6 +33,7 @@
 #include "oauth/oauthtwitter.h"
 #include "imagedownloader.h"
 #include "twittabgroup.h"
+#include "qtwitscene.h"
 
 class QTwitStatus;
 
@@ -90,6 +91,7 @@ private:
 
 	QList<TwitTabGroup> m_twitTabGroups;
 	int m_lastStatusId;
+	QList<QTwitScene*> m_twitScenes;
 
 	QSqlDatabase m_database;
 

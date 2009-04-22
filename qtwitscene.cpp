@@ -21,14 +21,11 @@
 #include <QtDebug>
 #include <QScrollBar>
 #include "qtwit/qtwitstatus.h"
-#include "qtwitdget.h"
+#include "qtwitscene.h"
 
-QTwitScene::QTwitScene(ImageDownloader *imgDown, QObject *parent)
-	:	QGraphicsScene(parent), m_imageDownloader(imgDown)
+QTwitScene::QTwitScene(QObject *parent)
+	:	QGraphicsScene(parent), m_imageDownloader(0)
 {
-	if(m_imageDownloader){
-		connect(m_imageDownloader, SIGNAL(finished()), this, SLOT(finishedDownloadImages()));
-	}
 }
 
 void QTwitScene::setImageDownloader(ImageDownloader *imgDown)

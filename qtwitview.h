@@ -22,7 +22,8 @@
 #define QTWITVIEW_H
 
 #include <QGraphicsView>
- 
+#include <QScrollBar>
+
 class QTwitView : public QGraphicsView
 {
 	Q_OBJECT
