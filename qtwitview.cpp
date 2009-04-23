@@ -43,8 +43,7 @@ void QTwitView::resizeEvent(QResizeEvent *e)
 	QSize s = e->size();
 	QTwitScene* twitScene = qobject_cast<QTwitScene*>(scene());
 	if(twitScene){
-		//int widthVertScrollBar = verticalScrollBar()->width();
-		twitScene->resizeTextItems(s.width() - 50);
+		twitScene->resizeItems(s.width() - 50 - 1);
 		twitScene->setSceneRect(0, 0, s.width(), twitScene->boundingWidth());
 	}
 

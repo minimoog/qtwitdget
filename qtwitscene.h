@@ -24,6 +24,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsRectItem>
 #include "imagedownloader.h"
 
 class QTwitStatus;
@@ -43,7 +44,7 @@ public:
 	void setStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
 	void setUserid(int id);
-	void resizeTextItems(int w);
+	void resizeItems(int w);
 	float boundingWidth() const;
 
 signals:
@@ -64,6 +65,7 @@ private:
 
 	QList<QGraphicsTextItem*> m_textItems;
 	QList<QGraphicsPixmapItem*> m_pixmapItems;
+	QList<QGraphicsRectItem*> m_rectItems;
 };
 
 #endif //QTWITSCENE_H

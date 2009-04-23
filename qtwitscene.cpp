@@ -63,9 +63,14 @@ void QTwitScene::updateStatusWidgets()
 			pixmapItem->setPos(0, posY);
 			m_pixmapItems << pixmapItem;
 
-			QGraphicsTextItem* textItem = addText(QString());
+			QGraphicsRectItem* rectItem = new QGraphicsRectItem;
+			addItem(rectItem);
+			rectItem->setPos(50, posY);
+			rectItem->setRect(0, 0, 0, 50);
+			m_rectItems << rectItem;
+
+			QGraphicsTextItem* textItem = new QGraphicsTextItem(rectItem);
 			textItem->setOpenExternalLinks(true);
-			textItem->setPos(50, posY);
 			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
 			m_textItems << textItem;
 
@@ -110,15 +115,21 @@ void QTwitScene::finishedDownloadImages()
 	QGraphicsView* twitView = graphicsViews.at(0);
 	
 	setSceneRect(0, 0, twitView->viewport()->width(), boundingWidth());
-	resizeTextItems(twitView->viewport()->width() - 50);
+	resizeItems(twitView->viewport()->width() - 50 - 1);
 }
 
-void QTwitScene::resizeTextItems(int w)
+void QTwitScene::resizeItems(int w)
 {
 	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
 	while(iterTextItem.hasNext()){
 		QGraphicsTextItem* textItem = iterTextItem.next();
 		textItem->setTextWidth(w);
+	}
+
+	QListIterator<QGraphicsRectItem*> iterRectItem(m_rectItems);
+	while(iterRectItem.hasNext()){
+		QGraphicsRectItem* rectItem = iterRectItem.next();
+		rectItem->setRect(0, 0, w, 48);
 	}
 }
 
