@@ -65,9 +65,15 @@ void QTwitScene::updateStatusWidgets()
 
 			QGraphicsRectItem* rectItem = new QGraphicsRectItem;
 			addItem(rectItem);
-			rectItem->setPos(50, posY);
+			rectItem->setPos(48, posY);
 			rectItem->setRect(0, 0, 0, 50);
+			rectItem->setPen(QPen(Qt::NoPen));
 			m_rectItems << rectItem;
+
+			if(m_rectItems.count() % 2)
+				rectItem->setBrush(QBrush(QColor("#F2E3C6")));
+			else
+				rectItem->setBrush(QBrush(QColor("#E0E4CC")));
 
 			QGraphicsTextItem* textItem = new QGraphicsTextItem(rectItem);
 			textItem->setOpenExternalLinks(true);
@@ -115,7 +121,7 @@ void QTwitScene::finishedDownloadImages()
 	QGraphicsView* twitView = graphicsViews.at(0);
 	
 	setSceneRect(0, 0, twitView->viewport()->width(), boundingWidth());
-	resizeItems(twitView->viewport()->width() - 50 - 1);
+	resizeItems(twitView->viewport()->width() - 48 - 1);
 }
 
 void QTwitScene::resizeItems(int w)
