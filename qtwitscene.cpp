@@ -21,8 +21,34 @@
 #include <QtDebug>
 #include <QScrollBar>
 #include <QGraphicsView>
+#include <QRegExp>
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
+
+static QString replaceLinksWithHref(const QString &text)
+{
+	QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive);
+
+	//make a copy
+	QString textWithHref(text);
+
+	//replace url links with href
+	int pos = 0;
+	while(pos >= 0){
+		pos = rx.indexIn(textWithHref, pos);
+
+		if(pos >= 0){
+			int length = rx.matchedLength();
+			QString matchedUrl = textWithHref.mid(pos, length);
+			QString href = "<a href=\"" + matchedUrl + "\">" + matchedUrl + "</a>";
+			textWithHref.replace(pos, length, href);
+			int advance = href.size() - matchedUrl.size(); //how much to advanced after replacement
+			pos += (length + advance);
+		}
+	}
+
+	return textWithHref;
+}
 
 QTwitScene::QTwitScene(QObject *parent)
 	:	QGraphicsScene(parent), m_imageDownloader(0)
@@ -114,7 +140,7 @@ void QTwitScene::finishedDownloadImages()
 		QImage img = images.value(ts.profileImageUrl());
 
 		pixmapItem->setPixmap(QPixmap::fromImage(img));
-		textItem->setHtml(ts.text());
+		textItem->setHtml(replaceLinksWithHref(ts.text()));
 	}
 
 	QList<QGraphicsView*> graphicsViews = views();
