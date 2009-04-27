@@ -26,6 +26,7 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
 #include "imagedownloader.h"
+#include "pixmapbuttonitem.h"
 
 class QTwitStatus;
 
@@ -66,7 +67,7 @@ private:
 	QList<QGraphicsTextItem*> m_textItems;
 	QList<QGraphicsPixmapItem*> m_pixmapItems;
 	QList<QGraphicsRectItem*> m_rectItems;
-	QList<QGraphicsPixmapItem*> m_replyItems;
+	QList<PixmapButtonItem*> m_replyItems;
 };
 
 #endif //QTWITSCENE_H

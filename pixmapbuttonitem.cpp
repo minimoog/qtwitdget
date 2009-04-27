@@ -17,13 +17,17 @@
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
  */
- 
+
+#include <QtDebug>
+#include <QGraphicsSceneHoverEvent>
 #include "pixmapbuttonitem.h"
 
 PixmapButtonItem::PixmapButtonItem(QGraphicsItem *parent)
 	:	QGraphicsPixmapItem(parent)
 {
 	setAcceptHoverEvents(true);
+	setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
+	setToolTip(tr("PixmapButtonItem"));
 }
 
 void PixmapButtonItem::setHoverPixmap(const QPixmap &pixmap)
@@ -46,12 +50,25 @@ QPixmap PixmapButtonItem::clickedPixmap() const
 	return m_clickedPixmap;
 }
 
+void PixmapButtonItem::setDefaultPixmap(const QPixmap &pixmap)
+{
+	m_defaultPixmap = pixmap;
+	setPixmap(m_defaultPixmap);
+}
+
+QPixmap PixmapButtonItem::defaultPixmap() const
+{
+	return m_defaultPixmap;
+}
+
+
 void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 {
-	m_defaultPixmap = pixmap();
 	setPixmap(m_hoverPixmap);
 
 	//QGraphicsItem::prepareGeometryChange () ???
+
+	qDebug() << "hover enter";
 
 	QGraphicsPixmapItem::hoverEnterEvent(e);
 }
@@ -59,6 +76,8 @@ void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 void PixmapButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
 {
 	setPixmap(m_defaultPixmap);
+
+	qDebug() << "hover leave";
 
 	QGraphicsPixmapItem::hoverLeaveEvent(e);
 }

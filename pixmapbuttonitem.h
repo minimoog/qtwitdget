@@ -23,7 +23,7 @@
  
 #include <QGraphicsPixmapItem>
 
-class PixmapButtonItem : public  QObject, QGraphicsPixmapItem
+class PixmapButtonItem : public  QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
 public:
@@ -32,6 +32,8 @@ public:
 	QPixmap hoverPixmap() const;
 	void setClickedPixmap(const QPixmap &pixmap);
 	QPixmap clickedPixmap() const;
+	void setDefaultPixmap(const QPixmap &pixmap);
+	QPixmap defaultPixmap() const;
 signals:
 	void clicked();
 protected:
