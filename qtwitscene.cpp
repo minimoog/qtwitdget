@@ -147,7 +147,7 @@ void QTwitScene::finishedDownloadImages()
 	QGraphicsView* twitView = graphicsViews.at(0);
 	
 	setSceneRect(0, 0, twitView->viewport()->width(), boundingWidth());
-	resizeItems(twitView->viewport()->width() - 48 - 1);
+	resizeItems(twitView->viewport()->width() - 64 - 1);
 }
 
 void QTwitScene::resizeItems(int w)
