@@ -106,6 +106,9 @@ void QTwitScene::updateStatusWidgets()
 			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
 			m_textItems << textItem;
 
+			QGraphicsPixmapItem* replyItem = new QGraphicsPixmapItem(QPixmap(":/images/button_reply.png"), rectItem);
+			m_replyItems << replyItem;
+
 			posY += 50.0f;
 		}
 	}
@@ -159,9 +162,12 @@ void QTwitScene::resizeItems(int w)
 	}
 
 	QListIterator<QGraphicsRectItem*> iterRectItem(m_rectItems);
+	QListIterator<QGraphicsPixmapItem*> iterReplyItem(m_replyItems);
 	while(iterRectItem.hasNext()){
 		QGraphicsRectItem* rectItem = iterRectItem.next();
+		QGraphicsPixmapItem* replyItem = iterReplyItem.next();
 		rectItem->setRect(0, 0, w, 48);
+		replyItem->setPos(w, 0);
 	}
 }
 
