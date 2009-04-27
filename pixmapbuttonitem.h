@@ -34,9 +34,13 @@ public:
 	QPixmap clickedPixmap() const;
 signals:
 	void clicked();
+protected:
+	void hoverEnterEvent(QGraphicsSceneHoverEvent *e);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent *e);
 private:
 	QPixmap m_hoverPixmap;
 	QPixmap m_clickedPixmap;
+	QPixmap m_defaultPixmap;
 };
 
 #endif //PIXMAPBUTONITEM_H

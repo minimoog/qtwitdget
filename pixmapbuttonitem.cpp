@@ -23,6 +23,7 @@
 PixmapButtonItem::PixmapButtonItem(QGraphicsItem *parent)
 	:	QGraphicsPixmapItem(parent)
 {
+	setAcceptHoverEvents(true);
 }
 
 void PixmapButtonItem::setHoverPixmap(const QPixmap &pixmap)
@@ -45,3 +46,19 @@ QPixmap PixmapButtonItem::clickedPixmap() const
 	return m_clickedPixmap;
 }
 
+void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
+{
+	m_defaultPixmap = pixmap();
+	setPixmap(m_hoverPixmap);
+
+	//QGraphicsItem::prepareGeometryChange () ???
+
+	QGraphicsPixmapItem::hoverEnterEvent(e);
+}
+
+void PixmapButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
+{
+	setPixmap(m_defaultPixmap);
+
+	QGraphicsPixmapItem::hoverLeaveEvent(e);
+}
