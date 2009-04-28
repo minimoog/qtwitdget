@@ -8,6 +8,9 @@
 	<file>images/button_retweet.png</file>
 	<file>images/button_retweet_hover.png</file>
 	<file>images/button_retweet_click.png</file>
+	<file>images/button_favorited.png</file>
+	<file>images/button_favorited_hover.png</file>
+	<file>images/button_favorited_click.png</file>
 	<file>translations/qtwitdget_en.qm</file>
 	<file>translations/qtwitdget_mk.qm</file>
 </qresource>
