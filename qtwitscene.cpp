@@ -112,6 +112,12 @@ void QTwitScene::updateStatusWidgets()
 			replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
 			m_replyItems << replyItem;
 
+			PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
+			retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
+			retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
+			retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
+			m_retweetItems << retweetItem;
+
 			posY += 50.0f;
 		}
 	}
@@ -166,11 +172,14 @@ void QTwitScene::resizeItems(int w)
 
 	QListIterator<QGraphicsRectItem*> iterRectItem(m_rectItems);
 	QListIterator<PixmapButtonItem*> iterReplyItem(m_replyItems);
+	QListIterator<PixmapButtonItem*> iterRetweetItem(m_retweetItems);
 	while(iterRectItem.hasNext()){
 		QGraphicsRectItem* rectItem = iterRectItem.next();
 		PixmapButtonItem* replyItem = iterReplyItem.next();
+		PixmapButtonItem* retweetItem = iterRetweetItem.next();
 		rectItem->setRect(0, 0, w, 48);
 		replyItem->setPos(w, 0);
+		retweetItem->setPos(w, 16);
 	}
 }
 

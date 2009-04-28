@@ -68,6 +68,7 @@ private:
 	QList<QGraphicsPixmapItem*> m_pixmapItems;
 	QList<QGraphicsRectItem*> m_rectItems;
 	QList<PixmapButtonItem*> m_replyItems;
+	QList<PixmapButtonItem*> m_retweetItems;
 };
 
 #endif //QTWITSCENE_H
