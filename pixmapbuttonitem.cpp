@@ -77,3 +77,19 @@ void PixmapButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
 
 	QGraphicsPixmapItem::hoverLeaveEvent(e);
 }
+
+void PixmapButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
+{
+	if(e->button() == Qt::LeftButton){
+		setPixmap(m_clickedPixmap);
+		emit clicked();
+		e->accept();
+	}
+}
+
+void PixmapButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+{
+	if(e->button() == Qt::LeftButton){
+		setPixmap(m_defaultPixmap);
+	}
+}

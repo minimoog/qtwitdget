@@ -109,6 +109,7 @@ void QTwitScene::updateStatusWidgets()
 			PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
 			replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
 			replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+			replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
 			m_replyItems << replyItem;
 
 			posY += 50.0f;

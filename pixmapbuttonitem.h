@@ -39,6 +39,8 @@ signals:
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *e);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *e);
+	void mousePressEvent(QGraphicsSceneMouseEvent *e);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
 private:
 	QPixmap m_hoverPixmap;
 	QPixmap m_clickedPixmap;
