@@ -186,9 +186,39 @@ void MainWindow::finishedFriendsTimeline()
 
 		QSqlQuery query;
 		query.prepare("INSERT INTO status "
-			"(created, id, text, screenName, profileImageUrl, source, replyToStatusId, replyToUserId, replyToScreenName) "
+			"(created, "
+			"id, "
+			"text, "
+			"source, "
+			"replyToStatusId, "
+			"replyToUserId, "
+			"favorited, "
+			"replyToScreenName, "
+			"userId, "
+			"name, "
+			"screenName, "
+			"location, "
+			"description, "
+			"profileImageUrl, "
+			"url, "
+			"followersCount) "
 			"VALUES "
-			"(:created, :id, :text, :screenName, :profileImageUrl, :source, :replyToStatusId, :replyToUserId, :replyToScreenName)");
+			"(:created, "
+			":id, "
+			":text, "
+			":source, "
+			":replyToStatusId, "
+			":replyToUserId, "
+			":favorited, "
+			":replyToScreenName, "
+			":userId, "
+			":name, "
+			":screenName, "
+			":location, "
+			":description, "
+			":profileImageUrl, "
+			":url, "
+			":followersCount)");
 
 		//it doesn't have to be backwards, I like it this way
 		QListIterator<QTwitStatus> i(lastStatuses);
@@ -198,12 +228,20 @@ void MainWindow::finishedFriendsTimeline()
 			query.bindValue(":created", s.created().toString(Qt::ISODate));
 			query.bindValue(":id", s.id());
 			query.bindValue(":text", s.text());
-			query.bindValue(":screenName", s.screenName());
-			query.bindValue(":profileImageUrl", s.profileImageUrl());
 			query.bindValue(":source", s.source());
 			query.bindValue(":replyToStatusId", s.replyToStatusId());
 			query.bindValue(":replyToUserId", s.replyToUserId());
+			query.bindValue(":favorited", s.favorited());
 			query.bindValue(":replyToScreenName", s.replyToScreenName());
+			query.bindValue(":userId", s.userId());
+			query.bindValue(":name", s.name());
+			query.bindValue(":screenName", s.screenName());
+			query.bindValue(":location", s.location());
+			query.bindValue(":description", s.description());
+			query.bindValue(":profileImageUrl", s.profileImageUrl());
+			query.bindValue(":url", s.url());
+			query.bindValue(":followersCount", s.folllowersCount());
+			
 			query.exec();
 		}
 
@@ -308,7 +346,7 @@ void MainWindow::createDatabase(const QString& databaseName)
 				"location TEXT, "
 				"description TEXT, "
 				"profileImageUrl TEXT, "
-				"url TEXT, ",
+				"url TEXT, "
 				"followersCount INTEGER);");
 				
 	query.exec("CREATE INDEX IF NOT EXISTS index_id ON status (id);");
