@@ -297,13 +297,20 @@ void MainWindow::createDatabase(const QString& databaseName)
 				"created DATETIME, "
 				"id INTEGER, "
 				"text TEXT, "
-				"screenName TEXT, "
-				"profileImageUrl TEXT, "
 				"source TEXT, "
 				"replyToStatusId INTEGER, "
 				"replyToUserId INTEGER, "
-				"replyToScreenName TEXT);");
-
+				"favorited INTEGER, "
+				"replyToScreenName TEXT, "
+				"userId INTEGER, "
+				"name TEXT, "
+				"screenName TEXT, "
+				"location TEXT, "
+				"description TEXT, "
+				"profileImageUrl TEXT, "
+				"url TEXT, ",
+				"followersCount INTEGER);");
+				
 	query.exec("CREATE INDEX IF NOT EXISTS index_id ON status (id);");
 }
 
