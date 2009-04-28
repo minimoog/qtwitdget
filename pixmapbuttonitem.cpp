@@ -68,16 +68,12 @@ void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 
 	//QGraphicsItem::prepareGeometryChange () ???
 
-	qDebug() << "hover enter";
-
 	QGraphicsPixmapItem::hoverEnterEvent(e);
 }
 
 void PixmapButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
 {
 	setPixmap(m_defaultPixmap);
-
-	qDebug() << "hover leave";
 
 	QGraphicsPixmapItem::hoverLeaveEvent(e);
 }
