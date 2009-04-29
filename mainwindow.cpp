@@ -49,7 +49,6 @@ MainWindow::MainWindow()
 	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
-	ui.groupWidget->hide();
 	ui.updateEdit->setLimit(140);
 	
 	//remove tab that Designer creates

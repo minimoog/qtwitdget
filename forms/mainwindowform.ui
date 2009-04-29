@@ -14,7 +14,7 @@
    <string>QTwitdget</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
@@ -40,12 +40,28 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <widget class="TextEditWithLimit" name="updateEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>64</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="margin">
        <number>1</number>
       </property>
       <item>
-       <spacer name="horizontalSpacer">
+       <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -58,17 +74,21 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="moreButton">
+       <widget class="QPushButton" name="updateButton">
         <property name="text">
-         <string>...</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+         <string>Update</string>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
+       <widget class="QPushButton" name="shortUrlsButton">
+        <property name="text">
+         <string>Short Urls</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -81,81 +101,6 @@
        </spacer>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QWidget" name="groupWidget" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>1</number>
-       </property>
-       <property name="margin">
-        <number>1</number>
-       </property>
-       <item>
-        <widget class="TextEditWithLimit" name="updateEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>64</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <property name="margin">
-          <number>1</number>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="updateButton">
-           <property name="text">
-            <string>Update</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="shortUrlsButton">
-           <property name="text">
-            <string>Short Urls</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -257,38 +202,6 @@
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>shortUrlsButton</sender>
-   <signal>clicked()</signal>
-   <receiver>updateEdit</receiver>
-   <slot>shortUrls()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>288</x>
-     <y>765</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>209</x>
-     <y>741</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>moreButton</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>groupWidget</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>247</x>
-     <y>670</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>200</x>
-     <y>686</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>actionMinimize</sender>
    <signal>triggered()</signal>
