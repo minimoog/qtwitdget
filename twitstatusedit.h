@@ -34,11 +34,13 @@ public:
 
 	void setLimit(int limit);
 	int limit() const;
+	void setStatusId(int statusId);
+	int statusId() const;
 
 signals:
-	/*! emited when size of text goes over limit and under limit (from overlimit) */
+	/*! emitted when size of text goes over limit and under limit (from overlimit) */
 	void overLimit(bool);
-	/*! emited when Return or Enter are pressed */
+	/*! emitted when Return or Enter are pressed */
 	void returnPressed();
 
 public slots:
@@ -52,6 +54,7 @@ private slots:
 
 private:
 	int m_limit;
+	int m_statusId;
 	bool m_isOverLimit;
 };
 

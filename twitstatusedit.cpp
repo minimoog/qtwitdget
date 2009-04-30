@@ -38,6 +38,16 @@ int TwitStatusEdit::limit() const
 	return m_limit;
 }
 
+void TwitStatusEdit::setStatusId(int statusId)
+{
+	m_statusId = statusId;
+}
+
+int TwitStatusEdit::statusId() const
+{
+	return m_statusId;
+}
+
 void TwitStatusEdit::onTextChanged()
 {
 	if(toPlainText().size() > m_limit){
