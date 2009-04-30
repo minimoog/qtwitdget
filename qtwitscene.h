@@ -49,8 +49,9 @@ public:
 	float boundingWidth() const;
 
 signals:
-	void requestReplyStatus(const QString& replyText, int replyToStatus);
-	//void requestDeleteStatus(int statusId);
+	void requestReply(int statusId, const QString& screenName);
+	void requestRetweet(const QString& text, const QString& screenName);
+	void requestFavorited(int statusId);
 	
 private slots:
 	void finishedDownloadImages();

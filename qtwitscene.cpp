@@ -205,15 +205,15 @@ float QTwitScene::boundingWidth() const
 
 void QTwitScene::replyClicked(int i)
 {
-
+	emit requestReply(m_statuses.at(i).id(), m_statuses.at(i).screenName());
 }
 
 void QTwitScene::retweetClicked(int i)
 {
-
+	emit requestRetweet(m_statuses.at(i).text(), m_statuses.at(i).screenName());
 }
 
 void QTwitScene::favoritedClicked(int i)
 {
-
+	emit requestFavorited(m_statuses.at(i).id());
 }
