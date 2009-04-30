@@ -9,7 +9,7 @@ win32:LIBS += libeay32.lib
 unix:LIBS += -lcrypto
 
 HEADERS +=  imagedownloader.h \
-			texteditwithlimit.h \
+			twitstatusedit.h \
 			shortenedurl.h \
 			mainwindow.h \
 			langchangedialog.h \
@@ -34,7 +34,7 @@ HEADERS +=  imagedownloader.h \
 			
 SOURCES +=  main.cpp \
 			imagedownloader.cpp \
-			texteditwithlimit.cpp \
+			twitstatusedit.cpp \
 			shortenedurl.cpp \
 			mainwindow.cpp \
 			langchangedialog.cpp \

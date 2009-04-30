@@ -18,19 +18,19 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
  */
 
-#ifndef TEXTEDITWITHLIMIT_H
-#define TEXTEDITWITHLIMIT_H
+#ifndef TWITSTATUSEDIT_H
+#define TWITSTATUSEDIT_H
 
 #include <QPlainTextEdit>
 
-/*! class TextEditWithLimit */
-class TextEditWithLimit : public QPlainTextEdit
+/*! class TwitStatusEdit */
+class TwitStatusEdit : public QPlainTextEdit
 {
 	Q_OBJECT
 	Q_PROPERTY(int limit READ limit WRITE setLimit)
 	
 public:
-	TextEditWithLimit(QWidget *parent = 0);
+	TwitStatusEdit(QWidget *parent = 0);
 
 	void setLimit(int limit);
 	int limit() const;
@@ -55,4 +55,4 @@ private:
 	bool m_isOverLimit;
 };
 
-#endif //TEXTEDITWITHLIMIT_H
+#endif //TWITSTATUSEDIT_H

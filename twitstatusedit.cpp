@@ -19,26 +19,26 @@
  */
 
 #include <QRegExp>
-#include "texteditwithlimit.h"
+#include "twitstatusedit.h"
 #include "shortenedurl.h"
 
-TextEditWithLimit::TextEditWithLimit(QWidget *parent)
+TwitStatusEdit::TwitStatusEdit(QWidget *parent)
 	:	QPlainTextEdit(parent), m_limit(16777215), m_isOverLimit(false)
 {
 	connect(this, SIGNAL(textChanged()), SLOT(onTextChanged()));
 }
 
-void TextEditWithLimit::setLimit(int limit)
+void TwitStatusEdit::setLimit(int limit)
 {
 	m_limit = limit;
 }
 
-int TextEditWithLimit::limit() const
+int TwitStatusEdit::limit() const
 {
 	return m_limit;
 }
 
-void TextEditWithLimit::onTextChanged()
+void TwitStatusEdit::onTextChanged()
 {
 	if(toPlainText().size() > m_limit){
 
@@ -59,7 +59,7 @@ void TextEditWithLimit::onTextChanged()
 	}
 }
 
-void TextEditWithLimit::keyPressEvent(QKeyEvent *e)
+void TwitStatusEdit::keyPressEvent(QKeyEvent *e)
 {
 	switch(e->key()){
 		case Qt::Key_Tab:	//ignore Tab
@@ -77,7 +77,7 @@ void TextEditWithLimit::keyPressEvent(QKeyEvent *e)
 	}
 }
 
-void TextEditWithLimit::shortUrls()
+void TwitStatusEdit::shortUrls()
 {
 	QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive, QRegExp::RegExp2);	
 	QString txt = toPlainText();

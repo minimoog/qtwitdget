@@ -40,7 +40,7 @@
      </widget>
     </item>
     <item>
-     <widget class="TextEditWithLimit" name="updateEdit">
+     <widget class="TwitStatusEdit" name="updateEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -192,9 +192,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TextEditWithLimit</class>
+   <class>TwitStatusEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>texteditwithlimit.h</header>
+   <header>twitstatusedit.h</header>
    <slots>
     <slot>shortUrls()</slot>
    </slots>
