@@ -61,6 +61,15 @@ QPixmap PixmapButtonItem::defaultPixmap() const
 	return m_defaultPixmap;
 }
 
+void PixmapButtonItem::setIndex(int i)
+{
+	m_index = i;
+}
+
+int PixmapButtonItem::index() const
+{
+	return m_index;
+}
 
 void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 {
@@ -82,7 +91,7 @@ void PixmapButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
 	if(e->button() == Qt::LeftButton){
 		setPixmap(m_clickedPixmap);
-		emit clicked();
+		emit clicked(m_index);
 		e->accept();
 	}
 }

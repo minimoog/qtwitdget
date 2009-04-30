@@ -34,8 +34,10 @@ public:
 	QPixmap clickedPixmap() const;
 	void setDefaultPixmap(const QPixmap &pixmap);
 	QPixmap defaultPixmap() const;
+	void setIndex(int i);
+	int index() const;
 signals:
-	void clicked();
+	void clicked(int i);
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *e);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *e);
@@ -45,6 +47,7 @@ private:
 	QPixmap m_hoverPixmap;
 	QPixmap m_clickedPixmap;
 	QPixmap m_defaultPixmap;
+	int m_index;
 };
 
 #endif //PIXMAPBUTONITEM_H
