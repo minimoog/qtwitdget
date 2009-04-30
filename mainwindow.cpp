@@ -18,6 +18,7 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
  */
 
+#include <QtDebug>
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -449,9 +450,9 @@ void MainWindow::createTabs()
 		statusScene->setImageDownloader(m_imageDownloader);
 		m_twitScenes << statusScene;
 
-		//connect(statusesWidget, SIGNAL(requestReplyStatus(const QString&, int)), 
-		//	m_twitUpdate, SLOT(setUpdate(const QString&, int)));
-		//connect(statusesWidget, SIGNAL(requestDeleteStatus(int)), m_twitDestroy, SLOT(deleteStatus(int)));
+		connect(statusScene, SIGNAL(requestReply(int, const QString&)), this, SLOT(reply(int, const QString&)));
+		connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), this, SLOT(retweet(const QString&, const QString&)));
+		connect(statusScene, SIGNAL(requestFavorited(int)), this, SLOT(favorited(int)));
 
 		QTwitView *statusView = new QTwitView;
 		statusView->setScene(statusScene);
@@ -470,4 +471,24 @@ void MainWindow::nextStatuses()
 	m_twitTabGroups[i].increasePage();
 
 	refreshTab(i);
+}
+
+void MainWindow::reply(int statusId, const QString &screenName)
+{
+	qDebug() << "reply";
+	qDebug() << "status id: " << statusId;
+	qDebug() << "screen name: " << screenName;
+}
+
+void MainWindow::retweet(const QString &text, const QString &screenName)
+{
+	qDebug() << "retweet";
+	qDebug() << "text: " << text;
+	qDebug() << "screen name: " << screenName;
+}
+
+void MainWindow::favorited(int statusId)
+{
+	qDebug() << "favorited";
+	qDebug() << "status id: " << statusId;
 }

@@ -64,6 +64,10 @@ private slots:
 	void closeTab(int i);
 	void nextStatuses();
 
+	void reply(int statusId, const QString& screenName);
+	void retweet(const QString& text, const QString& screenName);
+	void favorited(int statusId);
+
 protected:
 	void closeEvent(QCloseEvent *e);
 	void changeEvent(QEvent *e);
