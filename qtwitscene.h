@@ -50,10 +50,13 @@ public:
 
 signals:
 	void requestReplyStatus(const QString& replyText, int replyToStatus);
-	void requestDeleteStatus(int statusId);
+	//void requestDeleteStatus(int statusId);
 	
 private slots:
 	void finishedDownloadImages();
+	void replyClicked(int i);
+	void retweetClicked(int i);
+	void favoritedClicked(int i);
 	
 private:
 	void updateStatusWidgets();
