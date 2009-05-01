@@ -450,8 +450,10 @@ void MainWindow::createTabs()
 		statusScene->setImageDownloader(m_imageDownloader);
 		m_twitScenes << statusScene;
 
-		connect(statusScene, SIGNAL(requestReply(int, const QString&)), this, SLOT(reply(int, const QString&)));
-		connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), this, SLOT(retweet(const QString&, const QString&)));
+		connect(statusScene,	SIGNAL(requestReply(int, const QString&)), 
+				ui.updateEdit,	SLOT(setReply(int, const QString&)));
+		connect(statusScene,	SIGNAL(requestRetweet(const QString&, const QString&)), 
+				ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
 		connect(statusScene, SIGNAL(requestFavorited(int)), this, SLOT(favorited(int)));
 
 		QTwitView *statusView = new QTwitView;
@@ -471,20 +473,6 @@ void MainWindow::nextStatuses()
 	m_twitTabGroups[i].increasePage();
 
 	refreshTab(i);
-}
-
-void MainWindow::reply(int statusId, const QString &screenName)
-{
-	qDebug() << "reply";
-	qDebug() << "status id: " << statusId;
-	qDebug() << "screen name: " << screenName;
-}
-
-void MainWindow::retweet(const QString &text, const QString &screenName)
-{
-	qDebug() << "retweet";
-	qDebug() << "text: " << text;
-	qDebug() << "screen name: " << screenName;
 }
 
 void MainWindow::favorited(int statusId)
