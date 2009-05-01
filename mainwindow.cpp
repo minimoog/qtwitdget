@@ -452,8 +452,10 @@ void MainWindow::createTabs()
 
 		connect(statusScene,	SIGNAL(requestReply(int, const QString&)), 
 				ui.updateEdit,	SLOT(setReply(int, const QString&)));
+		connect(statusScene, SIGNAL(requestReply(int, const QString&)), ui.updateEdit, SLOT(setFocus()));
 		connect(statusScene,	SIGNAL(requestRetweet(const QString&, const QString&)), 
 				ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
+		connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), ui.updateEdit, SLOT(setFocus()));
 		connect(statusScene, SIGNAL(requestFavorited(int)), this, SLOT(favorited(int)));
 
 		QTwitView *statusView = new QTwitView;
