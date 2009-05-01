@@ -171,7 +171,7 @@ void MainWindow::updateButtonClicked()
 	if(!ui.updateEdit->toPlainText().isEmpty()){
 		//trim to 140 characters
 		QString updateText = ui.updateEdit->toPlainText().left(140);
-		m_twitUpdate->setUpdate(updateText);
+		m_twitUpdate->setUpdate(updateText, ui.updateEdit->statusId());
 		ui.updateEdit->clear();
 	}
 }
