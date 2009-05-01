@@ -23,7 +23,7 @@
 #include "shortenedurl.h"
 
 TwitStatusEdit::TwitStatusEdit(QWidget *parent)
-	:	QPlainTextEdit(parent), m_limit(16777215), m_isOverLimit(false)
+	:	QPlainTextEdit(parent), m_limit(16777215), m_isOverLimit(false), m_statusId(0)
 {
 	connect(this, SIGNAL(textChanged()), SLOT(onTextChanged()));
 }
@@ -50,6 +50,9 @@ int TwitStatusEdit::statusId() const
 
 void TwitStatusEdit::onTextChanged()
 {
+	if(toPlainText().isEmpty())		//clear reply status
+		m_statusId = 0;
+
 	if(toPlainText().size() > m_limit){
 
 		if(!m_isOverLimit){
@@ -67,6 +70,20 @@ void TwitStatusEdit::onTextChanged()
 			setStyleSheet(QString());
 		}
 	}
+}
+
+void TwitStatusEdit::setReply(int id, const QString& screenName)
+{
+	m_statusId = id;
+
+	appendPlainText(QString('@') + screenName + QString(' '));
+}
+
+void TwitStatusEdit::setRetweet(const QString& text, const QString& screenName)
+{
+	m_statusId = 0;
+
+	appendPlainText(QString("RT ") + QString('@') + screenName + QString(": ") + text);
 }
 
 void TwitStatusEdit::keyPressEvent(QKeyEvent *e)
