@@ -96,6 +96,7 @@ private:
 	QList<TwitTabGroup> m_twitTabGroups;
 	int m_lastStatusId;
 	QList<QTwitScene*> m_twitScenes;
+	int m_userId;
 
 	QSqlDatabase m_database;
 

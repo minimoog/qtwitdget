@@ -120,16 +120,16 @@ void MainWindow::startUp()
 {
 	//read settings
 	QSettings settings;
-	int userId = settings.value("user_id", 0).toInt();
+	m_userId = settings.value("user_id", 0).toInt();
 	QString oauthToken = settings.value("oauth_token").toString();
 	QString oauthTokenSecret = settings.value("oauth_token_secret").toString();
 
-	if(userId != 0 && !oauthToken.isEmpty() && !oauthTokenSecret.isEmpty()){
+	if(m_userId != 0 && !oauthToken.isEmpty() && !oauthTokenSecret.isEmpty()){
 		m_oauthTwitter->setOAuthToken(oauthToken.toUtf8());
 		m_oauthTwitter->setOAuthTokenSecret(oauthTokenSecret.toUtf8());
 
 		//create or change database according to user id
-		createDatabase(QString::number(userId));
+		createDatabase(QString::number(m_userId));
 
 		if(isDatabaseEmpty()){
 			m_firstRun = true;
@@ -429,11 +429,11 @@ void MainWindow::createTwitGroups()
 	//just testing
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
-	allfriends.setQuery(" screenName != \"minimoog77\" ");
+	allfriends.setQuery(QString(" userId != %1 ").arg(m_userId));
 
 	TwitTabGroup myTwits;
 	myTwits.setTabName(tr("My twits"));
-	myTwits.setQuery(" screenName == \"minimoog77\" ");
+	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
 
 	m_twitTabGroups.append(allfriends);
 	m_twitTabGroups.append(myTwits);
