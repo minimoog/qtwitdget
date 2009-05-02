@@ -164,7 +164,9 @@ void QTwitScene::finishedDownloadImages()
 		QImage img = images.value(ts.profileImageUrl());
 
 		pixmapItem->setPixmap(QPixmap::fromImage(img));
-		textItem->setHtml(replaceLinksWithHref(ts.text()));
+		QString nameHtml = QString("<b>%1: </b>").arg(ts.name());
+		QString textHtml = replaceLinksWithHref(ts.text());
+		textItem->setHtml(nameHtml + textHtml);
 	}
 
 	QList<QGraphicsView*> graphicsViews = views();
