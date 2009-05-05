@@ -60,9 +60,6 @@ void QTwitFriendsTimeline::update(int sinceId, int maxId, int count, int page)
 	QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
 	req.setRawHeader("Authorization", oauthHeader);
 
-	//qDebug() << url;
-	//qDebug() << req;
-
 	QNetworkReply *netReply = networkAccessManager()->get(req);
 	connect(netReply, SIGNAL(finished()), this, SLOT(reply()));
 	connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
