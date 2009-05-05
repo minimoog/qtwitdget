@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
+ * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
 #ifndef TWITSTATUSEDIT_H

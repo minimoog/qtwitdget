@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
+ * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
 #include <QtDebug>
@@ -30,7 +30,7 @@ ShortenedUrl::ShortenedUrl()
 }
 
 QString ShortenedUrl::shortUrl(const QString &url)
-{
+{s
 	//TODO: Add other services for shortening
 	QString urlService("http://is.gd/api.php?longurl=");
 	urlService += url;
