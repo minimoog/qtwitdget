@@ -31,9 +31,11 @@ public:
 	bool read(QIODevice *device);
 	QTwitExtUserInfo userInfo() const;
 
+protected:
+	void readUser();
+
 private:
 	void readUnknownElement();
-	void readUser();
 
 	QTwitExtUserInfo m_userInfo;
 };
