@@ -16,23 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QtDebug>
 #include <QNetworkReply>
 #include "qtwitfriends.h"
+#include "xml/xmlreaderextusers.h"
 
 QTwitFriends::QTwitFriends(QObject *parent)
 	:	QTwitBase(parent)
 {
 }
 
-/*
-QStringList QTwitFriends::getFriends() const
+QList<QTwitExtUserInfo> QTwitFriends::getFriends() const
 {
-	//return m_friends;
+	return m_friends;
 }
-*/
 
 void QTwitFriends::updateFriends(int id, int userId, const QString& screenName, int page)
 {
+	Q_ASSERT(networkAccessManager() != 0);
+
+	m_friends.clear();
+
 	QUrl url("http://twitter.com/statuses/friends.xml");
 
 	if(id != 0){
@@ -59,18 +63,23 @@ void QTwitFriends::updateFriends(int id, int userId, const QString& screenName, 
 	req.setRawHeader("Authorization", oauthHeader);
 	QNetworkReply *reply = networkAccessManager()->get(req);
 	connect(reply, SIGNAL(finished()), this, SLOT(reply()));
+	connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
 
 void QTwitFriends::reply()
 {
+	QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
+	if(netReply){
+		XmlReaderExtUsers xrextusers;
+		xrextusers.readUsers(netReply);
+		m_friends = xrextusers.users();
+	}
 
-	/* TODO */
-
-	/*
-	if(reply->error() != QNetworkReply::NoError)
-		return;
-	
-	reply->deleteLater();
-	*/
 	emit finished();
+}
+
+
+void QTwitFriends::error()
+{
+	qDebug() << "QTwitFriends error";
 }

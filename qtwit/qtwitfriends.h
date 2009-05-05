@@ -22,6 +22,7 @@
 #define QTWITFRIENDS_H
 
 #include "qtwitbase.h"
+#include "qtwitextuserinfo.h"
 
 /*! QTwitFriends class */
 class QTwitFriends : public QTwitBase
@@ -33,11 +34,14 @@ public:
 	QTwitFriends(QObject *parent = 0);
 	/*! Updates friends for authenticated user */
 	void updateFriends(int id = 0, int userId = 0, const QString& screenName = QString(), int page = 0);
+	QList<QTwitExtUserInfo> getFriends() const;
 
 private:
+	QList<QTwitExtUserInfo> m_friends;
 
 private slots:
 	void reply();
+	void error();
 };
 
 #endif //QTWITFRIENDS_H
