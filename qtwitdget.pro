@@ -29,6 +29,7 @@ HEADERS +=  imagedownloader.h \
 			qtwit/qtwitdestroy.h \
 			xml/xmlreaderextuserinfo.h \
 			xml/xmlreaderstatus.h \
+			xml/xmlreaderextusers.h \
 			oauth/oauth.h \
 			oauth/oauthtwitter.h 
 			
@@ -50,6 +51,7 @@ SOURCES +=  main.cpp \
 			qtwit/qtwitdestroy.cpp \
 			xml/xmlreaderstatus.cpp \
 			xml/xmlreaderextuserinfo.cpp \
+			xml/xmlreaderextusers.cpp \
 			oauth/oauth.cpp \
 			oauth/oauthtwitter.cpp 
 			
