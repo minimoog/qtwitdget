@@ -17,6 +17,7 @@ HEADERS +=  imagedownloader.h \
 			qtwitscene.h \
 			qtwitview.h \
 			pixmapbuttonitem.h \
+			groupdialog.h \
 			qtwit/qtwitupdate.h \
 			qtwit/qtwitstatusdata.h \
 			qtwit/qtwitstatus.h \
@@ -42,6 +43,7 @@ SOURCES +=  main.cpp \
 			qtwitscene.cpp \
 			qtwitview.cpp \
 			pixmapbuttonitem.cpp \
+			groupdialog.cpp \
 			qtwit/qtwitbase.cpp \
 			qtwit/qtwitfriendstimeline.cpp \
 			qtwit/qtwitupdate.cpp \
@@ -56,7 +58,8 @@ SOURCES +=  main.cpp \
 			oauth/oauthtwitter.cpp 
 			
 FORMS += 	forms/mainwindowform.ui \
-			forms/langchangedialogform.ui
+			forms/langchangedialogform.ui \
+			forms/groupdialogform.ui
 			
 TRANSLATIONS += translations/qtwitdget_en.ts \
 				translations/qtwitdget_mk.ts
