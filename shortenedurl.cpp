@@ -30,7 +30,7 @@ ShortenedUrl::ShortenedUrl()
 }
 
 QString ShortenedUrl::shortUrl(const QString &url)
-{s
+{
 	//TODO: Add other services for shortening
 	QString urlService("http://is.gd/api.php?longurl=");
 	urlService += url;
