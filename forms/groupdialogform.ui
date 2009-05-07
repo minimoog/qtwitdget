@@ -104,12 +104,12 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="text">
-        <string>&gt;</string>
+        <string>Insert &gt;&gt;</string>
        </property>
       </widget>
      </item>
@@ -136,12 +136,12 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="text">
-        <string>&lt;</string>
+        <string>Remove</string>
        </property>
       </widget>
      </item>
