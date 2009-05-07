@@ -32,6 +32,7 @@ class QTwitFriends : public QTwitBase
 public:
 	/*! Constructor */
 	QTwitFriends(QObject *parent = 0);
+	QTwitFriends(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent = 0);
 	/*! Updates friends for authenticated user */
 	void updateFriends(int id = 0, int userId = 0, const QString& screenName = QString(), int page = 0);
 	QList<QTwitExtUserInfo> getFriends() const;

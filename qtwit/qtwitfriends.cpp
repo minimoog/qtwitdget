@@ -26,6 +26,11 @@ QTwitFriends::QTwitFriends(QObject *parent)
 {
 }
 
+QTwitFriends::QTwitFriends(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent)
+:	QTwitBase(netManager, oauthTwitter, parent)
+{
+}
+
 QList<QTwitExtUserInfo> QTwitFriends::getFriends() const
 {
 	return m_friends;
