@@ -33,6 +33,7 @@ class QTwitBase : public QObject
 public:
 	/*! Constructor */
 	QTwitBase(QObject *parent = 0);
+	QTwitBase(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent = 0);
 
 	void setNetworkAccessManager(QNetworkAccessManager* netManager);
 	QNetworkAccessManager* networkAccessManager() const;

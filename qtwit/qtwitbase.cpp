@@ -25,6 +25,11 @@ QTwitBase::QTwitBase(QObject *parent)
 {
 }
 
+QTwitBase::QTwitBase(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent)
+:	QObject(parent), m_netManager(netManager), m_oauthTwitter(oauthTwitter)
+{
+}
+
 void QTwitBase::setNetworkAccessManager(QNetworkAccessManager* netManager)
 {
 	m_netManager = netManager;
