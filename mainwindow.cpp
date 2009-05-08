@@ -29,6 +29,7 @@
 #include "qtwitscene.h"
 #include "shortenedurl.h"
 #include "qtwitview.h"
+#include "groupdialog.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
@@ -73,6 +74,7 @@ MainWindow::MainWindow()
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
 	connect(ui.actionAuthorize, SIGNAL(triggered()), SLOT(authorize()));
+	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
@@ -174,6 +176,12 @@ void MainWindow::updateButtonClicked()
 		m_twitUpdate->setUpdate(updateText, ui.updateEdit->statusId());
 		ui.updateEdit->clear();
 	}
+}
+
+void MainWindow::createGrouping()
+{
+	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
+	groupDialog.exec();
 }
 
 void MainWindow::finishedFriendsTimeline()
