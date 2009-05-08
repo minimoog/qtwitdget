@@ -18,12 +18,15 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include "groupdialog.h"
 
 GroupDialog::GroupDialog(QWidget *parent) 
 	: QDialog(parent), m_twitFriends(new QTwitFriends(this))
 {
     m_ui.setupUi(this);
+	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
+	m_twitFriends->updateFriends();
 }
 
 GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent)
@@ -31,6 +34,8 @@ GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthT
 	m_twitFriends(new QTwitFriends(netManager, oauthTwitter, this))
 {
 	m_ui.setupUi(this);
+	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
+	m_twitFriends->updateFriends();
 }
 
 void GroupDialog::setNetworkManager(QNetworkAccessManager* netManager)
@@ -54,4 +59,9 @@ void GroupDialog::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void GroupDialog::finishedFriends()
+{
+	qDebug() << "Finished Friends";
 }

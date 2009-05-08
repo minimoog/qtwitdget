@@ -37,6 +37,9 @@ public:
 protected:
     virtual void changeEvent(QEvent *e);
 
+private slots:
+	void finishedFriends();
+
 private:
     Ui::GroupDialog m_ui;
 	QTwitFriends *m_twitFriends;
