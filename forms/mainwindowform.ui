@@ -132,6 +132,7 @@
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionCreateGroup"/>
     <addaction name="actionChangeStyleSheet"/>
     <addaction name="actionSettings"/>
     <addaction name="actionChangeLanguage"/>
@@ -187,6 +188,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
+   </property>
+  </action>
+  <action name="actionCreateGroup">
+   <property name="text">
+    <string>Create Group</string>
    </property>
   </action>
  </widget>
