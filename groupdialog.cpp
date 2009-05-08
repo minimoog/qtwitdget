@@ -20,9 +20,27 @@
 
 #include "groupdialog.h"
 
-GroupDialog::GroupDialog(QWidget *parent) : QDialog(parent)
+GroupDialog::GroupDialog(QWidget *parent) 
+	: QDialog(parent), m_twitFriends(new QTwitFriends(this))
 {
     m_ui.setupUi(this);
+}
+
+GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent)
+:	QDialog(parent),
+	m_twitFriends(new QTwitFriends(netManager, oauthTwitter, this))
+{
+	m_ui.setupUi(this);
+}
+
+void GroupDialog::setNetworkManager(QNetworkAccessManager* netManager)
+{
+	m_twitFriends->setNetworkAccessManager(netManager);
+}
+
+void GroupDialog::setOAuthTwitter(OAuthTwitter* oauthTwitter)
+{
+	m_twitFriends->setOAuthTwitter(oauthTwitter);
 }
 
 void GroupDialog::changeEvent(QEvent *e)

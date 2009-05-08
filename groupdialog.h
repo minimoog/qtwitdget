@@ -21,6 +21,7 @@
 #ifndef GROUPDIALOG_H
 #define GROUPDIALOG_H
 
+#include "qtwit/qtwitfriends.h"
 #include "ui_groupdialogform.h"
 
 class GroupDialog : public QDialog 
@@ -29,12 +30,17 @@ class GroupDialog : public QDialog
    
 public:
     GroupDialog(QWidget *parent = 0);
+	GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent = 0);
+	void setNetworkManager(QNetworkAccessManager* netManager);
+	void setOAuthTwitter(OAuthTwitter* oauthTwitter);
 
 protected:
     virtual void changeEvent(QEvent *e);
 
 private:
     Ui::GroupDialog m_ui;
+	QTwitFriends *m_twitFriends;
+
 };
 
 #endif // GROUPDIALOG_H
