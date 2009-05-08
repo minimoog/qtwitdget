@@ -63,5 +63,9 @@ void GroupDialog::changeEvent(QEvent *e)
 
 void GroupDialog::finishedFriends()
 {
-	qDebug() << "Finished Friends";
+	QList<QTwitExtUserInfo> listFriends = m_twitFriends->getFriends();
+
+	foreach(const QTwitExtUserInfo& fr, listFriends){
+		m_ui.friendsListWidget->addItem(fr.screenName());
+	}
 }
