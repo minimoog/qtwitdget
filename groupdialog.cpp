@@ -26,6 +26,7 @@ GroupDialog::GroupDialog(QWidget *parent)
 {
     m_ui.setupUi(this);
 	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
+	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	m_twitFriends->updateFriends();
 }
 
@@ -35,6 +36,7 @@ GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthT
 {
 	m_ui.setupUi(this);
 	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
+	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	m_twitFriends->updateFriends();
 }
 
@@ -67,5 +69,17 @@ void GroupDialog::finishedFriends()
 
 	foreach(const QTwitExtUserInfo& fr, listFriends){
 		m_ui.friendsListWidget->addItem(fr.screenName());
+	}
+}
+
+void GroupDialog::insertButtonClicked()
+{
+	QList<QListWidgetItem*> items = m_ui.friendsListWidget->selectedItems();
+	foreach(QListWidgetItem* it, items){
+		//find duplicate
+		QList<QListWidgetItem*> sameItems = m_ui.groupListWidget->findItems(it->text(), Qt::MatchExactly);
+		if(sameItems.isEmpty()){
+			m_ui.groupListWidget->addItem(it->text());
+		}
 	}
 }

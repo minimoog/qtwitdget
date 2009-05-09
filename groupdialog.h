@@ -39,6 +39,7 @@ protected:
 
 private slots:
 	void finishedFriends();
+	void insertButtonClicked();
 
 private:
     Ui::GroupDialog m_ui;
