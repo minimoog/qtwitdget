@@ -43,7 +43,14 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="friendsListWidget"/>
+        <widget class="QListWidget" name="friendsListWidget">
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -90,7 +97,17 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="groupListWidget"/>
+        <widget class="QListWidget" name="groupListWidget">
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::DragDrop</enum>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
