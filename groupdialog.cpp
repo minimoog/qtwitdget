@@ -94,6 +94,11 @@ QList<int> GroupDialog::getGroupList() const
 	return m_groupList;
 }
 
+QString GroupDialog::getGroupName() const
+{
+	return m_ui.groupNameLineEdit->text();
+}
+
 void GroupDialog::createGroupButtonClicked()
 {
 	for(int i = 0; i < m_ui.groupListWidget->count(); ++i){
@@ -105,7 +110,6 @@ void GroupDialog::createGroupButtonClicked()
 void GroupDialog::removeButtonClicked()
 {
 	QList<QListWidgetItem*> selected = m_ui.groupListWidget->selectedItems();
-	qDebug() << selected.count();
 	foreach(QListWidgetItem* it, selected){
 		m_ui.groupListWidget->removeItemWidget(it);
 		delete it;

@@ -35,6 +35,7 @@ public:
 	void setNetworkManager(QNetworkAccessManager* netManager);
 	void setOAuthTwitter(OAuthTwitter* oauthTwitter);
 	QList<int> getGroupList() const;
+	QString getGroupName() const;
 
 protected:
     virtual void changeEvent(QEvent *e);
