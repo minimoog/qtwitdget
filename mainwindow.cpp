@@ -182,7 +182,11 @@ void MainWindow::createGrouping()
 {
 	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
 	groupDialog.exec();
-	//createUserTwitGroup(groupDialog.getGroupName(), groupDialog.getGroupList());
+	TwitTabGroup group = createUserTwitGroup(groupDialog.getGroupName(), groupDialog.getGroupList());
+	addGroupTab(group);
+
+	ui.tabWidget->setCurrentIndex(ui.tabWidget->count() - 1);
+	refreshTab(ui.tabWidget->count() - 1);
 }
 
 void MainWindow::finishedFriendsTimeline()
