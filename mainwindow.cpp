@@ -143,7 +143,7 @@ void MainWindow::startUp()
 				m_lastStatusId = query.value(0).toInt();
 		}
 
-		createTwitGroups();
+		createDefaultTwitGroups();
 		createTabs();
 
 		//ui.twitsWidget->setUserid(userId);
@@ -441,7 +441,7 @@ void MainWindow::loadStyleSheet()
 	}
 }
 
-void MainWindow::createTwitGroups()
+void MainWindow::createDefaultTwitGroups()
 {
 	m_twitTabGroups.clear();
 

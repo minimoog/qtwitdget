@@ -75,7 +75,7 @@ private:
 	void setupTrayIcon();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
-	void createTwitGroups();
+	void createDefaultTwitGroups();
 	void createTabs();
 	bool isDatabaseEmpty();
 
