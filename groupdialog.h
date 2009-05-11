@@ -34,6 +34,7 @@ public:
 	GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent = 0);
 	void setNetworkManager(QNetworkAccessManager* netManager);
 	void setOAuthTwitter(OAuthTwitter* oauthTwitter);
+	QList<int> getGroupList() const;
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -41,11 +42,13 @@ protected:
 private slots:
 	void finishedFriends();
 	void insertButtonClicked();
+	void createGroupButtonClicked();
 
 private:
     Ui::GroupDialog m_ui;
 	QTwitFriends *m_twitFriends;
 	QHash<QString, int> m_scrNameToId;
+	QList<int> m_groupList;
 
 };
 

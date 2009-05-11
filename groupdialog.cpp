@@ -27,6 +27,7 @@ GroupDialog::GroupDialog(QWidget *parent)
     m_ui.setupUi(this);
 	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
+	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
 	m_twitFriends->updateFriends();
 }
 
@@ -37,6 +38,7 @@ GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthT
 	m_ui.setupUi(this);
 	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
+	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
 	m_twitFriends->updateFriends();
 }
 
@@ -82,5 +84,18 @@ void GroupDialog::insertButtonClicked()
 		if(sameItems.isEmpty()){
 			m_ui.groupListWidget->addItem(it->text());
 		}
+	}
+}
+
+QList<int> GroupDialog::getGroupList() const
+{
+	return m_groupList;
+}
+
+void GroupDialog::createGroupButtonClicked()
+{
+	for(int i = 0; i < m_ui.groupListWidget->count(); ++i){
+		QListWidgetItem *lwit = m_ui.groupListWidget->item(i);
+		m_groupList.append(m_scrNameToId.value(lwit->text()));
 	}
 }
