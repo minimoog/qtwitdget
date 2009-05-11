@@ -483,24 +483,8 @@ void MainWindow::createTabs()
 	//add tabs
 	QListIterator<TwitTabGroup> iter(m_twitTabGroups);
 	while(iter.hasNext()){
-		TwitTabGroup tg = iter.next();
-		
-		QTwitScene *statusScene = new QTwitScene(this);
-		statusScene->setImageDownloader(m_imageDownloader);
-		m_twitScenes << statusScene;
-
-		connect(statusScene,	SIGNAL(requestReply(int, const QString&)), 
-				ui.updateEdit,	SLOT(setReply(int, const QString&)));
-		connect(statusScene, SIGNAL(requestReply(int, const QString&)), ui.updateEdit, SLOT(setFocus()));
-		connect(statusScene,	SIGNAL(requestRetweet(const QString&, const QString&)), 
-				ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
-		connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), ui.updateEdit, SLOT(setFocus()));
-		connect(statusScene, SIGNAL(requestFavorited(int)), this, SLOT(favorited(int)));
-
-		QTwitView *statusView = new QTwitView;
-		statusView->setScene(statusScene);
-		connect(statusView, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
-		ui.tabWidget->addTab(statusView, tg.tabName());
+		TwitTabGroup tg = iter.next();		
+		addGroupTab(tg);
 	}
 }
 
