@@ -43,6 +43,7 @@ private slots:
 	void finishedFriends();
 	void insertButtonClicked();
 	void createGroupButtonClicked();
+	void removeButtonClicked();
 
 private:
     Ui::GroupDialog m_ui;

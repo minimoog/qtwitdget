@@ -28,6 +28,7 @@ GroupDialog::GroupDialog(QWidget *parent)
 	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
+	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(removeButtonClicked()));
 	m_twitFriends->updateFriends();
 }
 
@@ -39,6 +40,7 @@ GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthT
 	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
+	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(removeButtonClicked()));
 	m_twitFriends->updateFriends();
 }
 
@@ -97,5 +99,15 @@ void GroupDialog::createGroupButtonClicked()
 	for(int i = 0; i < m_ui.groupListWidget->count(); ++i){
 		QListWidgetItem *lwit = m_ui.groupListWidget->item(i);
 		m_groupList.append(m_scrNameToId.value(lwit->text()));
+	}
+}
+
+void GroupDialog::removeButtonClicked()
+{
+	QList<QListWidgetItem*> selected = m_ui.groupListWidget->selectedItems();
+	qDebug() << selected.count();
+	foreach(QListWidgetItem* it, selected){
+		m_ui.groupListWidget->removeItemWidget(it);
+		delete it;
 	}
 }
