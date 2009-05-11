@@ -504,6 +504,26 @@ void MainWindow::createTabs()
 	}
 }
 
+void MainWindow::addGroupTab(const TwitTabGroup& group)
+{
+	QTwitScene *statusScene = new QTwitScene(this);
+	statusScene->setImageDownloader(m_imageDownloader);
+	m_twitScenes << statusScene;
+
+	connect(statusScene,	SIGNAL(requestReply(int, const QString&)), 
+		ui.updateEdit,	SLOT(setReply(int, const QString&)));
+	connect(statusScene, SIGNAL(requestReply(int, const QString&)), ui.updateEdit, SLOT(setFocus()));
+	connect(statusScene,	SIGNAL(requestRetweet(const QString&, const QString&)), 
+		ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
+	connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), ui.updateEdit, SLOT(setFocus()));
+	connect(statusScene, SIGNAL(requestFavorited(int)), this, SLOT(favorited(int)));
+
+	QTwitView *statusView = new QTwitView;
+	statusView->setScene(statusScene);
+	connect(statusView, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
+	ui.tabWidget->addTab(statusView, group.tabName());
+}
+
 void MainWindow::nextStatuses()
 {
 	int i = ui.tabWidget->currentIndex();
