@@ -76,6 +76,7 @@ private:
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
 	void createDefaultTwitGroups();
+	void createUserTwitGroup(const QString& name, const QList<int>& usersId);
 	void createTabs();
 	bool isDatabaseEmpty();
 
