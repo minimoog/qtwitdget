@@ -182,7 +182,7 @@ void MainWindow::createGrouping()
 {
 	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
 	groupDialog.exec();
-	createUserTwitGroup(groupDialog.getGroupName(), groupDialog.getGroupList());
+	//createUserTwitGroup(groupDialog.getGroupName(), groupDialog.getGroupList());
 }
 
 void MainWindow::finishedFriendsTimeline()
@@ -459,7 +459,7 @@ void MainWindow::createDefaultTwitGroups()
 	m_twitTabGroups.append(myTwits);
 }
 
-void MainWindow::createUserTwitGroup(const QString& name, const QList<int>& usersId)
+TwitTabGroup MainWindow::createUserTwitGroup(const QString& name, const QList<int>& usersId)
 {
 	TwitTabGroup twitGroup;
 	twitGroup.setTabName(name);
@@ -474,6 +474,8 @@ void MainWindow::createUserTwitGroup(const QString& name, const QList<int>& user
 	twitGroup.setQuery(query);
 
 	m_twitTabGroups.append(twitGroup);
+
+	return twitGroup;
 }
 
 void MainWindow::createTabs()
