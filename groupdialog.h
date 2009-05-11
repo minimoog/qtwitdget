@@ -21,6 +21,7 @@
 #ifndef GROUPDIALOG_H
 #define GROUPDIALOG_H
 
+#include <QHash>
 #include "qtwit/qtwitfriends.h"
 #include "ui_groupdialogform.h"
 
@@ -44,6 +45,7 @@ private slots:
 private:
     Ui::GroupDialog m_ui;
 	QTwitFriends *m_twitFriends;
+	QHash<QString, int> m_scrNameToId;
 
 };
 

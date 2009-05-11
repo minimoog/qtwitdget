@@ -69,6 +69,7 @@ void GroupDialog::finishedFriends()
 
 	foreach(const QTwitExtUserInfo& fr, listFriends){
 		m_ui.friendsListWidget->addItem(fr.screenName());
+		m_scrNameToId.insert(fr.screenName(), fr.id());
 	}
 }
 
