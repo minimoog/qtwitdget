@@ -18,6 +18,7 @@ HEADERS +=  imagedownloader.h \
 			qtwitview.h \
 			groupdialog.h \
 			sceneitems/pixmapbuttonitem.h \
+			sceneitems/gradientrectitem.h \
 			qtwit/qtwitupdate.h \
 			qtwit/qtwitstatusdata.h \
 			qtwit/qtwitstatus.h \
@@ -44,6 +45,7 @@ SOURCES +=  main.cpp \
 			qtwitview.cpp \
 			groupdialog.cpp \
 			sceneitems/pixmapbuttonitem.cpp \
+			s
 			qtwit/qtwitbase.cpp \
 			qtwit/qtwitfriendstimeline.cpp \
 			qtwit/qtwitupdate.cpp \
