@@ -26,7 +26,7 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
 #include "imagedownloader.h"
-#include "pixmapbuttonitem.h"
+#include "sceneitems/pixmapbuttonitem.h"
 
 class QTwitStatus;
 
