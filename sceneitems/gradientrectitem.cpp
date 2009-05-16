@@ -24,3 +24,14 @@ GradientRectItem::GradientRectItem(QGraphicsItem * parent)
 	:	QGraphicsRectItem(parent)
 {
 }
+
+void GradientRectItem::setWidth(qreal width)
+{
+    QRectF rectItem = rect();
+    rectItem.setWidth(width);
+    rectItem.setHeight(100.0);    //fixed height
+    rectItem.setX(0);
+    rectItem.setY(0);
+    
+    setRect(rectItem);
+}

@@ -27,7 +27,8 @@ class GradientRectItem : public QGraphicsRectItem
 {
 public:
 	GradientRectItem(QGraphicsItem * parent = 0);
-
+    void setWidth(qreal width);
+    
 };
 
 #endif //GRADIENTRECTITEM_H
