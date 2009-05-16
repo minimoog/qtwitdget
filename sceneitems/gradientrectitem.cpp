@@ -26,6 +26,13 @@ GradientRectItem::GradientRectItem(QGraphicsItem * parent)
 {
 }
 
+GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradient, QGraphicsItem * parent)
+    :   QGraphicsRectItem(parent)
+{
+    setWidth(width);
+    setGradient(gradient);
+}
+
 void GradientRectItem::setWidth(qreal width)
 {
     QRectF rectItem = rect();
@@ -41,7 +48,7 @@ void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 {
     QLinearGradient linearGradient(0, 0, 0, 1);
 
-    switch(gradient){
+    switch (gradient) {
         case Grey:
             linearGradient.setColorAt(0, QColor(238, 238, 238));
             linearGradient.setColorAt(1, QColor(255, 255, 255));
