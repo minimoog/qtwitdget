@@ -26,9 +26,15 @@
 class GradientRectItem : public QGraphicsRectItem
 {
 public:
+    enum Gradient {
+        Grey,
+        Pink,
+        Blue
+    };
+
 	GradientRectItem(QGraphicsItem * parent = 0);
     void setWidth(qreal width);
-    
+    void setGradient(GradientRectItem::Gradient gradient);
 };
 
 #endif //GRADIENTRECTITEM_H

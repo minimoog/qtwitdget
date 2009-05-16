@@ -17,7 +17,8 @@
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
- 
+
+#include <QLinearGradient>
 #include "gradientrectitem.h"
 
 GradientRectItem::GradientRectItem(QGraphicsItem * parent)
@@ -34,4 +35,25 @@ void GradientRectItem::setWidth(qreal width)
     rectItem.setY(0);
     
     setRect(rectItem);
+}
+
+void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
+{
+    QLinearGradient linearGradient(0, 0, 0, 1);
+
+    switch(gradient){
+        case Grey:
+            linearGradient.setColorAt(0, QColor(238, 238, 238));
+            linearGradient.setColorAt(1, QColor(255, 255, 255));
+            break;
+        case Pink:
+            linearGradient.setColorAt(0, QColor(255, 223, 223));
+            linearGradient.setColorAt(1, QColor(255, 255, 255));
+            break;
+        case Blue:
+            linearGradient.setColorAt(0, QColor(220, 238, 243));
+            linearGradient.setColorAt(1, QColor(255, 255, 255));
+    }
+
+    setBrush(linearGradient);
 }
