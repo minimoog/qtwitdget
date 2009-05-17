@@ -80,62 +80,67 @@ void QTwitScene::updateStatusWidgets()
 	QList<QUrl> urlsImages;
 
 	//if number of statuses is bigger than text items create new 
-	if(m_statuses.count() > m_textItems.count()){
-		int numCreated = m_statuses.count() - m_textItems.count();
-		float posY = 50.0f * m_textItems.count();
+	if(m_statuses.count() > m_gradRectItems.count()){
+		int numCreated = m_statuses.count() - m_gradRectItems.count();
+		float posY = 100.0f * m_gradRectItems.count();
 
 		for(int i = 0; i < numCreated; ++i){
-			QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
-			pixmapItem->setPos(0, posY);
-			m_pixmapItems << pixmapItem;
+            GradientRectItem *rectItem = new GradientRectItem(200, GradientRectItem::Pink);
+            addItem(rectItem);
+            rectItem->setPos(0, posY);
+            m_gradRectItems << rectItem;
 
-			QGraphicsRectItem* rectItem = new QGraphicsRectItem;
-			addItem(rectItem);
-			rectItem->setPos(48, posY);
-			rectItem->setRect(0, 0, 0, 50);
-			rectItem->setPen(QPen(Qt::NoPen));
-			m_rectItems << rectItem;
+			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
+			//pixmapItem->setPos(0, posY);
+			//m_pixmapItems << pixmapItem;
 
-			if(m_rectItems.count() % 2)
-				rectItem->setBrush(QBrush(QColor("#F2E3C6")));
-			else
-				rectItem->setBrush(QBrush(QColor("#E0E4CC")));
+			//QGraphicsRectItem* rectItem = new QGraphicsRectItem;
+			//addItem(rectItem);
+			//rectItem->setPos(48, posY);
+			//rectItem->setRect(0, 0, 0, 50);
+			//rectItem->setPen(QPen(Qt::NoPen));
+			//m_rectItems << rectItem;
 
-			QGraphicsTextItem* textItem = new QGraphicsTextItem(rectItem);
-			textItem->setOpenExternalLinks(true);
-			textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
-			m_textItems << textItem;
+			//if(m_rectItems.count() % 2)
+				//rectItem->setBrush(QBrush(QColor("#F2E3C6")));
+			//else
+				//rectItem->setBrush(QBrush(QColor("#E0E4CC")));
 
-			PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
-			replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
-			replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
-			replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
-			replyItem->setIndex(m_textItems.count() - 1);
-			connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
-			m_replyItems << replyItem;
+			//QGraphicsTextItem* textItem = new QGraphicsTextItem(rectItem);
+			//textItem->setOpenExternalLinks(true);
+			//textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
+			//m_textItems << textItem;
 
-			PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
-			retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
-			retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
-			retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
-			retweetItem->setIndex(m_textItems.count() - 1);
-			connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
-			m_retweetItems << retweetItem;
+			//PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
+			//replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+			//replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+			//replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+			//replyItem->setIndex(m_textItems.count() - 1);
+			//connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
+			//m_replyItems << replyItem;
 
-			PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
-			favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
-			favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
-			favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
-			favoritedItem->setIndex(m_textItems.count() - 1);
-			connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
-			m_favoritedItems << favoritedItem;
+			//PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
+			//retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
+			//retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
+			//retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
+			//retweetItem->setIndex(m_textItems.count() - 1);
+			//connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
+			//m_retweetItems << retweetItem;
 
-			posY += 50.0f;
+			//PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
+			//favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
+			//favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
+			//favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+			//favoritedItem->setIndex(m_textItems.count() - 1);
+			//connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
+			//m_favoritedItems << favoritedItem;
+
+			posY += 100.0f;
 		}
 	}
 
 	//check
-	if(m_statuses.count() < m_textItems.count())
+	if(m_statuses.count() < m_gradRectItems.count())
 		qDebug() << "This shouldn't be";
 
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
@@ -152,6 +157,7 @@ void QTwitScene::finishedDownloadImages()
 {
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 
+    /*
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
 	QListIterator<QGraphicsPixmapItem*> iterPixmapItem(m_pixmapItems);
 	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
@@ -168,16 +174,22 @@ void QTwitScene::finishedDownloadImages()
 		QString textHtml = replaceLinksWithHref(ts.text());
 		textItem->setHtml(nameHtml + textHtml);
 	}
+    */
 
 	QList<QGraphicsView*> graphicsViews = views();
 	QGraphicsView* twitView = graphicsViews.at(0);
 	
-	setSceneRect(0, 0, twitView->viewport()->width(), boundingWidth());
-	resizeItems(twitView->viewport()->width() - 64 - 1);
+	setSceneRect(0, 0, twitView->viewport()->width(), boundingHeight());
+	resizeItems(twitView->viewport()->width() - 1);
 }
 
 void QTwitScene::resizeItems(int w)
 {
+    QListIterator<GradientRectItem*> iterGradRectItem(m_gradRectItems);
+    while (iterGradRectItem.hasNext()) {
+        iterGradRectItem.next()->setWidth(w);
+    }
+    /*
 	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
 	while(iterTextItem.hasNext()){
 		QGraphicsTextItem* textItem = iterTextItem.next();
@@ -198,11 +210,12 @@ void QTwitScene::resizeItems(int w)
 		retweetItem->setPos(w, 16);
 		favoritedItem->setPos(w, 32);
 	}
+    */
 }
 
-float QTwitScene::boundingWidth() const
+float QTwitScene::boundingHeight() const
 {
-	return 50.0f * m_textItems.count();
+	return 100.0f * m_gradRectItems.count();
 }
 
 void QTwitScene::replyClicked(int i)

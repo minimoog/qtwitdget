@@ -43,8 +43,8 @@ void QTwitView::resizeEvent(QResizeEvent *e)
 	QSize s = e->size();
 	QTwitScene* twitScene = qobject_cast<QTwitScene*>(scene());
 	if(twitScene){
-		twitScene->resizeItems(s.width() - 64 - 1);
-		twitScene->setSceneRect(0, 0, s.width(), twitScene->boundingWidth());
+		twitScene->resizeItems(s.width() - 1);
+		twitScene->setSceneRect(0, 0, s.width(), twitScene->boundingHeight());
 	}
 
 	QWidget::resizeEvent(e);

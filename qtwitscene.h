@@ -27,6 +27,7 @@
 #include <QGraphicsRectItem>
 #include "imagedownloader.h"
 #include "sceneitems/pixmapbuttonitem.h"
+#include "sceneitems/gradientrectitem.h"
 
 class QTwitStatus;
 
@@ -46,7 +47,7 @@ public:
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeItems(int w);
-	float boundingWidth() const;
+	float boundingHeight() const;
 
 signals:
 	void requestReply(int statusId, const QString& screenName);
@@ -68,12 +69,13 @@ private:
 
 	QList<QTwitStatus> m_statuses;
 
-	QList<QGraphicsTextItem*> m_textItems;
-	QList<QGraphicsPixmapItem*> m_pixmapItems;
-	QList<QGraphicsRectItem*> m_rectItems;
-	QList<PixmapButtonItem*> m_replyItems;
-	QList<PixmapButtonItem*> m_retweetItems;
-	QList<PixmapButtonItem*> m_favoritedItems;
+	//QList<QGraphicsTextItem*> m_textItems;
+	//QList<QGraphicsPixmapItem*> m_pixmapItems;
+	//QList<QGraphicsRectItem*> m_rectItems;
+	//QList<PixmapButtonItem*> m_replyItems;
+	//QList<PixmapButtonItem*> m_retweetItems;
+	//QList<PixmapButtonItem*> m_favoritedItems;
+    QList<GradientRectItem*> m_gradRectItems;
 };
 
 #endif //QTWITSCENE_H

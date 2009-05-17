@@ -19,6 +19,7 @@
  */
 
 #include <QLinearGradient>
+#include <QPen>
 #include "gradientrectitem.h"
 
 GradientRectItem::GradientRectItem(QGraphicsItem * parent)
@@ -47,6 +48,7 @@ void GradientRectItem::setWidth(qreal width)
 void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 {
     QLinearGradient linearGradient(0, 0, 0, 1);
+    linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
 
     switch (gradient) {
         case Grey:
@@ -60,7 +62,9 @@ void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
         case Blue:
             linearGradient.setColorAt(0, QColor(220, 238, 243));
             linearGradient.setColorAt(1, QColor(255, 255, 255));
+            break;
     }
 
     setBrush(linearGradient);
+    setPen(QPen(Qt::NoPen));
 }
