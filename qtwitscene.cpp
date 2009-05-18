@@ -88,6 +88,19 @@ void QTwitScene::updateStatusWidgets()
             GradientRectItem *rectItem = new GradientRectItem(200, GradientRectItem::Pink);
             addItem(rectItem);
             rectItem->setPos(0, posY);
+            
+            switch (m_gradRectItems.count() % 3) {
+                case 0:
+                    rectItem->setGradient(GradientRectItem::Grey);
+                    break;
+                case 1:
+                    rectItem->setGradient(GradientRectItem::Pink);
+                    break;
+                case 2:
+                    rectItem->setGradient(GradientRectItem::Blue);
+                    break;
+            }
+
             m_gradRectItems << rectItem;
 
 			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
