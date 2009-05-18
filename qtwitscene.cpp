@@ -103,6 +103,9 @@ void QTwitScene::updateStatusWidgets()
 
             m_gradRectItems << rectItem;
 
+            QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), rectItem);
+            avatarBoxItem->setPos(7, 7);
+
 			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
 			//pixmapItem->setPos(0, posY);
 			//m_pixmapItems << pixmapItem;
