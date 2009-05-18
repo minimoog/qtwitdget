@@ -106,6 +106,11 @@ void QTwitScene::updateStatusWidgets()
             QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), rectItem);
             avatarBoxItem->setPos(7, 7);
 
+            QGraphicsRectItem *whiteBorderItem = new QGraphicsRectItem(0, 0, 50, 50, avatarBoxItem);
+            whiteBorderItem->setPen(QPen(Qt::white));
+            whiteBorderItem->setBrush(QBrush(Qt::NoBrush));
+            whiteBorderItem->setPos(10, 10);
+
 			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
 			//pixmapItem->setPos(0, posY);
 			//m_pixmapItems << pixmapItem;
