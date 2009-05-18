@@ -106,10 +106,14 @@ void QTwitScene::updateStatusWidgets()
             QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), rectItem);
             avatarBoxItem->setPos(7, 7);
 
-            QGraphicsRectItem *whiteBorderItem = new QGraphicsRectItem(0, 0, 50, 50, avatarBoxItem);
+            QGraphicsRectItem *whiteBorderItem = new QGraphicsRectItem(0, 0, 49, 49, avatarBoxItem);
             whiteBorderItem->setPen(QPen(Qt::white));
             whiteBorderItem->setBrush(QBrush(Qt::NoBrush));
             whiteBorderItem->setPos(10, 10);
+
+            QGraphicsPixmapItem *avatarItem = new QGraphicsPixmapItem(whiteBorderItem);
+            avatarItem->setPos(1, 1);
+            m_avatarItems << avatarItem;
 
 			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
 			//pixmapItem->setPos(0, posY);
@@ -178,6 +182,16 @@ void QTwitScene::finishedDownloadImages()
 {
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 
+    QListIterator<QGraphicsPixmapItem*> iterAvatarItem(m_avatarItems);
+    QListIterator<QTwitStatus> iterStatus(m_statuses);
+    while (iterStatus.hasNext()) {
+        QTwitStatus ts = iterStatus.next();
+        QGraphicsPixmapItem* avatarItem = iterAvatarItem.next();
+
+        QImage img = images.value(ts.profileImageUrl());
+
+        avatarItem->setPixmap(QPixmap::fromImage(img));
+    } 
     /*
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
 	QListIterator<QGraphicsPixmapItem*> iterPixmapItem(m_pixmapItems);
