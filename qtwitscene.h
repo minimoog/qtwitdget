@@ -76,6 +76,7 @@ private:
 	//QList<PixmapButtonItem*> m_favoritedItems;
     QList<GradientRectItem*> m_gradRectItems;
     QList<QGraphicsPixmapItem*> m_avatarItems;
+    QList<QGraphicsTextItem*> m_nameItems;
 };
 
 #endif //QTWITSCENE_H

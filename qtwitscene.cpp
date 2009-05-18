@@ -115,6 +115,12 @@ void QTwitScene::updateStatusWidgets()
             avatarItem->setPos(1, 1);
             m_avatarItems << avatarItem;
 
+            QGraphicsTextItem *nameItem = new QGraphicsTextItem(rectItem);
+            nameItem->setDefaultTextColor(QColor("#018ad9"));
+            nameItem->setFont(QFont("Segoe UI", 16));
+            nameItem->setPos(84, 0);
+            m_nameItems << nameItem;
+
 			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
 			//pixmapItem->setPos(0, posY);
 			//m_pixmapItems << pixmapItem;
@@ -183,14 +189,17 @@ void QTwitScene::finishedDownloadImages()
 	QHash<QString, QImage> images = m_imageDownloader->getImages();
 
     QListIterator<QGraphicsPixmapItem*> iterAvatarItem(m_avatarItems);
+    QListIterator<QGraphicsTextItem*> iterNameItem(m_nameItems);
     QListIterator<QTwitStatus> iterStatus(m_statuses);
     while (iterStatus.hasNext()) {
         QTwitStatus ts = iterStatus.next();
         QGraphicsPixmapItem* avatarItem = iterAvatarItem.next();
+        QGraphicsTextItem* nameItem = iterNameItem.next();
 
         QImage img = images.value(ts.profileImageUrl());
 
         avatarItem->setPixmap(QPixmap::fromImage(img));
+        nameItem->setPlainText(ts.name());
     } 
     /*
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
