@@ -145,13 +145,13 @@ void QTwitScene::updateStatusWidgets()
             retweetItem->setPos(43, 80);
 			connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
 
-			//PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
-			//favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
-			//favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
-			//favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
-			//favoritedItem->setIndex(m_textItems.count() - 1);
-			//connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
-			//m_favoritedItems << favoritedItem;
+			PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
+			favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
+			favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
+			favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+			favoritedItem->setIndex(m_textItems.count() - 1);
+			connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
+			m_favoritedItems << favoritedItem;
 
 			posY += 100.0f;
 		}
@@ -192,25 +192,7 @@ void QTwitScene::finishedDownloadImages()
         QString textHtml = replaceLinksWithHref(ts.text());
         iterTextItem.next()->setHtml(textHtml);
     } 
-    /*
-	QListIterator<QTwitStatus> iterStatus(m_statuses);
-	QListIterator<QGraphicsPixmapItem*> iterPixmapItem(m_pixmapItems);
-	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
-
-	while(iterStatus.hasNext()){
-		QTwitStatus ts = iterStatus.next();
-		QGraphicsPixmapItem* pixmapItem = iterPixmapItem.next();
-		QGraphicsTextItem* textItem = iterTextItem.next();
-
-		QImage img = images.value(ts.profileImageUrl());
-
-		pixmapItem->setPixmap(QPixmap::fromImage(img));
-		QString nameHtml = QString("<b>%1: </b>").arg(ts.name());
-		QString textHtml = replaceLinksWithHref(ts.text());
-		textItem->setHtml(nameHtml + textHtml);
-	}
-    */
-
+   
 	QList<QGraphicsView*> graphicsViews = views();
 	QGraphicsView* twitView = graphicsViews.at(0);
 	
@@ -222,32 +204,12 @@ void QTwitScene::resizeItems(int w)
 {
     QListIterator<GradientRectItem*> iterGradRectItem(m_gradRectItems);
     QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
+    QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
     while (iterGradRectItem.hasNext()) {
         iterGradRectItem.next()->setWidth(w);
         iterTextItem.next()->setTextWidth(w - 84 - 24);
+        iterFavoritedItem.next()->setPos(w - 50, 80);
     }
-    /*
-	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
-	while(iterTextItem.hasNext()){
-		QGraphicsTextItem* textItem = iterTextItem.next();
-		textItem->setTextWidth(w);
-	}
-
-	QListIterator<QGraphicsRectItem*> iterRectItem(m_rectItems);
-	QListIterator<PixmapButtonItem*> iterReplyItem(m_replyItems);
-	QListIterator<PixmapButtonItem*> iterRetweetItem(m_retweetItems);
-	QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
-	while(iterRectItem.hasNext()){
-		QGraphicsRectItem* rectItem = iterRectItem.next();
-		PixmapButtonItem* replyItem = iterReplyItem.next();
-		PixmapButtonItem* retweetItem = iterRetweetItem.next();
-		PixmapButtonItem* favoritedItem = iterFavoritedItem.next();
-		rectItem->setRect(0, 0, w, 48);
-		replyItem->setPos(w, 0);
-		retweetItem->setPos(w, 16);
-		favoritedItem->setPos(w, 32);
-	}
-    */
 }
 
 float QTwitScene::boundingHeight() const
