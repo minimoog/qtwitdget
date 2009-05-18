@@ -45,6 +45,11 @@ void GradientRectItem::setWidth(qreal width)
     setRect(rectItem);
 }
 
+qreal GradientRectItem::width() const
+{
+    return rect().width();
+}
+
 void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 {
     QLinearGradient linearGradient(0, 0, 0, 1);

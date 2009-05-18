@@ -35,6 +35,7 @@ public:
 	GradientRectItem(QGraphicsItem * parent = 0);
     GradientRectItem(qreal width, GradientRectItem::Gradient gradient, QGraphicsItem * parent = 0);
     void setWidth(qreal width);
+    qreal width() const;
     void setGradient(GradientRectItem::Gradient gradient);
 };
 
