@@ -69,7 +69,6 @@ private:
 
 	QList<QTwitStatus> m_statuses;
 
-	//QList<QGraphicsTextItem*> m_textItems;
 	//QList<QGraphicsRectItem*> m_rectItems;
 	//QList<PixmapButtonItem*> m_replyItems;
 	//QList<PixmapButtonItem*> m_retweetItems;
@@ -77,6 +76,7 @@ private:
     QList<GradientRectItem*> m_gradRectItems;
     QList<QGraphicsPixmapItem*> m_avatarItems;
     QList<QGraphicsTextItem*> m_nameItems;
+    QList<QGraphicsTextItem*> m_textItems;
 };
 
 #endif //QTWITSCENE_H

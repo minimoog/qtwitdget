@@ -117,30 +117,17 @@ void QTwitScene::updateStatusWidgets()
 
             QGraphicsTextItem *nameItem = new QGraphicsTextItem(rectItem);
             nameItem->setDefaultTextColor(QColor("#018ad9"));
-            nameItem->setFont(QFont("Segoe UI", 16));
+            nameItem->setFont(QFont("Segoe UI", 12));
             nameItem->setPos(84, 0);
             m_nameItems << nameItem;
 
-			//QGraphicsPixmapItem* pixmapItem = addPixmap(QPixmap());
-			//pixmapItem->setPos(0, posY);
-			//m_pixmapItems << pixmapItem;
-
-			//QGraphicsRectItem* rectItem = new QGraphicsRectItem;
-			//addItem(rectItem);
-			//rectItem->setPos(48, posY);
-			//rectItem->setRect(0, 0, 0, 50);
-			//rectItem->setPen(QPen(Qt::NoPen));
-			//m_rectItems << rectItem;
-
-			//if(m_rectItems.count() % 2)
-				//rectItem->setBrush(QBrush(QColor("#F2E3C6")));
-			//else
-				//rectItem->setBrush(QBrush(QColor("#E0E4CC")));
-
-			//QGraphicsTextItem* textItem = new QGraphicsTextItem(rectItem);
-			//textItem->setOpenExternalLinks(true);
-			//textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
-			//m_textItems << textItem;
+            QGraphicsTextItem *textItem = new QGraphicsTextItem(rectItem);
+            textItem->setDefaultTextColor(QColor("#222222"));
+            textItem->setFont(QFont("Segoe UI", 9));
+            textItem->setPos(84, 24);
+            textItem->setOpenExternalLinks(true);
+            textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
+            m_textItems << textItem;
 
 			//PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
 			//replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
@@ -191,6 +178,7 @@ void QTwitScene::finishedDownloadImages()
     QListIterator<QGraphicsPixmapItem*> iterAvatarItem(m_avatarItems);
     QListIterator<QGraphicsTextItem*> iterNameItem(m_nameItems);
     QListIterator<QTwitStatus> iterStatus(m_statuses);
+    QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
     while (iterStatus.hasNext()) {
         QTwitStatus ts = iterStatus.next();
         QGraphicsPixmapItem* avatarItem = iterAvatarItem.next();
@@ -200,6 +188,9 @@ void QTwitScene::finishedDownloadImages()
 
         avatarItem->setPixmap(QPixmap::fromImage(img));
         nameItem->setPlainText(ts.name());
+
+        QString textHtml = replaceLinksWithHref(ts.text());
+        iterTextItem.next()->setHtml(textHtml);
     } 
     /*
 	QListIterator<QTwitStatus> iterStatus(m_statuses);
@@ -230,8 +221,10 @@ void QTwitScene::finishedDownloadImages()
 void QTwitScene::resizeItems(int w)
 {
     QListIterator<GradientRectItem*> iterGradRectItem(m_gradRectItems);
+    QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
     while (iterGradRectItem.hasNext()) {
         iterGradRectItem.next()->setWidth(w);
+        iterTextItem.next()->setTextWidth(w - 84 - 24);
     }
     /*
 	QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
