@@ -207,7 +207,7 @@ void QTwitScene::resizeItems(int w)
     QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
     while (iterGradRectItem.hasNext()) {
         iterGradRectItem.next()->setWidth(w);
-        iterTextItem.next()->setTextWidth(w - 84 - 24);
+        iterTextItem.next()->setTextWidth(w - 84 - 10);
         iterFavoritedItem.next()->setPos(w - 50, 80);
     }
 }
