@@ -70,7 +70,6 @@ private:
 	QList<QTwitStatus> m_statuses;
 
 	//QList<QGraphicsRectItem*> m_rectItems;
-	//QList<PixmapButtonItem*> m_retweetItems;
 	//QList<PixmapButtonItem*> m_favoritedItems;
     QList<GradientRectItem*> m_gradRectItems;
     QList<QGraphicsPixmapItem*> m_avatarItems;

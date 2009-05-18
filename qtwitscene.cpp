@@ -137,13 +137,13 @@ void QTwitScene::updateStatusWidgets()
             replyItem->setPos(10, 80);
 			connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
 
-			//PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
-			//retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
-			//retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
-			//retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
-			//retweetItem->setIndex(m_textItems.count() - 1);
-			//connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
-			//m_retweetItems << retweetItem;
+			PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
+			retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
+			retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
+			retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
+			retweetItem->setIndex(m_textItems.count() - 1);
+            retweetItem->setPos(43, 80);
+			connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
 
 			//PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
 			//favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
