@@ -129,13 +129,13 @@ void QTwitScene::updateStatusWidgets()
             textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
             m_textItems << textItem;
 
-			//PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
-			//replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
-			//replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
-			//replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
-			//replyItem->setIndex(m_textItems.count() - 1);
-			//connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
-			//m_replyItems << replyItem;
+			PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
+			replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+			replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+			replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+		    replyItem->setIndex(m_textItems.count() - 1);
+            replyItem->setPos(10, 80);
+			connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
 
 			//PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
 			//retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
