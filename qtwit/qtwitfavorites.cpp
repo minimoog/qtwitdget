@@ -17,7 +17,8 @@
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
- 
+
+#include <QtDebug>
 #include "qtwitfavorites.h"
 
 static const QNetworkRequest::Attribute createFavoriteAttribute = static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1);
@@ -62,3 +63,15 @@ void QTwitFavorites::destroy(int id)
     connect(netReply, SIGNAL(finished()), this, SLOT(reply()));
     connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
+
+void QTwitFavorites::reply()
+{
+    QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
+    if (netReply) {
+        QVariant created = netReply->attribute(createFavoriteAttribute);
+        QVariant statusId = netReply->attribute(idAttribute);
+
+        emit finished(statusId.toInt(), created.toBool());
+    }
+}
+
