@@ -32,7 +32,7 @@ public:
 	void destroy(int id);
 
 signals:
-	void finished();
+	void finished(int id, bool created);
 
 private slots:
 	void reply();

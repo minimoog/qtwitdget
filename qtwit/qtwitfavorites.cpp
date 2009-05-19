@@ -20,8 +20,28 @@
  
 #include "qtwitfavorites.h"
 
+static const QNetworkRequest::Attribute createFavoriteAttribute = static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1);
+static const QNetworkRequest::Attribute idAttribute = static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 2);
+
+
 QTwitFavorites::QTwitFavorites(QObject *parent)
 :	QTwitBase(parent)
 {	
 }
 
+void QTwitFavorites::create(int id)
+{
+    QString urlString = QString("http://twitter.com/favorites/create/%1.xml").arg(id);
+
+    QUrl url(urlString);
+
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::POST);
+    QNetworkRequest req(url);
+    req.setRawHeader("Authorization", oauthHeader);
+    req.setAttribute(createFavoriteAttribute, true);
+    req.setAttribute(idAttribute, id);
+
+    QNetworkReply *netReply = networkAccessManager()->post(req, QByteArray());
+    connect(netReply, SIGNAL(finished()), this, SLOT(reply()));
+    connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+}
