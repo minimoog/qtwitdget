@@ -45,3 +45,20 @@ void QTwitFavorites::create(int id)
     connect(netReply, SIGNAL(finished()), this, SLOT(reply()));
     connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
+
+void QTwitFavorites::destroy(int id)
+{
+    QString urlString = QString("http://twitter.com/favorites/destroy/%1.xml").arg(id);
+
+    QUrl url(urlString);
+
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::POST);
+    QNetworkRequest req(url);
+    req.setRawHeader("Authorization", oauthHeader);
+    req.setAttribute(createFavoriteAttribute, false);
+    req.setAttribute(idAttribute, id);
+
+    QNetworkReply *netReply = networkAccessManager()->post(req, QByteArray());
+    connect(netReply, SIGNAL(finished()), this, SLOT(reply()));
+    connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+}
