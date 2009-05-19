@@ -72,6 +72,12 @@ void QTwitFavorites::reply()
         QVariant statusId = netReply->attribute(idAttribute);
 
         emit finished(statusId.toInt(), created.toBool());
+
+        netReply->deleteLater();
     }
 }
 
+void QTwitFavorites::error()
+{
+    qDebug() << "Favorite error";
+}
