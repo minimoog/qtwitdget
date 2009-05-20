@@ -46,7 +46,7 @@ SOURCES +=  main.cpp \
 			qtwitview.cpp \
 			groupdialog.cpp \
 			sceneitems/pixmapbuttonitem.cpp \
-			s
+			sceneitems/gradientrectitem.cpp \
 			qtwit/qtwitbase.cpp \
 			qtwit/qtwitfriendstimeline.cpp \
 			qtwit/qtwitupdate.cpp \
