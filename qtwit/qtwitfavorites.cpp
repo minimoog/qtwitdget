@@ -68,8 +68,9 @@ void QTwitFavorites::reply()
 {
     QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
     if (netReply) {
-        QVariant created = netReply->attribute(createFavoriteAttribute);
-        QVariant statusId = netReply->attribute(idAttribute);
+        QNetworkRequest req = netReply->request();
+        QVariant created = req.attribute(createFavoriteAttribute);
+        QVariant statusId = req.attribute(idAttribute);
 
         emit finished(statusId.toInt(), created.toBool());
 
