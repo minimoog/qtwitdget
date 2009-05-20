@@ -33,6 +33,7 @@ void QTwitDestroy::deleteStatus(int id)
 	QString urlString = QString("http://twitter.com/statuses/destroy/%1.xml").arg(id);
 	QUrl url(urlString);
 	
+	//quick fix
 	m_id = id;
 
 	QNetworkRequest req(url);
