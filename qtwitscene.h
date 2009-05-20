@@ -25,6 +25,7 @@
 #include <QGraphicsTextItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
+#include <QGraphicsLineItem>
 #include "imagedownloader.h"
 #include "sceneitems/pixmapbuttonitem.h"
 #include "sceneitems/gradientrectitem.h"
@@ -74,6 +75,7 @@ private:
     QList<QGraphicsTextItem*> m_nameItems;
     QList<QGraphicsTextItem*> m_textItems;
     QList<PixmapButtonItem*> m_favoritedItems;
+    QList<QGraphicsLineItem*> m_lineItems;
 };
 
 #endif //QTWITSCENE_H

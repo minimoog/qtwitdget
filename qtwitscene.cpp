@@ -153,6 +153,10 @@ void QTwitScene::updateStatusWidgets()
 			connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
 			m_favoritedItems << favoritedItem;
 
+            QGraphicsLineItem *lineItem = new QGraphicsLineItem(rectItem);
+            lineItem->setPen(QPen(QColor("#DDDDDD")));
+            m_lineItems << lineItem;
+
 			posY += 100.0f;
 		}
 	}
@@ -205,10 +209,12 @@ void QTwitScene::resizeItems(int w)
     QListIterator<GradientRectItem*> iterGradRectItem(m_gradRectItems);
     QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
     QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
+    QListIterator<QGraphicsLineItem*> iterLineItem(m_lineItems);
     while (iterGradRectItem.hasNext()) {
         iterGradRectItem.next()->setWidth(w);
         iterTextItem.next()->setTextWidth(w - 84 - 10);
         iterFavoritedItem.next()->setPos(w - 50, 80);
+        iterLineItem.next()->setLine(1, 99, w - 1, 99);
     }
 }
 
