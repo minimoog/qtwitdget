@@ -30,6 +30,7 @@
 #include "qtwit/qtwitfriendstimeline.h"
 #include "qtwit/qtwitdestroy.h"
 #include "qtwit/qtwitupdate.h"
+#include "qtwit/qtwitfavorites.h"
 #include "oauth/oauthtwitter.h"
 #include "imagedownloader.h"
 #include "twittabgroup.h"
@@ -88,6 +89,7 @@ private:
 	QTwitFriendsTimeline *m_twitFriendsTimeline;
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
+    QTwitFavorites *m_twitFavorite;
 	ImageDownloader *m_imageDownloader;
 	QTimer *m_timer;
 

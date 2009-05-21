@@ -37,6 +37,7 @@ MainWindow::MainWindow()
 	m_twitFriendsTimeline(new QTwitFriendsTimeline(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
 	m_twitDestroy(new QTwitDestroy(this)),
+    m_twitFavorite(new QTwitFavorites(this)),
 	m_imageDownloader(new ImageDownloader(this)),
 	m_timer(new QTimer(this))
 {
@@ -44,11 +45,13 @@ MainWindow::MainWindow()
 	m_twitFriendsTimeline->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
 	m_twitDestroy->setNetworkAccessManager(m_netManager);
+    m_twitFavorite->setNetworkAccessManager(m_netManager);
 	m_imageDownloader->setNetworkAccessManager(m_netManager);
 
 	m_twitFriendsTimeline->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
 	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
+    m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
 	ui.updateEdit->setLimit(140);
@@ -526,6 +529,22 @@ void MainWindow::nextStatuses()
 
 void MainWindow::favorited(int statusId)
 {
-	qDebug() << "favorited";
-	qDebug() << "status id: " << statusId;
+    //first check if status is already favorited
+    QSqlQuery query;
+    QString sq = QString("SELECT favorited FROM status WHERE id = %1;").arg(statusId);
+    query.exec(sq);
+
+    //hopefully returns one record
+    if (query.next()) {
+        if (query.value(0).toBool()) { //already favorited
+            m_twitFavorite->destroy(statusId);
+            QString sqf = QString("UPDATE status SET favorited = 0 WHERE id = %1;").arg(statusId);
+            query.exec(sqf);
+        } else {            //set favorited
+            m_twitFavorite->create(statusId);
+            QString sqf = QString("UPDATE status SET favorited = 1 WHERE id = %1;").arg(statusId);
+            query.exec(sqf);
+        }
+    }
 }
+
