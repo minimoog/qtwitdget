@@ -82,7 +82,7 @@ void QTwitScene::updateStatusWidgets()
 	//if number of statuses is bigger than text items create new 
 	if(m_statuses.count() > m_gradRectItems.count()){
 		int numCreated = m_statuses.count() - m_gradRectItems.count();
-		float posY = 100.0f * m_gradRectItems.count();
+		float posY = 101.0f * m_gradRectItems.count();
 
 		for(int i = 0; i < numCreated; ++i){
             GradientRectItem *rectItem = new GradientRectItem(200, GradientRectItem::Pink);
@@ -157,7 +157,7 @@ void QTwitScene::updateStatusWidgets()
             lineItem->setPen(QPen(QColor("#DDDDDD")));
             m_lineItems << lineItem;
 
-			posY += 100.0f;
+			posY += 101.0f;
 		}
 	}
 
@@ -220,7 +220,7 @@ void QTwitScene::resizeItems(int w)
 
 float QTwitScene::boundingHeight() const
 {
-	return 100.0f * m_gradRectItems.count();
+	return 101.0f * m_gradRectItems.count();
 }
 
 void QTwitScene::replyClicked(int i)
