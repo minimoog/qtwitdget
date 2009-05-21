@@ -24,7 +24,7 @@
 #include "imagedownloader.h"
 
 ImageDownloader::ImageDownloader(QObject *parent)
-	:	QObject(parent), m_manager(0)
+	:	QObject(parent), m_manager(0), downloadCount(0)
 {
 	resolveHomeAppPath();
 }
@@ -41,7 +41,10 @@ QNetworkAccessManager* ImageDownloader::networkAccessManager() const
 
 void ImageDownloader::downloadImages(const QList<QUrl> &urls)
 {
-	downloadCount = 0;
+    //QUICK FIX
+    //TODO: Rethink another system
+	//downloadCount = 0;
+    QList<QUrl> downloadUrls;
 
 	foreach(const QUrl& url, urls){
 
@@ -51,13 +54,9 @@ void ImageDownloader::downloadImages(const QList<QUrl> &urls)
 
 			QString imageFileName = homeAppImagesPath + decodeUrlToFilename(url);
 
-			if(!QFile::exists(imageFileName)){	//download
-				Q_ASSERT(m_manager != 0);
+			if (!QFile::exists(imageFileName)) {	//put to download list
 				downloadCount++;
-				QNetworkRequest request(url);
-				QNetworkReply *reply = m_manager->get(request);
-				connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-				connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+                downloadUrls << url;
 			} else {							//load from disk
 				QImage img;
 
@@ -69,8 +68,17 @@ void ImageDownloader::downloadImages(const QList<QUrl> &urls)
 		}
 	}
 
-	if(downloadCount == 0)
+    if (downloadCount == 0) { //there is no image to download
 		emit finished();
+    } else {                  //download images from download list
+        Q_ASSERT(m_manager != 0);
+        foreach (const QUrl& url, downloadUrls) {
+            QNetworkRequest req(url);
+            QNetworkReply *reply = m_manager->get(req);
+            connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
+            connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+        }
+    }
 }
 
 void ImageDownloader::downloadFinished()
