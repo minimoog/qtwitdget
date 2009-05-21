@@ -57,16 +57,16 @@ void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 
     switch (gradient) {
         case Grey:
-            linearGradient.setColorAt(0, QColor(238, 238, 238));
-            linearGradient.setColorAt(1, QColor(255, 255, 255));
+            linearGradient.setColorAt(0, QColor(238, 238, 238, 127));
+            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
             break;
         case Pink:
-            linearGradient.setColorAt(0, QColor(255, 223, 223));
-            linearGradient.setColorAt(1, QColor(255, 255, 255));
+            linearGradient.setColorAt(0, QColor(255, 223, 223, 127));
+            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
             break;
         case Blue:
-            linearGradient.setColorAt(0, QColor(220, 238, 243));
-            linearGradient.setColorAt(1, QColor(255, 255, 255));
+            linearGradient.setColorAt(0, QColor(220, 238, 243, 127));
+            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
             break;
     }
 
