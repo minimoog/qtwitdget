@@ -244,7 +244,7 @@ void MainWindow::finishedFriendsTimeline()
 			query.bindValue(":source", s.source());
 			query.bindValue(":replyToStatusId", s.replyToStatusId());
 			query.bindValue(":replyToUserId", s.replyToUserId());
-			query.bindValue(":favorited", s.favorited());
+			query.bindValue(":favorited", static_cast<int>(s.favorited()));
 			query.bindValue(":replyToScreenName", s.replyToScreenName());
 			query.bindValue(":userId", s.userId());
 			query.bindValue(":name", s.name());
