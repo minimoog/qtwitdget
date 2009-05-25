@@ -516,6 +516,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
 
 	QTwitView *statusView = new QTwitView;
 	statusView->setScene(statusScene);
+    statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 	connect(statusView, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
 	ui.tabWidget->addTab(statusView, group.tabName());
 }
