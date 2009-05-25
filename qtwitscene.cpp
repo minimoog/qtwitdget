@@ -183,10 +183,12 @@ void QTwitScene::finishedDownloadImages()
     QListIterator<QGraphicsTextItem*> iterNameItem(m_nameItems);
     QListIterator<QTwitStatus> iterStatus(m_statuses);
     QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
+    QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
     while (iterStatus.hasNext()) {
         QTwitStatus ts = iterStatus.next();
         QGraphicsPixmapItem* avatarItem = iterAvatarItem.next();
         QGraphicsTextItem* nameItem = iterNameItem.next();
+        PixmapButtonItem* favoritedItem = iterFavoritedItem.next();
 
         QImage img = images.value(ts.profileImageUrl());
 
@@ -195,6 +197,16 @@ void QTwitScene::finishedDownloadImages()
 
         QString textHtml = replaceLinksWithHref(ts.text());
         iterTextItem.next()->setHtml(textHtml);
+
+        if (ts.favorited()) {
+            favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
+            favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
+            favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
+        } else {
+            favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
+            favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
+            favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+        }
     } 
    
 	QList<QGraphicsView*> graphicsViews = views();

@@ -546,5 +546,9 @@ void MainWindow::favorited(int statusId)
             query.exec(sqf);
         }
     }
+
+    //refresh all tabs (not good, just for one click refreshing all tabs?)
+    for(int i = 0; i < ui.tabWidget->count(); ++i)
+        refreshTab(i);
 }
 
