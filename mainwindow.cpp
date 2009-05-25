@@ -453,7 +453,7 @@ void MainWindow::createDefaultTwitGroups()
 {
 	m_twitTabGroups.clear();
 
-	//just testing
+	//default tabs
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
 	allfriends.setQuery(QString(" userId != %1 ").arg(m_userId));
@@ -462,8 +462,13 @@ void MainWindow::createDefaultTwitGroups()
 	myTwits.setTabName(tr("My twits"));
 	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
 
+    TwitTabGroup favorites;
+    favorites.setTabName(tr("Favorites"));
+    favorites.setQuery(QString(" favorited == 1"));
+
 	m_twitTabGroups.append(allfriends);
 	m_twitTabGroups.append(myTwits);
+    m_twitTabGroups.append(favorites);
 }
 
 TwitTabGroup MainWindow::createUserTwitGroup(const QString& name, const QList<int>& usersId)
