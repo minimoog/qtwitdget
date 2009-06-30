@@ -30,7 +30,7 @@ QTwitFavorites::QTwitFavorites(QObject *parent)
 {	
 }
 
-void QTwitFavorites::create(int id)
+void QTwitFavorites::create(qint64 id)
 {
     QString urlString = QString("http://twitter.com/favorites/create/%1.xml").arg(id);
 
@@ -47,7 +47,7 @@ void QTwitFavorites::create(int id)
     connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
 
-void QTwitFavorites::destroy(int id)
+void QTwitFavorites::destroy(qint64 id)
 {
     QString urlString = QString("http://twitter.com/favorites/destroy/%1.xml").arg(id);
 
@@ -72,7 +72,7 @@ void QTwitFavorites::reply()
         QVariant created = req.attribute(createFavoriteAttribute);
         QVariant statusId = req.attribute(idAttribute);
 
-        emit finished(statusId.toInt(), created.toBool());
+        emit finished(statusId.toLongLong(), created.toBool());
 
         netReply->deleteLater();
     }

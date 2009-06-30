@@ -60,10 +60,10 @@ public:
 	~QTwitStatusData() { }
 
 	QDateTime created;
-	int id;		
+	qint64 id;		
 	QString text;		
 	QString source;
-	int replyToStatusId;
+	qint64 replyToStatusId;
 	int replyToUserId;
 	bool favorited;
 	QString replyToScreenName;

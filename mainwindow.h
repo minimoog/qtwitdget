@@ -56,7 +56,7 @@ private slots:
 	void updateTimeline();
 	/*! Called when user request to destroy (delete) status */
 	/*! \param id ID of the status */
-	void statusDestroyed(int id);
+	void statusDestroyed(qint64 id);
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void createGrouping();
@@ -66,7 +66,7 @@ private slots:
 	void closeTab(int i);
 	void nextStatuses();
 
-	void favorited(int statusId);
+	void favorited(qint64 statusId);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -97,7 +97,7 @@ private:
 	bool m_firstRun;
 
 	QList<TwitTabGroup> m_twitTabGroups;
-	int m_lastStatusId;
+	qint64 m_lastStatusId;
 	QList<QTwitScene*> m_twitScenes;
 	int m_userId;
 

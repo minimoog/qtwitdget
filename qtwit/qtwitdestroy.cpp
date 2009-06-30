@@ -26,7 +26,7 @@ QTwitDestroy::QTwitDestroy(QObject *parent)
 {
 }
 
-void QTwitDestroy::deleteStatus(int id)
+void QTwitDestroy::deleteStatus(qint64 id)
 {
 	Q_ASSERT(networkAccessManager() != 0);
 

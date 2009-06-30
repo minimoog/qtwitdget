@@ -68,7 +68,7 @@ MainWindow::MainWindow()
 	connect(m_twitFriendsTimeline, SIGNAL(finished()), SLOT(finishedFriendsTimeline()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
-	connect(m_twitDestroy, SIGNAL(destroyed(int)), SLOT(statusDestroyed(int)));
+	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
 	
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
@@ -143,7 +143,7 @@ void MainWindow::startUp()
 			QSqlQuery query;
 			query.exec("SELECT id FROM status ORDER BY created DESC LIMIT 1");
 			if(query.next())
-				m_lastStatusId = query.value(0).toInt();
+				m_lastStatusId = query.value(0).toLongLong();
 		}
 
 		createDefaultTwitGroups();
@@ -269,7 +269,7 @@ void MainWindow::finishedFriendsTimeline()
 	}
 }
 
-void MainWindow::statusDestroyed(int id)
+void MainWindow::statusDestroyed(qint64 id)
 {
 	QSqlQuery query;
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
@@ -402,10 +402,10 @@ void MainWindow::refreshTab(int i)
 	while(query.next()){
 		QTwitStatus s;
 		s.setCreated(query.value(0).toDateTime());
-		s.setId(query.value(1).toInt());
+        s.setId(query.value(1).toLongLong());
 		s.setText(query.value(2).toString());
 		s.setSource(query.value(3).toString());
-		s.setReplyToStatusId(query.value(4).toInt());
+		s.setReplyToStatusId(query.value(4).toLongLong());
 		s.setReplyToUserId(query.value(5).toInt());
 		s.setFavorited(query.value(6).toBool());
 		s.setReplyToScreenName(query.value(7).toString());
@@ -506,13 +506,13 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
 	statusScene->setImageDownloader(m_imageDownloader);
 	m_twitScenes << statusScene;
 
-	connect(statusScene,	SIGNAL(requestReply(int, const QString&)), 
-		ui.updateEdit,	SLOT(setReply(int, const QString&)));
-	connect(statusScene, SIGNAL(requestReply(int, const QString&)), ui.updateEdit, SLOT(setFocus()));
+	connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)), 
+		ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
+	connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
 	connect(statusScene,	SIGNAL(requestRetweet(const QString&, const QString&)), 
 		ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
 	connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), ui.updateEdit, SLOT(setFocus()));
-	connect(statusScene, SIGNAL(requestFavorited(int)), this, SLOT(favorited(int)));
+	connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
 
 	QTwitView *statusView = new QTwitView;
 	statusView->setScene(statusScene);
@@ -533,7 +533,7 @@ void MainWindow::nextStatuses()
 	refreshTab(i);
 }
 
-void MainWindow::favorited(int statusId)
+void MainWindow::favorited(qint64 statusId)
 {
     //first check if status is already favorited
     QSqlQuery query;

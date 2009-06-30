@@ -24,7 +24,7 @@ QTwitUpdate::QTwitUpdate(QObject *parent)
 {
 }
 
-void QTwitUpdate::setUpdate(const QString &update, int inReplyToStatusId)
+void QTwitUpdate::setUpdate(const QString &update, qint64 inReplyToStatusId)
 {
 	QByteArray statusUtf8 = update.toUtf8();
 	QByteArray status = statusUtf8.toPercentEncoding();

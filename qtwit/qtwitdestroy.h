@@ -34,18 +34,18 @@ public:
 
 public slots:
 	/*! Delete twitter status of auth. user with status id */
-	void deleteStatus(int id);
+	void deleteStatus(qint64 id);
 	
 signals:
 	/*! emitted when status with id is deleted */
-	void destroyed(int id);
+	void destroyed(qint64 id);
 
 private slots:
 	void reply();
 	void error();
 
 private:
-	int m_id;
+	qint64 m_id;
 };
  
 #endif //QTWITDESTROY_H

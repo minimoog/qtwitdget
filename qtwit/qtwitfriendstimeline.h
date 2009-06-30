@@ -38,7 +38,7 @@ public:
 	 * \remark Set parameters to zero or default ctr to NOT query them
 	 * \remark clears all statuses
 	 */
-	void update(int sinceId = 0, int maxId = 0, int count = 0, int page = 0);
+	void update(qint64 sinceId = 0, qint64 maxId = 0, int count = 0, int page = 0);
 	/*! Gets statuses */
 	QList<QTwitStatus> getStatuses() const;
 

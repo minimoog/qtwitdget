@@ -92,7 +92,7 @@ void XmlReaderStatus::readStatus(QTwitStatus& ts)
 			if(name() == "created_at")
 				ts.setCreatedFromTwitter(readElementText());
 			else if(name() == "id")
-				ts.setId(readElementText().toInt());
+				ts.setId(readElementText().toLongLong());
 			else if(name() == "text")
 				ts.setText(readElementText());
 			else if(name() == "source")
@@ -121,7 +121,7 @@ void XmlReaderStatus::readInReplyToStatusId(QTwitStatus& ts)
 {
 	QString sid = readElementText();
 	if(!sid.isEmpty())
-		ts.setReplyToStatusId(sid.toInt());
+		ts.setReplyToStatusId(sid.toLongLong());
 }
 
 void XmlReaderStatus::readInReplyToUserId(QTwitStatus& ts)

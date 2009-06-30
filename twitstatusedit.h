@@ -34,8 +34,8 @@ public:
 
 	void setLimit(int limit);
 	int limit() const;
-	void setStatusId(int statusId);
-	int statusId() const;
+	void setStatusId(qint64 statusId);
+	qint64 statusId() const;
 
 signals:
 	/*! emitted when size of text goes over limit and under limit (from overlimit) */
@@ -45,7 +45,7 @@ signals:
 
 public slots:
 	void shortUrls();
-	void setReply(int id, const QString& screenName);
+	void setReply(qint64 id, const QString& screenName);
 	void setRetweet(const QString& text, const QString& screenName);
 
 protected:
@@ -56,7 +56,7 @@ private slots:
 
 private:
 	int m_limit;
-	int m_statusId;
+	qint64 m_statusId;
 	bool m_isOverLimit;
 };
 

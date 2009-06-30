@@ -51,9 +51,9 @@ public:
 	float boundingHeight() const;
 
 signals:
-	void requestReply(int statusId, const QString& screenName);
+	void requestReply(qint64 statusId, const QString& screenName);
 	void requestRetweet(const QString& text, const QString& screenName);
-	void requestFavorited(int statusId);
+	void requestFavorited(qint64 statusId);
 	
 private slots:
 	void finishedDownloadImages();

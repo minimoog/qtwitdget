@@ -28,7 +28,7 @@ QTwitFriendsTimeline::QTwitFriendsTimeline(QObject *parent)
 {
 }
 
-void QTwitFriendsTimeline::update(int sinceId, int maxId, int count, int page)
+void QTwitFriendsTimeline::update(qint64 sinceId, qint64 maxId, int count, int page)
 {
 	Q_ASSERT(networkAccessManager() != 0);
 

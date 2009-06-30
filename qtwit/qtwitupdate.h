@@ -34,7 +34,7 @@ public:
 
 public slots:
 	/*! Updates status for authenticated user */
-	void setUpdate(const QString &update, int inReplyToStatusId = 0);
+	void setUpdate(const QString &update, qint64 inReplyToStatusId = 0);
 
 private slots:
 	void reply();

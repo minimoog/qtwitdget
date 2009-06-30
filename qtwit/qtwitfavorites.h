@@ -28,11 +28,11 @@ class QTwitFavorites : public QTwitBase
 	Q_OBJECT
 public:
 	QTwitFavorites(QObject *parent = 0);
-	void create(int id);
-	void destroy(int id);
+	void create(qint64 id);
+	void destroy(qint64 id);
 
 signals:
-	void finished(int id, bool created);
+	void finished(qint64 id, bool created);
 
 private slots:
 	void reply();

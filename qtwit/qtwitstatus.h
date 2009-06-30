@@ -46,8 +46,8 @@ public:
 	void setCreated(const QDateTime &datetime) { d->created = datetime; }
 	QDateTime created() const { return d->created; }
 
-	void setId(int id) { d->id = id; }
-	int id() const { return d->id; }
+	void setId(qint64 id) { d->id = id; }
+	qint64 id() const { return d->id; }
 
 	void setText(const QString& text) { d->text = text; }
 	QString text() const { return d->text; }
@@ -55,8 +55,8 @@ public:
 	void setSource(const QString& source) { d->source = source; }
 	QString source() const { return d->source; }
 
-	void setReplyToStatusId(int statusId) { d->replyToStatusId = statusId; }
-	int replyToStatusId() const { return d->replyToStatusId; }
+	void setReplyToStatusId(qint64 statusId) { d->replyToStatusId = statusId; }
+	qint64 replyToStatusId() const { return d->replyToStatusId; }
 
 	void setReplyToUserId(int userId) { d->replyToUserId = userId; }
 	int replyToUserId() const { return d->replyToUserId; }

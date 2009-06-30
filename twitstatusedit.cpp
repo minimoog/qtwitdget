@@ -38,12 +38,12 @@ int TwitStatusEdit::limit() const
 	return m_limit;
 }
 
-void TwitStatusEdit::setStatusId(int statusId)
+void TwitStatusEdit::setStatusId(qint64 statusId)
 {
 	m_statusId = statusId;
 }
 
-int TwitStatusEdit::statusId() const
+qint64 TwitStatusEdit::statusId() const
 {
 	return m_statusId;
 }
@@ -72,7 +72,7 @@ void TwitStatusEdit::onTextChanged()
 	}
 }
 
-void TwitStatusEdit::setReply(int id, const QString& screenName)
+void TwitStatusEdit::setReply(qint64 id, const QString& screenName)
 {
 	m_statusId = id;
 
