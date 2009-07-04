@@ -21,11 +21,11 @@
 #include <QtDebug>
 #include <QUrl>
 #include <QDesktopServices>
-#include <QMessageBox>
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QTimer>
 #include "oauthtwitter.h"
+#include "pindialog.h"
 
 OAuthTwitter::OAuthTwitter(QObject *parent)
 	:	OAuth(parent), m_netManager(0)
@@ -73,9 +73,10 @@ void OAuthTwitter::requestToken()
 		reply->deleteLater();
 		requestAuthorization();
 
-		if(authorizationWidget()){
-			requestAccessToken();
-		}
+        int pin = authorizationWidget();
+        if (pin) {
+            requestAccessToken(pin);
+        }
 	} else {
 		qDebug() << "Timeout";
 	}
@@ -89,11 +90,12 @@ void OAuthTwitter::requestAuthorization()
 	QDesktopServices::openUrl(authorizeUrl);
 }
 
-void OAuthTwitter::requestAccessToken()
+void OAuthTwitter::requestAccessToken(int pin)
 {
 	Q_ASSERT(m_netManager != 0);
 
 	QUrl url(TWITTER_ACCESS_TOKEN_URL);
+    url.addEncodedQueryItem("oauth_verifier", QByteArray::number(pin));
 
 	QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
 
@@ -122,23 +124,16 @@ void OAuthTwitter::requestAccessToken()
 	}
 }
 
-bool OAuthTwitter::authorizationWidget()
+int OAuthTwitter::authorizationWidget()
 {
-	QMessageBox msgBox;
-	msgBox.setText(tr("Authorize?"));
-	msgBox.setInformativeText(tr("Did you authorize QTwitdget to access you twitter account?"));
-	msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-	msgBox.setDefaultButton(QMessageBox::Ok);
+	//PIN based http://apiwiki.twitter.com/Authentication
+    PinDialog pinDialog;
 
-	int ret = msgBox.exec();
-	switch(ret){
-		case QMessageBox::Ok:
-			return true;
-		case QMessageBox::Cancel:
-			return false;
-		default:
-			return false;
-	}
+    if (pinDialog.exec()) {
+        return pinDialog.getPin();
+    } else {
+        return 0;
+    }    
 }
 
 void OAuthTwitter::authorize()

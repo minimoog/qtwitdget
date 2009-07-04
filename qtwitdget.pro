@@ -34,7 +34,8 @@ HEADERS +=  imagedownloader.h \
 			xml/xmlreaderstatus.h \
 			xml/xmlreaderextusers.h \
 			oauth/oauth.h \
-			oauth/oauthtwitter.h 
+			oauth/oauthtwitter.h \
+			oauth/pindialog.h
 			
 SOURCES +=  main.cpp \
 			imagedownloader.cpp \
@@ -59,11 +60,13 @@ SOURCES +=  main.cpp \
 			xml/xmlreaderextuserinfo.cpp \
 			xml/xmlreaderextusers.cpp \
 			oauth/oauth.cpp \
-			oauth/oauthtwitter.cpp 
+			oauth/oauthtwitter.cpp  \
+			oauth/pindialog.cpp 
 			
 FORMS += 	forms/mainwindowform.ui \
 			forms/langchangedialogform.ui \
-			forms/groupdialogform.ui
+			forms/groupdialogform.ui \
+			forms/pindialogform.ui
 			
 TRANSLATIONS += translations/qtwitdget_en.ts \
 				translations/qtwitdget_mk.ts

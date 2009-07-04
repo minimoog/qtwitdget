@@ -48,7 +48,7 @@ public:
 	void authorize();
 protected:
 	/*! Reimplement this if you want other widget to get confirm of the authorization */ 
-	bool authorizationWidget();
+	int authorizationWidget();
 
 private slots:
 	void error();
@@ -56,7 +56,7 @@ private slots:
 private:
 	void requestToken();
 	void requestAuthorization();
-	void requestAccessToken();
+	void requestAccessToken(int pin);
 
 	QNetworkAccessManager *m_netManager;
 };	
