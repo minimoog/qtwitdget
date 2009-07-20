@@ -43,8 +43,8 @@ QString ShortenedUrl::shortUrl(const QString &url)
     QTimer timer;
     timer.setSingleShot(true);
 
-    connect(&timer, SIGNAL(timeout()), &eventloop, SLOT(quit()));
-    connect(&m_netManager, SIGNAL(finished(QNetworkReply*)), &eventloop, SLOT(quit()));
+    QObject::connect(&timer, SIGNAL(timeout()), &eventloop, SLOT(quit()));
+    QObject::connect(&m_netManager, SIGNAL(finished(QNetworkReply*)), &eventloop, SLOT(quit()));
 
     QNetworkReply *reply = m_netManager.get(req);
 
@@ -61,9 +61,7 @@ QString ShortenedUrl::shortUrl(const QString &url)
             return QString();
         }
 
-        qDebug() << reply->readAll();
-        return QString();
-        //return reply->readAll();
+        return reply->readAll();
 
     } else {
         qDebug() << "Timeout";

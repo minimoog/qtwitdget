@@ -24,10 +24,8 @@
 #include <QNetworkAccessManager>
 
 /*! class ShortenedUrl */
-class ShortenedUrl : public QObject
+class ShortenedUrl
 {
-	Q_OBJECT
-	
 public:
 	/*! constructor */
 	ShortenedUrl();
