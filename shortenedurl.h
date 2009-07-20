@@ -22,7 +22,6 @@
 #define SHORTENEDURL_H
  
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 
 /*! class ShortenedUrl */
 class ShortenedUrl : public QObject
@@ -35,13 +34,8 @@ public:
 	/*! Short url */
 	QString shortUrl(const QString& url);
 
-private slots:
-	void finished(QNetworkReply* reply);
-
 private:
 	QNetworkAccessManager m_netManager;
-	bool m_blocked;
-	QString m_shortenedUrl;
 };
  
- #endif //SHORTENEDEURL_H
+#endif //SHORTENEDEURL_H

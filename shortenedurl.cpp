@@ -21,42 +21,52 @@
 #include <QtDebug>
 #include <QUrl>
 #include <QNetworkRequest>
-#include <QApplication>
+#include <QNetworkReply>
+#include <QEventLoop>
+#include <QTimer>
 #include "shortenedurl.h"
 
 ShortenedUrl::ShortenedUrl()
 {
-	connect(&m_netManager, SIGNAL(finished(QNetworkReply*)), SLOT(finished(QNetworkReply*)));
 }
 
 QString ShortenedUrl::shortUrl(const QString &url)
 {
 	//TODO: Add other services for shortening
-	QString urlService("http://is.gd/api.php?longurl=");
-	urlService += url;
+	QUrl urlService("http://api.0.mk/");
+	urlService.addQueryItem("dolg", url);
 
-	QUrl sUrl(urlService);
-	QNetworkRequest req(sUrl);
-	m_blocked = true;
+	QNetworkRequest req(urlService);
 	
-	m_netManager.get(req);
+    QEventLoop eventloop;
+    
+    QTimer timer;
+    timer.setSingleShot(true);
 
-	while(m_blocked)
-		qApp->processEvents();
+    connect(&timer, SIGNAL(timeout()), &eventloop, SLOT(quit()));
+    connect(&m_netManager, SIGNAL(finished(QNetworkReply*)), &eventloop, SLOT(quit()));
 
-	return m_shortenedUrl;
-}
+    QNetworkReply *reply = m_netManager.get(req);
 
-void ShortenedUrl::finished(QNetworkReply* reply)
-{
-	m_blocked = false;
+	timer.start(5000);
+    eventloop.exec();
 
-	if(reply->error() != QNetworkReply::NoError){
-		qDebug() << "Error shortening url";
-		qDebug() << reply->readAll();
-		m_shortenedUrl.clear();
-		return;
-	}
+    if (timer.isActive()) {
+        timer.stop();
 
-	m_shortenedUrl = reply->readAll();
+        if (reply->error() != QNetworkReply::NoError) {
+            qDebug() << "Error shortening url";
+            qDebug() << reply->readAll();
+
+            return QString();
+        }
+
+        qDebug() << reply->readAll();
+        return QString();
+        //return reply->readAll();
+
+    } else {
+        qDebug() << "Timeout";
+        return QString();
+    }
 }

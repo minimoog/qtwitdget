@@ -69,6 +69,7 @@ MainWindow::MainWindow()
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
+    connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
 	
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
