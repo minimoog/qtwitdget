@@ -116,9 +116,9 @@ void NetPixmapItem::downloadFinished()
             qDebug() << "Error load from data";
             return;
         } else {
-            //save it to cache
             setPixmap(pm);
 
+            //save it to cache
             QPixmapCache::insert(reply->url().toString(), pm);
 
             //and to disk

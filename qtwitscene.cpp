@@ -171,14 +171,6 @@ void QTwitScene::updateStatusWidgets()
 	if(m_statuses.count() < m_gradRectItems.count())
 		qDebug() << "This shouldn't be";
 
-    /*
-	QListIterator<QTwitStatus> iterStatus(m_statuses);
-	while(iterStatus.hasNext()){
-		QTwitStatus ts = iterStatus.next();
-		urlsImages << ts.profileImageUrl();
-	}
-    */
-
     refreshStatutes();
 }
 

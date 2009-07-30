@@ -26,7 +26,6 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsLineItem>
-#include "imagedownloader.h"
 #include "sceneitems/pixmapbuttonitem.h"
 #include "sceneitems/gradientrectitem.h"
 #include "sceneitems/netpixmapitem.h"

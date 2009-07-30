@@ -8,8 +8,7 @@ QT += network xml sql
 win32:LIBS += libeay32.lib
 unix:LIBS += -lcrypto
 
-HEADERS +=  imagedownloader.h \
-			twitstatusedit.h \
+HEADERS +=  twitstatusedit.h \
 			shortenedurl.h \
 			mainwindow.h \
 			langchangedialog.h \
@@ -39,7 +38,6 @@ HEADERS +=  imagedownloader.h \
 			oauth/pindialog.h
 			
 SOURCES +=  main.cpp \
-			imagedownloader.cpp \
 			twitstatusedit.cpp \
 			shortenedurl.cpp \
 			mainwindow.cpp \
