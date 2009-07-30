@@ -19,8 +19,16 @@
  */
  
 #include <QtDebug>
+#include <QCoreApplication>
+#include <QDesktopServices>
+#include <QDir>
+#include <QFileInfo>
 #include <QPixmapCache>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include "netpixmapitem.h"
+
+QString NetPixmapItem::dirImagesPath;
 
 static QString decodeTwitterImageUrlToFilename(const QUrl& url)
 {

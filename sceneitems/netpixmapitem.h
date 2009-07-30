@@ -23,6 +23,7 @@
 
 #include <QGraphicsPixmapItem>
 #include <QNetworkAccessManager>
+#include <QUrl>
 
 class NetPixmapItem : public QObject, public QGraphicsPixmapItem
 {
