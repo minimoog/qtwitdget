@@ -503,7 +503,7 @@ void MainWindow::createTabs()
 void MainWindow::addGroupTab(const TwitTabGroup& group)
 {
 	QTwitScene *statusScene = new QTwitScene(this);
-	statusScene->setImageDownloader(m_imageDownloader);
+    statusScene->setNetworkAccessManager(m_netManager);
 	m_twitScenes << statusScene;
 
 	connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)), 

@@ -54,13 +54,13 @@ static QString decodeTwitterImageUrlToFilename(const QUrl& url)
 NetPixmapItem::NetPixmapItem(QGraphicsItem * parent)
 :   QGraphicsPixmapItem(parent), m_netManager(0)
 {
-
+    resolveDirImagesPath();
 }
 
 NetPixmapItem::NetPixmapItem(QNetworkAccessManager * netManager, QGraphicsItem * parent)
 :   QGraphicsPixmapItem(parent), m_netManager(netManager)
 {
-
+    resolveDirImagesPath();
 }
 
 void NetPixmapItem::setNetworkAccessManager(QNetworkAccessManager *netManager)
@@ -94,6 +94,7 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
             //load it from disk and cache it
             pm.load(imageFilename);
             QPixmapCache::insert(url.toString(), pm);
+            setPixmap(pm);
         }
     } else {
         setPixmap(pm);
@@ -116,6 +117,8 @@ void NetPixmapItem::downloadFinished()
             return;
         } else {
             //save it to cache
+            setPixmap(pm);
+
             QPixmapCache::insert(reply->url().toString(), pm);
 
             //and to disk
