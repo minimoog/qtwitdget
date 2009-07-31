@@ -78,14 +78,20 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
     //check if pixmap is already cache
     QPixmap pm;
 
-    if (!QPixmapCache::find(url.toString(), pm)) {  
+    if (QPixmapCache::find(url.toString(), pm)) {  
+        setPixmap(pm);
+    } else {
         //no, try to load it from disk
         QString imageFilename = dirImagesPath + decodeTwitterImageUrlToFilename(url);
+
         if (!QFile::exists(imageFilename)) {
             //there is not image on the disk cache, download it
             Q_ASSERT(m_netManager != 0);
             QNetworkRequest request;
             request.setUrl(url);
+            
+            //insert empty pixmap into cache to avoid multiple downloads
+            QPixmapCache::insert(url.toString(), pm);
 
             QNetworkReply *reply = m_netManager->get(request);
             connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
@@ -96,8 +102,6 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
             QPixmapCache::insert(url.toString(), pm);
             setPixmap(pm);
         }
-    } else {
-        setPixmap(pm);
     }
 }
 
