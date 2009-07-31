@@ -60,14 +60,13 @@ static QString replaceLinksWithHref(const QString &text)
 }
 
 QTwitScene::QTwitScene(QObject *parent)
-	:	QGraphicsScene(parent), m_imageDownloader(0)
+	:	QGraphicsScene(parent), m_netManager(0)
 {
 }
 
-void QTwitScene::setImageDownloader(ImageDownloader *imgDown)
-{	
-	m_imageDownloader = imgDown;
-	connect(m_imageDownloader, SIGNAL(finished()), this, SLOT(finishedDownloadImages()));
+void QTwitScene::setNetworkAccessManager(QNetworkAccessManager * netManager)
+{
+    m_netManager = netManager;
 }
 
 void QTwitScene::setStatuses(const QList<QTwitStatus>& statuses)
@@ -84,8 +83,6 @@ void QTwitScene::setUserid(int id)
 
 void QTwitScene::updateStatusWidgets()
 {
-	Q_ASSERT(m_imageDownloader != 0);
-
 	QList<QUrl> urlsImages;
 
 	//if number of statuses is bigger than text items create new 
@@ -120,7 +117,7 @@ void QTwitScene::updateStatusWidgets()
             whiteBorderItem->setBrush(QBrush(Qt::NoBrush));
             whiteBorderItem->setPos(10, 10);
 
-            QGraphicsPixmapItem *avatarItem = new QGraphicsPixmapItem(whiteBorderItem);
+            NetPixmapItem *avatarItem = new NetPixmapItem(m_netManager, whiteBorderItem);
             avatarItem->setPos(1, 1);
             m_avatarItems << avatarItem;
 
@@ -174,34 +171,23 @@ void QTwitScene::updateStatusWidgets()
 	if(m_statuses.count() < m_gradRectItems.count())
 		qDebug() << "This shouldn't be";
 
-	QListIterator<QTwitStatus> iterStatus(m_statuses);
-	while(iterStatus.hasNext()){
-		QTwitStatus ts = iterStatus.next();
-		urlsImages << ts.profileImageUrl();
-	}
-
-	if(!urlsImages.isEmpty())
-		m_imageDownloader->downloadImages(urlsImages);
+    refreshStatutes();
 }
 
-void QTwitScene::finishedDownloadImages()
+void QTwitScene::refreshStatutes()
 {
-	QHash<QString, QImage> images = m_imageDownloader->getImages();
-
-    QListIterator<QGraphicsPixmapItem*> iterAvatarItem(m_avatarItems);
+    QListIterator<NetPixmapItem*> iterAvatarItem(m_avatarItems);
     QListIterator<QGraphicsTextItem*> iterNameItem(m_nameItems);
     QListIterator<QTwitStatus> iterStatus(m_statuses);
     QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
     QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
     while (iterStatus.hasNext()) {
         QTwitStatus ts = iterStatus.next();
-        QGraphicsPixmapItem* avatarItem = iterAvatarItem.next();
+        NetPixmapItem* avatarItem = iterAvatarItem.next();
         QGraphicsTextItem* nameItem = iterNameItem.next();
         PixmapButtonItem* favoritedItem = iterFavoritedItem.next();
 
-        QImage img = images.value(ts.profileImageUrl());
-
-        avatarItem->setPixmap(QPixmap::fromImage(img));
+        avatarItem->setPixmapUrl(QUrl(ts.profileImageUrl()));
         nameItem->setPlainText(ts.name());
 
         QString textHtml = replaceLinksWithHref(ts.text());

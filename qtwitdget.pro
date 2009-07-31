@@ -8,8 +8,7 @@ QT += network xml sql
 win32:LIBS += libeay32.lib
 unix:LIBS += -lcrypto
 
-HEADERS +=  imagedownloader.h \
-			twitstatusedit.h \
+HEADERS +=  twitstatusedit.h \
 			shortenedurl.h \
 			mainwindow.h \
 			langchangedialog.h \
@@ -19,6 +18,7 @@ HEADERS +=  imagedownloader.h \
 			groupdialog.h \
 			sceneitems/pixmapbuttonitem.h \
 			sceneitems/gradientrectitem.h \
+			sceneitems/netpixmapitem.h \
 			qtwit/qtwitupdate.h \
 			qtwit/qtwitstatusdata.h \
 			qtwit/qtwitstatus.h \
@@ -38,7 +38,6 @@ HEADERS +=  imagedownloader.h \
 			oauth/pindialog.h
 			
 SOURCES +=  main.cpp \
-			imagedownloader.cpp \
 			twitstatusedit.cpp \
 			shortenedurl.cpp \
 			mainwindow.cpp \
@@ -48,6 +47,7 @@ SOURCES +=  main.cpp \
 			groupdialog.cpp \
 			sceneitems/pixmapbuttonitem.cpp \
 			sceneitems/gradientrectitem.cpp \
+			sceneitems/netpixmapitem.cpp \
 			qtwit/qtwitbase.cpp \
 			qtwit/qtwitfriendstimeline.cpp \
 			qtwit/qtwitupdate.cpp \

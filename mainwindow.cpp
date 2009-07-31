@@ -38,7 +38,6 @@ MainWindow::MainWindow()
 	m_twitUpdate(new QTwitUpdate(this)),
 	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
-	m_imageDownloader(new ImageDownloader(this)),
 	m_timer(new QTimer(this))
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
@@ -46,7 +45,6 @@ MainWindow::MainWindow()
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
 	m_twitDestroy->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
-	m_imageDownloader->setNetworkAccessManager(m_netManager);
 
 	m_twitFriendsTimeline->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
@@ -504,7 +502,7 @@ void MainWindow::createTabs()
 void MainWindow::addGroupTab(const TwitTabGroup& group)
 {
 	QTwitScene *statusScene = new QTwitScene(this);
-	statusScene->setImageDownloader(m_imageDownloader);
+    statusScene->setNetworkAccessManager(m_netManager);
 	m_twitScenes << statusScene;
 
 	connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)), 

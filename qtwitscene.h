@@ -26,9 +26,9 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsLineItem>
-#include "imagedownloader.h"
 #include "sceneitems/pixmapbuttonitem.h"
 #include "sceneitems/gradientrectitem.h"
+#include "sceneitems/netpixmapitem.h"
 
 class QTwitStatus;
 
@@ -40,9 +40,8 @@ class QTwitScene : public QGraphicsScene
 public:
 	/*! Constructor */
 	QTwitScene(QObject *parent = 0);
-	/*! Sets image downloader */
-	/*! must be set to see images */
-	void setImageDownloader(ImageDownloader *imgDown);
+	/*! Sets network access manager */
+    void setNetworkAccessManager(QNetworkAccessManager * netManager);
 	/*! sets statuses */
 	void setStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
@@ -56,22 +55,22 @@ signals:
 	void requestFavorited(qint64 statusId);
 	
 private slots:
-	void finishedDownloadImages();
 	void replyClicked(int i);
 	void retweetClicked(int i);
 	void favoritedClicked(int i);
 	
 private:
 	void updateStatusWidgets();
+    void refreshStatutes();
 
 	int m_userid; //user id
 
-	ImageDownloader *m_imageDownloader;
+    QNetworkAccessManager * m_netManager;
 
 	QList<QTwitStatus> m_statuses;
 
     QList<GradientRectItem*> m_gradRectItems;
-    QList<QGraphicsPixmapItem*> m_avatarItems;
+    QList<NetPixmapItem*> m_avatarItems;
     QList<QGraphicsTextItem*> m_nameItems;
     QList<QGraphicsTextItem*> m_textItems;
     QList<PixmapButtonItem*> m_favoritedItems;

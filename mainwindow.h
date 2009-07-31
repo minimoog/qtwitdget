@@ -32,7 +32,6 @@
 #include "qtwit/qtwitupdate.h"
 #include "qtwit/qtwitfavorites.h"
 #include "oauth/oauthtwitter.h"
-#include "imagedownloader.h"
 #include "twittabgroup.h"
 #include "qtwitscene.h"
 
@@ -90,7 +89,6 @@ private:
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
-	ImageDownloader *m_imageDownloader;
 	QTimer *m_timer;
 
 	QList<QTwitStatus> m_statuses;
