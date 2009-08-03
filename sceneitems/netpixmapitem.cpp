@@ -90,9 +90,6 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
             QNetworkRequest request;
             request.setUrl(url);
             
-            //insert empty pixmap into cache to avoid multiple downloads
-            QPixmapCache::insert(url.toString(), pm);
-
             QNetworkReply *reply = m_netManager->get(request);
             connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
@@ -120,10 +117,19 @@ void NetPixmapItem::downloadFinished()
             qDebug() << "Error load from data";
             return;
         } else {
-            setPixmap(pm);
+            QPixmap pmScaled;
+
+            //resize pixmap if size different than 48x48
+            if (pm.width() > 48 || pm.height() > 48) {
+                pmScaled = pm.scaled(48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            } else {
+                pmScaled = pm;
+            }
+
+            setPixmap(pmScaled);
 
             //save it to cache
-            QPixmapCache::insert(reply->url().toString(), pm);
+            QPixmapCache::insert(reply->url().toString(), pmScaled);
 
             //and to disk
             QString filename = decodeTwitterImageUrlToFilename(reply->url());
@@ -132,13 +138,7 @@ void NetPixmapItem::downloadFinished()
 
             QString fullpath = dirImagesPath + filename;
 
-            QFile file(fullpath);
-            if (!file.open(QIODevice::WriteOnly)) {
-                qDebug() << "Could not write";
-            }
-
-            file.write(buffer);
-            file.close();
+            pmScaled.save(fullpath);
         }
     }
 }
