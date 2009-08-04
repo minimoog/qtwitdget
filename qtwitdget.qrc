@@ -14,6 +14,9 @@
 	<file>images/button_unfavorited.png</file>
 	<file>images/button_unfavorited_hover.png</file>
 	<file>images/button_unfavorited_click.png</file>
+	<file>images/button_delete.png</file>
+	<file>images/button_delete_hover.png</file>
+	<file>images/button_delete_click.png</file>
 	<file>images/avatar_box.png</file>
 	<file>translations/qtwitdget_en.qm</file>
 	<file>translations/qtwitdget_mk.qm</file>
