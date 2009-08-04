@@ -123,7 +123,7 @@ void QTwitScene::updateStatusWidgets()
 
             QGraphicsTextItem *nameItem = new QGraphicsTextItem(rectItem);
             nameItem->setDefaultTextColor(QColor("#018ad9"));
-            nameItem->setFont(QFont("Segoe UI", 12));
+            nameItem->setFont(QFont("Segoe UI", 11));
             nameItem->setPos(84, 0);
             m_nameItems << nameItem;
 
@@ -188,7 +188,7 @@ void QTwitScene::refreshStatutes()
         PixmapButtonItem* favoritedItem = iterFavoritedItem.next();
 
         avatarItem->setPixmapUrl(QUrl(ts.profileImageUrl()));
-        nameItem->setPlainText(ts.name());
+        nameItem->setPlainText(ts.screenName());
 
         QString textHtml = replaceLinksWithHref(ts.text());
         iterTextItem.next()->setHtml(textHtml);
