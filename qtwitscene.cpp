@@ -141,7 +141,6 @@ void QTwitScene::updateStatusWidgets()
 			replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
 		    replyItem->setIndex(m_textItems.count() - 1);
             replyItem->setPos(10, 80);
-			connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
             m_replyButtonItems << replyItem;
 
 			PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
@@ -200,10 +199,14 @@ void QTwitScene::refreshStatutes()
             replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
             replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
             replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
+            replyButtonItem->disconnect();
+            connect(replyButtonItem, SIGNAL(clicked(int)), this, SLOT(deleteClicked(int)));
         } else {
             replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
             replyButtonItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
             replyButtonItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+            replyButtonItem->disconnect();
+            connect(replyButtonItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
         }
 
         if (ts.favorited()) {
@@ -260,5 +263,5 @@ void QTwitScene::favoritedClicked(int i)
 
 void QTwitScene::deleteClicked(int i)
 {
-
+    emit requestDelete(m_statuses.at(i).id());
 }

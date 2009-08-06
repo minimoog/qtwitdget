@@ -66,6 +66,7 @@ private slots:
 	void nextStatuses();
 
 	void favorited(qint64 statusId);
+    void reqDelete(qint64 statusId);
 
 protected:
 	void closeEvent(QCloseEvent *e);

@@ -148,8 +148,6 @@ void MainWindow::startUp()
 		createDefaultTwitGroups();
 		createTabs();
 
-		//ui.twitsWidget->setUserid(userId);
-
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			refreshTab(i);
 
@@ -513,6 +511,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
 		ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
 	connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), ui.updateEdit, SLOT(setFocus()));
 	connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
+    connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
 
 	QTwitView *statusView = new QTwitView;
 	statusView->setScene(statusScene);
@@ -558,3 +557,7 @@ void MainWindow::favorited(qint64 statusId)
         refreshTab(i);
 }
 
+void MainWindow::reqDelete(qint64 statusId)
+{
+    m_twitDestroy->deleteStatus(statusId);
+}
