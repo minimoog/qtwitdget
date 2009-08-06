@@ -53,11 +53,13 @@ signals:
 	void requestReply(qint64 statusId, const QString& screenName);
 	void requestRetweet(const QString& text, const QString& screenName);
 	void requestFavorited(qint64 statusId);
+    void requestDelete(qint64 statusId);
 	
 private slots:
 	void replyClicked(int i);
 	void retweetClicked(int i);
 	void favoritedClicked(int i);
+    void deleteClicked(int i);
 	
 private:
 	void updateStatusWidgets();
@@ -74,6 +76,7 @@ private:
     QList<QGraphicsTextItem*> m_nameItems;
     QList<QGraphicsTextItem*> m_textItems;
     QList<PixmapButtonItem*> m_favoritedItems;
+    QList<PixmapButtonItem*> m_replyButtonItems;
     QList<QGraphicsLineItem*> m_lineItems;
 };
 

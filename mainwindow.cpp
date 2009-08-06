@@ -503,6 +503,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
 {
 	QTwitScene *statusScene = new QTwitScene(this);
     statusScene->setNetworkAccessManager(m_netManager);
+    statusScene->setUserid(m_userId);
 	m_twitScenes << statusScene;
 
 	connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)), 

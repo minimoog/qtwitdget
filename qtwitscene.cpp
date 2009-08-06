@@ -142,6 +142,7 @@ void QTwitScene::updateStatusWidgets()
 		    replyItem->setIndex(m_textItems.count() - 1);
             replyItem->setPos(10, 80);
 			connect(replyItem, SIGNAL(clicked(int)), this, SLOT(replyClicked(int)));
+            m_replyButtonItems << replyItem;
 
 			PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
 			retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
@@ -162,7 +163,7 @@ void QTwitScene::updateStatusWidgets()
             QGraphicsLineItem *lineItem = new QGraphicsLineItem(rectItem);
             lineItem->setPen(QPen(QColor("#DDDDDD")));
             m_lineItems << lineItem;
-
+            
 			posY += 101.0f;
 		}
 	}
@@ -181,17 +182,29 @@ void QTwitScene::refreshStatutes()
     QListIterator<QTwitStatus> iterStatus(m_statuses);
     QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
     QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
+    QListIterator<PixmapButtonItem*> iterReplyButtonItem(m_replyButtonItems);
     while (iterStatus.hasNext()) {
         QTwitStatus ts = iterStatus.next();
         NetPixmapItem* avatarItem = iterAvatarItem.next();
         QGraphicsTextItem* nameItem = iterNameItem.next();
         PixmapButtonItem* favoritedItem = iterFavoritedItem.next();
+        PixmapButtonItem* replyButtonItem = iterReplyButtonItem.next();
 
         avatarItem->setPixmapUrl(QUrl(ts.profileImageUrl()));
         nameItem->setPlainText(ts.screenName());
 
         QString textHtml = replaceLinksWithHref(ts.text());
         iterTextItem.next()->setHtml(textHtml);
+
+        if (ts.userId() == m_userid) {
+            replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
+            replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
+            replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
+        } else {
+            replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+            replyButtonItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+            replyButtonItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+        }
 
         if (ts.favorited()) {
             favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
@@ -243,4 +256,9 @@ void QTwitScene::retweetClicked(int i)
 void QTwitScene::favoritedClicked(int i)
 {
 	emit requestFavorited(m_statuses.at(i).id());
+}
+
+void QTwitScene::deleteClicked(int i)
+{
+
 }
