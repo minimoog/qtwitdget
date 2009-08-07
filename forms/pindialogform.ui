@@ -29,10 +29,10 @@
      <item>
       <widget class="QLineEdit" name="pinLineEdit">
        <property name="inputMask">
-        <string>999999; </string>
+        <string>9999999; </string>
        </property>
        <property name="maxLength">
-        <number>6</number>
+        <number>7</number>
        </property>
       </widget>
      </item>
