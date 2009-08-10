@@ -83,6 +83,7 @@ private:
 	bool isDatabaseEmpty();
     void readSettings();
     void writeSettings();
+    void readGroupsSettings();
 
 	Ui::MainWindowForm ui;
 

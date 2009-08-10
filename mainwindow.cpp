@@ -187,6 +187,20 @@ void MainWindow::createGrouping()
 	TwitTabGroup group = createUserTwitGroup(groupDialog.getGroupName(), groupDialog.getGroupList());
 	addGroupTab(group);
 
+    //if save is checked, save group to settings
+    if (groupDialog.isSaveGroupingChecked()) {
+        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+        int size = settings.beginReadArray("groups");
+        settings.endArray();
+
+        settings.beginWriteArray("groups");
+        settings.setArrayIndex(size);
+        settings.setValue("tabName", group.tabName());
+        settings.setValue("query", group.query());
+
+        settings.endArray();
+    }
+
 	ui.tabWidget->setCurrentIndex(ui.tabWidget->count() - 1);
 	refreshTab(ui.tabWidget->count() - 1);
 }
@@ -469,6 +483,9 @@ void MainWindow::createDefaultTwitGroups()
 	m_twitTabGroups.append(allfriends);
 	m_twitTabGroups.append(myTwits);
     m_twitTabGroups.append(favorites);
+
+    //read saved groups
+    readGroupsSettings();
 }
 
 TwitTabGroup MainWindow::createUserTwitGroup(const QString& name, const QList<int>& usersId)
@@ -579,4 +596,21 @@ void MainWindow::writeSettings()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
+}
+
+void MainWindow::readGroupsSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    int size = settings.beginReadArray("groups");
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+
+        TwitTabGroup ttg;
+        ttg.setTabName(settings.value("tabName").toString());
+        ttg.setQuery(settings.value("query").toString());
+
+        m_twitTabGroups.append(ttg);
+    }
+
+    settings.endArray();
 }

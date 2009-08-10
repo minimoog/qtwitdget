@@ -36,6 +36,7 @@ public:
 	void setOAuthTwitter(OAuthTwitter* oauthTwitter);
 	QList<int> getGroupList() const;
 	QString getGroupName() const;
+    bool isSaveGroupingChecked() const;
 
 protected:
     virtual void changeEvent(QEvent *e);

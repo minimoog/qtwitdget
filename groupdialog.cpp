@@ -115,3 +115,8 @@ void GroupDialog::removeButtonClicked()
 		delete it;
 	}
 }
+
+bool GroupDialog::isSaveGroupingChecked() const
+{
+    return m_ui.saveGroupCheckBox->isChecked();
+}
