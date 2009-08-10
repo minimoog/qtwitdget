@@ -109,7 +109,7 @@ void MainWindow::authorize()
 		tT.stop();
 		QTwitExtUserInfo extUserInfo = vc.userInfo();
 		//store settings
-		QSettings settings;
+        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
 		settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
 		settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
 		settings.setValue("user_id", extUserInfo.id());
@@ -123,7 +123,7 @@ void MainWindow::authorize()
 void MainWindow::startUp()
 {
 	//read settings
-	QSettings settings;
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
 	m_userId = settings.value("user_id", 0).toInt();
 	QString oauthToken = settings.value("oauth_token").toString();
 	QString oauthTokenSecret = settings.value("oauth_token_secret").toString();

@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
 
-	QSettings settings("QTwitdget", "QTwitdget");
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
 	QString lang = settings.value("Language").toString();
 
 	appTranslator = new QTranslator;

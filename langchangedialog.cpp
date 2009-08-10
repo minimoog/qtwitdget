@@ -30,7 +30,7 @@ LangChangeDialog::LangChangeDialog(QWidget *parent)
 	ui.setupUi(this);
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-	QSettings settings("QTwitdget", "QTwitdget");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
 	QString lang = settings.value("Language").toString();
 
 	if(lang == "en"){
@@ -51,7 +51,7 @@ void LangChangeDialog::changeEvent(QEvent *e)
 
 void LangChangeDialog::languageChanged()
 {
-	QSettings settings;
+	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
 
 	if(ui.enButton->isChecked()){
 		appTranslator->load(":/translations/qtwitdget_en");
