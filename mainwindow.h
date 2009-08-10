@@ -81,6 +81,8 @@ private:
 	void createTabs();
 	void addGroupTab(const TwitTabGroup& group);
 	bool isDatabaseEmpty();
+    void readSettings();
+    void writeSettings();
 
 	Ui::MainWindowForm ui;
 

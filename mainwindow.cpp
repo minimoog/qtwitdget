@@ -82,6 +82,8 @@ MainWindow::MainWindow()
 	m_firstRun = false;
 	
 	setupTrayIcon();
+
+    readSettings();
 }
 
 void MainWindow::authorize()
@@ -314,6 +316,7 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    writeSettings();
 	hide();
 	e->ignore();
 }
@@ -560,4 +563,20 @@ void MainWindow::favorited(qint64 statusId)
 void MainWindow::reqDelete(qint64 statusId)
 {
     m_twitDestroy->deleteStatus(statusId);
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    QPoint pos = settings.value("pos", QPoint(200, 50)).toPoint();
+    QSize size = settings.value("size", QSize(480, 880)).toSize();
+    resize(size);
+    move(pos);
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
 }
