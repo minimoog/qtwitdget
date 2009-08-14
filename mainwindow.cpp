@@ -440,9 +440,21 @@ void MainWindow::refreshTab(int i)
 
 void MainWindow::closeTab(int i)
 {
-	QWidget *widget = ui.tabWidget->widget(i);
+    QTwitView *twitView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
+    if (twitView) {
+        QTwitScene *twitScene = qobject_cast<QTwitScene*>(twitView->scene());
+
+        if (twitScene) {
+            m_twitScenes.removeOne(twitScene);
+            delete twitScene;
+        }
+
+        delete twitView;
+    } else {
+        qDebug() << "Error remove tab: Not a QGraphics View";
+    }
+
 	ui.tabWidget->removeTab(i);
-	delete widget;
 
 	m_twitTabGroups.removeAt(i);
 }
