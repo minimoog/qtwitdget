@@ -49,11 +49,8 @@ private slots:
     void error();
 
 private:
-    void resolveDirImagesPath();
-
     QNetworkAccessManager * m_netManager;
-    static QString dirImagesPath;
-
+    
 };
 
 #endif //NETPIXMAPITEM_H

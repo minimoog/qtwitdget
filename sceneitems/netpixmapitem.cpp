@@ -26,9 +26,8 @@
 #include <QPixmapCache>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QtSql>
 #include "netpixmapitem.h"
-
-QString NetPixmapItem::dirImagesPath;
 
 static QString decodeTwitterImageUrlToFilename(const QUrl& url)
 {
@@ -54,13 +53,11 @@ static QString decodeTwitterImageUrlToFilename(const QUrl& url)
 NetPixmapItem::NetPixmapItem(QGraphicsItem * parent)
 :   QGraphicsPixmapItem(parent), m_netManager(0)
 {
-    resolveDirImagesPath();
 }
 
 NetPixmapItem::NetPixmapItem(QNetworkAccessManager * netManager, QGraphicsItem * parent)
 :   QGraphicsPixmapItem(parent), m_netManager(netManager)
 {
-    resolveDirImagesPath();
 }
 
 void NetPixmapItem::setNetworkAccessManager(QNetworkAccessManager *netManager)
@@ -82,7 +79,7 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
         setPixmap(pm);
     } else {
         //no, try to load it from disk
-        QString imageFilename = dirImagesPath + decodeTwitterImageUrlToFilename(url);
+        QString imageFilename = decodeTwitterImageUrlToFilename(url);
 
         if (!QFile::exists(imageFilename)) {
             //there is not image on the disk cache, download it
@@ -136,7 +133,7 @@ void NetPixmapItem::downloadFinished()
             if (filename.isEmpty())
                 return;
 
-            QString fullpath = dirImagesPath + filename;
+            QString fullpath = filename;
 
             pmScaled.save(fullpath);
         }
@@ -149,21 +146,5 @@ void NetPixmapItem::error()
     if(reply){
         QUrl url = reply->url();
         qDebug() << "error downloading" << url << reply->errorString();
-    }
-}
-
-void NetPixmapItem::resolveDirImagesPath()
-{
-    if (dirImagesPath.isEmpty()) {
-        QCoreApplication::setOrganizationName("QTwitdget");
-        dirImagesPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-
-        QDir dir;
-        dir.setPath(dirImagesPath);
-        if (!dir.exists()) {
-            dir.mkpath(".");
-        }
-
-        dirImagesPath += '/';
     }
 }
