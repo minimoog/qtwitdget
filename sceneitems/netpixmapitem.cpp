@@ -78,11 +78,15 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
     if (QPixmapCache::find(url.toString(), pm)) {  
         setPixmap(pm);
     } else {
-        //no, try to load it from disk
-        QString imageFilename = decodeTwitterImageUrlToFilename(url);
+        //no, try to load it from database
+        QString imageName = decodeTwitterImageUrlToFilename(url);
+		QString qs = QString("SELECT image FROM images WHERE imageName = '%1'").arg(imageName);
 
-        if (!QFile::exists(imageFilename)) {
-            //there is not image on the disk cache, download it
+		QSqlQuery query;
+		query.exec(qs);
+
+		if (!query.next()) {
+			//there is not image on the database, download it
             Q_ASSERT(m_netManager != 0);
             QNetworkRequest request;
             request.setUrl(url);
@@ -91,8 +95,11 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
             connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
         } else {
-            //load it from disk and cache it
-            pm.load(imageFilename);
+			QByteArray image = query.value(0).toByteArray();
+			if (!pm.loadFromData(image)) {
+				qDebug() << "Error load image from database";
+				return;
+			}
             QPixmapCache::insert(url.toString(), pm);
             setPixmap(pm);
         }
@@ -128,14 +135,22 @@ void NetPixmapItem::downloadFinished()
             //save it to cache
             QPixmapCache::insert(reply->url().toString(), pmScaled);
 
-            //and to disk
-            QString filename = decodeTwitterImageUrlToFilename(reply->url());
-            if (filename.isEmpty())
+            //and to database
+            QString imageName = decodeTwitterImageUrlToFilename(reply->url());
+            if (imageName.isEmpty())
                 return;
+			
+			QByteArray image;
+			QBuffer buffer(&image);
+			buffer.open(QIODevice::WriteOnly);
+			pmScaled.save(&buffer, "PNG");
+			
+			QSqlQuery query;
+			query.prepare("INSERT INTO images (imageName, image) VALUES (:imageName, :image)");
+			query.bindValue(":imageName", imageName);
+			query.bindValue(":image", image);
 
-            QString fullpath = filename;
-
-            pmScaled.save(fullpath);
+			query.exec();
         }
     }
 }

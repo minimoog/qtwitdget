@@ -381,7 +381,7 @@ void MainWindow::createDatabase(const QString& databaseName)
 				
 	query.exec("CREATE INDEX IF NOT EXISTS index_id ON status (id);");
 
-	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName)");
+	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
 }
 
 bool MainWindow::isDatabaseEmpty()
