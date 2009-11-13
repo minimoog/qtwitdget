@@ -68,6 +68,7 @@ MainWindow::MainWindow()
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
     connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
+	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
 	
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
@@ -550,7 +551,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
 	QTwitView *statusView = new QTwitView;
 	statusView->setScene(statusScene);
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-	connect(statusView, SIGNAL(scrollBarMaxPos()), this, SLOT(nextStatuses()));
+	connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
 	ui.tabWidget->addTab(statusView, group.tabName());
 }
 

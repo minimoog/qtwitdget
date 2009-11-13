@@ -35,7 +35,9 @@ QTwitView::QTwitView(QWidget *parent)
 void QTwitView::scrollBarPos(int pos)
 {
 	if(pos == verticalScrollBar()->maximum() && verticalScrollBar()->isEnabled())
-		emit scrollBarMaxPos();
+		emit scrollBarMaxPos(true);
+	else
+		emit scrollBarMaxPos(false);
 }
 
 void QTwitView::resizeEvent(QResizeEvent *e)

@@ -30,7 +30,7 @@ class QTwitView : public QGraphicsView
 public:
 	QTwitView(QWidget *parent = 0);
 signals:
-	void scrollBarMaxPos();
+	void scrollBarMaxPos(bool maxPos);
 protected:
 	void resizeEvent(QResizeEvent *e);
 private slots:
