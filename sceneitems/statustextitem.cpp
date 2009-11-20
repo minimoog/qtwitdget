@@ -44,6 +44,6 @@ StatusTextItem::StatusTextItem(const QString& text, QGraphicsItem * parent)
 void StatusTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
 	QStyleOptionGraphicsItem *o = const_cast<QStyleOptionGraphicsItem*>(option);
-	o->state &= ~QStyle::State_Selected;
+	o->state &= ~(QStyle::State_Selected | QStyle::State_HasFocus);
 	QGraphicsTextItem::paint(painter, o, widget);
 }
