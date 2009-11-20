@@ -127,12 +127,8 @@ void QTwitScene::updateStatusWidgets()
             nameItem->setPos(84, 0);
             m_nameItems << nameItem;
 
-            QGraphicsTextItem *textItem = new QGraphicsTextItem(rectItem);
-            textItem->setDefaultTextColor(QColor("#222222"));
-            textItem->setFont(QFont("Segoe UI", 9));
+            StatusTextItem *textItem = new StatusTextItem(rectItem);
             textItem->setPos(84, 24);
-            textItem->setOpenExternalLinks(true);
-            textItem->setTextInteractionFlags(Qt::TextBrowserInteraction);
             m_textItems << textItem;
 
 			PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
@@ -179,7 +175,7 @@ void QTwitScene::refreshStatutes()
     QListIterator<NetPixmapItem*> iterAvatarItem(m_avatarItems);
     QListIterator<QGraphicsTextItem*> iterNameItem(m_nameItems);
     QListIterator<QTwitStatus> iterStatus(m_statuses);
-    QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
+    QListIterator<StatusTextItem*> iterTextItem(m_textItems);
     QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
     QListIterator<PixmapButtonItem*> iterReplyButtonItem(m_replyButtonItems);
     while (iterStatus.hasNext()) {
@@ -230,7 +226,7 @@ void QTwitScene::refreshStatutes()
 void QTwitScene::resizeItems(int w)
 {
     QListIterator<GradientRectItem*> iterGradRectItem(m_gradRectItems);
-    QListIterator<QGraphicsTextItem*> iterTextItem(m_textItems);
+    QListIterator<StatusTextItem*> iterTextItem(m_textItems);
     QListIterator<PixmapButtonItem*> iterFavoritedItem(m_favoritedItems);
     QListIterator<QGraphicsLineItem*> iterLineItem(m_lineItems);
     while (iterGradRectItem.hasNext()) {

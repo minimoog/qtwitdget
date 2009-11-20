@@ -29,6 +29,7 @@
 #include "sceneitems/pixmapbuttonitem.h"
 #include "sceneitems/gradientrectitem.h"
 #include "sceneitems/netpixmapitem.h"
+#include "sceneitems/statustextitem.h"
 
 class QTwitStatus;
 
@@ -74,7 +75,7 @@ private:
     QList<GradientRectItem*> m_gradRectItems;
     QList<NetPixmapItem*> m_avatarItems;
     QList<QGraphicsTextItem*> m_nameItems;
-    QList<QGraphicsTextItem*> m_textItems;
+    QList<StatusTextItem*> m_textItems;
     QList<PixmapButtonItem*> m_favoritedItems;
     QList<PixmapButtonItem*> m_replyButtonItems;
     QList<QGraphicsLineItem*> m_lineItems;
