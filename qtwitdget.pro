@@ -19,6 +19,7 @@ HEADERS +=  twitstatusedit.h \
 			sceneitems/pixmapbuttonitem.h \
 			sceneitems/gradientrectitem.h \
 			sceneitems/netpixmapitem.h \
+			sceneitems/statustextitem.h \
 			qtwit/qtwitupdate.h \
 			qtwit/qtwitstatusdata.h \
 			qtwit/qtwitstatus.h \
@@ -48,6 +49,7 @@ SOURCES +=  main.cpp \
 			sceneitems/pixmapbuttonitem.cpp \
 			sceneitems/gradientrectitem.cpp \
 			sceneitems/netpixmapitem.cpp \
+			sceneitems/statustextitem.cpp \
 			qtwit/qtwitbase.cpp \
 			qtwit/qtwitfriendstimeline.cpp \
 			qtwit/qtwitupdate.cpp \
