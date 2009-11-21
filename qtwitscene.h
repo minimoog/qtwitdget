@@ -33,6 +33,20 @@
 
 class QTwitStatus;
 
+struct SceneItems
+{
+	SceneItems() : gradRectItem(0), avatarItem(0), nameItem(0), 
+		textItem(0), favoritedItem(0), replyButtonItem(0), lineItem(0) {}
+
+	GradientRectItem*	gradRectItem;
+	NetPixmapItem*		avatarItem;
+	QGraphicsTextItem*	nameItem;
+	StatusTextItem*		textItem;
+	PixmapButtonItem*	favoritedItem;
+	PixmapButtonItem*	replyButtonItem;
+	QGraphicsLineItem*	lineItem;
+};
+
 /*! class QTwitdget */
 class QTwitScene : public QGraphicsScene
 {
@@ -71,14 +85,7 @@ private:
     QNetworkAccessManager * m_netManager;
 
 	QList<QTwitStatus> m_statuses;
-
-    QList<GradientRectItem*> m_gradRectItems;
-    QList<NetPixmapItem*> m_avatarItems;
-    QList<QGraphicsTextItem*> m_nameItems;
-    QList<StatusTextItem*> m_textItems;
-    QList<PixmapButtonItem*> m_favoritedItems;
-    QList<PixmapButtonItem*> m_replyButtonItems;
-    QList<QGraphicsLineItem*> m_lineItems;
+	QList<SceneItems> m_sceneItems;
 };
 
 #endif //QTWITSCENE_H
