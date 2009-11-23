@@ -38,12 +38,13 @@ struct SceneItems
 	SceneItems() : gradRectItem(0), avatarItem(0), nameItem(0), 
 		textItem(0), favoritedItem(0), replyButtonItem(0), lineItem(0) {}
 
-	GradientRectItem*	gradRectItem;
+	GradientRectItem*	gradRectItem;       
 	NetPixmapItem*		avatarItem;
 	QGraphicsTextItem*	nameItem;
 	StatusTextItem*		textItem;
+    PixmapButtonItem*	replyButtonItem;
+    PixmapButtonItem*   retweetItem;
 	PixmapButtonItem*	favoritedItem;
-	PixmapButtonItem*	replyButtonItem;
 	QGraphicsLineItem*	lineItem;
 };
 
@@ -79,6 +80,7 @@ private slots:
 private:
 	void updateStatusWidgets();
     void refreshStatutes();
+	SceneItems createStatusSceneItem(int count);
 
 	int m_userid; //user id
 

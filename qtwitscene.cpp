@@ -81,6 +81,80 @@ void QTwitScene::setUserid(int id)
 	m_userid = id;
 }
 
+SceneItems QTwitScene::createStatusSceneItem(int count)
+{
+	SceneItems scit;
+
+	GradientRectItem *rectItem;
+
+	switch (count % 3) {
+		case 0:
+			rectItem = new GradientRectItem(200, GradientRectItem::Grey);
+			break;
+		case 1:
+			rectItem = new GradientRectItem(200, GradientRectItem::Pink);
+			break;
+		case 2:
+			rectItem = new GradientRectItem(200, GradientRectItem::Blue);
+			break;
+	}
+
+	scit.gradRectItem = rectItem;
+
+	QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), rectItem);
+    avatarBoxItem->setPos(7, 7);
+
+	QGraphicsRectItem *whiteBorderItem = new QGraphicsRectItem(0, 0, 49, 49, avatarBoxItem);
+    whiteBorderItem->setPen(QPen(Qt::white));
+    whiteBorderItem->setBrush(QBrush(Qt::NoBrush));
+    whiteBorderItem->setPos(10, 10);
+
+	NetPixmapItem *avatarItem = new NetPixmapItem(m_netManager, whiteBorderItem);
+    avatarItem->setPos(1, 1);
+	scit.avatarItem = avatarItem;
+
+    QGraphicsTextItem *nameItem = new QGraphicsTextItem(rectItem);
+    nameItem->setDefaultTextColor(QColor("#018ad9"));
+    nameItem->setFont(QFont("Segoe UI", 11));
+    nameItem->setPos(84, 0);
+	scit.nameItem = nameItem;
+
+    StatusTextItem *textItem = new StatusTextItem(rectItem);
+    textItem->setPos(84, 24);
+	scit.textItem = textItem;
+
+    PixmapButtonItem *replyItem = new PixmapButtonItem(rectItem);
+	replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+	replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+	replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+	//replyItem->setId(m_sceneItems.count() - 1);
+    replyItem->setPos(10, 80);
+	scit.replyButtonItem = replyItem;
+
+    PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
+	retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
+	retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
+	retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
+	//retweetItem->setId(m_sceneItems.count() - 1);
+    retweetItem->setPos(43, 80);
+	//connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
+    scit.retweetItem = retweetItem;
+
+    PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
+	favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
+	favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
+	favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+	//favoritedItem->setId(m_sceneItems.count() - 1);
+	//connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
+	scit.favoritedItem = favoritedItem;
+
+    QGraphicsLineItem *lineItem = new QGraphicsLineItem(rectItem);
+    lineItem->setPen(QPen(QColor("#DDDDDD")));
+	scit.lineItem = lineItem;
+
+    return scit;
+}
+
 void QTwitScene::updateStatusWidgets()
 {
 	QList<QUrl> urlsImages;
