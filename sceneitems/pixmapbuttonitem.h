@@ -23,6 +23,7 @@
  
 #include <QGraphicsPixmapItem>
 
+/*! Button with 3 state/pixmaps */
 class PixmapButtonItem : public  QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
@@ -34,10 +35,11 @@ public:
 	QPixmap clickedPixmap() const;
 	void setDefaultPixmap(const QPixmap &pixmap);
 	QPixmap defaultPixmap() const;
-	void setIndex(int i);
-	int index() const;
+	/*! Sets id with which signal is emited when is clicked on pixmap */
+	void setId(qint64 i);
+	qint64 id() const;
 signals:
-	void clicked(int i);
+	void clicked(qint64 i);
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *e);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *e);
@@ -47,7 +49,7 @@ private:
 	QPixmap m_hoverPixmap;
 	QPixmap m_clickedPixmap;
 	QPixmap m_defaultPixmap;
-	int m_index;
+	qint64 m_id;
 };
 
 #endif //PIXMAPBUTONITEM_H

@@ -137,7 +137,7 @@ void QTwitScene::updateStatusWidgets()
 			replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
 			replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
 			replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
-		    replyItem->setIndex(m_sceneItems.count() - 1);
+		    replyItem->setId(m_sceneItems.count() - 1);
             replyItem->setPos(10, 80);
 			scit.replyButtonItem = replyItem;
 
@@ -145,7 +145,7 @@ void QTwitScene::updateStatusWidgets()
 			retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
 			retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
 			retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
-			retweetItem->setIndex(m_sceneItems.count() - 1);
+			retweetItem->setId(m_sceneItems.count() - 1);
             retweetItem->setPos(43, 80);
 			connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
 
@@ -153,7 +153,7 @@ void QTwitScene::updateStatusWidgets()
 			favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
 			favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
 			favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
-			favoritedItem->setIndex(m_sceneItems.count() - 1);
+			favoritedItem->setId(m_sceneItems.count() - 1);
 			connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
 			scit.favoritedItem = favoritedItem;
 
