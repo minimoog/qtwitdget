@@ -60,6 +60,8 @@ public:
     void setNetworkAccessManager(QNetworkAccessManager * netManager);
 	/*! sets statuses */
 	void setStatuses(const QList<QTwitStatus>& statuses);
+    /*! adds new statuses (prepend) */
+    void addStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeItems(int w);
@@ -81,6 +83,7 @@ private:
 	void updateStatusWidgets();
     void refreshStatutes();
 	SceneItems createStatusSceneItem(int count);
+    void resizeItem(int w, SceneItems& sceneItems);
 
 	int m_userid; //user id
 
