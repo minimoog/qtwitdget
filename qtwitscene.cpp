@@ -127,7 +127,6 @@ SceneItems QTwitScene::createStatusSceneItem(int count)
 	replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
 	replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
 	replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
-	//replyItem->setId(m_sceneItems.count() - 1);
     replyItem->setPos(10, 80);
 	scit.replyButtonItem = replyItem;
 
@@ -135,17 +134,13 @@ SceneItems QTwitScene::createStatusSceneItem(int count)
 	retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
 	retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
 	retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
-	//retweetItem->setId(m_sceneItems.count() - 1);
     retweetItem->setPos(43, 80);
-	//connect(retweetItem, SIGNAL(clicked(int)), this, SLOT(retweetClicked(int)));
     scit.retweetItem = retweetItem;
 
     PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
 	favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
 	favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
 	favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
-	//favoritedItem->setId(m_sceneItems.count() - 1);
-	//connect(favoritedItem, SIGNAL(clicked(int)), this, SLOT(favoritedClicked(int)));
 	scit.favoritedItem = favoritedItem;
 
     QGraphicsLineItem *lineItem = new QGraphicsLineItem(rectItem);
@@ -205,6 +200,54 @@ void QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
     }
 
     setSceneRect(0, 0, width, boundingHeight());
+}
+
+void QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
+{
+    float appendPos = 101.0f * m_sceneItems.count();
+    
+    //we need viewport width
+    QList<QGraphicsView*> graphicsViews = views();
+    QGraphicsView* twitView = graphicsViews.at(0);
+    int width = twitView->viewport()->width();
+
+    //append new statuses
+    for (int i = 0; i < statuses.size(); ++i) {
+        SceneItems scit = createStatusSceneItem(m_sceneItems.count());
+
+        addItem(scit.gradRectItem);
+        scit.gradRectItem->setPos(0, appendPos + 101.0f * i);
+        scit.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
+        scit.nameItem->setPlainText(statuses.at(i).screenName());
+        scit.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
+
+        scit.replyButtonItem->setId(statuses.at(i).id());
+        scit.retweetItem->setId(statuses.at(i).id());
+        scit.favoritedItem->setId(statuses.at(i).id());
+
+        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
+        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SLOT(favoritedClicked(qint64)));
+
+        if (statuses.at(i).userId() == m_userid) {
+            scit.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
+            scit.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
+            scit.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
+            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(deleteClicked(qint64)));
+        } else {
+            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
+        }
+
+        if (statuses.at(i).favorited()) {
+            scit.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
+            scit.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
+            scit.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
+        }
+
+        resizeItem(width, scit);
+        m_sceneItems << scit;
+    }
+
+    setSceneRect(0, 0, width, boundingHeight());    
 }
 
 void QTwitScene::updateStatusWidgets()

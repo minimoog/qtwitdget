@@ -62,6 +62,8 @@ public:
 	void setStatuses(const QList<QTwitStatus>& statuses);
     /*! adds new statuses (prepend) */
     void addStatuses(const QList<QTwitStatus>& statuses);
+    /*! appends statuses */
+    void appendStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeItems(int w);
