@@ -56,9 +56,22 @@ public:
 	void setTabName(const QString& tabName) { m_tabName = tabName; }
 	QString tabName() const { return m_tabName; }
 
+    /* Sets/gets Last (most newest) status id in this group */
+    void setLastStatusId(qint64 id) { m_lastStatusId = id; }
+    qint64 lastStatusId() const { return m_lastStatusId; }
+
+    /* Sets/gets first (oldest) status id in this group to be shown */
+    /* Statuses between lastStatusId and firstStatusId are shown on the scene */
+    /* When new status arrives lastStatusId is updated accordingly */
+    /* When users wants to see more oldest statutes firstStatusId is updated accordingly */
+    void setFirstStatusId(qint64 id) { m_firstStatusId = id; }
+    qint64 firstStatusId() const { return m_firstStatusId; }
+
 private:
 	int m_page;
 	int m_statusesPerPage;
+    qint64 m_lastStatusId;
+    qint64 m_firstStatusId;
 	QString m_queryString;
 	QString m_tabName;
 };
