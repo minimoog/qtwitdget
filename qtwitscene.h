@@ -73,12 +73,6 @@ signals:
 	void requestFavorited(qint64 statusId);
     void requestDelete(qint64 statusId);
 	
-private slots:
-	void replyClicked(int i);
-	void retweetClicked(int i);
-	void favoritedClicked(int i);
-    void deleteClicked(int i);
-	
 private:
 	SceneItems createStatusSceneItem(int count);
     void resizeItem(int w, SceneItems& sceneItems);
