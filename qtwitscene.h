@@ -58,8 +58,6 @@ public:
 	QTwitScene(QObject *parent = 0);
 	/*! Sets network access manager */
     void setNetworkAccessManager(QNetworkAccessManager * netManager);
-	/*! sets statuses */
-	void setStatuses(const QList<QTwitStatus>& statuses);
     /*! adds new statuses (prepend) */
     void addStatuses(const QList<QTwitStatus>& statuses);
     /*! appends statuses */
@@ -82,8 +80,6 @@ private slots:
     void deleteClicked(int i);
 	
 private:
-	void updateStatusWidgets();
-    void refreshStatutes();
 	SceneItems createStatusSceneItem(int count);
     void resizeItem(int w, SceneItems& sceneItems);
 

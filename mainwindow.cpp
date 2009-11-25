@@ -438,7 +438,7 @@ void MainWindow::refreshTab(int i)
 	}
 
 	QTwitScene *statusScene = m_twitScenes.at(i);
-	statusScene->setStatuses(m_statuses);
+	//statusScene->setStatuses(m_statuses);
 }
 
 void MainWindow::closeTab(int i)
