@@ -34,6 +34,8 @@
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
 
+////TODO: QMap with SceneItems and status id
+
 static QString replaceLinksWithHref(const QString &text)
 {
 	QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive);
@@ -143,7 +145,7 @@ SceneItems QTwitScene::createStatusSceneItem(int count)
     return scit;
 }
 
-void QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
+qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 {
     //move down old statuses
     for (int i = 0; i < m_sceneItems.size(); ++i) {
@@ -204,9 +206,11 @@ void QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
     }
 
     setSceneRect(0, 0, width, boundingHeight());
+
+    return m_sceneItems.last().replyButtonItem->id();
 }
 
-void QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
+qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
 {
     float appendPos = 101.0f * m_sceneItems.count();
     
@@ -251,7 +255,9 @@ void QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
         m_sceneItems << scit;
     }
 
-    setSceneRect(0, 0, width, boundingHeight());    
+    setSceneRect(0, 0, width, boundingHeight()); 
+
+    return m_sceneItems.last().replyButtonItem->id();
 }
 
 void QTwitScene::resizeItems(int w)

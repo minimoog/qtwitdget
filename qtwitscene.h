@@ -59,9 +59,11 @@ public:
 	/*! Sets network access manager */
     void setNetworkAccessManager(QNetworkAccessManager * netManager);
     /*! adds new statuses (prepend) */
-    void addStatuses(const QList<QTwitStatus>& statuses);
+    /*! \return oldest status id on the scene */
+    qint64 addStatuses(const QList<QTwitStatus>& statuses);
     /*! appends statuses */
-    void appendStatuses(const QList<QTwitStatus>& statuses);
+    /*! \return oldest status id on the scene */
+    qint64 appendStatuses(const QList<QTwitStatus>& statuses);
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeItems(int w);
