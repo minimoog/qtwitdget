@@ -79,6 +79,7 @@ private:
 	void createDefaultTwitGroups();
 	TwitTabGroup createUserTwitGroup(const QString& name, const QList<int>& usersId);
 	void createTabs();
+    void updateTab(int i);
 	void addGroupTab(const TwitTabGroup& group);
 	bool isDatabaseEmpty();
     void readSettings();
