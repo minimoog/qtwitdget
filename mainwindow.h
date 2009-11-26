@@ -61,7 +61,6 @@ private slots:
 	void createGrouping();
 	void languageChanged();
 	void loadStyleSheet();
-	void refreshTab(int i);
 	void closeTab(int i);
 	void nextStatuses();
 

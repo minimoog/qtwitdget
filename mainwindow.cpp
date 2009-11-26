@@ -152,7 +152,7 @@ void MainWindow::startUp()
 		createTabs();
 
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
-			refreshTab(i);
+			updateTab(i);
 
 		//start update timer
 		m_timer->start(60000);
@@ -203,7 +203,7 @@ void MainWindow::createGrouping()
     }
 
 	ui.tabWidget->setCurrentIndex(ui.tabWidget->count() - 1);
-	refreshTab(ui.tabWidget->count() - 1);
+	updateTab(ui.tabWidget->count() - 1);
 }
 
 void MainWindow::finishedFriendsTimeline()
@@ -279,7 +279,7 @@ void MainWindow::finishedFriendsTimeline()
 
 		//refresh all tabs
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
-			refreshTab(i);
+			updateTab(i);
 	}
 }
 
@@ -289,7 +289,8 @@ void MainWindow::statusDestroyed(qint64 id)
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
 
-	refreshTab(ui.tabWidget->currentIndex());
+    //DOESN'T WORK////
+	updateTab(ui.tabWidget->currentIndex());
 }
 
 void MainWindow::languageChanged()
@@ -395,50 +396,6 @@ bool MainWindow::isDatabaseEmpty()
 	}
 
 	return true;
-}
-
-void MainWindow::refreshTab(int i)
-{
-	if(i == -1)
-		return;
-
-	TwitTabGroup tg = m_twitTabGroups.at(i);
-
-	QSqlQuery query;
-	QString sq = QString("SELECT created, id, text, source, replyToStatusId, replyToUserId, favorited, "
-		"replyToScreenName, userId, name, screenName, location, description, profileImageUrl, url, followersCount "
-		"FROM status "
-		"WHERE %1 "
-		"ORDER BY id DESC "
-		"LIMIT %2;").arg(tg.query()).arg(tg.numStatuses());
-
-	query.exec(sq);
-
-	m_statuses.clear();
-
-	while(query.next()){
-		QTwitStatus s;
-		s.setCreated(query.value(0).toDateTime());
-        s.setId(query.value(1).toLongLong());
-		s.setText(query.value(2).toString());
-		s.setSource(query.value(3).toString());
-		s.setReplyToStatusId(query.value(4).toLongLong());
-		s.setReplyToUserId(query.value(5).toInt());
-		s.setFavorited(query.value(6).toBool());
-		s.setReplyToScreenName(query.value(7).toString());
-		s.setUserId(query.value(8).toInt());
-		s.setName(query.value(9).toString());
-		s.setScreenName(query.value(10).toString());
-		s.setLocation(query.value(11).toString());
-		s.setDescription(query.value(12).toString());
-		s.setProfileImageUrl(query.value(13).toString());
-		s.setUrl(query.value(14).toString());
-		s.setFollowersCount(query.value(15).toInt());
-		m_statuses.append(s);		
-	}
-
-	QTwitScene *statusScene = m_twitScenes.at(i);
-	//statusScene->setStatuses(m_statuses);
 }
 
 void MainWindow::updateTab(int i)
@@ -605,7 +562,8 @@ void MainWindow::nextStatuses()
 
 	m_twitTabGroups[i].increasePage();
 
-	refreshTab(i);
+    //TODO:
+	//refreshTab(i);
 }
 
 void MainWindow::favorited(qint64 statusId)
@@ -630,7 +588,8 @@ void MainWindow::favorited(qint64 statusId)
 
     //refresh all tabs (not good, just for one click refreshing all tabs?)
     for(int i = 0; i < ui.tabWidget->count(); ++i)
-        refreshTab(i);
+        //!!!!!!DOESN'T WORK!!!!!!
+        updateTab(i);
 }
 
 void MainWindow::reqDelete(qint64 statusId)
