@@ -74,6 +74,10 @@ signals:
 	void requestRetweet(const QString& text, const QString& screenName);
 	void requestFavorited(qint64 statusId);
     void requestDelete(qint64 statusId);
+
+private slots:
+	void replyClicked(qint64 i);
+	void retweetClicked(qint64 i);
 	
 private:
 	SceneItems createStatusSceneItem(int count);

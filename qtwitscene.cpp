@@ -172,16 +172,16 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
         scit.retweetItem->setId(statuses.at(i).id());
         scit.favoritedItem->setId(statuses.at(i).id());
 
-        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SIGNAL(retweetClicked(qint64)));
-        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(favoritedClicked(qint64)));
+        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
+        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
 
         if (statuses.at(i).userId() == m_userid) {
             scit.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
             scit.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
             scit.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(deleteClicked(qint64)));
+            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
         } else {
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(replyClicked(qint64)));
+            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
         }
 
         if (statuses.at(i).favorited()) {
@@ -233,14 +233,14 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
         scit.retweetItem->setId(statuses.at(i).id());
         scit.favoritedItem->setId(statuses.at(i).id());
 
-        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SIGNAL(retweetClicked(qint64)));
-        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(favoritedClicked(qint64)));
+        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
+        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
 
         if (statuses.at(i).userId() == m_userid) {
             scit.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
             scit.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
             scit.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(deleteClicked(qint64)));
+            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
         } else {
             connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(replyClicked(qint64)));
         }
@@ -283,4 +283,16 @@ void QTwitScene::resizeItem(int w, SceneItems& sceneItems)
 float QTwitScene::boundingHeight() const
 {
 	return 101.0f * m_sceneItems.count();
+}
+
+void QTwitScene::replyClicked(qint64 id)
+{
+    //TODO:
+	emit requestReply(id, QString());
+}
+
+void QTwitScene::retweetClicked(qint64 id)
+{
+    //TODO:
+	emit requestRetweet(QString()/*m_statuses.at(i).text()*/, QString()/*m_statuses.at(i).screenName()*/);
 }
