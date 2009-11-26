@@ -189,7 +189,18 @@ void QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
         }
 
         resizeItem(width, scit);
-        m_sceneItems << scit;
+        m_sceneItems.insert(i, scit);
+    }
+
+    //remove surplus statutes
+    if (m_sceneItems.count() > 50) {    //50 should be global setting
+        int nRemove = m_sceneItems.count() - 50;
+
+        for (int i = 0; i < nRemove; ++i) {
+            SceneItems scit = m_sceneItems.takeLast();
+            removeItem(scit.gradRectItem);
+            delete scit.gradRectItem;
+        }
     }
 
     setSceneRect(0, 0, width, boundingHeight());
