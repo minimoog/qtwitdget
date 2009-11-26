@@ -289,7 +289,7 @@ void MainWindow::statusDestroyed(qint64 id)
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
 
-    //DOESN'T WORK////
+    //DOESN'T WORK////!!!!!
 	updateTab(ui.tabWidget->currentIndex());
 }
 
@@ -429,13 +429,14 @@ void MainWindow::updateTab(int i)
 
     if (statuses.count()) {
         QTwitScene *statusScene = m_twitScenes.at(i);
-        statusScene->addStatuses(statuses);
+        qint64 firstId = statusScene->addStatuses(statuses);
         
         query.first();
 
         qint64 lastId = query.value(0).toLongLong();
 
         m_twitTabGroups[i].setLastStatusId(lastId);
+        m_twitTabGroups[i].setFirstStatusId(firstId);
     }
 }
 
