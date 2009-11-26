@@ -29,7 +29,7 @@ class TwitTabGroup
 {
 public:
 	/* Constructor */
-	TwitTabGroup() : m_page(0), m_statusesPerPage(50) {}
+	TwitTabGroup() : m_page(0), m_statusesPerPage(50), m_lastStatusId(0), m_firstStatusId(0) {}
 
 	/* Sets/gets page */
 	void setPage(int page) { m_page = page; }
