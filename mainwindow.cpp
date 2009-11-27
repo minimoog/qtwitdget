@@ -561,10 +561,36 @@ void MainWindow::nextStatuses()
 	if(i == -1)
 		return;
 
-	m_twitTabGroups[i].increasePage();
+    TwitTabGroup tg = m_twitTabGroups.at(i);
 
-    //TODO:
-	//refreshTab(i);
+    QSqlQuery query;
+    QString sq = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+        "FROM status "
+        "WHERE id < %1 AND %2 "
+        "ORDER BY id DESC "
+        "LIMIT 50;").arg(tg.firstStatusId()).arg(tg.query());
+
+    query.exec(sq);
+
+    QList<QTwitStatus> statuses;
+
+    while (query.next()) {
+        QTwitStatus st;
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setFavorited(query.value(2).toBool());
+        st.setUserId(query.value(3).toInt());
+        st.setScreenName(query.value(4).toString());
+        st.setProfileImageUrl(query.value(5).toString());
+        statuses << st;
+    }
+
+    if (statuses.count()) {
+        QTwitScene *statusScene = m_twitScenes.at(i);
+        qint64 firstId = statusScene->appendStatuses(statuses);
+
+        m_twitTabGroups[i].setFirstStatusId(firstId);   //NOT NEEDING
+    }
 }
 
 void MainWindow::favorited(qint64 statusId)
