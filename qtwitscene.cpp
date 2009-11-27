@@ -252,7 +252,7 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
             scit.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
             connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
         } else {
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(replyClicked(qint64)));
+            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
         }
 
         if (statuses.at(i).favorited()) {
