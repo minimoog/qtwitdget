@@ -205,7 +205,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
         QMutableMapIterator<qint64, SceneItems> i(m_sceneItems);
         int removedItems = 0;
 
-        while (i.hasNext() && removedItems == nRemove) {
+        while (i.hasNext() && (removedItems != nRemove)) {
             i.next();
             SceneItems scit = i.value();
             removeItem(scit.gradRectItem);
