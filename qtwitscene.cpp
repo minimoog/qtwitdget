@@ -147,9 +147,10 @@ SceneItems QTwitScene::createStatusSceneItem(int count)
 
 qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 {
-    //move down old statuses
-    for (int i = 0; i < m_sceneItems.size(); ++i) {
-        m_sceneItems.at(i).gradRectItem->moveBy(0, 101.0f * statuses.size());
+    QMapIterator<qint64, SceneItems> i(m_sceneItems);
+    while (i.hasNext()) {
+        i.next();
+        i.value().gradRectItem->moveBy(0, 101.0f * statuses.size());
     }
 
     //we need viewport width
@@ -190,24 +191,33 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
             scit.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
         }
 
+        scit.statusText = statuses.at(i).text();
+        scit.screenName = statuses.at(i).screenName();
+
         resizeItem(width, scit);
-        m_sceneItems.insert(i, scit);
+        m_sceneItems.insert(statuses.at(i).id(), scit);
     }
 
     //remove surplus statutes
     if (m_sceneItems.count() > 50) {    //50 should be global setting
         int nRemove = m_sceneItems.count() - 50;
 
-        for (int i = 0; i < nRemove; ++i) {
-            SceneItems scit = m_sceneItems.takeLast();
+        QMutableMapIterator<qint64, SceneItems> i(m_sceneItems);
+        int removedItems = 0;
+
+        while (i.hasNext() && removedItems == nRemove) {
+            i.next();
+            SceneItems scit = i.value();
             removeItem(scit.gradRectItem);
             delete scit.gradRectItem;
+            i.remove();
+            ++removedItems;
         }
     }
 
     setSceneRect(0, 0, width, boundingHeight());
 
-    return m_sceneItems.last().replyButtonItem->id();
+    return m_sceneItems.begin().key();
 }
 
 qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
@@ -251,20 +261,25 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
             scit.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
         }
 
+        scit.statusText = statuses.at(i).text();
+        scit.screenName = statuses.at(i).screenName();
+
         resizeItem(width, scit);
-        m_sceneItems << scit;
+        m_sceneItems.insert(statuses.at(i).id(), scit);
     }
 
     setSceneRect(0, 0, width, boundingHeight()); 
 
-    return m_sceneItems.last().replyButtonItem->id();
+    return m_sceneItems.begin().key();
 }
 
 void QTwitScene::resizeItems(int w)
 {
-	QListIterator<SceneItems> iterSceneItems(m_sceneItems);
+	QMapIterator<qint64, SceneItems> iterSceneItems(m_sceneItems);
     while (iterSceneItems.hasNext()) {
-		SceneItems scit = iterSceneItems.next();
+		iterSceneItems.next();
+        SceneItems scit = iterSceneItems.value();
+
 		scit.gradRectItem->setWidth(w);
 		scit.textItem->setTextWidth(w - 84 - 10);
 		scit.favoritedItem->setPos(w - 50, 80);
@@ -287,12 +302,11 @@ float QTwitScene::boundingHeight() const
 
 void QTwitScene::replyClicked(qint64 id)
 {
-    //TODO:
-	emit requestReply(id, QString());
+    emit requestReply(id, m_sceneItems.value(id).screenName);
 }
 
 void QTwitScene::retweetClicked(qint64 id)
 {
-    //TODO:
-	emit requestRetweet(QString()/*m_statuses.at(i).text()*/, QString()/*m_statuses.at(i).screenName()*/);
+    SceneItems scit = m_sceneItems.value(id);
+    emit requestRetweet(scit.statusText, scit.screenName);
 }

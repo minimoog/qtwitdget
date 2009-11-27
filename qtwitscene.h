@@ -46,6 +46,8 @@ struct SceneItems
     PixmapButtonItem*   retweetItem;
 	PixmapButtonItem*	favoritedItem;
 	QGraphicsLineItem*	lineItem;
+    QString             statusText;
+    QString             screenName;
 };
 
 /*! class QTwitdget */
@@ -87,8 +89,7 @@ private:
 
     QNetworkAccessManager * m_netManager;
 
-	QList<QTwitStatus> m_statuses;
-	QList<SceneItems> m_sceneItems;
+    QMap<qint64, SceneItems> m_sceneItems;
 };
 
 #endif //QTWITSCENE_H
