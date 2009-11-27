@@ -484,7 +484,7 @@ void MainWindow::createDefaultTwitGroups()
 	//default tabs
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
-	allfriends.setQuery(QString(" userId != %1 ").arg(m_userId));
+	allfriends.setQuery(QString(" 1 == 1 "));
 
 	TwitTabGroup myTwits;
 	myTwits.setTabName(tr("My twits"));
