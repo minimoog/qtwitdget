@@ -33,9 +33,9 @@
 
 class QTwitStatus;
 
-struct SceneItems
+struct GroupItems
 {
-	SceneItems() : gradRectItem(0), avatarItem(0), nameItem(0), 
+	GroupItems() : gradRectItem(0), avatarItem(0), nameItem(0), 
 		textItem(0), favoritedItem(0), replyButtonItem(0), lineItem(0) {}
 
 	GradientRectItem*	gradRectItem;       
@@ -82,14 +82,14 @@ private slots:
 	void retweetClicked(qint64 i);
 	
 private:
-	SceneItems createStatusSceneItem(int count);
-    void resizeItem(int w, SceneItems& sceneItems);
+	GroupItems createStatusSceneItem(int count);
+    void resizeItem(int w, GroupItems& sceneItems);
 
 	int m_userid; //user id
 
     QNetworkAccessManager * m_netManager;
 
-    QMap<qint64, SceneItems> m_sceneItems;
+    QMap<qint64, GroupItems> m_sceneItems;
 };
 
 #endif //QTWITSCENE_H

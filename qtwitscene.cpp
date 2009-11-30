@@ -34,7 +34,7 @@
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
 
-////TODO: QMap with SceneItems and status id
+////TODO: QMap with GroupItems and status id
 
 static QString replaceLinksWithHref(const QString &text)
 {
@@ -76,9 +76,9 @@ void QTwitScene::setUserid(int id)
 	m_userid = id;
 }
 
-SceneItems QTwitScene::createStatusSceneItem(int count)
+GroupItems QTwitScene::createStatusSceneItem(int count)
 {
-	SceneItems scit;
+	GroupItems scit;
 
 	GradientRectItem *rectItem;
 
@@ -147,7 +147,7 @@ SceneItems QTwitScene::createStatusSceneItem(int count)
 
 qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 {
-    QMapIterator<qint64, SceneItems> i(m_sceneItems);
+    QMapIterator<qint64, GroupItems> i(m_sceneItems);
     while (i.hasNext()) {
         i.next();
         i.value().gradRectItem->moveBy(0, 101.0f * statuses.size());
@@ -161,55 +161,55 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 
     //prepend new statuses
     for (int i = 0; i < statuses.size(); ++i) {
-        SceneItems scit = createStatusSceneItem(m_sceneItems.count());
+        GroupItems grpItems = createStatusSceneItem(m_sceneItems.count());
 
-        addItem(scit.gradRectItem);
-        scit.gradRectItem->setPos(0, 101.0f * i);
-        scit.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
-        scit.nameItem->setPlainText(statuses.at(i).screenName());
-        scit.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
+        addItem(grpItems.gradRectItem);
+        grpItems.gradRectItem->setPos(0, 101.0f * i);
+        grpItems.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
+        grpItems.nameItem->setPlainText(statuses.at(i).screenName());
+        grpItems.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
 
-        scit.replyButtonItem->setId(statuses.at(i).id());
-        scit.retweetItem->setId(statuses.at(i).id());
-        scit.favoritedItem->setId(statuses.at(i).id());
+        grpItems.replyButtonItem->setId(statuses.at(i).id());
+        grpItems.retweetItem->setId(statuses.at(i).id());
+        grpItems.favoritedItem->setId(statuses.at(i).id());
 
-        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
-        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
+        connect(grpItems.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
+        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
 
         if (statuses.at(i).userId() == m_userid) {
-            scit.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
-            scit.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
-            scit.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
+            grpItems.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
+            grpItems.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
+            grpItems.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
+            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
         } else {
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
+            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
         }
 
         if (statuses.at(i).favorited()) {
-            scit.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
-            scit.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
-            scit.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
+            grpItems.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
+            grpItems.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
+            grpItems.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
         }
 
-        scit.statusText = statuses.at(i).text();
-        scit.screenName = statuses.at(i).screenName();
+        grpItems.statusText = statuses.at(i).text();
+        grpItems.screenName = statuses.at(i).screenName();
 
-        resizeItem(width, scit);
-        m_sceneItems.insert(statuses.at(i).id(), scit);
+        resizeItem(width, grpItems);
+        m_sceneItems.insert(statuses.at(i).id(), grpItems);
     }
 
     //remove surplus statutes
     if (m_sceneItems.count() > 50) {    //50 should be global setting
         int nRemove = m_sceneItems.count() - 50;
 
-        QMutableMapIterator<qint64, SceneItems> i(m_sceneItems);
+        QMutableMapIterator<qint64, GroupItems> i(m_sceneItems);
         int removedItems = 0;
 
         while (i.hasNext() && (removedItems != nRemove)) {
             i.next();
-            SceneItems scit = i.value();
-            removeItem(scit.gradRectItem);
-            delete scit.gradRectItem;
+            GroupItems grpItems = i.value();
+            removeItem(grpItems.gradRectItem);
+            delete grpItems.gradRectItem;
             i.remove();
             ++removedItems;
         }
@@ -231,41 +231,41 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
 
     //append new statuses
     for (int i = 0; i < statuses.size(); ++i) {
-        SceneItems scit = createStatusSceneItem(m_sceneItems.count());
+        GroupItems grpItems = createStatusSceneItem(m_sceneItems.count());
 
-        addItem(scit.gradRectItem);
-        scit.gradRectItem->setPos(0, appendPos + 101.0f * i);
-        scit.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
-        scit.nameItem->setPlainText(statuses.at(i).screenName());
-        scit.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
+        addItem(grpItems.gradRectItem);
+        grpItems.gradRectItem->setPos(0, appendPos + 101.0f * i);
+        grpItems.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
+        grpItems.nameItem->setPlainText(statuses.at(i).screenName());
+        grpItems.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
 
-        scit.replyButtonItem->setId(statuses.at(i).id());
-        scit.retweetItem->setId(statuses.at(i).id());
-        scit.favoritedItem->setId(statuses.at(i).id());
+        grpItems.replyButtonItem->setId(statuses.at(i).id());
+        grpItems.retweetItem->setId(statuses.at(i).id());
+        grpItems.favoritedItem->setId(statuses.at(i).id());
 
-        connect(scit.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
-        connect(scit.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
+        connect(grpItems.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
+        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
 
         if (statuses.at(i).userId() == m_userid) {
-            scit.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
-            scit.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
-            scit.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
+            grpItems.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
+            grpItems.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
+            grpItems.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
+            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
         } else {
-            connect(scit.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
+            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
         }
 
         if (statuses.at(i).favorited()) {
-            scit.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
-            scit.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
-            scit.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
+            grpItems.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
+            grpItems.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
+            grpItems.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
         }
 
-        scit.statusText = statuses.at(i).text();
-        scit.screenName = statuses.at(i).screenName();
+        grpItems.statusText = statuses.at(i).text();
+        grpItems.screenName = statuses.at(i).screenName();
 
-        resizeItem(width, scit);
-        m_sceneItems.insert(statuses.at(i).id(), scit);
+        resizeItem(width, grpItems);
+        m_sceneItems.insert(statuses.at(i).id(), grpItems);
     }
 
     setSceneRect(0, 0, width, boundingHeight()); 
@@ -275,19 +275,19 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
 
 void QTwitScene::resizeItems(int w)
 {
-	QMapIterator<qint64, SceneItems> iterSceneItems(m_sceneItems);
-    while (iterSceneItems.hasNext()) {
-		iterSceneItems.next();
-        SceneItems scit = iterSceneItems.value();
+	QMapIterator<qint64, GroupItems> iterGroupItems(m_sceneItems);
+    while (iterGroupItems.hasNext()) {
+		iterGroupItems.next();
+        GroupItems grpItems = iterGroupItems.value();
 
-		scit.gradRectItem->setWidth(w);
-		scit.textItem->setTextWidth(w - 84 - 10);
-		scit.favoritedItem->setPos(w - 50, 80);
-		scit.lineItem->setLine(1, 99, w - 1, 99);
+		grpItems.gradRectItem->setWidth(w);
+		grpItems.textItem->setTextWidth(w - 84 - 10);
+		grpItems.favoritedItem->setPos(w - 50, 80);
+		grpItems.lineItem->setLine(1, 99, w - 1, 99);
     }
 }
 
-void QTwitScene::resizeItem(int w, SceneItems& sceneItems)
+void QTwitScene::resizeItem(int w, GroupItems& sceneItems)
 {
     sceneItems.gradRectItem->setWidth(w);
     sceneItems.textItem->setTextWidth(w - 84 - 10);
@@ -307,6 +307,6 @@ void QTwitScene::replyClicked(qint64 id)
 
 void QTwitScene::retweetClicked(qint64 id)
 {
-    SceneItems scit = m_sceneItems.value(id);
+    GroupItems scit = m_sceneItems.value(id);
     emit requestRetweet(scit.statusText, scit.screenName);
 }
