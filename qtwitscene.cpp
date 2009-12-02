@@ -174,13 +174,13 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
         grpItems.favoritedItem->setId(statuses.at(i).id());
 
         connect(grpItems.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
-        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
+        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SLOT(favoritedClicked(qint64)));
 
         if (statuses.at(i).userId() == m_userid) {
             grpItems.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
             grpItems.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
             grpItems.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
+            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(deleteClicked(qint64)));
         } else {
             connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
         }
@@ -244,13 +244,13 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
         grpItems.favoritedItem->setId(statuses.at(i).id());
 
         connect(grpItems.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
-        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestFavorited(qint64)));
+        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SLOT(favoritedClicked(qint64)));
 
         if (statuses.at(i).userId() == m_userid) {
             grpItems.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
             grpItems.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
             grpItems.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SIGNAL(requestDelete(qint64)));
+            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(deleteClicked(qint64)));
         } else {
             connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
         }
@@ -309,4 +309,35 @@ void QTwitScene::retweetClicked(qint64 id)
 {
     GroupItems scit = m_sceneItems.value(id);
     emit requestRetweet(scit.statusText, scit.screenName);
+}
+
+void QTwitScene::deleteClicked(qint64 id)
+{
+    QMap<qint64, GroupItems>::iterator it = m_sceneItems.find(id);
+
+    //remove from the scene
+    GroupItems grpItems = it.value();
+    removeItem(grpItems.gradRectItem);
+    delete grpItems.gradRectItem;
+    it = m_sceneItems.erase(it);
+
+    //others (below it) move up 
+    QMap<qint64, GroupItems>::iterator mit = m_sceneItems.begin();
+    while (mit != it) {
+        mit.value().gradRectItem->moveBy(0, -101);
+        ++mit;
+    }
+
+    QList<QGraphicsView*> graphicsViews = views();
+    QGraphicsView* twitView = graphicsViews.at(0);
+    //Take width from scenerect not from viewport
+    int width = twitView->viewport()->width();
+
+    setSceneRect(0, 0, width, boundingHeight());
+
+    emit requestDelete(id);
+}
+
+void QTwitScene::favoritedClicked(qint64 i)
+{
 }

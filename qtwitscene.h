@@ -80,6 +80,8 @@ signals:
 private slots:
 	void replyClicked(qint64 i);
 	void retweetClicked(qint64 i);
+    void deleteClicked(qint64 i);
+    void favoritedClicked(qint64 i);
 	
 private:
 	GroupItems createStatusSceneItem(int count);
