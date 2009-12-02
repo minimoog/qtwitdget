@@ -589,7 +589,7 @@ void MainWindow::nextStatuses()
         QTwitScene *statusScene = m_twitScenes.at(i);
         qint64 firstId = statusScene->appendStatuses(statuses);
 
-        m_twitTabGroups[i].setFirstStatusId(firstId);   //NOT NEEDING
+        m_twitTabGroups[i].setFirstStatusId(firstId);   //NOT NEEDED
     }
 }
 
@@ -621,7 +621,13 @@ void MainWindow::favorited(qint64 statusId)
 
 void MainWindow::reqDelete(qint64 statusId)
 {
+    QSqlQuery query;
+    QString sq = QString("DELETE FROM status WHERE id = %1;").arg(statusId);
+    query.exec(sq);
+
     m_twitDestroy->deleteStatus(statusId);
+
+    //TODO: //////DELETE deleted STATUSES FROM OTHER TABS///////
 }
 
 void MainWindow::readSettings()
