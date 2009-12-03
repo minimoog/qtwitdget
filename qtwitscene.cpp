@@ -62,7 +62,7 @@ static QString replaceLinksWithHref(const QString &text)
 }
 
 QTwitScene::QTwitScene(QObject *parent)
-	:	QGraphicsScene(parent), m_netManager(0)
+	:	QGraphicsScene(parent), m_netManager(0), m_numPages(1)
 {
 }
 
@@ -199,7 +199,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
     }
 
     //remove surplus statutes
-    if (m_sceneItems.count() > 50) {    //50 should be global setting
+    if (m_sceneItems.count() > 50 * m_numPages) {    //50 should be global setting
         int nRemove = m_sceneItems.count() - 50;
 
         QMutableMapIterator<qint64, GroupItems> i(m_sceneItems);
@@ -223,6 +223,9 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
 {
     float appendPos = 101.0f * m_sceneItems.count();
+
+    //increase page number
+    m_numPages += 1;
     
     //we need viewport width
     QList<QGraphicsView*> graphicsViews = views();

@@ -90,6 +90,7 @@ private:
     void resizeItem(int w, GroupItems& sceneItems);
 
 	int m_userid; //user id
+    int m_numPages; //number of pages
 
     QNetworkAccessManager * m_netManager;
 
