@@ -288,9 +288,6 @@ void MainWindow::statusDestroyed(qint64 id)
 	QSqlQuery query;
 	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
 	query.exec(qs);
-
-    //DOESN'T WORK////!!!!!
-	updateTab(ui.tabWidget->currentIndex());
 }
 
 void MainWindow::languageChanged()
@@ -621,13 +618,12 @@ void MainWindow::favorited(qint64 statusId)
 
 void MainWindow::reqDelete(qint64 statusId)
 {
-    QSqlQuery query;
-    QString sq = QString("DELETE FROM status WHERE id = %1;").arg(statusId);
-    query.exec(sq);
-
     m_twitDestroy->deleteStatus(statusId);
 
-    //TODO: //////DELETE deleted STATUSES FROM OTHER TABS///////
+    //remove status from other tabs
+    for (int i = 0; i < ui.tabWidget->count(); ++i) {
+        m_twitScenes.at(i)->removeStatus(statusId);
+    }
 }
 
 void MainWindow::readSettings()

@@ -66,6 +66,8 @@ public:
     /*! appends statuses */
     /*! \return oldest status id on the scene */
     qint64 appendStatuses(const QList<QTwitStatus>& statuses);
+    /*! removes status from scene */
+    bool removeStatus(qint64 id);
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeItems(int w);

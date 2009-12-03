@@ -313,29 +313,34 @@ void QTwitScene::retweetClicked(qint64 id)
 
 void QTwitScene::deleteClicked(qint64 id)
 {
+   removeStatus(id);
+
+   emit requestDelete(id);
+}
+
+bool QTwitScene::removeStatus(qint64 id)
+{
     QMap<qint64, GroupItems>::iterator it = m_sceneItems.find(id);
 
-    //remove from the scene
-    GroupItems grpItems = it.value();
-    removeItem(grpItems.gradRectItem);
-    delete grpItems.gradRectItem;
-    it = m_sceneItems.erase(it);
+    if (it != m_sceneItems.end()) {
+        //remove from the scene
+        GroupItems grpItems = it.value();
+        removeItem(grpItems.gradRectItem);
+        delete grpItems.gradRectItem;
+        it = m_sceneItems.erase(it);
 
-    //others (below it) move up 
-    QMap<qint64, GroupItems>::iterator mit = m_sceneItems.begin();
-    while (mit != it) {
-        mit.value().gradRectItem->moveBy(0, -101);
-        ++mit;
+        //below statuses move up
+        QMap<qint64, GroupItems>::iterator mit = m_sceneItems.begin();
+        while (mit != it) {
+            mit.value().gradRectItem->moveBy(0, -101);
+            ++mit;
+        }
+
+        setSceneRect(0, 0, width(), boundingHeight());
+        return true;
     }
 
-    QList<QGraphicsView*> graphicsViews = views();
-    QGraphicsView* twitView = graphicsViews.at(0);
-    //Take width from scenerect not from viewport
-    int width = twitView->viewport()->width();
-
-    setSceneRect(0, 0, width, boundingHeight());
-
-    emit requestDelete(id);
+    return false;
 }
 
 void QTwitScene::favoritedClicked(qint64 i)
