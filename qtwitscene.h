@@ -68,6 +68,8 @@ public:
     qint64 appendStatuses(const QList<QTwitStatus>& statuses);
     /*! removes status from scene */
     bool removeStatus(qint64 id);
+    /*! sets/unsets favorited/unfavorited for status with id on the scene */
+    bool setFavorited(qint64 id, bool fav);
 	/*! sets user id */
 	void setUserid(int id);
 	void resizeItems(int w);

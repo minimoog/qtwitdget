@@ -316,8 +316,6 @@ void QTwitScene::retweetClicked(qint64 id)
 
 void QTwitScene::deleteClicked(qint64 id)
 {
-   removeStatus(id);
-
    emit requestDelete(id);
 }
 
@@ -346,6 +344,26 @@ bool QTwitScene::removeStatus(qint64 id)
     return false;
 }
 
-void QTwitScene::favoritedClicked(qint64 i)
+void QTwitScene::favoritedClicked(qint64 id)
 {
+    emit requestFavorited(id);
+}
+
+bool QTwitScene::setFavorited(qint64 id, bool fav)
+{
+    GroupItems grpItems = m_sceneItems.value(id);
+
+    if (grpItems.gradRectItem) {
+        if (fav) {
+            grpItems.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
+            grpItems.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
+            grpItems.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
+        } else {
+            grpItems.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
+	        grpItems.favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
+	        grpItems.favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+        }
+        return true;
+    }
+    return false;
 }

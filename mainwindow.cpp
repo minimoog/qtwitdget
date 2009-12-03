@@ -592,6 +592,8 @@ void MainWindow::nextStatuses()
 
 void MainWindow::favorited(qint64 statusId)
 {
+    //TODO: when favorite is clicked Favorites tab is not updated/removed
+
     //first check if status is already favorited
     QSqlQuery query;
     QString sq = QString("SELECT favorited FROM status WHERE id = %1;").arg(statusId);
@@ -603,17 +605,19 @@ void MainWindow::favorited(qint64 statusId)
             m_twitFavorite->destroy(statusId);
             QString sqf = QString("UPDATE status SET favorited = 0 WHERE id = %1;").arg(statusId);
             query.exec(sqf);
+
+            for (int i = 0; i < ui.tabWidget->count(); ++i) 
+                m_twitScenes.at(i)->setFavorited(statusId, false);
+
         } else {            //set favorited
             m_twitFavorite->create(statusId);
             QString sqf = QString("UPDATE status SET favorited = 1 WHERE id = %1;").arg(statusId);
             query.exec(sqf);
+
+            for (int i = 0; i < ui.tabWidget->count(); ++i) 
+                m_twitScenes.at(i)->setFavorited(statusId, true);
         }
     }
-
-    //refresh all tabs (not good, just for one click refreshing all tabs?)
-    for(int i = 0; i < ui.tabWidget->count(); ++i)
-        //!!!!!!DOESN'T WORK!!!!!!
-        updateTab(i);
 }
 
 void MainWindow::reqDelete(qint64 statusId)
