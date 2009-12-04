@@ -34,19 +34,19 @@
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
-	m_twitFriendsTimeline(new QTwitFriendsTimeline(this)),
+	m_twitHomeTimeline(new QTwitHomeTimeline(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
 	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
 	m_timer(new QTimer(this))
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
-	m_twitFriendsTimeline->setNetworkAccessManager(m_netManager);
+	m_twitHomeTimeline->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
 	m_twitDestroy->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
 
-	m_twitFriendsTimeline->setOAuthTwitter(m_oauthTwitter);
+	m_twitHomeTimeline->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
 	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
@@ -63,7 +63,7 @@ MainWindow::MainWindow()
 
 	//connect signals
 	connect(ui.updateButton, SIGNAL(clicked()), SLOT(updateButtonClicked()));
-	connect(m_twitFriendsTimeline, SIGNAL(finished()), SLOT(finishedFriendsTimeline()));
+	connect(m_twitHomeTimeline, SIGNAL(finished()), SLOT(finishedFriendsTimeline()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
@@ -165,9 +165,9 @@ void MainWindow::updateTimeline()
 {
 	if(m_firstRun){
 		m_firstRun = false;
-		m_twitFriendsTimeline->update(0, 0, 200);
+		m_twitHomeTimeline->update(0, 0, 200);
 	} else {
-		m_twitFriendsTimeline->update(m_lastStatusId, 0, 200);
+		m_twitHomeTimeline->update(m_lastStatusId, 0, 200);
 	}
 }
 
@@ -208,7 +208,7 @@ void MainWindow::createGrouping()
 
 void MainWindow::finishedFriendsTimeline()
 {
-	QList<QTwitStatus> lastStatuses = m_twitFriendsTimeline->getStatuses();
+	QList<QTwitStatus> lastStatuses = m_twitHomeTimeline->getStatuses();
 
 	if(!lastStatuses.isEmpty()){
 		//get last status id

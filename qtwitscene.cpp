@@ -34,8 +34,6 @@
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
 
-////TODO: QMap with GroupItems and status id
-
 static QString replaceLinksWithHref(const QString &text)
 {
 	QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive);
