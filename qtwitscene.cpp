@@ -198,7 +198,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 
     //remove surplus statutes
     if (m_sceneItems.count() > 50 * m_numPages) {    //50 should be global setting
-        int nRemove = m_sceneItems.count() - 50;
+        int nRemove = m_sceneItems.count() - 50 * m_numPages;
 
         QMutableMapIterator<qint64, GroupItems> i(m_sceneItems);
         int removedItems = 0;
