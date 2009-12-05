@@ -5,8 +5,8 @@ INCLUDEPATH += .
 
 QT += network xml sql
 
-win32:LIBS += libeay32.lib
-unix:LIBS += -lcrypto
+//win32:LIBS += libeay32.lib
+//unix:LIBS += -lcrypto
 
 HEADERS +=  twitstatusedit.h \
 			shortenedurl.h \

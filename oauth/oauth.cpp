@@ -20,8 +20,7 @@
 
 #include <QDateTime>
 #include <QtAlgorithms>
-#include <openssl/hmac.h>
-#include <openssl/evp.h>
+#include <QtDebug>
 #include "oauth.h"
 
 #define CONSUMER_KEY "consumer_key"
@@ -52,11 +51,28 @@ static QByteArray generateNonce()
 	return nonce;
 }
 
-OAuth::OAuth(QObject *parent) : QObject(parent)
+#ifdef Q_WS_WIN
+OAuth::OAuth(QObject *parent) : QObject(parent), m_libraryOpenssl("libeay32", parent)
 {
 	QDateTime current = QDateTime::currentDateTime();
 	qsrand(current.toTime_t());
+
+    //fetch function pointers
+    HMAC_fp = (FPHMAC)m_libraryOpenssl.resolve("HMAC");
+
+    if (!HMAC_fp) {
+        qDebug() << "Error resolving symbol HMAC";
+    }
+
+    EVP_sha1_fp = (FPEVPSHA1)m_libraryOpenssl.resolve("EVP_sha1");
+
+    if (EVP_sha1_fp) {
+        qDebug() << "Error resolving symbol EVP_sha1_fp";
+    }
 }
+#elif Q_WS_X11
+    ////TODO/////
+#endif
 
 void OAuth::parseTokens(const QByteArray& response)
 {
@@ -98,7 +114,7 @@ QByteArray OAuth::generateSignatureHMACSHA1(const QByteArray& signatureBase)
 	unsigned char digest[EVP_MAX_MD_SIZE];
 	unsigned int digestLen = 0;
 
-	HMAC(EVP_sha1(), 
+    HMAC_fp(EVP_sha1_fp(), 
 		key.constData(), 
 		key.size(), 
 		(const unsigned char*)signatureBase.constData(), 

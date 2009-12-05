@@ -23,7 +23,16 @@
 
 #include <QObject>
 #include <QByteArray>
+#include <QLibrary>
 #include <QUrl>
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
+
+typedef unsigned char * (*FPHMAC)(const EVP_MD *, const void *, int,
+		                        const unsigned char *, size_t, unsigned char *,
+		                        unsigned int *);
+
+typedef const EVP_MD * (*FPEVPSHA1)(void);
 
 /*! \class OAuth
  *	\brief Base OAuth class
@@ -61,6 +70,11 @@ private:
 
 	QByteArray m_oauthToken;
 	QByteArray m_oauthTokenSecret;
+
+    //dynamic linking and function pointers
+    QLibrary m_libraryOpenssl;
+    FPHMAC HMAC_fp;
+    FPEVPSHA1 EVP_sha1_fp;
 };
 
 #endif //OAUTH_H
