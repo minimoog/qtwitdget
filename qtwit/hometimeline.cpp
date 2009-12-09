@@ -24,7 +24,7 @@ const int pagelimit = 16;
 const int maxCount = 200;
 
 HomeTimeline::HomeTimeline(QObject *parent)
-    :   QTwitHomeTimeline(parent), m_page(0)
+    :   QTwitHomeTimeline(parent), m_page(1)
 {
     connect(this, SIGNAL(finished()), this, SLOT(finishedPage()));
 }
@@ -37,7 +37,7 @@ QList<QTwitStatus> HomeTimeline::statuses() const
 void HomeTimeline::timeline(qint64 sinceid)
 {
     m_sinceid = sinceid;
-    m_page = 0;
+    m_page = 1;
     m_statuses.clear();
 
     update(sinceid, 0, maxCount, m_page);
@@ -48,7 +48,7 @@ void HomeTimeline::finishedPage()
     QList<QTwitStatus> newStatuses = getStatuses();
     m_statuses.append(newStatuses);
 
-    if (newStatuses.count() == maxCount && m_page < pagelimit) {
+    if ( /*newStatuses.count() == maxCount && */ m_page <= pagelimit) {
         m_page += 1;
         update(m_sinceid, 0, maxCount, m_page);
     } else {

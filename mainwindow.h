@@ -27,7 +27,7 @@
 #include <QtSql>
 #include <QNetworkAccessManager>
 #include "ui_mainwindowform.h"
-#include "qtwit/qtwithometimeline.h"
+#include "qtwit/hometimeline.h"
 #include "qtwit/qtwitdestroy.h"
 #include "qtwit/qtwitupdate.h"
 #include "qtwit/qtwitfavorites.h"
@@ -89,7 +89,7 @@ private:
 
 	QNetworkAccessManager *m_netManager;
 	OAuthTwitter *m_oauthTwitter;
-	QTwitHomeTimeline *m_twitHomeTimeline;
+	HomeTimeline *m_homeTimeline;
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
