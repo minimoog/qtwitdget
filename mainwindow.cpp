@@ -215,6 +215,9 @@ void MainWindow::finishedFriendsTimeline()
 		m_lastStatusId = lastStatuses.at(0).id();
 
 		QSqlQuery query;
+
+        query.exec("BEGIN;");
+
 		query.prepare("INSERT INTO status "
 			"(created, "
 			"id, "
@@ -248,7 +251,7 @@ void MainWindow::finishedFriendsTimeline()
 			":description, "
 			":profileImageUrl, "
 			":url, "
-			":followersCount)");
+			":followersCount);");
 
 		//it doesn't have to be backwards, I like it this way
 		QListIterator<QTwitStatus> i(lastStatuses);
@@ -275,7 +278,7 @@ void MainWindow::finishedFriendsTimeline()
 			query.exec();
 		}
 
-		query.finish();
+        query.exec("COMMIT;");
 
 		//refresh all tabs
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
