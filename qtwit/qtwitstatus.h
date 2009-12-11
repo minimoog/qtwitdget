@@ -94,6 +94,12 @@ public:
 	void setCreatedFromTwitter (const QString &twitterDate);
 	QString toTwitterDate() const;
 
+    bool isRetweet() const { return d->isRetweet; }
+    void setRetweet(bool rt) { d->isRetweet = rt; }
+
+    void setFriendsCount(int count) { d->friendsCount = count; }
+    int friendsCount() const { return d->friendsCount; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
