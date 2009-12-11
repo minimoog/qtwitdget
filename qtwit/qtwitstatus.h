@@ -118,6 +118,12 @@ public:
     void setGeoEnabled(bool enable) { d->geoEnabled = enable; }
     bool isGeoEnabled() const { return d->geoEnabled; }
 
+    void setVerified(bool verify) { d->verified = verify; }
+    bool isVerified() const { return d->verified; }
+
+    void setFollowing(bool follow) { d->following = follow; }
+    bool isFollowing() const { return d->following; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
