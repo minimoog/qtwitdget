@@ -106,6 +106,9 @@ public:
     void setFavouritesCount(int count) { d->favouritesCount = count; }
     int favouritesCount() const { return d->favouritesCount; }
 
+    void setUtcOffset(int offset) { d->utcOffset = offset; }
+    int utcOffset() const { return d->utcOffset; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
