@@ -103,6 +103,9 @@ public:
     void setUserCreatedAt(const QDateTime& datetime) { d->userCreatedAt = datetime; }
     QDateTime userCreatedAt() const { return d->userCreatedAt; }
 
+    void setFavouritesCount(int count) { d->favouritesCount = count; }
+    int favouritesCount() const { return d->favouritesCount; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };

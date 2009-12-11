@@ -28,7 +28,7 @@ class QTwitStatusData : public QSharedData
 public:
 
 	QTwitStatusData() : id(0), replyToStatusId(0), replyToUserId(0), favorited(false), userId(0), followersCount(0), 
-        isRetweet(false), friendsCount(0) 
+        isRetweet(false), friendsCount(0), favouritesCount(0) 
 	{	text.clear(); 
 		source.clear();
 		replyToScreenName.clear();
@@ -59,7 +59,8 @@ public:
 		followersCount(other.followersCount),
         friendsCount(other.friendsCount),
         isRetweet(other.isRetweet),
-        userCreatedAt(other.userCreatedAt)
+        userCreatedAt(other.userCreatedAt),
+        favouritesCount(other.favouritesCount)
 		 { }
 
 	~QTwitStatusData() { }
@@ -83,6 +84,7 @@ public:
 	int followersCount;
     int friendsCount;
     QDateTime userCreatedAt;
+    int favouritesCount;
 };
 
 /*
