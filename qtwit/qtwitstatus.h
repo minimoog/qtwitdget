@@ -115,6 +115,9 @@ public:
     void setStatusesCount(int count) { d->statusesCount = count; }
     int statusesCount() const { return d->statusesCount; }
 
+    void setGeoEnabled(bool enable) { d->geoEnabled = enable; }
+    bool isGeoEnabled() const { return d->geoEnabled; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
