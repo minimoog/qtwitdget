@@ -100,6 +100,9 @@ public:
     void setFriendsCount(int count) { d->friendsCount = count; }
     int friendsCount() const { return d->friendsCount; }
 
+    void setUserCreatedAt(const QDateTime& datetime) { d->userCreatedAt = datetime; }
+    QDateTime userCreatedAt() const { return d->userCreatedAt; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };

@@ -58,7 +58,8 @@ public:
 		url(other.url),
 		followersCount(other.followersCount),
         friendsCount(other.friendsCount),
-        isRetweet(other.isRetweet)
+        isRetweet(other.isRetweet),
+        userCreatedAt(other.userCreatedAt)
 		 { }
 
 	~QTwitStatusData() { }
@@ -81,6 +82,7 @@ public:
 	QString url;
 	int followersCount;
     int friendsCount;
+    QDateTime userCreatedAt;
 };
 
 /*
