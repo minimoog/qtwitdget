@@ -28,7 +28,7 @@ class QTwitStatusData : public QSharedData
 public:
 
 	QTwitStatusData() : id(0), replyToStatusId(0), replyToUserId(0), favorited(false), userId(0), followersCount(0), 
-        isRetweet(false), friendsCount(0), favouritesCount(0), utcOffset(0) 
+        isRetweet(false), friendsCount(0), favouritesCount(0), utcOffset(0), statusesCount(0) 
 	{	text.clear(); 
 		source.clear();
 		replyToScreenName.clear();
@@ -63,7 +63,8 @@ public:
         userCreatedAt(other.userCreatedAt),
         favouritesCount(other.favouritesCount),
         utcOffset(other.utcOffset),
-        timezone(other.timezone)
+        timezone(other.timezone),
+        statusesCount(other.statusesCount)
 		 { }
 
 	~QTwitStatusData() { }
@@ -90,6 +91,7 @@ public:
     int favouritesCount;
     int utcOffset;
     QString timezone;
+    int statusesCount;
 };
 
 /*

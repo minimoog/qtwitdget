@@ -112,6 +112,9 @@ public:
     void setTimezone(const QString& timezone) { d->timezone = timezone; }
     QString timezone() const { return d->timezone; }
 
+    void setStatusesCount(int count) { d->statusesCount = count; }
+    int statusesCount() const { return d->statusesCount; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
