@@ -109,6 +109,9 @@ public:
     void setUtcOffset(int offset) { d->utcOffset = offset; }
     int utcOffset() const { return d->utcOffset; }
 
+    void setTimezone(const QString& timezone) { d->timezone = timezone; }
+    QString timezone() const { return d->timezone; }
+
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };

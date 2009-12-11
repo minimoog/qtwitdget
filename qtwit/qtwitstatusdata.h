@@ -37,7 +37,8 @@ public:
 		location.clear();
 		description.clear();
 		profileImageUrl.clear();
-		url.clear(); }
+		url.clear(); 
+        timezone.clear(); }
 
 	QTwitStatusData(const QTwitStatusData &other) 
 		: QSharedData(other), 
@@ -61,7 +62,8 @@ public:
         isRetweet(other.isRetweet),
         userCreatedAt(other.userCreatedAt),
         favouritesCount(other.favouritesCount),
-        utcOffset(other.utcOffset)
+        utcOffset(other.utcOffset),
+        timezone(other.timezone)
 		 { }
 
 	~QTwitStatusData() { }
@@ -87,6 +89,7 @@ public:
     QDateTime userCreatedAt;
     int favouritesCount;
     int utcOffset;
+    QString timezone;
 };
 
 /*
