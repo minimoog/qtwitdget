@@ -66,8 +66,8 @@ OAuth::OAuth(QObject *parent) : QObject(parent), m_libraryOpenssl("libeay32", pa
 
     EVP_sha1_fp = (FPEVPSHA1)m_libraryOpenssl.resolve("EVP_sha1");
 
-    if (EVP_sha1_fp) {
-        qDebug() << "Error resolving symbol EVP_sha1_fp";
+    if (!EVP_sha1_fp) {
+        qDebug() << "Error resolving symbol EVP_sha1";
     }
 }
 #elif Q_WS_X11
