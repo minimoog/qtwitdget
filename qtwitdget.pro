@@ -24,6 +24,7 @@ HEADERS +=  twitstatusedit.h \
 			qtwit/qtwitstatusdata.h \
 			qtwit/qtwitstatus.h \
 			qtwit/qtwitrtstatus.h \
+			qtwit/qtwitrtstatusdata.h \
 			qtwit/qtwitverifycredentials.h \
 			qtwit/qtwitfriends.h \
 			qtwit/qtwitextuserinfodata.h \

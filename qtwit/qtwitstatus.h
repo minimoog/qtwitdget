@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QLocale>
 #include <QSharedData>
+#include "qtwitrtstatus.h"
 
 //forward declaration doesn't work in VS
 #include "qtwitstatusdata.h"
@@ -123,6 +124,22 @@ public:
 
     void setFollowing(bool follow) { d->following = follow; }
     bool isFollowing() const { return d->following; }
+
+    void setRetweetStatus(const QTwitRtStatus& rtStatus)
+    {
+        if (!d->rtStatus) 
+            d->rtStatus = new QTwitRtStatus;
+
+        *d->rtStatus = rtStatus;
+    }
+
+    QTwitRtStatus retweetStatus() const
+    {
+        if (!d->rtStatus)
+            return QTwitRtStatus();
+
+        return *d->rtStatus;
+    }
 
 private:
 	QSharedDataPointer<QTwitStatusData> d;

@@ -25,7 +25,7 @@
 #include <QSharedData>
 
 //forward declaration doesn't work in VS
-#include "qtwitstatusdata.h"
+#include "qtwitrtstatusdata.h"
 
 //implicitly shared class
 
@@ -33,7 +33,7 @@ class QTwitRtStatus
 {
 public:
 
-	QTwitRtStatus() { d = new QTwitStatusData(); }
+	QTwitRtStatus() { d = new QTwitRtStatusData(); }
 
 	QTwitRtStatus(const QTwitRtStatus &other)
 		:	d(other.d) { }
@@ -114,7 +114,7 @@ public:
     bool isFollowing() const { return d->following; }
 
 private:
-	QSharedDataPointer<QTwitStatusData> d;
+	QSharedDataPointer<QTwitRtStatusData> d;
 };
 
 #endif //QTWITRTSTATUS_H
