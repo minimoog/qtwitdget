@@ -19,6 +19,7 @@
  */
 
 #include <QtDebug>
+#include <QBuffer>
 #include <QUrl>
 #include "qtwithometimeline.h"
 #include "xml/xmlreaderstatus.h"
@@ -68,9 +69,13 @@ void QTwitHomeTimeline::update(qint64 sinceId, qint64 maxId, int count, int page
 void QTwitHomeTimeline::reply()
 {
 	QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
+    QByteArray arrayReply = netReply->readAll();
+    QBuffer response(&arrayReply);
+    response.open(QIODevice::ReadOnly);
+
 	if(netReply){
 		XmlReaderStatus xrs;
-		if(xrs.read(netReply))
+		if(xrs.read(&response))
 			m_statuses = xrs.statuses();		
 
 		netReply->deleteLater();
