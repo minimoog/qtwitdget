@@ -78,6 +78,9 @@ MainWindow::MainWindow()
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
 	connect(ui.actionAuthorize, SIGNAL(triggered()), SLOT(authorize()));
 	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
+    
+    //timer is single shot, avoid conflict with HomeTimeline
+    m_timer->setSingleShot(true);
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
@@ -154,9 +157,6 @@ void MainWindow::startUp()
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
 
-		//start update timer
-		m_timer->start(60000);
-
 		updateTimeline();
 	}
 }
@@ -165,10 +165,8 @@ void MainWindow::updateTimeline()
 {
 	if(m_firstRun){
 		m_firstRun = false;
-		//m_twitHomeTimeline->update(0, 0, 200);
         m_homeTimeline->timeline(0);
 	} else {
-		//m_twitHomeTimeline->update(m_lastStatusId, 0, 200);
         m_homeTimeline->timeline(m_lastStatusId);
 	}
 }
@@ -283,6 +281,9 @@ void MainWindow::finishedFriendsTimeline()
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
 	}
+
+    //start 60 seconds timer
+    m_timer->start(60000);
 }
 
 void MainWindow::statusDestroyed(qint64 id)
