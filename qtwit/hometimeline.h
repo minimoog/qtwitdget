@@ -37,12 +37,15 @@ signals:
     void finishedTimeline();
 
 private slots:
-    void finishedPage();
+    void finishedFirstRequest();
+    void finishedSubsequentRequest();
 
 private:
+    void moreTimeline();
+
     QList<QTwitStatus> m_statuses;
-    int m_page;
-    int m_sinceid;
+    qint64 m_sinceid;
+    qint64 m_maxid;
 };
 
 #endif //HOMETIMELINE_H

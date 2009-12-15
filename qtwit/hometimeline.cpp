@@ -20,13 +20,14 @@
 
 #include "hometimeline.h"
 
-const int pagelimit = 16;
 const int maxCount = 200;
+//twitter API returns under 200 statuses, and this number is reasonable assumption 
+//that if you have less then 150 statuses there are no new subsequent statuses  
+const int possibleCount = 150;
 
 HomeTimeline::HomeTimeline(QObject *parent)
-    :   QTwitHomeTimeline(parent), m_page(1)
+    :   QTwitHomeTimeline(parent)
 {
-    connect(this, SIGNAL(finished()), this, SLOT(finishedPage()));
 }
 
 QList<QTwitStatus> HomeTimeline::statuses() const
@@ -37,22 +38,52 @@ QList<QTwitStatus> HomeTimeline::statuses() const
 void HomeTimeline::timeline(qint64 sinceid)
 {
     m_sinceid = sinceid;
-    m_page = 1;
     m_statuses.clear();
 
-    update(sinceid, 0, maxCount, m_page);
+    disconnect(SIGNAL(finished()));
+    connect(this, SIGNAL(finished()), this, SLOT(finishedFirstRequest()));
+
+    update(sinceid, 0, maxCount, 0);
 }
 
-void HomeTimeline::finishedPage()
+void HomeTimeline::finishedFirstRequest()
 {
     QList<QTwitStatus> newStatuses = getStatuses();
     m_statuses.append(newStatuses);
 
-    if ( /*newStatuses.count() == maxCount && */ m_page <= pagelimit) {
-        m_page += 1;
-        update(m_sinceid, 0, maxCount, m_page);
+    if (m_statuses.count() > possibleCount) {
+        //get maxid
+        m_maxid = m_statuses.last().id();
+
+        //disconnect to other slot
+        disconnect(SIGNAL(finished()));
+        connect(this, SIGNAL(finished()), this, SLOT(finishedSubsequentRequest()));
+        update(m_sinceid, m_maxid, maxCount, 0);
     } else {
         emit finishedTimeline();
     }
 }
 
+void HomeTimeline::finishedSubsequentRequest()
+{
+    QList<QTwitStatus> newStatuses = getStatuses();
+
+    if (newStatuses.isEmpty()) {
+        emit finishedTimeline();
+        return;
+    }
+
+    //remove front status (maxid)
+    newStatuses.removeFirst();
+
+    if (!newStatuses.isEmpty()) {
+        m_statuses.append(newStatuses);
+
+        //get new maxid
+        m_maxid = m_statuses.last().id();
+
+        update(m_sinceid, m_maxid, maxCount, 0);
+    } else {
+        emit finishedTimeline();
+    }
+}
