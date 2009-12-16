@@ -1,4 +1,4 @@
-/* Copyright (c) 2008, Antonie Jovanoski
+/* Copyright (c) 2009, Antonie Jovanoski
  *	
  * All rights reserved.
  *
@@ -18,30 +18,24 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
-#ifndef QTWITSTATUS_H
-#define QTWITSTATUS_H
+#ifndef QTWITRTSTATUS_H
+#define QTWITRTSTATUS_H
 
-#include <QDateTime>
 #include <QString>
-#include <QStringList>
-#include <QLocale>
 #include <QSharedData>
-#include "qtwitrtstatus.h"
 
 //forward declaration doesn't work in VS
-#include "qtwitstatusdata.h"
-
-//class QTwitStatusData;
+#include "qtwitrtstatusdata.h"
 
 //implicitly shared class
 
-class QTwitStatus
+class QTwitRtStatus
 {
 public:
 
-	QTwitStatus() { d = new QTwitStatusData(); }
+	QTwitRtStatus() { d = new QTwitRtStatusData(); }
 
-	QTwitStatus(const QTwitStatus &other)
+	QTwitRtStatus(const QTwitRtStatus &other)
 		:	d(other.d) { }
 
 	void setCreated(const QDateTime &datetime) { d->created = datetime; }
@@ -92,12 +86,6 @@ public:
 	void setFollowersCount(int followersCount) { d->followersCount = followersCount; }
 	int folllowersCount() const { return d->followersCount; }
 
-	void setCreatedFromTwitter (const QString &twitterDate);
-	QString toTwitterDate() const;
-
-    bool isRetweet() const { return d->isRetweet; }
-    void setRetweet(bool rt) { d->isRetweet = rt; }
-
     void setFriendsCount(int count) { d->friendsCount = count; }
     int friendsCount() const { return d->friendsCount; }
 
@@ -122,24 +110,11 @@ public:
     void setVerified(bool verify) { d->verified = verify; }
     bool isVerified() const { return d->verified; }
 
-    void setRetweetStatus(const QTwitRtStatus& rtStatus)
-    {
-        if (!d->rtStatus) 
-            d->rtStatus = new QTwitRtStatus;
-
-        *d->rtStatus = rtStatus;
-    }
-
-    QTwitRtStatus retweetStatus() const
-    {
-        if (!d->rtStatus)
-            return QTwitRtStatus();
-
-        return *d->rtStatus;
-    }
+    void setFollowing(bool follow) { d->following = follow; }
+    bool isFollowing() const { return d->following; }
 
 private:
-	QSharedDataPointer<QTwitStatusData> d;
+	QSharedDataPointer<QTwitRtStatusData> d;
 };
 
-#endif //QTWITSTATUS_H
+#endif //QTWITRTSTATUS_H

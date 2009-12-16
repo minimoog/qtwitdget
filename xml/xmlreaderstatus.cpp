@@ -20,6 +20,8 @@
 
 #include "xmlreaderstatus.h"
 
+//TODO: Use skipCurrentElement
+
 XmlReaderStatus::XmlReaderStatus()
 {
 }
@@ -109,6 +111,8 @@ void XmlReaderStatus::readStatus(QTwitStatus& ts)
 					ts.setFavorited(false);
 			else if(name() == "in_reply_to_screen_name")
 				ts.setReplyToScreenName(readElementText());
+            //else if(name() == "retweeted_status")
+               // ;           //TODO
 			else if(name() == "user")
 				readUser(ts);
 			else
@@ -155,9 +159,36 @@ void XmlReaderStatus::readUser(QTwitStatus& ts)
 			else if(name() == "url")
 				ts.setUrl(readElementText());
 			else if(name() == "followers_count")
-				ts.setFollowersCount(readElementText().toInt());			
+				ts.setFollowersCount(readElementText().toInt());
+            else if(name() == "friends_count")
+                ts.setFriendsCount(readElementText().toInt());
+            //else if(name() == "created_at") 
+                //ts.setUserCreatedAt(QDateTime()); //TODO    
+            else if(name() == "favourites_count")
+                ts.setFavouritesCount(readElementText().toInt());
+            else if(name() == "utc_offset")
+                ts.setUtcOffset(readElementText().toInt());
+            else if(name() == "time_zone")
+                ts.setTimezone(readElementText());
+            else if(name() == "statuses_count")
+                ts.setStatusesCount(readElementText().toInt());
+            else if(name() == "geo_enabled")
+                if(readElementText() == "true")
+                    ts.setGeoEnabled(true);
+                else
+                    ts.setGeoEnabled(false);
+            else if(name() == "verified")
+                if(readElementText() == "true")
+                    ts.setVerified(true);
+                else
+                    ts.setVerified(false);
 			else
 				readUnknownElement();
 		}
 	}
+}
+
+QString XmlReaderStatus::stringError() const
+{
+    return QString("%1\nLine %2, column %3").arg(errorString()).arg(lineNumber()).arg(columnNumber());
 }
