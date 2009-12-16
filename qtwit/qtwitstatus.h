@@ -122,9 +122,6 @@ public:
     void setVerified(bool verify) { d->verified = verify; }
     bool isVerified() const { return d->verified; }
 
-    void setFollowing(bool follow) { d->following = follow; }
-    bool isFollowing() const { return d->following; }
-
     void setRetweetStatus(const QTwitRtStatus& rtStatus)
     {
         if (!d->rtStatus) 
