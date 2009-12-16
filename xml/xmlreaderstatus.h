@@ -38,6 +38,7 @@ private:
 	void readInReplyToStatusId(QTwitStatus& ts);
 	void readInReplyToUserId(QTwitStatus& ts);
 	void readUser(QTwitStatus& ts);
+    QString stringError() const;
 
 	QList<QTwitStatus> m_statuses;
 };

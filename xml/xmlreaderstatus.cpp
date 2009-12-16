@@ -20,6 +20,8 @@
 
 #include "xmlreaderstatus.h"
 
+//TODO: Use skipCurrentElement
+
 XmlReaderStatus::XmlReaderStatus()
 {
 }
@@ -109,8 +111,8 @@ void XmlReaderStatus::readStatus(QTwitStatus& ts)
 					ts.setFavorited(false);
 			else if(name() == "in_reply_to_screen_name")
 				ts.setReplyToScreenName(readElementText());
-            else if(name() == "retweeted_status")
-                ;           //TODO
+            //else if(name() == "retweeted_status")
+               // ;           //TODO
 			else if(name() == "user")
 				readUser(ts);
 			else
@@ -160,8 +162,8 @@ void XmlReaderStatus::readUser(QTwitStatus& ts)
 				ts.setFollowersCount(readElementText().toInt());
             else if(name() == "friends_count")
                 ts.setFriendsCount(readElementText().toInt());
-            else if(name() == "created_at")
-                ts.setUserCreatedAt(QDateTime()); //TODO
+            //else if(name() == "created_at") 
+                //ts.setUserCreatedAt(QDateTime()); //TODO    
             else if(name() == "favourites_count")
                 ts.setFavouritesCount(readElementText().toInt());
             else if(name() == "utc_offset")
@@ -180,13 +182,13 @@ void XmlReaderStatus::readUser(QTwitStatus& ts)
                     ts.setVerified(true);
                 else
                     ts.setVerified(false);
-            else if(name() == "following")
-                if(readElementText() == "true")
-                    ts.setFollowing(true);
-                else
-                    ts.setFollowing(false);
 			else
 				readUnknownElement();
 		}
 	}
+}
+
+QString XmlReaderStatus::stringError() const
+{
+    return QString("%1\nLine %2, column %3").arg(errorString()).arg(lineNumber()).arg(columnNumber());
 }
