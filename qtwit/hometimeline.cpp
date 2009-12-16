@@ -1,0 +1,89 @@
+/* Copyright (c) 2009, Antonie Jovanoski
+ *	
+ * All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
+ */
+
+#include "hometimeline.h"
+
+const int maxCount = 200;
+//twitter API returns under 200 statuses, and this number is reasonable assumption 
+//that if you have less then 150 statuses there are no new subsequent statuses  
+const int possibleCount = 150;
+
+HomeTimeline::HomeTimeline(QObject *parent)
+    :   QTwitHomeTimeline(parent)
+{
+}
+
+QList<QTwitStatus> HomeTimeline::statuses() const
+{
+    return m_statuses;
+}
+
+void HomeTimeline::timeline(qint64 sinceid)
+{
+    m_sinceid = sinceid;
+    m_statuses.clear();
+
+    disconnect(SIGNAL(finished()));
+    connect(this, SIGNAL(finished()), this, SLOT(finishedFirstRequest()));
+
+    update(sinceid, 0, maxCount, 0);
+}
+
+void HomeTimeline::finishedFirstRequest()
+{
+    QList<QTwitStatus> newStatuses = getStatuses();
+    m_statuses.append(newStatuses);
+
+    if (m_statuses.count() > possibleCount) {
+        //get maxid
+        m_maxid = m_statuses.last().id();
+
+        //disconnect to other slot
+        disconnect(SIGNAL(finished()));
+        connect(this, SIGNAL(finished()), this, SLOT(finishedSubsequentRequest()));
+        update(m_sinceid, m_maxid, maxCount, 0);
+    } else {
+        emit finishedTimeline();
+    }
+}
+
+void HomeTimeline::finishedSubsequentRequest()
+{
+    QList<QTwitStatus> newStatuses = getStatuses();
+
+    if (newStatuses.isEmpty()) {
+        emit finishedTimeline();
+        return;
+    }
+
+    //remove front status (maxid)
+    newStatuses.removeFirst();
+
+    if (!newStatuses.isEmpty()) {
+        m_statuses.append(newStatuses);
+
+        //get new maxid
+        m_maxid = m_statuses.last().id();
+
+        update(m_sinceid, m_maxid, maxCount, 0);
+    } else {
+        emit finishedTimeline();
+    }
+}
