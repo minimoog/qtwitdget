@@ -31,6 +31,7 @@
 #include "qtwit/qtwitdestroy.h"
 #include "qtwit/qtwitupdate.h"
 #include "qtwit/qtwitfavorites.h"
+#include "qtwit/mentions.h"
 #include "oauth/oauthtwitter.h"
 #include "twittabgroup.h"
 #include "qtwitscene.h"
@@ -56,6 +57,7 @@ private slots:
 	/*! Called when user request to destroy (delete) status */
 	/*! \param id ID of the status */
 	void statusDestroyed(qint64 id);
+    void finishedMentions();
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void createGrouping();
@@ -90,6 +92,7 @@ private:
 	QNetworkAccessManager *m_netManager;
 	OAuthTwitter *m_oauthTwitter;
 	HomeTimeline *m_homeTimeline;
+    Mentions *m_mentions;
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
@@ -100,6 +103,7 @@ private:
 
 	QList<TwitTabGroup> m_twitTabGroups;
 	qint64 m_lastStatusId;
+    qint64 m_lastMentionId;
 	QList<QTwitScene*> m_twitScenes;
 	int m_userId;
 

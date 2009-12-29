@@ -35,6 +35,7 @@ MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
 	m_homeTimeline(new HomeTimeline(this)),
+    m_mentions(new Mentions(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
 	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
@@ -42,11 +43,13 @@ MainWindow::MainWindow()
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_homeTimeline->setNetworkAccessManager(m_netManager);
+    m_mentions->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
 	m_twitDestroy->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
 
 	m_homeTimeline->setOAuthTwitter(m_oauthTwitter);
+    m_mentions->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
 	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
@@ -64,6 +67,7 @@ MainWindow::MainWindow()
 	//connect signals
 	connect(ui.updateButton, SIGNAL(clicked()), SLOT(updateButtonClicked()));
 	connect(m_homeTimeline, SIGNAL(finishedTimeline()), SLOT(finishedFriendsTimeline()));
+    connect(m_mentions, SIGNAL(finishedTimeline()), SLOT(finishedMentions()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
@@ -149,6 +153,11 @@ void MainWindow::startUp()
 			query.exec("SELECT id FROM status ORDER BY created DESC LIMIT 1");
 			if(query.next())
 				m_lastStatusId = query.value(0).toLongLong();
+
+            //also for mentions last status id
+            query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY created DESC LIMIT 1");
+            if (query.next())
+                m_lastMentionId = query.value(0).toLongLong();
 		}
 
 		createDefaultTwitGroups();
@@ -166,8 +175,10 @@ void MainWindow::updateTimeline()
 	if(m_firstRun){
 		m_firstRun = false;
         m_homeTimeline->timeline(0);
+        m_mentions->timeline(0);
 	} else {
         m_homeTimeline->timeline(m_lastStatusId);
+        m_mentions->timeline(m_lastMentionId);
 	}
 }
 
@@ -218,7 +229,7 @@ void MainWindow::finishedFriendsTimeline()
 
         query.exec("BEGIN;");
 
-		query.prepare("INSERT INTO status "
+		query.prepare("INSERT OR ABORT INTO status "
 			"(created, "
 			"id, "
 			"text, "
@@ -234,7 +245,8 @@ void MainWindow::finishedFriendsTimeline()
 			"description, "
 			"profileImageUrl, "
 			"url, "
-			"followersCount) "
+			"followersCount, " 
+            "mention) "
 			"VALUES "
 			"(:created, "
 			":id, "
@@ -251,7 +263,8 @@ void MainWindow::finishedFriendsTimeline()
 			":description, "
 			":profileImageUrl, "
 			":url, "
-			":followersCount);");
+			":followersCount, "
+            ":mention);");
 
 		//it doesn't have to be backwards, I like it this way
 		QListIterator<QTwitStatus> i(lastStatuses);
@@ -274,6 +287,7 @@ void MainWindow::finishedFriendsTimeline()
 			query.bindValue(":profileImageUrl", s.profileImageUrl());
 			query.bindValue(":url", s.url());
 			query.bindValue(":followersCount", s.folllowersCount());
+            query.bindValue(":mention", 0); //not a mention
 			
 			query.exec();
 		}
@@ -287,6 +301,94 @@ void MainWindow::finishedFriendsTimeline()
 
     //start 60 seconds timer
     m_timer->start(60000);
+}
+
+void MainWindow::finishedMentions()
+{
+    QList<QTwitStatus> mentions = m_mentions->statuses();
+
+	if(!mentions.isEmpty()){
+		//get last status id
+		m_lastMentionId = mentions.at(0).id();
+
+		QSqlQuery query;
+
+        query.exec("BEGIN;");
+
+        //replace strategy
+		query.prepare("INSERT OR REPLACE INTO status "
+			"(created, "
+			"id, "
+			"text, "
+			"source, "
+			"replyToStatusId, "
+			"replyToUserId, "
+			"favorited, "
+			"replyToScreenName, "
+			"userId, "
+			"name, "
+			"screenName, "
+			"location, "
+			"description, "
+			"profileImageUrl, "
+			"url, "
+			"followersCount, " 
+            "mention) "
+			"VALUES "
+			"(:created, "
+			":id, "
+			":text, "
+			":source, "
+			":replyToStatusId, "
+			":replyToUserId, "
+			":favorited, "
+			":replyToScreenName, "
+			":userId, "
+			":name, "
+			":screenName, "
+			":location, "
+			":description, "
+			":profileImageUrl, "
+			":url, "
+			":followersCount, "
+            ":mention);");
+
+		//it doesn't have to be backwards, I like it this way
+		QListIterator<QTwitStatus> i(mentions);
+		i.toBack();
+		while(i.hasPrevious()){
+			QTwitStatus s = i.previous();
+			query.bindValue(":created", s.created().toString(Qt::ISODate));
+			query.bindValue(":id", s.id());
+			query.bindValue(":text", s.text());
+			query.bindValue(":source", s.source());
+			query.bindValue(":replyToStatusId", s.replyToStatusId());
+			query.bindValue(":replyToUserId", s.replyToUserId());
+			query.bindValue(":favorited", static_cast<int>(s.favorited()));
+			query.bindValue(":replyToScreenName", s.replyToScreenName());
+			query.bindValue(":userId", s.userId());
+			query.bindValue(":name", s.name());
+			query.bindValue(":screenName", s.screenName());
+			query.bindValue(":location", s.location());
+			query.bindValue(":description", s.description());
+			query.bindValue(":profileImageUrl", s.profileImageUrl());
+			query.bindValue(":url", s.url());
+			query.bindValue(":followersCount", s.folllowersCount());
+            query.bindValue(":mention", 1); //a mention
+			
+			query.exec();
+		}
+
+        query.exec("COMMIT;");
+
+		//refresh all tabs
+		for(int i = 0; i < ui.tabWidget->count(); ++i)
+			updateTab(i);
+	}
+
+    //!!!!!!!!WHAT TO DO WITH TIMER???
+    //start 60 seconds timer
+    //m_timer->start(60000);
 }
 
 void MainWindow::statusDestroyed(qint64 id)
@@ -383,6 +485,7 @@ void MainWindow::createDatabase(const QString& databaseName)
 				"profileImageUrl TEXT, "
 				"url TEXT, "
 				"followersCount INTEGER, "
+                "mention INTEGER, "
                 "UNIQUE (id));");
 				
 	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
@@ -492,13 +595,17 @@ void MainWindow::createDefaultTwitGroups()
 	myTwits.setTabName(tr("My twits"));
 	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
 
-    TwitTabGroup favorites;
-    favorites.setTabName(tr("Favorites"));
-    favorites.setQuery(QString(" favorited == 1"));
+    //TwitTabGroup favorites;
+    //favorites.setTabName(tr("Favorites"));
+    //favorites.setQuery(QString(" favorited == 1"));
+
+    TwitTabGroup mentions;
+    mentions.setTabName(tr("Mentions"));
+    mentions.setQuery(QString(" mention == 1"));
 
 	m_twitTabGroups.append(allfriends);
 	m_twitTabGroups.append(myTwits);
-    m_twitTabGroups.append(favorites);
+    m_twitTabGroups.append(mentions);
 
     //read saved groups
     readGroupsSettings();
