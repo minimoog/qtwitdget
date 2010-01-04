@@ -37,6 +37,7 @@ HEADERS +=  twitstatusedit.h \
 			qtwit/qtwitmentions.h \
 			qtwit/hometimeline.h \
 			qtwit/mentions.h \
+			qtwit/qtwitretweet.h \
 			xml/xmlreaderextuserinfo.h \
 			xml/xmlreaderstatus.h \
 			xml/xmlreaderextusers.h \
@@ -68,6 +69,7 @@ SOURCES +=  main.cpp \
 			qtwit/qtwitmentions.cpp \
 			qtwit/hometimeline.cpp \
 			qtwit/mentions.cpp \
+			qtwit/qtwitretweet.cpp \
 			xml/xmlreaderstatus.cpp \
 			xml/xmlreaderextuserinfo.cpp \
 			xml/xmlreaderextusers.cpp \
