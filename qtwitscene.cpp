@@ -308,8 +308,7 @@ void QTwitScene::replyClicked(qint64 id)
 
 void QTwitScene::retweetClicked(qint64 id)
 {
-    GroupItems scit = m_sceneItems.value(id);
-    emit requestRetweet(scit.statusText, scit.screenName);
+    emit requestRetweet(id);
 }
 
 void QTwitScene::deleteClicked(qint64 id)

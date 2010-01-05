@@ -19,6 +19,7 @@
  */
 
 #include <QtDebug>
+#include <QBuffer>
 #include "qtwitretweet.h"
 #include "xml/xmlreaderstatus.h"
 
@@ -52,7 +53,25 @@ void QTwitRetweet::reply()
     if (netReply) {
         XmlReaderStatus xrs;
 
-        if (xrs.read(netReply))
+        QByteArray replyArray = netReply->readAll();
+        //HACK: prepend <statuses> and append </statuses> tags to parse them like statuses array
+        int prIndex = replyArray.indexOf("<status>");
+        
+        if (prIndex == -1)
+            //something wrong
+            return;
+
+        replyArray.insert(prIndex, "<statuses>");
+        replyArray.append("</statuses>");
+
+        //TODO:
+        //XmlReaderStatus -> parse one status
+        //XmlReaderStatusArray -> parse array of statuses
+
+        QBuffer replyBuffer(&replyArray);
+        replyBuffer.open(QIODevice::ReadOnly);
+
+        if (xrs.read(&replyBuffer))
             m_retweetStatus = xrs.statuses().at(0); //fails if there are no statuses
 
         netReply->deleteLater();

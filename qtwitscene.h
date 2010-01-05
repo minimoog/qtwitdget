@@ -77,7 +77,7 @@ public:
 
 signals:
 	void requestReply(qint64 statusId, const QString& screenName);
-	void requestRetweet(const QString& text, const QString& screenName);
+	void requestRetweet(qint64 statusid);
 	void requestFavorited(qint64 statusId);
     void requestDelete(qint64 statusId);
 

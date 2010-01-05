@@ -39,6 +39,7 @@ MainWindow::MainWindow()
 	m_twitUpdate(new QTwitUpdate(this)),
 	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
+    m_twitRetweet(new QTwitRetweet(this)),
 	m_timer(new QTimer(this))
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
@@ -47,12 +48,14 @@ MainWindow::MainWindow()
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
 	m_twitDestroy->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
+    m_twitRetweet->setNetworkAccessManager(m_netManager);
 
 	m_homeTimeline->setOAuthTwitter(m_oauthTwitter);
     m_mentions->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
 	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
+    m_twitRetweet->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
 	ui.updateEdit->setLimit(140);
@@ -71,6 +74,7 @@ MainWindow::MainWindow()
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
+    connect(m_twitRetweet, SIGNAL(finished()), SLOT(retweetFinished()));
     connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
 	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
 	
@@ -149,6 +153,9 @@ void MainWindow::startUp()
 			m_firstRun = true;
 		} else {
 			//determine last status id from which to update
+            ////BUG/////
+            //if last status is own retweet hometimeline will return error
+            //hometimeline doesn't show "retweets by me"
 			QSqlQuery query;
 			query.exec("SELECT id FROM status ORDER BY created DESC LIMIT 1");
 			if(query.next())
@@ -650,9 +657,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
 	connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)), 
 		ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
 	connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
-	connect(statusScene,	SIGNAL(requestRetweet(const QString&, const QString&)), 
-		ui.updateEdit,	SLOT(setRetweet(const QString&, const QString&)));
-	connect(statusScene, SIGNAL(requestRetweet(const QString&, const QString&)), ui.updateEdit, SLOT(setFocus()));
+    connect(statusScene, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
 	connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
     connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
 
@@ -740,6 +745,84 @@ void MainWindow::reqDelete(qint64 statusId)
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
         m_twitScenes.at(i)->removeStatus(statusId);
     }
+}
+
+void MainWindow::retweet(qint64 statusId)
+{
+    m_twitRetweet->retweet(statusId);
+}
+
+void MainWindow::retweetFinished()
+{
+    QTwitStatus rs = m_twitRetweet->getRetweetedStatus();
+
+    if (rs.id() == 0)
+        return;
+
+    ////!!!REFACTOR THIS//////
+
+    QSqlQuery query;
+
+	query.prepare("INSERT OR ABORT INTO status "
+		"(created, "
+		"id, "
+		"text, "
+		"source, "
+		"replyToStatusId, "
+		"replyToUserId, "
+		"favorited, "
+		"replyToScreenName, "
+		"userId, "
+		"name, "
+		"screenName, "
+		"location, "
+		"description, "
+		"profileImageUrl, "
+		"url, "
+		"followersCount, " 
+        "mention) "
+		"VALUES "
+		"(:created, "
+		":id, "
+		":text, "
+		":source, "
+		":replyToStatusId, "
+		":replyToUserId, "
+		":favorited, "
+		":replyToScreenName, "
+		":userId, "
+		":name, "
+		":screenName, "
+		":location, "
+		":description, "
+		":profileImageUrl, "
+		":url, "
+		":followersCount, "
+        ":mention);");
+
+		query.bindValue(":created", rs.created().toString(Qt::ISODate));
+		query.bindValue(":id", rs.id());
+		query.bindValue(":text", rs.text());
+		query.bindValue(":source", rs.source());
+		query.bindValue(":replyToStatusId", rs.replyToStatusId());
+		query.bindValue(":replyToUserId", rs.replyToUserId());
+		query.bindValue(":favorited", static_cast<int>(rs.favorited()));
+		query.bindValue(":replyToScreenName", rs.replyToScreenName());
+		query.bindValue(":userId", rs.userId());
+		query.bindValue(":name", rs.name());
+		query.bindValue(":screenName", rs.screenName());
+		query.bindValue(":location", rs.location());
+		query.bindValue(":description", rs.description());
+		query.bindValue(":profileImageUrl", rs.profileImageUrl());
+		query.bindValue(":url", rs.url());
+		query.bindValue(":followersCount", rs.folllowersCount());
+        query.bindValue(":mention", 0); //not a mention
+
+        query.exec();
+
+        //refresh all tabs
+		for(int i = 0; i < ui.tabWidget->count(); ++i)
+			updateTab(i);
 }
 
 void MainWindow::readSettings()

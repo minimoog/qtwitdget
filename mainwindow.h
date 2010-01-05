@@ -32,6 +32,7 @@
 #include "qtwit/qtwitupdate.h"
 #include "qtwit/qtwitfavorites.h"
 #include "qtwit/mentions.h"
+#include "qtwit/qtwitretweet.h"
 #include "oauth/oauthtwitter.h"
 #include "twittabgroup.h"
 #include "qtwitscene.h"
@@ -68,6 +69,8 @@ private slots:
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
+    void retweet(qint64 statusId);
+    void retweetFinished();
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -96,6 +99,7 @@ private:
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
+    QTwitRetweet *m_twitRetweet;
 	QTimer *m_timer;
 
 	QList<QTwitStatus> m_statuses;
