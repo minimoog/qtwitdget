@@ -47,6 +47,7 @@ class MainWindow : public QMainWindow
 public:
 	/*! Constructor */
 	MainWindow();
+    ~MainWindow();
 	void startUp();
 	
 private slots:

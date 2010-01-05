@@ -40,7 +40,9 @@ MainWindow::MainWindow()
 	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
     m_twitRetweet(new QTwitRetweet(this)),
-	m_timer(new QTimer(this))
+	m_timer(new QTimer(this)),
+    m_lastStatusId(0),
+    m_lastMentionId(0)
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_homeTimeline->setNetworkAccessManager(m_netManager);
@@ -156,15 +158,17 @@ void MainWindow::startUp()
             ////BUG/////
             //if last status is own retweet hometimeline will return error
             //hometimeline doesn't show "retweets by me"
-			QSqlQuery query;
-			query.exec("SELECT id FROM status ORDER BY created DESC LIMIT 1");
-			if(query.next())
-				m_lastStatusId = query.value(0).toLongLong();
+			//QSqlQuery query;
+			//query.exec("SELECT id FROM status ORDER BY created DESC LIMIT 1");
+			//if(query.next())
+				//m_lastStatusId = query.value(0).toLongLong();
 
             //also for mentions last status id
-            query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY created DESC LIMIT 1");
-            if (query.next())
-                m_lastMentionId = query.value(0).toLongLong();
+           // query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY created DESC LIMIT 1");
+            //if (query.next())
+               // m_lastMentionId = query.value(0).toLongLong();
+            m_lastStatusId = settings.value("lastStatusId").toLongLong();
+            m_lastMentionId = settings.value("lastMentionId").toLongLong();
 		}
 
 		createDefaultTwitGroups();
@@ -856,4 +860,12 @@ void MainWindow::readGroupsSettings()
     }
 
     settings.endArray();
+}
+
+MainWindow::~MainWindow()
+{
+    //wrote lastStatusId from home_timeline and mentions_timeline
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    settings.setValue("lastStatusId", m_lastStatusId);
+    settings.setValue("lastMentionId", m_lastMentionId);
 }
