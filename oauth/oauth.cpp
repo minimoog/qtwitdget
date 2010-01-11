@@ -71,7 +71,27 @@ OAuth::OAuth(QObject *parent) : QObject(parent), m_libraryOpenssl("libeay32", pa
     }
 }
 #elif Q_WS_X11
-    ////TODO/////
+OAuth::OAuth(QObject *parent) : QObject(parent), m_libraryOpenssl("crypto", parent)
+{
+    QDateTime current = QDateTime::currentDateTime();
+	qsrand(current.toTime_t());
+
+    if (!m_libraryOpenssl.isLoaded())
+        qDebug() << "Error loading libcrypto library";
+
+    //fetch function pointers
+    HMAC_fp = (FPHMAC)m_libraryOpenssl.resolve("HMAC");
+
+    if (!HMAC_fp) {
+        qDebug() << "Error resolving symbol HMAC";
+    }
+
+    EVP_sha1_fp = (FPEVPSHA1)m_libraryOpenssl.resolve("EVP_sha1");
+
+    if (!EVP_sha1_fp) {
+        qDebug() << "Error resolving symbol EVP_sha1";
+    }
+}
 #endif
 
 void OAuth::parseTokens(const QByteArray& response)
