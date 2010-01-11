@@ -154,19 +154,6 @@ void MainWindow::startUp()
 		if(isDatabaseEmpty()){
 			m_firstRun = true;
 		} else {
-			//determine last status id from which to update
-            ////BUG/////
-            //if last status is own retweet hometimeline will return error
-            //hometimeline doesn't show "retweets by me"
-			//QSqlQuery query;
-			//query.exec("SELECT id FROM status ORDER BY created DESC LIMIT 1");
-			//if(query.next())
-				//m_lastStatusId = query.value(0).toLongLong();
-
-            //also for mentions last status id
-           // query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY created DESC LIMIT 1");
-            //if (query.next())
-               // m_lastMentionId = query.value(0).toLongLong();
             m_lastStatusId = settings.value("lastStatusId").toLongLong();
             m_lastMentionId = settings.value("lastMentionId").toLongLong();
 		}
@@ -606,10 +593,6 @@ void MainWindow::createDefaultTwitGroups()
 	myTwits.setTabName(tr("My twits"));
 	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
 
-    //TwitTabGroup favorites;
-    //favorites.setTabName(tr("Favorites"));
-    //favorites.setQuery(QString(" favorited == 1"));
-
     TwitTabGroup mentions;
     mentions.setTabName(tr("Mentions"));
     mentions.setQuery(QString(" mention == 1"));
@@ -713,8 +696,6 @@ void MainWindow::nextStatuses()
 
 void MainWindow::favorited(qint64 statusId)
 {
-    //TODO: when favorite is clicked Favorites tab is not updated/removed
-
     //first check if status is already favorited
     QSqlQuery query;
     QString sq = QString("SELECT favorited FROM status WHERE id = %1;").arg(statusId);
