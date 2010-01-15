@@ -244,7 +244,8 @@ void MainWindow::finishedFriendsTimeline()
 			"profileImageUrl, "
 			"url, "
 			"followersCount, " 
-            "mention) "
+            "mention, " 
+            "isRead) "
 			"VALUES "
 			"(:created, "
 			":id, "
@@ -262,7 +263,8 @@ void MainWindow::finishedFriendsTimeline()
 			":profileImageUrl, "
 			":url, "
 			":followersCount, "
-            ":mention);");
+            ":mention, "
+            ":isRead);");
 
 		//it doesn't have to be backwards, I like it this way
 		QListIterator<QTwitStatus> i(lastStatuses);
@@ -286,6 +288,7 @@ void MainWindow::finishedFriendsTimeline()
 			query.bindValue(":url", s.url());
 			query.bindValue(":followersCount", s.folllowersCount());
             query.bindValue(":mention", 0); //not a mention
+            query.bindValue(":isRead", 0); //not readed
 			
 			query.exec();
 		}
@@ -331,7 +334,8 @@ void MainWindow::finishedMentions()
 			"profileImageUrl, "
 			"url, "
 			"followersCount, " 
-            "mention) "
+            "mention, "
+            "isRead) "
 			"VALUES "
 			"(:created, "
 			":id, "
@@ -349,7 +353,8 @@ void MainWindow::finishedMentions()
 			":profileImageUrl, "
 			":url, "
 			":followersCount, "
-            ":mention);");
+            ":mention, "
+            ":isRead);");
 
 		//it doesn't have to be backwards, I like it this way
 		QListIterator<QTwitStatus> i(mentions);
@@ -373,6 +378,7 @@ void MainWindow::finishedMentions()
 			query.bindValue(":url", s.url());
 			query.bindValue(":followersCount", s.folllowersCount());
             query.bindValue(":mention", 1); //a mention
+            query.bindValue(":isRead", 0); //not read
 			
 			query.exec();
 		}
@@ -484,6 +490,7 @@ void MainWindow::createDatabase(const QString& databaseName)
 				"url TEXT, "
 				"followersCount INTEGER, "
                 "mention INTEGER, "
+                "isRead INTEGER, "
                 "UNIQUE (id));");
 				
 	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
