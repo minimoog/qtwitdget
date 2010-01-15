@@ -72,6 +72,8 @@ public:
     bool setFavorited(qint64 id, bool fav);
 	/*! sets user id */
 	void setUserid(int id);
+    /*! sets status with id to be top aligned on the scene/viewport */
+    void setAlignTopStatus(qint64 id);
 	void resizeItems(int w);
 	float boundingHeight() const;
 
