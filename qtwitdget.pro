@@ -14,7 +14,9 @@ HEADERS +=  twitstatusedit.h \
 			langchangedialog.h \
 			twittabgroup.h \
 			qtwitscene.h \
+			qtwitsceneunread.h \
 			qtwitview.h \
+			qtwitviewunread.h \
 			groupdialog.h \
 			sceneitems/pixmapbuttonitem.h \
 			sceneitems/gradientrectitem.h \
@@ -51,7 +53,9 @@ SOURCES +=  main.cpp \
 			mainwindow.cpp \
 			langchangedialog.cpp \
 			qtwitscene.cpp \
+			qtwitsceneunread.cpp \
 			qtwitview.cpp \
+			qtwitviewunread.cpp \
 			groupdialog.cpp \
 			sceneitems/pixmapbuttonitem.cpp \
 			sceneitems/gradientrectitem.cpp \

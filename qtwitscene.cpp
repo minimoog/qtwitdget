@@ -364,17 +364,3 @@ bool QTwitScene::setFavorited(qint64 id, bool fav)
     }
     return false;
 }
-
-void QTwitScene::setAlignTopStatus(qint64 id)
-{
-    GroupItems grpItems = m_sceneItems.value(id);
-
-    if (grpItems.gradRectItem) {
-        QPointF itemScenePos = grpItems.gradRectItem->scenePos();
-        QRectF newSceneRect = sceneRect();
-        newSceneRect.setY(itemScenePos.y());
-
-        //set new scene rect
-        setSceneRect(newSceneRect);
-    }
-}

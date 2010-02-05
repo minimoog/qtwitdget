@@ -592,6 +592,10 @@ void MainWindow::createDefaultTwitGroups()
 	m_twitTabGroups.clear();
 
 	//default tabs
+    TwitTabGroup unread;
+    unread.setTabName(tr("Unread"));
+    unread.setQuery(QString(" isRead == 0 "));
+
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
 	allfriends.setQuery(QString(" 1 == 1 "));
@@ -604,6 +608,7 @@ void MainWindow::createDefaultTwitGroups()
     mentions.setTabName(tr("Mentions"));
     mentions.setQuery(QString(" mention == 1"));
 
+    m_twitTabGroups.append(unread);
 	m_twitTabGroups.append(allfriends);
 	m_twitTabGroups.append(myTwits);
     m_twitTabGroups.append(mentions);
