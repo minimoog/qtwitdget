@@ -30,6 +30,9 @@ QTwitView::QTwitView(QWidget *parent)
 
 	QScrollBar *scrollBar = verticalScrollBar();
 	connect(scrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollBarPos(int)));
+
+    //do translation with translating one root item
+    setTransformationAnchor(QGraphicsView::NoAnchor);
 }
 
 void QTwitView::scrollBarPos(int pos)

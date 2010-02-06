@@ -76,6 +76,7 @@ private slots:
 protected:
 	void closeEvent(QCloseEvent *e);
 	void changeEvent(QEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
 	void setupTrayIcon();

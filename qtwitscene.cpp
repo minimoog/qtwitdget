@@ -364,3 +364,19 @@ bool QTwitScene::setFavorited(qint64 id, bool fav)
     }
     return false;
 }
+
+bool QTwitScene::containsStatus(qint64 id)
+{
+    return m_sceneItems.contains(id);
+}
+
+QPointF QTwitScene::statusScenePos(qint64 id)
+{
+    if (m_sceneItems.contains(id)) {
+        GroupItems grpItems = m_sceneItems.value(id);
+
+        return grpItems.gradRectItem->scenePos();
+    }
+
+    return QPointF();
+}

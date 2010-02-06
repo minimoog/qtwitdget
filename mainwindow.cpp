@@ -594,7 +594,9 @@ void MainWindow::createDefaultTwitGroups()
 	//default tabs
     TwitTabGroup unread;
     unread.setTabName(tr("Unread"));
-    unread.setQuery(QString(" isRead == 0 "));
+    //unread.setQuery(QString(" isRead == 0 "));
+    //for testing purposes
+    unread.setQuery(QString(" 1 == 1 "));
 
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
@@ -853,6 +855,35 @@ void MainWindow::readGroupsSettings()
     }
 
     settings.endArray();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_N && ui.tabWidget->currentIndex() == 0) {
+        QSqlQuery query;
+        query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id DESC LIMIT 1");
+
+        if (!query.next())
+            return;
+
+        qint64 id = query.value(0).toLongLong();
+
+        QTwitScene *twitScene = m_twitScenes.at(0);
+
+        if (!twitScene->containsStatus(id))
+            return;
+
+        QPointF pos = twitScene->statusScenePos(id);
+
+        QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
+        QPoint viewPos = twitView->mapFromScene(pos);
+
+        twitView->translate(-viewPos.x(), -viewPos.y());
+
+        return;
+    }
+
+    QMainWindow::keyPressEvent(e);
 }
 
 MainWindow::~MainWindow()
