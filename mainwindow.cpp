@@ -880,10 +880,22 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
         twitView->translate(-viewPos.x(), -viewPos.y());
 
+        //set status read
+        setStatusIdRead(id);
         return;
     }
 
     QMainWindow::keyPressEvent(e);
+}
+
+void MainWindow::setStatusIdRead(qint64 id)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE status SET isRead = 1 WHERE id = :id");
+    query.bindValue(":id", id);
+    query.exec();
+
+    //should return true or false
 }
 
 MainWindow::~MainWindow()
