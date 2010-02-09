@@ -147,6 +147,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 {
     //TODO: remove then move down rest of statuses on the scene
 
+    //move all down
     QMapIterator<qint64, GroupItems> i(m_sceneItems);
     while (i.hasNext()) {
         i.next();
@@ -159,44 +160,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 
     int width = twitView->viewport()->width();
 
-    //prepend new statuses
-    for (int i = 0; i < statuses.size(); ++i) {
-        GroupItems grpItems = createStatusSceneItem(m_sceneItems.count());
-
-        addItem(grpItems.gradRectItem);
-        grpItems.gradRectItem->setPos(0, 101.0f * i);
-        grpItems.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
-        grpItems.nameItem->setPlainText(statuses.at(i).screenName());
-        grpItems.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
-
-        grpItems.replyButtonItem->setId(statuses.at(i).id());
-        grpItems.retweetItem->setId(statuses.at(i).id());
-        grpItems.favoritedItem->setId(statuses.at(i).id());
-
-        connect(grpItems.retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetClicked(qint64)));
-        connect(grpItems.favoritedItem, SIGNAL(clicked(qint64)), this, SLOT(favoritedClicked(qint64)));
-
-        if (statuses.at(i).userId() == m_userid) {
-            grpItems.replyButtonItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
-            grpItems.replyButtonItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
-            grpItems.replyButtonItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
-            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(deleteClicked(qint64)));
-        } else {
-            connect(grpItems.replyButtonItem, SIGNAL(clicked(qint64)), this, SLOT(replyClicked(qint64)));
-        }
-
-        if (statuses.at(i).favorited()) {
-            grpItems.favoritedItem->setDefaultPixmap(QPixmap(":/images/button_unfavorited.png"));
-            grpItems.favoritedItem->setHoverPixmap(QPixmap(":/images/button_unfavorited_hover.png"));
-            grpItems.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
-        }
-
-        grpItems.statusText = statuses.at(i).text();
-        grpItems.screenName = statuses.at(i).screenName();
-
-        resizeItem(width, grpItems);
-        m_sceneItems.insert(statuses.at(i).id(), grpItems);
-    }
+    addToScene(statuses, 0, width);
 
     //remove surplus statutes
     if (m_sceneItems.count() > 50 * m_numPages) {    //50 should be global setting
@@ -220,24 +184,13 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
     return m_sceneItems.begin().key();
 }
 
-qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
+void QTwitScene::addToScene(const QList<QTwitStatus> &statuses, qreal ypos, int width)
 {
-    float appendPos = 101.0f * m_sceneItems.count();
-
-    //increase page number
-    m_numPages += 1;
-    
-    //we need viewport width
-    QList<QGraphicsView*> graphicsViews = views();
-    QGraphicsView* twitView = graphicsViews.at(0);
-    int width = twitView->viewport()->width();
-
-    //append new statuses
     for (int i = 0; i < statuses.size(); ++i) {
         GroupItems grpItems = createStatusSceneItem(m_sceneItems.count());
 
         addItem(grpItems.gradRectItem);
-        grpItems.gradRectItem->setPos(0, appendPos + 101.0f * i);
+        grpItems.gradRectItem->setPos(0, ypos + 101.0f * i);
         grpItems.avatarItem->setPixmapUrl(QUrl(statuses.at(i).profileImageUrl()));
         grpItems.nameItem->setPlainText(statuses.at(i).screenName());
         grpItems.textItem->setHtml(replaceLinksWithHref(statuses.at(i).text()));
@@ -270,6 +223,21 @@ qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
         resizeItem(width, grpItems);
         m_sceneItems.insert(statuses.at(i).id(), grpItems);
     }
+}
+
+qint64 QTwitScene::appendStatuses(const QList<QTwitStatus>& statuses)
+{
+    float appendPos = 101.0f * m_sceneItems.count();
+
+    //increase page number
+    m_numPages += 1;
+    
+    //we need viewport width
+    QList<QGraphicsView*> graphicsViews = views();
+    QGraphicsView* twitView = graphicsViews.at(0);
+    int width = twitView->viewport()->width();
+
+    addToScene(statuses, appendPos, width);
 
     setSceneRect(0, 0, width, boundingHeight()); 
 

@@ -88,6 +88,10 @@ signals:
 	void requestFavorited(qint64 statusId);
     void requestDelete(qint64 statusId);
 
+protected:
+    /*! adds statuses to Scene, at y position with width width */
+    void addToScene(const QList<QTwitStatus>& statuses, qreal ypos, int width);
+
 private slots:
 	void replyClicked(qint64 i);
 	void retweetClicked(qint64 i);
@@ -97,7 +101,7 @@ private slots:
 private:
 	GroupItems createStatusSceneItem(int count);
     void resizeItem(int w, GroupItems& sceneItems);
-    /*! adds new statuses (prepend) */
+    /*! adds new statuses / removes oldest statuses (50 per page) */
     /*! \return oldest status id on the scene */
     qint64 addStatuses(const QList<QTwitStatus>& statuses);
     /*! appends statuses */
