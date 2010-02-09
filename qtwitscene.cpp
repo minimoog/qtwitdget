@@ -60,7 +60,7 @@ static QString replaceLinksWithHref(const QString &text)
 }
 
 QTwitScene::QTwitScene(QObject *parent)
-	:	QGraphicsScene(parent), m_netManager(0), m_numPages(1)
+    :	QGraphicsScene(parent), m_netManager(0), m_numPages(1), m_lastStatus(0), m_firstStatus(0)
 {
 }
 
@@ -145,6 +145,8 @@ GroupItems QTwitScene::createStatusSceneItem(int count)
 
 qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
 {
+    //TODO: remove then move down rest of statuses on the scene
+
     QMapIterator<qint64, GroupItems> i(m_sceneItems);
     while (i.hasNext()) {
         i.next();
@@ -379,4 +381,74 @@ QPointF QTwitScene::statusScenePos(qint64 id)
     }
 
     return QPointF();
+}
+
+void QTwitScene::updateStatuses()
+{
+    QSqlQuery query;
+    QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+                         "FROM status "
+                         "WHERE id > %1 AND %2 "
+                         "ORDER BY id DESC "
+                         "LIMIT 50").arg(m_lastStatus).arg(m_additionalQuery);
+    query.exec(qr);
+
+    QList<QTwitStatus> statuses;
+
+    while (query.next()) {
+        QTwitStatus st;
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setFavorited(query.value(2).toBool());
+        st.setUserId(query.value(3).toInt());
+        st.setScreenName(query.value(4).toString());
+        st.setProfileImageUrl(query.value(5).toString());
+        statuses << st;
+    }
+
+    if (statuses.count()) {
+        m_firstStatus = addStatuses(statuses);
+
+        query.first();
+
+        m_lastStatus = query.value(0).toLongLong();
+    }
+}
+
+QString QTwitScene::additionalQuery() const
+{
+    return m_additionalQuery;
+}
+
+void QTwitScene::setAdditionalQuery(const QString &query)
+{
+    m_additionalQuery = query;
+}
+
+void QTwitScene::nextStatuses()
+{
+    QSqlQuery query;
+    QString sq = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+        "FROM status "
+        "WHERE id < %1 AND %2 "
+        "ORDER BY id DESC "
+        "LIMIT 50").arg(m_firstStatus).arg(m_additionalQuery);
+
+    query.exec(sq);
+
+    QList<QTwitStatus> statuses;
+
+    while (query.next()) {
+        QTwitStatus st;
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setFavorited(query.value(2).toBool());
+        st.setUserId(query.value(3).toInt());
+        st.setScreenName(query.value(4).toString());
+        st.setProfileImageUrl(query.value(5).toString());
+        statuses << st;
+    }
+
+    if (statuses.count())
+        m_firstStatus = appendStatuses(statuses);
 }

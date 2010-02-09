@@ -26,6 +26,7 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsLineItem>
+#include <QtSql>
 #include "sceneitems/pixmapbuttonitem.h"
 #include "sceneitems/gradientrectitem.h"
 #include "sceneitems/netpixmapitem.h"
@@ -60,9 +61,6 @@ public:
 	QTwitScene(QObject *parent = 0);
 	/*! Sets network access manager */
     void setNetworkAccessManager(QNetworkAccessManager * netManager);
-    /*! adds new statuses (prepend) */
-    /*! \return oldest status id on the scene */
-    qint64 addStatuses(const QList<QTwitStatus>& statuses);
     /*! appends statuses */
     /*! \return oldest status id on the scene */
     qint64 appendStatuses(const QList<QTwitStatus>& statuses);
@@ -76,8 +74,16 @@ public:
     bool containsStatus(qint64 id);
     /*! returns scene pos with status id (gradRectItem pos) */
     QPointF statusScenePos(qint64 id);
+    /*! resize items to width w */
 	void resizeItems(int w);
+    /*! returns bounding height */
 	float boundingHeight() const;
+    /*! refreshes statuses */
+    virtual void updateStatuses();
+    /*! adds next statuses */
+    virtual void nextStatuses();
+    QString additionalQuery() const;
+    void setAdditionalQuery(const QString& query);
 
 signals:
 	void requestReply(qint64 statusId, const QString& screenName);
@@ -94,9 +100,15 @@ private slots:
 private:
 	GroupItems createStatusSceneItem(int count);
     void resizeItem(int w, GroupItems& sceneItems);
+    /*! adds new statuses (prepend) */
+    /*! \return oldest status id on the scene */
+    qint64 addStatuses(const QList<QTwitStatus>& statuses);
 
 	int m_userid; //user id
     int m_numPages; //number of pages
+    qint64 m_lastStatus; //newest status id(top of)
+    qint64 m_firstStatus; //latest status id (bottom)
+    QString m_additionalQuery;
 
     QNetworkAccessManager * m_netManager;
 
