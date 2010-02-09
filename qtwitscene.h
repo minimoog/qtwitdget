@@ -61,9 +61,6 @@ public:
 	QTwitScene(QObject *parent = 0);
 	/*! Sets network access manager */
     void setNetworkAccessManager(QNetworkAccessManager * netManager);
-    /*! appends statuses */
-    /*! \return oldest status id on the scene */
-    qint64 appendStatuses(const QList<QTwitStatus>& statuses);
     /*! removes status from scene */
     bool removeStatus(qint64 id);
     /*! sets/unsets favorited/unfavorited for status with id on the scene */
@@ -103,6 +100,9 @@ private:
     /*! adds new statuses (prepend) */
     /*! \return oldest status id on the scene */
     qint64 addStatuses(const QList<QTwitStatus>& statuses);
+    /*! appends statuses */
+    /*! \return oldest status id on the scene */
+    qint64 appendStatuses(const QList<QTwitStatus>& statuses);
 
 	int m_userid; //user id
     int m_numPages; //number of pages
