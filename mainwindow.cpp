@@ -27,6 +27,7 @@
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
 #include "qtwitscene.h"
+#include "qtwitsceneunread.h"
 #include "shortenedurl.h"
 #include "qtwitview.h"
 #include "groupdialog.h"
@@ -566,18 +567,22 @@ void MainWindow::createDefaultTwitGroups()
     //unread.setQuery(QString(" isRead == 0 "));
     //for testing purposes
     unread.setQuery(QString(" 1 == 1 "));
+    unread.setType(TwitTabGroup::Unread);
 
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
 	allfriends.setQuery(QString(" 1 == 1 "));
+    allfriends.setType(TwitTabGroup::Normal);
 
 	TwitTabGroup myTwits;
 	myTwits.setTabName(tr("My twits"));
 	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
+    myTwits.setType(TwitTabGroup::Normal);
 
     TwitTabGroup mentions;
     mentions.setTabName(tr("Mentions"));
     mentions.setQuery(QString(" mention == 1"));
+    mentions.setType(TwitTabGroup::Normal);
 
     m_twitTabGroups.append(unread);
 	m_twitTabGroups.append(allfriends);
@@ -619,24 +624,45 @@ void MainWindow::createTabs()
 
 void MainWindow::addGroupTab(const TwitTabGroup& group)
 {
-	QTwitScene *statusScene = new QTwitScene(this);
-    statusScene->setNetworkAccessManager(m_netManager);
-    statusScene->setUserid(m_userId);
-    statusScene->setAdditionalQuery(group.query());
-	m_twitScenes << statusScene;
+    if (group.type() == TwitTabGroup::Normal) {
+        QTwitScene *statusScene = new QTwitScene(this);
+        statusScene->setNetworkAccessManager(m_netManager);
+        statusScene->setUserid(m_userId);
+        statusScene->setAdditionalQuery(group.query());
+        m_twitScenes << statusScene;
 
-	connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)), 
-		ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
-	connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
-    connect(statusScene, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
-	connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
-    connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
+        connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)),
+            ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
+        connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
+        connect(statusScene, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
+        connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
+        connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
 
-	QTwitView *statusView = new QTwitView;
-	statusView->setScene(statusScene);
-    statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-	connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
-	ui.tabWidget->addTab(statusView, group.tabName());
+        QTwitView *statusView = new QTwitView;
+        statusView->setScene(statusScene);
+        statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+        connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
+        ui.tabWidget->addTab(statusView, group.tabName());
+    } else if (group.type() == TwitTabGroup::Unread) {
+        QTwitSceneUnread *statusScene = new QTwitSceneUnread(this);
+        statusScene->setNetworkAccessManager(m_netManager);
+        statusScene->setUserid(m_userId);
+        statusScene->setAdditionalQuery(group.query());
+        m_twitScenes << statusScene;
+
+        connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)),
+            ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
+        connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
+        connect(statusScene, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
+        connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
+        connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
+
+        QTwitView *statusView = new QTwitView;
+        statusView->setScene(statusScene);
+        statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+        connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
+        ui.tabWidget->addTab(statusView, group.tabName());
+    }
 }
 
 void MainWindow::nextStatuses()
