@@ -28,6 +28,10 @@ class QTwitSceneUnread : public QTwitScene
     Q_OBJECT
 public:
     QTwitSceneUnread(QObject * parent);
+    /*! refreshes statuses */
+    virtual void updateStatuses();
+    /*! doesnt' do nothing */
+    virtual void nextStatuses();
 };
 
 #endif //QTWITSCENEUNREAD_H

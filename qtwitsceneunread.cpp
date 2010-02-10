@@ -28,8 +28,50 @@
  */
 
 #include "qtwitsceneunread.h"
+#include "qtwit/qtwitstatus.h"
 
 QTwitSceneUnread::QTwitSceneUnread(QObject * parent)
 :   QTwitScene(parent)
 {
+}
+
+void QTwitSceneUnread::nextStatuses()
+{
+    //doesn't do anything
+}
+
+
+void QTwitSceneUnread::updateStatuses()
+{
+    QSqlQuery query;
+    //bigger but reasonable limit
+    QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+                         "FROM status "
+                         "WHERE id > %1 AND %2 "
+                         "ORDER BY id DESC "
+                         "LIMIT 200").arg(lastStatusId()).arg(additionalQuery());
+    query.exec(qr);
+
+    QList<QTwitStatus> statuses;
+
+    while (query.next()) {
+        QTwitStatus st;
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setFavorited(query.value(2).toBool());
+        st.setUserId(query.value(3).toInt());
+        st.setScreenName(query.value(4).toString());
+        st.setProfileImageUrl(query.value(5).toString());
+        statuses << st;
+    }
+
+    if (statuses.count()) {
+        qint64 firstStatus = addStatuses(statuses, false);
+        setFirstStatusId(firstStatus);
+
+        query.first();
+
+        qint64 lastStatus = query.value(0).toLongLong();
+        setLastStatusId(lastStatus);
+    }
 }
