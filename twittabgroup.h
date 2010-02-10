@@ -28,8 +28,14 @@
 class TwitTabGroup
 {
 public:
+
+    enum Type {
+        Normal,
+        Unread
+    };
+
 	/* Constructor */
-	TwitTabGroup() : m_lastStatusId(0), m_firstStatusId(0) {}
+    TwitTabGroup() {}
 
 	/* Sets/gets additional query for tab group */
 	void setQuery(const QString& query) { m_queryString = query; }
@@ -39,22 +45,13 @@ public:
 	void setTabName(const QString& tabName) { m_tabName = tabName; }
 	QString tabName() const { return m_tabName; }
 
-    /* Sets/gets Last (most newest) status id in this group */
-    void setLastStatusId(qint64 id) { m_lastStatusId = id; }
-    qint64 lastStatusId() const { return m_lastStatusId; }
-
-    /* Sets/gets first (oldest) status id in this group to be shown */
-    /* Statuses between lastStatusId and firstStatusId are shown on the scene */
-    /* When new status arrives lastStatusId is updated accordingly */
-    /* When users wants to see more oldest statutes firstStatusId is updated accordingly */
-    void setFirstStatusId(qint64 id) { m_firstStatusId = id; }
-    qint64 firstStatusId() const { return m_firstStatusId; }
+    void setType(Type type) { m_type = type; }
+    Type type() const { return m_type; }
 
 private:
-    qint64 m_lastStatusId;
-    qint64 m_firstStatusId;
 	QString m_queryString;
 	QString m_tabName;
+    Type m_type;
 };
  
 #endif //TWITTABGROUP_H
