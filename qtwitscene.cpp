@@ -143,7 +143,7 @@ GroupItems QTwitScene::createStatusSceneItem(int count)
     return scit;
 }
 
-qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
+qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses, bool paging)
 {
     //TODO: remove then move down rest of statuses on the scene
 
@@ -163,7 +163,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses)
     addToScene(statuses, 0, width);
 
     //remove surplus statutes
-    if (m_sceneItems.count() > 50 * m_numPages) {    //50 should be global setting
+    if (paging && m_sceneItems.count() > 50 * m_numPages) {    //50 should be global setting
         int nRemove = m_sceneItems.count() - 50 * m_numPages;
 
         QMutableMapIterator<qint64, GroupItems> i(m_sceneItems);
@@ -419,4 +419,24 @@ void QTwitScene::nextStatuses()
 
     if (statuses.count())
         m_firstStatus = appendStatuses(statuses);
+}
+
+qint64 QTwitScene::lastStatusId() const
+{
+    return m_lastStatus;
+}
+
+void QTwitScene::setLastStatusId(qint64 id)
+{
+    m_lastStatus = id;
+}
+
+qint64 QTwitScene::firstStatusId() const
+{
+    return m_firstStatus;
+}
+
+void QTwitScene::setFirstStatusId(qint64 id)
+{
+    m_firstStatus = id;
 }

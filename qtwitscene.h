@@ -81,6 +81,10 @@ public:
     virtual void nextStatuses();
     QString additionalQuery() const;
     void setAdditionalQuery(const QString& query);
+    qint64 lastStatusId() const;
+    void setLastStatusId(qint64 id);
+    qint64 firstStatusId() const;
+    void setFirstStatusId(qint64 id);
 
 signals:
 	void requestReply(qint64 statusId, const QString& screenName);
@@ -91,6 +95,14 @@ signals:
 protected:
     /*! adds statuses to Scene, at y position with width width */
     void addToScene(const QList<QTwitStatus>& statuses, qreal ypos, int width);
+    /*! adds new statuses */
+    /*! if paging is true removes old statuses (50 per page) */
+    /*! if paging is false doesn't remove old statuses */
+    /*! \return oldest status id on the scene */
+    qint64 addStatuses(const QList<QTwitStatus>& statuses, bool paging = true);
+    /*! appends statuses */
+    /*! \return oldest status id on the scene */
+    qint64 appendStatuses(const QList<QTwitStatus>& statuses);
 
 private slots:
 	void replyClicked(qint64 i);
@@ -101,12 +113,6 @@ private slots:
 private:
 	GroupItems createStatusSceneItem(int count);
     void resizeItem(int w, GroupItems& sceneItems);
-    /*! adds new statuses / removes oldest statuses (50 per page) */
-    /*! \return oldest status id on the scene */
-    qint64 addStatuses(const QList<QTwitStatus>& statuses);
-    /*! appends statuses */
-    /*! \return oldest status id on the scene */
-    qint64 appendStatuses(const QList<QTwitStatus>& statuses);
 
 	int m_userid; //user id
     int m_numPages; //number of pages
