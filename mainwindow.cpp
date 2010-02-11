@@ -43,7 +43,8 @@ MainWindow::MainWindow()
     m_twitRetweet(new QTwitRetweet(this)),
 	m_timer(new QTimer(this)),
     m_lastStatusId(0),
-    m_lastMentionId(0)
+    m_lastMentionId(0),
+    m_lastMarkedReadStatus(0)
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_homeTimeline->setNetworkAccessManager(m_netManager);
@@ -564,9 +565,7 @@ void MainWindow::createDefaultTwitGroups()
 	//default tabs
     TwitTabGroup unread;
     unread.setTabName(tr("Unread"));
-    //unread.setQuery(QString(" isRead == 0 "));
-    //for testing purposes
-    unread.setQuery(QString(" 1 == 1 "));
+    unread.setQuery(QString(" isRead == 0 "));
     unread.setType(TwitTabGroup::Unread);
 
 	TwitTabGroup allfriends;
@@ -827,9 +826,9 @@ void MainWindow::readGroupsSettings()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_N && ui.tabWidget->currentIndex() == 0) {
+    if (e->nativeVirtualKey() == 'N' && ui.tabWidget->currentIndex() == 0) {
         QSqlQuery query;
-        query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id DESC LIMIT 1");
+        query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
 
         if (!query.next())
             return;
@@ -850,6 +849,12 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
         //set status read
         setStatusIdRead(id);
+
+        //delete previous read status
+        if (m_lastMarkedReadStatus)
+            twitScene->removeStatus(id);
+
+        m_lastMarkedReadStatus = id;
         return;
     }
 

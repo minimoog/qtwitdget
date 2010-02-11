@@ -111,6 +111,7 @@ private:
 	QList<TwitTabGroup> m_twitTabGroups;
 	qint64 m_lastStatusId;
     qint64 m_lastMentionId;
+    qint64 m_lastMarkedReadStatus;
 	QList<QTwitScene*> m_twitScenes;
 	int m_userId;
 
