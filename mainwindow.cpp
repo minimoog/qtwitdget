@@ -856,6 +856,12 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             twitScene->removeStatus(id);
 
         m_lastMarkedReadStatus = id;
+
+        //on all tabs change gradient to read
+        for (int i = 0; i < m_twitScenes.count(); ++i) {
+            m_twitScenes.at(i)->markRead(id);
+        }
+
         return;
     }
 
