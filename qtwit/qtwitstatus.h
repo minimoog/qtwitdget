@@ -122,6 +122,9 @@ public:
     void setVerified(bool verify) { d->verified = verify; }
     bool isVerified() const { return d->verified; }
 
+    void setRead(bool read) { d->isRead = read; }
+    bool isRead() const { return d->isRead; }
+
     void setRetweetStatus(const QTwitRtStatus& rtStatus)
     {
         if (!d->rtStatus) 

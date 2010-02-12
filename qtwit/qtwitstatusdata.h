@@ -30,7 +30,7 @@ public:
 
 	QTwitStatusData() : id(0), replyToStatusId(0), replyToUserId(0), favorited(false), userId(0), followersCount(0), 
         isRetweet(false), friendsCount(0), favouritesCount(0), utcOffset(0), statusesCount(0), geoEnabled(false),
-        verified(false), rtStatus(0)
+        verified(false), isRead(false), rtStatus(0)
 	{	text.clear(); 
 		source.clear();
 		replyToScreenName.clear();
@@ -68,7 +68,8 @@ public:
         timezone(other.timezone),
         statusesCount(other.statusesCount),
         geoEnabled(other.geoEnabled),
-        verified(other.verified)
+        verified(other.verified),
+        isRead(other.isRead)
     {
         if (other.rtStatus) {
             rtStatus = new QTwitRtStatus(*other.rtStatus);
@@ -107,6 +108,7 @@ public:
     int statusesCount;
     bool geoEnabled;
     bool verified;
+    bool isRead;
     QTwitRtStatus *rtStatus;
 };
 
