@@ -205,6 +205,13 @@ void QTwitScene::addToScene(const QList<QTwitStatus> &statuses, qreal ypos, int 
             grpItems.favoritedItem->setClickedPixmap(QPixmap(":/images/button_unfavorited_click.png"));
         }
 
+        //change gradient depending of read/unread status
+        if (statuses.at(i).isRead()) {
+            grpItems.gradRectItem->setGradient(GradientRectItem::Blue);
+        } else {
+            grpItems.gradRectItem->setGradient(GradientRectItem::TestBlue);
+        }
+
         grpItems.statusText = statuses.at(i).text();
         grpItems.screenName = statuses.at(i).screenName();
 
@@ -342,7 +349,7 @@ QPointF QTwitScene::statusScenePos(qint64 id)
 void QTwitScene::updateStatuses()
 {
     QSqlQuery query;
-    QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+    QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl, isRead "
                          "FROM status "
                          "WHERE id > %1 AND %2 "
                          "ORDER BY id DESC "
@@ -359,6 +366,7 @@ void QTwitScene::updateStatuses()
         st.setUserId(query.value(3).toInt());
         st.setScreenName(query.value(4).toString());
         st.setProfileImageUrl(query.value(5).toString());
+        st.setRead(query.value(6).toInt());
         statuses << st;
     }
 
@@ -384,7 +392,7 @@ void QTwitScene::setAdditionalQuery(const QString &query)
 void QTwitScene::nextStatuses()
 {
     QSqlQuery query;
-    QString sq = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+    QString sq = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl, isRead "
         "FROM status "
         "WHERE id < %1 AND %2 "
         "ORDER BY id DESC "
@@ -402,6 +410,7 @@ void QTwitScene::nextStatuses()
         st.setUserId(query.value(3).toInt());
         st.setScreenName(query.value(4).toString());
         st.setProfileImageUrl(query.value(5).toString());
+        st.setRead(query.value(6).toInt());
         statuses << st;
     }
 
