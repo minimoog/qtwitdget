@@ -78,19 +78,7 @@ GroupItems QTwitScene::createStatusSceneItem(int count)
 {
 	GroupItems scit;
 
-	GradientRectItem *rectItem;
-
-	switch (count % 3) {
-		case 0:
-			rectItem = new GradientRectItem(200, GradientRectItem::Grey);
-			break;
-		case 1:
-			rectItem = new GradientRectItem(200, GradientRectItem::Pink);
-			break;
-		case 2:
-			rectItem = new GradientRectItem(200, GradientRectItem::Blue);
-			break;
-	}
+    GradientRectItem *rectItem = new GradientRectItem(200, GradientRectItem::Blue);
 
 	scit.gradRectItem = rectItem;
 
