@@ -87,6 +87,7 @@ void QTwitHomeTimeline::reply()
 void QTwitHomeTimeline::error()
 {
 	qDebug() << "Home Timeline Error";
+    emit networkError(QString());
 }
 
 QList<QTwitStatus> QTwitHomeTimeline::getStatuses() const

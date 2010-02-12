@@ -44,6 +44,7 @@ public:
 signals:
 	/*! emited when finished downloading and processing */
 	void finished();
+    void networkError(const QString &errorString);
 
 private:
 	QNetworkAccessManager *m_netManager;
