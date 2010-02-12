@@ -29,7 +29,8 @@ public:
     enum Gradient {
         Grey,
         Pink,
-        Blue
+        Blue,
+        TestBlue
     };
 
 	GradientRectItem(QGraphicsItem * parent = 0);

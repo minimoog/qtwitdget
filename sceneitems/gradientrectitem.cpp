@@ -68,6 +68,9 @@ void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
             linearGradient.setColorAt(0, QColor(220, 238, 243, 127));
             linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
             break;
+    case TestBlue:
+            linearGradient.setColorAt(0, QColor(0, 190, 243, 127));
+            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
     }
 
     setBrush(linearGradient);
