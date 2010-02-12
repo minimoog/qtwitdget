@@ -74,6 +74,9 @@ MainWindow::MainWindow()
 	//connect signals
 	connect(ui.updateButton, SIGNAL(clicked()), SLOT(updateButtonClicked()));
 	connect(m_homeTimeline, SIGNAL(finishedTimeline()), SLOT(finishedFriendsTimeline()));
+    connect(m_homeTimeline, SIGNAL(finishedTimeline()), m_timer, SLOT(start()));
+    //on error just start again the timer
+    connect(m_homeTimeline, SIGNAL(networkError(QString)), m_timer, SLOT(start()));
     connect(m_mentions, SIGNAL(finishedTimeline()), SLOT(finishedMentions()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
@@ -93,6 +96,7 @@ MainWindow::MainWindow()
     
     //timer is single shot, avoid conflict with HomeTimeline
     m_timer->setSingleShot(true);
+    m_timer->setInterval(60000);
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
@@ -301,9 +305,6 @@ void MainWindow::finishedFriendsTimeline()
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
 	}
-
-    //start 60 seconds timer
-    m_timer->start(60000);
 }
 
 void MainWindow::finishedMentions()
