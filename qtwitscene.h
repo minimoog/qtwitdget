@@ -79,6 +79,8 @@ public:
     virtual void updateStatuses();
     /*! adds next statuses */
     virtual void nextStatuses();
+    /*! marks (different gradient) status with id read */
+    void markRead(qint64 id);
     QString additionalQuery() const;
     void setAdditionalQuery(const QString& query);
     qint64 lastStatusId() const;
