@@ -520,6 +520,8 @@ void MainWindow::updateTab(int i)
 
     QTwitScene *twitScene = m_twitScenes.at(i);
     twitScene->updateStatuses();
+
+    setTabTextUnreadStatuses(i);
 }
 
 void MainWindow::closeTab(int i)
@@ -841,6 +843,10 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         if (!twitScene->containsStatus(id))
             return;
 
+        //delete previous read status
+        if (m_lastMarkedReadStatus)
+            twitScene->removeStatus(id);
+
         QPointF pos = twitScene->statusScenePos(id);
 
         QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
@@ -851,15 +857,12 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         //set status read
         setStatusIdRead(id);
 
-        //delete previous read status
-        if (m_lastMarkedReadStatus)
-            twitScene->removeStatus(id);
-
         m_lastMarkedReadStatus = id;
 
-        //on all tabs change gradient to read
+        //on all tabs change read status gradient to read and update tabs names
         for (int i = 0; i < m_twitScenes.count(); ++i) {
             m_twitScenes.at(i)->markRead(id);
+            setTabTextUnreadStatuses(i);
         }
 
         return;
@@ -876,6 +879,28 @@ void MainWindow::setStatusIdRead(qint64 id)
     query.exec();
 
     //should return true or false
+}
+
+void MainWindow::setTabTextUnreadStatuses(int index)
+{
+    TwitTabGroup group = m_twitTabGroups.at(index);
+    int numUnread = 0;
+
+    //TODO: move to QTwitScene
+    QSqlQuery query;
+    QString qr = QString("SELECT COUNT(id) FROM status WHERE isRead = 0 AND %1").arg(group.query());
+    query.exec(qr);
+
+    if (query.next())
+        numUnread = query.value(0).toInt();
+
+    if (numUnread) {
+        QString currentTabText = group.tabName();
+        QString numText = QString(" (%1)").arg(numUnread);
+        currentTabText += numText;
+
+        ui.tabWidget->setTabText(index, currentTabText);
+    }
 }
 
 MainWindow::~MainWindow()

@@ -87,6 +87,7 @@ private:
 	void createTabs();
     void updateTab(int i);
 	void addGroupTab(const TwitTabGroup& group);
+    void setTabTextUnreadStatuses(int indexTab);
 	bool isDatabaseEmpty();
     void readSettings();
     void writeSettings();
