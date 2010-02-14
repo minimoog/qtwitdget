@@ -845,7 +845,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
         //delete previous read status
         if (m_lastMarkedReadStatus)
-            twitScene->removeStatus(id);
+            twitScene->removeStatus(m_lastMarkedReadStatus);
 
         QPointF pos = twitScene->statusScenePos(id);
 
