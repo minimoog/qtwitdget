@@ -900,6 +900,8 @@ void MainWindow::setTabTextUnreadStatuses(int index)
         currentTabText += numText;
 
         ui.tabWidget->setTabText(index, currentTabText);
+    } else {
+        ui.tabWidget->setTabText(index, group.tabName());
     }
 }
 
