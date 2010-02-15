@@ -109,6 +109,7 @@ GroupItems QTwitScene::createStatusSceneItem(int count)
 	replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
 	replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
     replyItem->setPos(10, 80);
+    replyItem->setToolTip(tr("Reply to this status"));
 	scit.replyButtonItem = replyItem;
 
     PixmapButtonItem *retweetItem = new PixmapButtonItem(rectItem);
@@ -116,12 +117,14 @@ GroupItems QTwitScene::createStatusSceneItem(int count)
 	retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
 	retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
     retweetItem->setPos(43, 80);
+    retweetItem->setToolTip(tr("Retweet this status"));
     scit.retweetItem = retweetItem;
 
     PixmapButtonItem *favoritedItem = new PixmapButtonItem(rectItem);
 	favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
 	favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
 	favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+    favoritedItem->setToolTip(tr("Favorite this status"));
 	scit.favoritedItem = favoritedItem;
 
     QGraphicsLineItem *lineItem = new QGraphicsLineItem(rectItem);

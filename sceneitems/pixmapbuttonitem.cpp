@@ -27,7 +27,6 @@ PixmapButtonItem::PixmapButtonItem(QGraphicsItem *parent)
 {
 	setAcceptHoverEvents(true);
 	setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
-	setToolTip(tr("PixmapButtonItem"));
 }
 
 void PixmapButtonItem::setHoverPixmap(const QPixmap &pixmap)
