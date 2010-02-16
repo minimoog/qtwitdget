@@ -30,6 +30,8 @@
 #include "qtwitsceneunread.h"
 #include "qtwit/qtwitstatus.h"
 
+const int maxStatuses = 200;
+
 QTwitSceneUnread::QTwitSceneUnread(QObject * parent)
 :   QTwitScene(parent)
 {
@@ -43,18 +45,54 @@ void QTwitSceneUnread::nextStatuses()
 
 void QTwitSceneUnread::updateStatuses()
 {
+    if ( numStatuses() < maxStatuses) {
+        QSqlQuery query;
+        //bigger but reasonable limit
+        QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+                             "FROM status "
+                             "WHERE id > %1 AND %2 "
+                             "ORDER BY id ASC "
+                             "LIMIT %3").arg(lastStatusId()).arg(additionalQuery()).arg(maxStatuses - numStatuses());
+        query.exec(qr);
+
+        QList<QTwitStatus> statuses;
+
+        while (query.next()) {
+            QTwitStatus st;
+            st.setId(query.value(0).toLongLong());
+            st.setText(query.value(1).toString());
+            st.setFavorited(query.value(2).toBool());
+            st.setUserId(query.value(3).toInt());
+            st.setScreenName(query.value(4).toString());
+            st.setProfileImageUrl(query.value(5).toString());
+            statuses.prepend(st);
+        }
+
+        if (statuses.count()) {
+            qint64 firstStatus = addStatuses(statuses, false);
+            setFirstStatusId(firstStatus);
+
+            query.last();
+
+            qint64 lastStatus = query.value(0).toLongLong();
+            setLastStatusId(lastStatus);
+        }
+    }
+}
+
+void QTwitSceneUnread::addNextUnreadStatus()
+{
     QSqlQuery query;
-    //bigger but reasonable limit
     QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
                          "FROM status "
                          "WHERE id > %1 AND %2 "
-                         "ORDER BY id DESC "
-                         "LIMIT 200").arg(lastStatusId()).arg(additionalQuery());
+                         "ORDER BY id ASC "
+                         "LIMIT 1").arg(lastStatusId()).arg(additionalQuery());
     query.exec(qr);
 
     QList<QTwitStatus> statuses;
 
-    while (query.next()) {
+    if (query.next()) {
         QTwitStatus st;
         st.setId(query.value(0).toLongLong());
         st.setText(query.value(1).toString());
@@ -63,13 +101,9 @@ void QTwitSceneUnread::updateStatuses()
         st.setScreenName(query.value(4).toString());
         st.setProfileImageUrl(query.value(5).toString());
         statuses << st;
-    }
 
-    if (statuses.count()) {
         qint64 firstStatus = addStatuses(statuses, false);
         setFirstStatusId(firstStatus);
-
-        query.first();
 
         qint64 lastStatus = query.value(0).toLongLong();
         setLastStatusId(lastStatus);

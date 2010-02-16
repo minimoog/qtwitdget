@@ -448,3 +448,8 @@ void QTwitScene::markRead(qint64 id)
         grpItem.gradRectItem->setGradient(GradientRectItem::Blue);
     }
 }
+
+int QTwitScene::numStatuses() const
+{
+    return m_sceneItems.count();
+}

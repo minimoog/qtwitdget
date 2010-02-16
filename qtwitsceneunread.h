@@ -30,6 +30,7 @@ public:
     QTwitSceneUnread(QObject * parent);
     /*! refreshes statuses */
     virtual void updateStatuses();
+    void addNextUnreadStatus();
     /*! doesnt' do nothing */
     virtual void nextStatuses();
 };

@@ -87,14 +87,6 @@ public:
     void setLastStatusId(qint64 id);
     qint64 firstStatusId() const;
     void setFirstStatusId(qint64 id);
-
-signals:
-	void requestReply(qint64 statusId, const QString& screenName);
-	void requestRetweet(qint64 statusid);
-	void requestFavorited(qint64 statusId);
-    void requestDelete(qint64 statusId);
-
-protected:
     /*! adds statuses to Scene, at y position with width width */
     void addToScene(const QList<QTwitStatus>& statuses, qreal ypos, int width);
     /*! adds new statuses */
@@ -105,6 +97,16 @@ protected:
     /*! appends statuses */
     /*! \return oldest status id on the scene */
     qint64 appendStatuses(const QList<QTwitStatus>& statuses);
+    /*! returns number of statuses on scene */
+    int numStatuses() const;
+
+signals:
+	void requestReply(qint64 statusId, const QString& screenName);
+	void requestRetweet(qint64 statusid);
+	void requestFavorited(qint64 statusId);
+    void requestDelete(qint64 statusId);
+
+protected:
 
 private slots:
 	void replyClicked(qint64 i);

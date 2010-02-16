@@ -838,7 +838,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
         qint64 id = query.value(0).toLongLong();
 
-        QTwitScene *twitScene = m_twitScenes.at(0);
+        QTwitSceneUnread *twitScene = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
 
         if (!twitScene->containsStatus(id))
             return;
@@ -846,6 +846,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         //delete previous read status
         if (m_lastMarkedReadStatus)
             twitScene->removeStatus(m_lastMarkedReadStatus);
+
+        //add next unread status
+        twitScene->addNextUnreadStatus();
 
         QPointF pos = twitScene->statusScenePos(id);
 
