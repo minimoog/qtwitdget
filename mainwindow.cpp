@@ -829,7 +829,7 @@ void MainWindow::readGroupsSettings()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (e->nativeVirtualKey() == 'N') {
+    if (e->nativeVirtualKey() == 'N' && ui.tabWidget->currentIndex() == 0) {
         QSqlQuery query;
         query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
 
@@ -838,21 +838,18 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 
         qint64 id = query.value(0).toLongLong();
 
-        QTwitSceneUnread *twitSceneUnread = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
-        QTwitScene *twitScene = m_twitScenes.at(ui.tabWidget->currentIndex());
+        QTwitSceneUnread *twitScene = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
 
-        //if (!twitScene->containsStatus(id))
-        //    return;
+        if (!twitScene->containsStatus(id))
+            return;
 
-        //remove previous read status from Unread timeline
+        //delete previous read status
         if (m_lastMarkedReadStatus)
-            twitSceneUnread->removeStatus(m_lastMarkedReadStatus);
+            twitScene->removeStatus(m_lastMarkedReadStatus);
 
-        //add next unread status to Unread timeline
-        twitSceneUnread->addNextUnreadStatus();
+        //add next unread status
+        twitScene->addNextUnreadStatus();
 
-        //move view to unread status if it has it on the scene
-        if (twitScene->containsStatus(id)) {
         QPointF pos = twitScene->statusScenePos(id);
 
         QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
