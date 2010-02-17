@@ -30,7 +30,7 @@
 #include "qtwitsceneunread.h"
 #include "qtwit/qtwitstatus.h"
 
-const int maxStatuses = 200;
+const int maxStatuses = 50;
 
 QTwitSceneUnread::QTwitSceneUnread(QObject * parent)
 :   QTwitScene(parent)

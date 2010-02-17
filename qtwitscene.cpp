@@ -34,6 +34,8 @@
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
 
+const int statusesPerPage = 20;
+
 static QString replaceLinksWithHref(const QString &text)
 {
 	QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive);
@@ -154,8 +156,8 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses, bool paging)
     addToScene(statuses, 0, width);
 
     //remove surplus statutes
-    if (paging && m_sceneItems.count() > 50 * m_numPages) {    //50 should be global setting
-        int nRemove = m_sceneItems.count() - 50 * m_numPages;
+    if (paging && m_sceneItems.count() > statusesPerPage * m_numPages) {
+        int nRemove = m_sceneItems.count() - statusesPerPage * m_numPages;
 
         QMutableMapIterator<qint64, GroupItems> i(m_sceneItems);
         int removedItems = 0;
@@ -356,7 +358,7 @@ void QTwitScene::updateStatuses()
                          "FROM status "
                          "WHERE id > %1 AND %2 "
                          "ORDER BY id DESC "
-                         "LIMIT 50").arg(m_lastStatus).arg(m_additionalQuery);
+                         "LIMIT %3").arg(m_lastStatus).arg(m_additionalQuery).arg(statusesPerPage);
     query.exec(qr);
 
     QList<QTwitStatus> statuses;
@@ -399,7 +401,7 @@ void QTwitScene::nextStatuses()
         "FROM status "
         "WHERE id < %1 AND %2 "
         "ORDER BY id DESC "
-        "LIMIT 50").arg(m_firstStatus).arg(m_additionalQuery);
+        "LIMIT %3").arg(m_firstStatus).arg(m_additionalQuery).arg(statusesPerPage);
 
     query.exec(sq);
 
