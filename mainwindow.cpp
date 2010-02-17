@@ -829,46 +829,91 @@ void MainWindow::readGroupsSettings()
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
-    if (e->nativeVirtualKey() == 'N' && ui.tabWidget->currentIndex() == 0) {
-        QSqlQuery query;
-        query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
+    //!!!!! NEEDS REFACTORING !!!!!!!!!
+    if (e->nativeVirtualKey() == 'N')
+        if (ui.tabWidget->currentIndex() == 0) {
+            QSqlQuery query;
+            query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
 
-        if (!query.next())
+            if (!query.next())
+                return;
+
+            qint64 id = query.value(0).toLongLong();
+
+            QTwitSceneUnread *twitScene = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
+
+            if (!twitScene->containsStatus(id))
+                return;
+
+            //delete previous read status
+            if (m_lastMarkedReadStatus)
+                twitScene->removeStatus(m_lastMarkedReadStatus);
+
+            //add next unread status
+            twitScene->addNextUnreadStatus();
+
+            QPointF pos = twitScene->statusScenePos(id);
+
+            QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
+            QPoint viewPos = twitView->mapFromScene(pos);
+
+            twitView->translate(-viewPos.x(), -viewPos.y());
+
+            //set status read
+            setStatusIdRead(id);
+
+            m_lastMarkedReadStatus = id;
+
+            //on all tabs change read status gradient to read and update tabs names
+            for (int i = 0; i < m_twitScenes.count(); ++i) {
+                m_twitScenes.at(i)->markRead(id);
+                setTabTextUnreadStatuses(i);
+            }
+
             return;
+        } else {
+            QSqlQuery query;
+            QString qs = QString("SELECT id "
+                                 "FROM status "
+                                 "WHERE isRead == 0 AND %1 "
+                                 "ORDER BY id ASC LIMIT 1").arg(m_twitTabGroups.at(ui.tabWidget->currentIndex()).query());
+            query.exec(qs);
 
-        qint64 id = query.value(0).toLongLong();
+            if (!query.next())
+                return;
 
-        QTwitSceneUnread *twitScene = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
+            qint64 id = query.value(0).toLongLong();
 
-        if (!twitScene->containsStatus(id))
-            return;
+            QTwitSceneUnread *twitSceneUnread = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
+            QTwitScene *twitScene = m_twitScenes.at(ui.tabWidget->currentIndex());
 
-        //delete previous read status
-        if (m_lastMarkedReadStatus)
-            twitScene->removeStatus(m_lastMarkedReadStatus);
+            if (!twitScene->containsStatus(id))
+                return;
 
-        //add next unread status
-        twitScene->addNextUnreadStatus();
+            //delete previus read status from Unread timeline
+            if (m_lastMarkedReadStatus)
+                twitSceneUnread->removeStatus(m_lastMarkedReadStatus);
 
-        QPointF pos = twitScene->statusScenePos(id);
+            twitSceneUnread->addNextUnreadStatus();
 
-        QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-        QPoint viewPos = twitView->mapFromScene(pos);
+            //move on selected view to unread status
+            QPointF pos = twitScene->statusScenePos(id);
 
-        twitView->translate(-viewPos.x(), -viewPos.y());
+            QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
+            QPoint viewPos = twitView->mapFromScene(pos);
 
-        //set status read
-        setStatusIdRead(id);
+            twitView->translate(-viewPos.x(), -viewPos.y());
 
-        m_lastMarkedReadStatus = id;
+            //set status read
+            setStatusIdRead(id);
 
-        //on all tabs change read status gradient to read and update tabs names
-        for (int i = 0; i < m_twitScenes.count(); ++i) {
-            m_twitScenes.at(i)->markRead(id);
-            setTabTextUnreadStatuses(i);
+            m_lastMarkedReadStatus = id;
+
+            //on all tabs change read status gradient to read and update tabs names
+            for (int i = 0; i < m_twitScenes.count(); ++i) {
+                m_twitScenes.at(i)->markRead(id);
+                setTabTextUnreadStatuses(i);
         }
-
-        return;
     }
 
     QMainWindow::keyPressEvent(e);
