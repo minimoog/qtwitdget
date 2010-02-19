@@ -19,11 +19,13 @@
  */
 
 #include <QResizeEvent>
+#include <QPropertyAnimation>
 #include "qtwitview.h"
 #include "qtwitscene.h"
 
 QTwitView::QTwitView(QWidget *parent) 
-	: QGraphicsView(parent)
+    : QGraphicsView(parent),
+      m_scrbarAnimation(new QPropertyAnimation(this, "valueVertScrollBar", this))
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -33,6 +35,8 @@ QTwitView::QTwitView(QWidget *parent)
 
     //do translation with translating one root item
     setTransformationAnchor(QGraphicsView::NoAnchor);
+
+    m_scrbarAnimation->setDuration(500);
 }
 
 void QTwitView::scrollBarPos(int pos)
@@ -77,9 +81,12 @@ void QTwitView::moveToPoint(qreal y)
         if (y > maxYMovement) {
             vBarNextPosition = vBarMax;
         } else {
-            vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement;
+            //WHY -18????? FIX THIS !!!!!!!
+            vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement - 18;
         }
 
-        verticalScrollBar()->setValue(vBarNextPosition);
+        //m_scrbarAnimation->setEndValue(vBarNextPosition);
+        //m_scrbarAnimation->start();
+        setValueVertScrollbar(vBarNextPosition);
     }
 }

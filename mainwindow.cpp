@@ -899,9 +899,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             QPointF pos = twitScene->statusScenePos(id);
 
             QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-            QPoint viewPos = twitView->mapFromScene(pos);
-
-            twitView->translate(-viewPos.x(), -viewPos.y());
+            twitView->moveToPoint(pos.y());
 
             //set status read
             setStatusIdRead(id);

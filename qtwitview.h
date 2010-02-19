@@ -24,6 +24,8 @@
 #include <QGraphicsView>
 #include <QScrollBar>
 
+class QPropertyAnimation;
+
 class QTwitView : public QGraphicsView
 {
 	Q_OBJECT
@@ -49,6 +51,9 @@ protected:
 	void resizeEvent(QResizeEvent *e);
 private slots:
 	void scrollBarPos(int pos);
+
+private:
+    QPropertyAnimation* m_scrbarAnimation;
 };
  
 #endif //QTWITVIEW_H
