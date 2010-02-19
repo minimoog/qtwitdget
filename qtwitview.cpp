@@ -34,9 +34,10 @@ QTwitView::QTwitView(QWidget *parent)
 	connect(scrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollBarPos(int)));
 
     //do translation with translating one root item
-    setTransformationAnchor(QGraphicsView::NoAnchor);
+    //setTransformationAnchor(QGraphicsView::NoAnchor);
 
     m_scrbarAnimation->setDuration(500);
+    m_scrbarAnimation->setEasingCurve(QEasingCurve::InOutExpo);
 }
 
 void QTwitView::scrollBarPos(int pos)
@@ -85,8 +86,7 @@ void QTwitView::moveToPoint(qreal y)
             vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement - 18;
         }
 
-        //m_scrbarAnimation->setEndValue(vBarNextPosition);
-        //m_scrbarAnimation->start();
-        setValueVertScrollbar(vBarNextPosition);
+        m_scrbarAnimation->setEndValue(vBarNextPosition);
+        m_scrbarAnimation->start();
     }
 }
