@@ -54,3 +54,13 @@ void QTwitView::resizeEvent(QResizeEvent *e)
 
 	QWidget::resizeEvent(e);
 }
+
+void QTwitView::setValueVertScrollbar(int value)
+{
+    verticalScrollBar()->setValue(value);
+}
+
+int QTwitView::valueVertScrollbar() const
+{
+    return verticalScrollBar()->value();
+}

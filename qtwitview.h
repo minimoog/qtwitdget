@@ -27,8 +27,14 @@
 class QTwitView : public QGraphicsView
 {
 	Q_OBJECT
+    Q_PROPERTY(int valueVertScrollBar READ valueVertScrollbar WRITE setValueVertScrollbar)
 public:
 	QTwitView(QWidget *parent = 0);
+
+    /* sets/gets value of vertical scrollbar */
+    void setValueVertScrollbar(int value);
+    int valueVertScrollbar() const;
+
 signals:
 	void scrollBarMaxPos(bool maxPos);
 protected:
