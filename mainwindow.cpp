@@ -856,24 +856,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             QPointF posStatus = twitScene->statusScenePos(id);
 
             QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-            QPoint viewPos = twitView->mapFromScene(posStatus);
-
-            QScrollBar *vBar = twitView->verticalScrollBar();
-            QRectF sceneRect = twitScene->sceneRect();
-
-            qreal maxYMovement = sceneRect.height() - twitView->viewport()->height();
-
-            if (maxYMovement > 0) {
-                int vBarNextPosition = 0;
-
-                if (viewPos.y() > maxYMovement) {
-                    vBarNextPosition = vBar->maximum();
-                } else {
-                    vBarNextPosition = vBar->minimum() + (vBar->maximum() - vBar->minimum()) * viewPos.y() / maxYMovement;
-                }
-
-                vBar->setValue(vBarNextPosition);
-            }
+            twitView->moveToPoint(posStatus.y());
 
             //set status read
             setStatusIdRead(id);

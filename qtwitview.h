@@ -35,6 +35,14 @@ public:
     void setValueVertScrollbar(int value);
     int valueVertScrollbar() const;
 
+    /* since horizontal scrollbar is disabled, and statuses are resizable to get whole x sizing
+     * we need just y position to focus to y position of status
+     *
+     * y should be y position of status to be centered (top left corner)
+     * uses scrollbar for moving
+     */
+    void moveToPoint(qreal y);
+
 signals:
 	void scrollBarMaxPos(bool maxPos);
 protected:

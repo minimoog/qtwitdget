@@ -64,3 +64,22 @@ int QTwitView::valueVertScrollbar() const
 {
     return verticalScrollBar()->value();
 }
+
+void QTwitView::moveToPoint(qreal y)
+{
+    qreal maxYMovement = sceneRect().height() - viewport()->height();
+
+    if (maxYMovement > 0) {
+        int vBarNextPosition = 0;
+        int vBarMin = verticalScrollBar()->minimum();
+        int vBarMax = verticalScrollBar()->maximum();
+
+        if (y > maxYMovement) {
+            vBarNextPosition = vBarMax;
+        } else {
+            vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement;
+        }
+
+        verticalScrollBar()->setValue(vBarNextPosition);
+    }
+}
