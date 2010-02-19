@@ -852,12 +852,28 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             //add next unread status
             twitScene->addNextUnreadStatus();
 
-            QPointF pos = twitScene->statusScenePos(id);
+            //move to unread status
+            QPointF posStatus = twitScene->statusScenePos(id);
 
             QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-            QPoint viewPos = twitView->mapFromScene(pos);
+            QPoint viewPos = twitView->mapFromScene(posStatus);
 
-            twitView->translate(-viewPos.x(), -viewPos.y());
+            QScrollBar *vBar = twitView->verticalScrollBar();
+            QRectF sceneRect = twitScene->sceneRect();
+
+            qreal maxYMovement = sceneRect.height() - twitView->viewport()->height();
+
+            if (maxYMovement > 0) {
+                int vBarNextPosition = 0;
+
+                if (viewPos.y() > maxYMovement) {
+                    vBarNextPosition = vBar->maximum();
+                } else {
+                    vBarNextPosition = vBar->minimum() + (vBar->maximum() - vBar->minimum()) * viewPos.y() / maxYMovement;
+                }
+
+                vBar->setValue(vBarNextPosition);
+            }
 
             //set status read
             setStatusIdRead(id);
