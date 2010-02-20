@@ -447,7 +447,7 @@ void QTwitScene::markRead(qint64 id)
 {
     if (m_sceneItems.contains(id)) {
         GroupItems grpItem = m_sceneItems.value(id);
-        grpItem.gradRectItem->setGradient(GradientRectItem::Blue);
+        grpItem.gradRectItem->setGradientAnim(GradientRectItem::Blue);
     }
 }
 

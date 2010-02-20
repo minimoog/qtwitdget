@@ -23,8 +23,13 @@
 
 #include <QGraphicsRectItem>
 
-class GradientRectItem : public QGraphicsRectItem
+class QPropertyAnimation;
+
+class GradientRectItem : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
+    Q_PROPERTY(QColor gradientColor READ gradientColor WRITE setGradientColor)
+
 public:
     enum Gradient {
         Grey,
@@ -38,6 +43,14 @@ public:
     void setWidth(qreal width);
     qreal width() const;
     void setGradient(GradientRectItem::Gradient gradient);
+    void setGradientAnim(GradientRectItem::Gradient gradient);
+
+    QColor gradientColor() const;
+    void setGradientColor(const QColor& color);
+
+private:
+    QColor m_linearGradColor;
+    QPropertyAnimation *m_gradientAnimation;
 };
 
 #endif //GRADIENTRECTITEM_H

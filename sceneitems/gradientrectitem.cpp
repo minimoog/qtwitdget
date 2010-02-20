@@ -20,17 +20,20 @@
 
 #include <QLinearGradient>
 #include <QPen>
+#include <QPropertyAnimation>
 #include "gradientrectitem.h"
 
 GradientRectItem::GradientRectItem(QGraphicsItem * parent)
-	:	QGraphicsRectItem(parent)
+    :	QGraphicsRectItem(parent), m_gradientAnimation(new QPropertyAnimation(this, "gradientColor", this))
 {
+    setPen(QPen(Qt::NoPen));
 }
 
 GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradient, QGraphicsItem * parent)
-    :   QGraphicsRectItem(parent)
+    :   QGraphicsRectItem(parent), m_gradientAnimation(new QPropertyAnimation(this, "gradientColor", this))
 {
     setWidth(width);
+    setPen(QPen(Qt::NoPen));
     setGradient(gradient);
 }
 
@@ -52,27 +55,55 @@ qreal GradientRectItem::width() const
 
 void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 {
-    QLinearGradient linearGradient(0, 0, 0, 1);
-    linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-
     switch (gradient) {
         case Grey:
-            linearGradient.setColorAt(0, QColor(238, 238, 238, 127));
-            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
+            setGradientColor(QColor(238, 238, 238, 127));
             break;
         case Pink:
-            linearGradient.setColorAt(0, QColor(255, 223, 223, 127));
-            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
+            setGradientColor(QColor(255, 223, 223, 127));
             break;
         case Blue:
-            linearGradient.setColorAt(0, QColor(220, 238, 243, 127));
-            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
+            setGradientColor(QColor(220, 238, 243, 127));
             break;
+        case TestBlue:
+            setGradientColor(QColor(0, 190, 243, 127));
+    }
+}
+
+void GradientRectItem::setGradientAnim(GradientRectItem::Gradient gradient)
+{
+    m_gradientAnimation->setDuration(500);
+
+    switch (gradient) {
+    case Grey:
+       m_gradientAnimation->setEndValue(QColor(238, 238, 238, 127));
+       break;
+    case Pink:
+       m_gradientAnimation->setEndValue(QColor(255, 223, 223, 127));
+       break;
+    case Blue:
+       m_gradientAnimation->setEndValue(QColor(220, 238, 243, 127));
+       break;
     case TestBlue:
-            linearGradient.setColorAt(0, QColor(0, 190, 243, 127));
-            linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
+       m_gradientAnimation->setEndValue(QColor(0, 190, 243, 127));
     }
 
+    m_gradientAnimation->start();
+}
+
+QColor GradientRectItem::gradientColor() const
+{
+    return m_linearGradColor;
+}
+
+void GradientRectItem::setGradientColor(const QColor &color)
+{
+    m_linearGradColor = color;
+
+    QLinearGradient linearGradient(0, 0, 0, 1);
+    linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    linearGradient.setColorAt(0, color);
+    linearGradient.setColorAt(1, QColor(255, 255, 255, 255));
+
     setBrush(linearGradient);
-    setPen(QPen(Qt::NoPen));
 }
