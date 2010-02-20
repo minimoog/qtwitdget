@@ -856,7 +856,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             QPointF posStatus = twitScene->statusScenePos(id);
 
             QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-            twitView->moveToPoint(posStatus.y());
+            twitView->moveToPointAnim(posStatus.y());
 
             //set status read
             setStatusIdRead(id);
@@ -899,7 +899,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             QPointF pos = twitScene->statusScenePos(id);
 
             QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-            twitView->moveToPoint(pos.y());
+            twitView->moveToPointAnim(pos.y());
 
             //set status read
             setStatusIdRead(id);

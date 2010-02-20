@@ -43,7 +43,7 @@ public:
      * y should be y position of status to be centered (top left corner)
      * uses scrollbar for moving
      */
-    void moveToPoint(qreal y);
+    void moveToPointAnim(qreal y);
 
 signals:
 	void scrollBarMaxPos(bool maxPos);

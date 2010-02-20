@@ -70,7 +70,7 @@ int QTwitView::valueVertScrollbar() const
     return verticalScrollBar()->value();
 }
 
-void QTwitView::moveToPoint(qreal y)
+void QTwitView::moveToPointAnim(qreal y)
 {
     qreal maxYMovement = sceneRect().height() - viewport()->height();
 
