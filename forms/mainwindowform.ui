@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="TimelineTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -107,7 +107,7 @@
      <x>0</x>
      <y>0</y>
      <width>550</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -201,6 +201,12 @@
    <slots>
     <slot>shortUrls()</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>TimelineTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>timelinetabwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

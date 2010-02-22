@@ -43,7 +43,8 @@ HEADERS += twitstatusedit.h \
     xml/xmlreaderextusers.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
-    oauth/pindialog.h
+    oauth/pindialog.h \
+    timelinetabwidget.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -75,7 +76,8 @@ SOURCES += main.cpp \
     xml/xmlreaderextusers.cpp \
     oauth/oauth.cpp \
     oauth/oauthtwitter.cpp \
-    oauth/pindialog.cpp
+    oauth/pindialog.cpp \
+    timelinetabwidget.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \
