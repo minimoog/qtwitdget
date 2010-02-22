@@ -48,10 +48,14 @@ public:
     void setType(Type type) { m_type = type; }
     Type type() const { return m_type; }
 
+    void setCloseable(bool closeable) { m_closeable = closeable; }
+    bool closeable() const { return m_closeable; }
+
 private:
 	QString m_queryString;
 	QString m_tabName;
     Type m_type;
+    bool m_closeable;
 };
  
 #endif //TWITTABGROUP_H
