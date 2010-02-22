@@ -24,11 +24,13 @@
 #include <QGraphicsRectItem>
 
 class QPropertyAnimation;
+class QParallelAnimationGroup;
 
 class GradientRectItem : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
-    Q_PROPERTY(QColor gradientColor READ gradientColor WRITE setGradientColor)
+    Q_PROPERTY(QColor firstGradientColor READ firstGradientColor WRITE setFirstGradientColor)
+    Q_PROPERTY(QColor secondGradientColor READ secondGradientColor WRITE setSecondGradientColor)
 
 public:
     enum Gradient {
@@ -46,12 +48,19 @@ public:
     void setGradient(GradientRectItem::Gradient gradient);
     void setGradientAnim(GradientRectItem::Gradient gradient);
 
-    QColor gradientColor() const;
-    void setGradientColor(const QColor& color);
+    QColor firstGradientColor() const;
+    void setFirstGradientColor(const QColor& color);
+    QColor secondGradientColor() const;
+    void setSecondGradientColor(const QColor& color);
 
 private:
-    QColor m_linearGradColor;
-    QPropertyAnimation *m_gradientAnimation;
+    void setTwoColorGradient();
+
+    QColor m_firstGradColor;
+    QColor m_secondGradColor;
+    QPropertyAnimation *m_gradient1Animation;
+    QPropertyAnimation *m_gradient2Animation;
+    QParallelAnimationGroup *m_parallelAnimation;
 };
 
 #endif //GRADIENTRECTITEM_H

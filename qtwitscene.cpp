@@ -212,9 +212,9 @@ void QTwitScene::addToScene(const QList<QTwitStatus> &statuses, qreal ypos, int 
 
         //change gradient depending of read/unread status
         if (statuses.at(i).isRead()) {
-            grpItems.gradRectItem->setGradient(GradientRectItem::Blue);
+            grpItems.gradRectItem->setGradient(GradientRectItem::White);
         } else {
-            grpItems.gradRectItem->setGradient(GradientRectItem::TestBlue);
+            grpItems.gradRectItem->setGradient(GradientRectItem::Blue);
         }
 
         grpItems.statusText = statuses.at(i).text();
@@ -447,7 +447,7 @@ void QTwitScene::markRead(qint64 id)
 {
     if (m_sceneItems.contains(id)) {
         GroupItems grpItem = m_sceneItems.value(id);
-        grpItem.gradRectItem->setGradientAnim(GradientRectItem::Blue);
+        grpItem.gradRectItem->setGradientAnim(GradientRectItem::White);
     }
 }
 
