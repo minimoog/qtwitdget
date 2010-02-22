@@ -570,21 +570,25 @@ void MainWindow::createDefaultTwitGroups()
     unread.setTabName(tr("Unread"));
     unread.setQuery(QString(" isRead == 0 "));
     unread.setType(TwitTabGroup::Unread);
+    unread.setCloseable(false);
 
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
 	allfriends.setQuery(QString(" 1 == 1 "));
     allfriends.setType(TwitTabGroup::Normal);
+    allfriends.setCloseable(false);
 
 	TwitTabGroup myTwits;
 	myTwits.setTabName(tr("My twits"));
 	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
     myTwits.setType(TwitTabGroup::Normal);
+    myTwits.setCloseable(false);
 
     TwitTabGroup mentions;
     mentions.setTabName(tr("Mentions"));
     mentions.setQuery(QString(" mention == 1"));
     mentions.setType(TwitTabGroup::Normal);
+    mentions.setCloseable(false);
 
     m_twitTabGroups.append(unread);
 	m_twitTabGroups.append(allfriends);
@@ -645,6 +649,13 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
         statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
         ui.tabWidget->addTab(statusView, group.tabName());
+
+        if (!group.closeable()) {
+            int index = ui.tabWidget->indexOf(statusView);
+            QWidget *tabButton = ui.tabWidget->getTabBar()->tabButton(index, QTabBar::RightSide);
+            tabButton->setEnabled(false);
+        }
+
     } else if (group.type() == TwitTabGroup::Unread) {
         QTwitSceneUnread *statusScene = new QTwitSceneUnread(this);
         statusScene->setNetworkAccessManager(m_netManager);
@@ -664,6 +675,12 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
         statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
         connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
         ui.tabWidget->addTab(statusView, group.tabName());
+
+        if (!group.closeable()) {
+            int index = ui.tabWidget->indexOf(statusView);
+            QWidget *tabButton = ui.tabWidget->getTabBar()->tabButton(index, QTabBar::RightSide);
+            tabButton->setEnabled(false);
+        }
     }
 }
 

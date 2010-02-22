@@ -35,7 +35,8 @@ public:
     };
 
 	/* Constructor */
-    TwitTabGroup() {}
+    TwitTabGroup() { m_type = TwitTabGroup::Normal;
+                     m_closeable = true; }
 
 	/* Sets/gets additional query for tab group */
 	void setQuery(const QString& query) { m_queryString = query; }
