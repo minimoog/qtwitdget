@@ -55,19 +55,28 @@ qreal GradientRectItem::width() const
 
 void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 {
+    QLinearGradient linearGradient(0, 0, 0, 1);
+    linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+
     switch (gradient) {
-        case Grey:
-            setGradientColor(QColor(238, 238, 238, 127));
-            break;
-        case Pink:
-            setGradientColor(QColor(255, 223, 223, 127));
+        case Green:
+            linearGradient.setColorAt(0, QColor("#DDF5D3"));
+            linearGradient.setColorAt(1, QColor("#E5FFDA"));
             break;
         case Blue:
-            setGradientColor(QColor(220, 238, 243, 127));
+            linearGradient.setColorAt(0, QColor("#DDF0F5"));
+            linearGradient.setColorAt(1, QColor("#E5FAFF"));
             break;
-        case TestBlue:
-            setGradientColor(QColor(0, 190, 243, 127));
+        case Grey:
+            linearGradient.setColorAt(0, QColor("#E3E3E3"));
+            linearGradient.setColorAt(1, QColor("#EBEBEB"));
+            break;
+        case Pink:
+            linearGradient.setColorAt(0, QColor("#F5E1E1"));
+            linearGradient.setColorAt(1, QColor("#FFE9E9"));
     }
+
+    setBrush(linearGradient);
 }
 
 void GradientRectItem::setGradientAnim(GradientRectItem::Gradient gradient)

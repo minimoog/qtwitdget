@@ -32,10 +32,11 @@ class GradientRectItem : public QObject, public QGraphicsRectItem
 
 public:
     enum Gradient {
+        Green,
+        Blue,
         Grey,
         Pink,
-        Blue,
-        TestBlue
+        White
     };
 
 	GradientRectItem(QGraphicsItem * parent = 0);
