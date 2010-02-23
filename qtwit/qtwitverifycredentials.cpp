@@ -31,7 +31,7 @@ void QTwitVerifyCredentials::verify()
 {
 	Q_ASSERT(networkAccessManager() != 0);
 
-	QUrl url("http://twitter.com/account/verify_credentials.xml");
+    QUrl url("http://api.twitter.com/1/account/verify_credentials.xml");
 
 	QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
 	QNetworkRequest req(url);

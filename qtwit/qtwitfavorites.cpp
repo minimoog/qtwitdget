@@ -32,7 +32,7 @@ QTwitFavorites::QTwitFavorites(QObject *parent)
 
 void QTwitFavorites::create(qint64 id)
 {
-    QString urlString = QString("http://twitter.com/favorites/create/%1.xml").arg(id);
+    QString urlString = QString("http://api.twitter.com/1/favorites/create/%1.xml").arg(id);
 
     QUrl url(urlString);
 
@@ -49,7 +49,7 @@ void QTwitFavorites::create(qint64 id)
 
 void QTwitFavorites::destroy(qint64 id)
 {
-    QString urlString = QString("http://twitter.com/favorites/destroy/%1.xml").arg(id);
+    QString urlString = QString("http://api.twitter.com/1/favorites/destroy/%1.xml").arg(id);
 
     QUrl url(urlString);
 

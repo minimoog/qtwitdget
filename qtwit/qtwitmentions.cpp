@@ -34,7 +34,7 @@ void QTwitMentions::update(qint64 sinceid, qint64 maxid, int count, int page)
 
     m_statuses.clear();
 
-    QUrl url("http://twitter.com/statuses/mentions.xml");
+    QUrl url("http://api.twitter.com/1/statuses/mentions.xml");
 
     if (sinceid != 0)
         url.addQueryItem("since_id", QString::number(sinceid));

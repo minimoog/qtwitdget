@@ -34,7 +34,7 @@ void QTwitFriendsTimeline::update(qint64 sinceId, qint64 maxId, int count, int p
 
 	m_statuses.clear();
 
-	QUrl url("http://twitter.com/statuses/friends_timeline.xml");
+    QUrl url("http://api.twitter.com/1/statuses/friends_timeline.xml");
 	
 	if(sinceId != 0){
 		QString strSinceId = QString("%1").arg(sinceId);

@@ -30,7 +30,7 @@ void QTwitUpdate::setUpdate(const QString &update, qint64 inReplyToStatusId)
 	QByteArray status = statusUtf8.toPercentEncoding();
 	QByteArray key("status");
 
-	QUrl url("http://twitter.com/statuses/update.xml");
+    QUrl url("http://api.twitter.com/1/statuses/update.xml");
 	QUrl urlQuery(url);
 
 	urlQuery.addEncodedQueryItem(key, status);

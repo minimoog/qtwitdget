@@ -42,7 +42,7 @@ void QTwitFriends::updateFriends(int id, int userId, const QString& screenName, 
 
 	m_friends.clear();
 
-	QUrl url("http://twitter.com/statuses/friends.xml");
+    QUrl url("http://api.twitter.com/1/statuses/friends.xml");
 
 	if(id != 0){
 		QString strId = QString("%1").arg(id);
