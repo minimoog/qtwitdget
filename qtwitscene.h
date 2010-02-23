@@ -99,6 +99,10 @@ public:
     qint64 appendStatuses(const QList<QTwitStatus>& statuses);
     /*! returns number of statuses on scene */
     int numStatuses() const;
+    /*! mark all statuses read on the scene*/
+    virtual void markAllRead();
+    /*! removes all statuses on scene */
+    void removeAll();
 
 signals:
 	void requestReply(qint64 statusId, const QString& screenName);

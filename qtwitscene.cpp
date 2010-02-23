@@ -451,6 +451,28 @@ void QTwitScene::markRead(qint64 id)
     }
 }
 
+void QTwitScene::markAllRead()
+{
+    QMapIterator<qint64, GroupItems> i(m_sceneItems);
+    while (i.hasNext()) {
+        i.next();
+        i.value().gradRectItem->setGradient(GradientRectItem::White);
+    }
+}
+
+void QTwitScene::removeAll()
+{
+    QMutableMapIterator<qint64, GroupItems> i(m_sceneItems);
+
+    while (i.hasNext()) {
+        i.next();
+        GroupItems grpItems = i.value();
+        removeItem(grpItems.gradRectItem);
+        delete grpItems.gradRectItem;
+        i.remove();
+    }
+}
+
 int QTwitScene::numStatuses() const
 {
     return m_sceneItems.count();
