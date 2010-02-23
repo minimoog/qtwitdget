@@ -109,3 +109,8 @@ void QTwitSceneUnread::addNextUnreadStatus()
         setLastStatusId(lastStatus);
     }
 }
+
+void QTwitSceneUnread::markAllRead()
+{
+    QTwitScene::removeAll();
+}

@@ -33,6 +33,8 @@ public:
     void addNextUnreadStatus();
     /*! doesnt' do nothing */
     virtual void nextStatuses();
+    /*! doesn't marks just removes all statuses */
+    virtual void markAllRead();
 };
 
 #endif //QTWITSCENEUNREAD_H
