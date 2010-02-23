@@ -847,7 +847,7 @@ void MainWindow::readGroupsSettings()
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
     //!!!!! NEEDS REFACTORING !!!!!!!!!
-    if (e->nativeVirtualKey() == 'N')
+    if (e->key() == 'N')
         if (ui.tabWidget->currentIndex() == 0) {
             QSqlQuery query;
             query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
