@@ -67,6 +67,7 @@ private slots:
 	void loadStyleSheet();
 	void closeTab(int i);
 	void nextStatuses();
+    void markAllStatusesRead();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);

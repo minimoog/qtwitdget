@@ -134,7 +134,15 @@
     <addaction name="actionSettings"/>
     <addaction name="actionChangeLanguage"/>
    </widget>
+   <widget class="QMenu" name="menuTweets">
+    <property name="title">
+     <string>Tweets</string>
+    </property>
+    <addaction name="actionMarkAllRead"/>
+    <addaction name="actionGotoToNextUnread"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuTweets"/>
    <addaction name="menuOptions"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -190,6 +198,19 @@
   <action name="actionCreateGroup">
    <property name="text">
     <string>Create Group</string>
+   </property>
+  </action>
+  <action name="actionMarkAllRead">
+   <property name="text">
+    <string>Mark All Read</string>
+   </property>
+   <property name="toolTip">
+    <string>Mark All Tweets Read</string>
+   </property>
+  </action>
+  <action name="actionGotoToNextUnread">
+   <property name="text">
+    <string>Goto to Next Unread</string>
    </property>
   </action>
  </widget>

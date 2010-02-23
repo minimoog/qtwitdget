@@ -84,6 +84,7 @@ MainWindow::MainWindow()
     connect(m_twitRetweet, SIGNAL(finished()), SLOT(retweetFinished()));
     connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
 	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
+    connect(ui.actionMarkAllRead, SIGNAL(triggered()), this, SLOT(markAllStatusesRead()));
 	
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
@@ -515,8 +516,6 @@ void MainWindow::updateTab(int i)
 {
     if (i == -1)
         return;
-
-    TwitTabGroup tg = m_twitTabGroups.at(i);
 
     QTwitScene *twitScene = m_twitScenes.at(i);
     twitScene->updateStatuses();
@@ -964,6 +963,18 @@ void MainWindow::setTabTextUnreadStatuses(int index)
         ui.tabWidget->setTabText(index, currentTabText);
     } else {
         ui.tabWidget->setTabText(index, group.tabName());
+    }
+}
+
+void MainWindow::markAllStatusesRead()
+{
+    QSqlQuery query;
+    query.exec("UPDATE status SET isRead = 1 WHERE isRead = 0");
+
+    //update all tabs
+    for (int i = 0; i < ui.tabWidget->count(); ++i) {
+        m_twitScenes.at(i)->markAllRead();
+        setTabTextUnreadStatuses(i);
     }
 }
 
