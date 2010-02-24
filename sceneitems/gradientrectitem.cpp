@@ -27,17 +27,20 @@
 GradientRectItem::GradientRectItem(QGraphicsItem * parent)
     :	QGraphicsRectItem(parent), m_gradient1Animation(new QPropertyAnimation(this, "firstGradientColor", this)),
     m_gradient2Animation(new QPropertyAnimation(this, "secondGradientColor", this)),
-    m_parallelAnimation(new QParallelAnimationGroup(this))
+    m_parallelAnimation(new QParallelAnimationGroup(this)),
+    m_fadeinoutAnimation(new QPropertyAnimation(this, "opacity", this))
 {
     setPen(QPen(Qt::NoPen));
     m_parallelAnimation->addAnimation(m_gradient1Animation);
     m_parallelAnimation->addAnimation(m_gradient2Animation);
+    connect(m_fadeinoutAnimation, SIGNAL(finished()), this, SIGNAL(fadeInOutFinished()));
 }
 
 GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradient, QGraphicsItem * parent)
     :   QGraphicsRectItem(parent), m_gradient1Animation(new QPropertyAnimation(this, "firstGradientColor", this)),
     m_gradient2Animation(new QPropertyAnimation(this, "secondGradientColor", this)),
-    m_parallelAnimation(new QParallelAnimationGroup (this))
+    m_parallelAnimation(new QParallelAnimationGroup (this)),
+    m_fadeinoutAnimation(new QPropertyAnimation(this, "opacity", this))
 {
     setWidth(width);
     setPen(QPen(Qt::NoPen));
@@ -45,6 +48,7 @@ GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradi
 
     m_parallelAnimation->addAnimation(m_gradient1Animation);
     m_parallelAnimation->addAnimation(m_gradient2Animation);
+    connect(m_fadeinoutAnimation, SIGNAL(finished()), this, SIGNAL(fadeInOutFinished()));
 }
 
 void GradientRectItem::setWidth(qreal width)
@@ -148,4 +152,12 @@ void GradientRectItem::setTwoColorGradient()
     linearGradient.setColorAt(1, m_secondGradColor);
 
     setBrush(linearGradient);
+}
+
+void GradientRectItem::startFadeOutAnim()
+{
+    m_fadeinoutAnimation->setDuration(500);
+    m_fadeinoutAnimation->setStartValue(1.0);
+    m_fadeinoutAnimation->setEndValue(0.0);
+    m_fadeinoutAnimation->start();
 }

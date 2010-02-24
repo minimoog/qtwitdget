@@ -103,6 +103,8 @@ public:
     virtual void markAllRead();
     /*! removes all statuses on scene */
     void removeAll();
+    /*! removes status with fade out */
+    void removeStatusAnim(qint64 id);
 
 signals:
 	void requestReply(qint64 statusId, const QString& screenName);
@@ -117,6 +119,7 @@ private slots:
 	void retweetClicked(qint64 i);
     void deleteClicked(qint64 i);
     void favoritedClicked(qint64 i);
+    void finishedFadeOut();
 	
 private:
 	GroupItems createStatusSceneItem(int count);
@@ -127,6 +130,7 @@ private:
     qint64 m_lastStatus; //newest status id(top of)
     qint64 m_firstStatus; //latest status id (bottom)
     QString m_additionalQuery;
+    qint64 m_fadeoutId;
 
     QNetworkAccessManager * m_netManager;
 

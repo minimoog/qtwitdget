@@ -910,7 +910,7 @@ void MainWindow::gotoNextUnread()
 
         //delete previous read status
         if (m_lastMarkedReadStatus)
-            twitScene->removeStatus(m_lastMarkedReadStatus);
+            twitScene->removeStatusAnim(m_lastMarkedReadStatus);
 
         //add next unread status
         twitScene->addNextUnreadStatus();

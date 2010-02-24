@@ -62,7 +62,8 @@ static QString replaceLinksWithHref(const QString &text)
 }
 
 QTwitScene::QTwitScene(QObject *parent)
-    :	QGraphicsScene(parent), m_netManager(0), m_numPages(1), m_lastStatus(0), m_firstStatus(0)
+    :	QGraphicsScene(parent), m_netManager(0), m_numPages(1), m_lastStatus(0), m_firstStatus(0),
+    m_fadeoutId(0)
 {
 }
 
@@ -291,8 +292,9 @@ bool QTwitScene::removeStatus(qint64 id)
     QMap<qint64, GroupItems>::iterator it = m_sceneItems.find(id);
 
     if (it != m_sceneItems.end()) {
-        //remove from the scene
         GroupItems grpItems = it.value();
+
+        //then remove from the scene
         removeItem(grpItems.gradRectItem);
         delete grpItems.gradRectItem;
         it = m_sceneItems.erase(it);
@@ -309,6 +311,18 @@ bool QTwitScene::removeStatus(qint64 id)
     }
 
     return false;
+}
+
+void QTwitScene::removeStatusAnim(qint64 id)
+{
+    if (m_sceneItems.contains(id)) {
+        m_fadeoutId = id;
+        GroupItems grpItems = m_sceneItems.value(id);
+
+        //fade out animation
+        connect(grpItems.gradRectItem, SIGNAL(fadeInOutFinished()), this, SLOT(finishedFadeOut()));
+        grpItems.gradRectItem->startFadeOutAnim();
+    }
 }
 
 void QTwitScene::favoritedClicked(qint64 id)
@@ -476,4 +490,11 @@ void QTwitScene::removeAll()
 int QTwitScene::numStatuses() const
 {
     return m_sceneItems.count();
+}
+
+void QTwitScene::finishedFadeOut()
+{
+    //after animation remove
+    removeStatus(m_fadeoutId);
+    m_fadeoutId = 0;
 }

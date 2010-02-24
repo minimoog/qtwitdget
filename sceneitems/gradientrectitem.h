@@ -31,6 +31,7 @@ class GradientRectItem : public QObject, public QGraphicsRectItem
     Q_OBJECT
     Q_PROPERTY(QColor firstGradientColor READ firstGradientColor WRITE setFirstGradientColor)
     Q_PROPERTY(QColor secondGradientColor READ secondGradientColor WRITE setSecondGradientColor)
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 
 public:
     enum Gradient {
@@ -47,11 +48,15 @@ public:
     qreal width() const;
     void setGradient(GradientRectItem::Gradient gradient);
     void setGradientAnim(GradientRectItem::Gradient gradient);
+    void startFadeOutAnim();
 
     QColor firstGradientColor() const;
     void setFirstGradientColor(const QColor& color);
     QColor secondGradientColor() const;
     void setSecondGradientColor(const QColor& color);
+
+signals:
+    void fadeInOutFinished();
 
 private:
     void setTwoColorGradient();
@@ -61,6 +66,7 @@ private:
     QPropertyAnimation *m_gradient1Animation;
     QPropertyAnimation *m_gradient2Animation;
     QParallelAnimationGroup *m_parallelAnimation;
+    QPropertyAnimation *m_fadeinoutAnimation;
 };
 
 #endif //GRADIENTRECTITEM_H
