@@ -112,7 +112,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Account</string>
+     <string>&amp;Account</string>
     </property>
     <addaction name="actionAuthorize"/>
     <addaction name="separator"/>
@@ -120,14 +120,14 @@
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Qt"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
-     <string>Options</string>
+     <string>&amp;Options</string>
     </property>
     <addaction name="actionCreateGroup"/>
     <addaction name="actionChangeStyleSheet"/>
@@ -136,7 +136,7 @@
    </widget>
    <widget class="QMenu" name="menuTweets">
     <property name="title">
-     <string>Tweets</string>
+     <string>&amp;Tweets</string>
     </property>
     <addaction name="actionMarkAllRead"/>
     <addaction name="actionGotoToNextUnread"/>
@@ -159,50 +159,53 @@
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionAbout_Qt">
    <property name="text">
-    <string>About Qt</string>
+    <string>About &amp;Qt</string>
    </property>
   </action>
   <action name="actionAuthorize">
    <property name="text">
-    <string>Authorize</string>
+    <string>&amp;Authorize</string>
    </property>
   </action>
   <action name="actionSettings">
    <property name="text">
-    <string>Settings</string>
+    <string>Se&amp;ttings</string>
    </property>
   </action>
   <action name="actionChangeLanguage">
    <property name="text">
-    <string>Change Language</string>
+    <string>Change &amp;Language</string>
    </property>
   </action>
   <action name="actionChangeStyleSheet">
    <property name="text">
-    <string>Change Style Sheet</string>
+    <string>Change &amp;Style Sheet</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>
    </property>
   </action>
   <action name="actionCreateGroup">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>Create Group</string>
+    <string>&amp;Create Group</string>
    </property>
   </action>
   <action name="actionMarkAllRead">
    <property name="text">
-    <string>Mark All Read</string>
+    <string>&amp;Mark All Read</string>
    </property>
    <property name="toolTip">
     <string>Mark All Tweets Read</string>
@@ -210,7 +213,7 @@
   </action>
   <action name="actionGotoToNextUnread">
    <property name="text">
-    <string>Goto to Next Unread</string>
+    <string>&amp;Goto to Next Unread</string>
    </property>
    <property name="shortcut">
     <string>Space</string>
