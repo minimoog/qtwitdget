@@ -212,6 +212,9 @@
    <property name="text">
     <string>Goto to Next Unread</string>
    </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
   </action>
  </widget>
  <customwidgets>

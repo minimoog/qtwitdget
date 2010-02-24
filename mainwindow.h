@@ -68,6 +68,7 @@ private slots:
 	void closeTab(int i);
 	void nextStatuses();
     void markAllStatusesRead();
+    void gotoNextUnread();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
@@ -77,7 +78,6 @@ private slots:
 protected:
 	void closeEvent(QCloseEvent *e);
 	void changeEvent(QEvent *e);
-    void keyPressEvent(QKeyEvent *e);
 
 private:
 	void setupTrayIcon();
