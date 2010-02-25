@@ -33,6 +33,7 @@
 #include "sceneitems/statustextitem.h"
 
 class QTwitStatus;
+class QGraphicsItemGroup;
 
 struct GroupItems
 {
@@ -135,6 +136,7 @@ private:
     QNetworkAccessManager * m_netManager;
 
     QMap<qint64, GroupItems> m_sceneItems;
+    QGraphicsItemGroup *m_groupStatuses;
 };
 
 #endif //QTWITSCENE_H

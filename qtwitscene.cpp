@@ -30,6 +30,7 @@
 #include <QtDebug>
 #include <QScrollBar>
 #include <QGraphicsView>
+#include <QGraphicsItemGroup>
 #include <QRegExp>
 #include "qtwit/qtwitstatus.h"
 #include "qtwitscene.h"
@@ -63,8 +64,9 @@ static QString replaceLinksWithHref(const QString &text)
 
 QTwitScene::QTwitScene(QObject *parent)
     :	QGraphicsScene(parent), m_netManager(0), m_numPages(1), m_lastStatus(0), m_firstStatus(0),
-    m_fadeoutId(0)
+    m_fadeoutId(0), m_groupStatuses(new QGraphicsItemGroup)
 {
+    addItem(m_groupStatuses);
 }
 
 void QTwitScene::setNetworkAccessManager(QNetworkAccessManager * netManager)
@@ -142,11 +144,12 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses, bool paging)
     //TODO: remove then move down rest of statuses on the scene
 
     //move all down
-    QMapIterator<qint64, GroupItems> i(m_sceneItems);
-    while (i.hasNext()) {
-        i.next();
-        i.value().gradRectItem->moveBy(0, 101.0f * statuses.size());
-    }
+    //QMapIterator<qint64, GroupItems> i(m_sceneItems);
+    //while (i.hasNext()) {
+    //    i.next();
+    //    i.value().gradRectItem->moveBy(0, 101.0f * statuses.size());
+    //}
+    m_groupStatuses->moveBy(0, 101.0f * statuses.size());
 
     //we need viewport width
     QList<QGraphicsView*> graphicsViews = views();
@@ -166,6 +169,7 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses, bool paging)
         while (i.hasNext() && (removedItems != nRemove)) {
             i.next();
             GroupItems grpItems = i.value();
+            m_groupStatuses->removeFromGroup(grpItems.gradRectItem);
             removeItem(grpItems.gradRectItem);
             delete grpItems.gradRectItem;
             i.remove();
@@ -223,6 +227,9 @@ void QTwitScene::addToScene(const QList<QTwitStatus> &statuses, qreal ypos, int 
 
         resizeItem(width, grpItems);
         m_sceneItems.insert(statuses.at(i).id(), grpItems);
+
+        //add to group
+        m_groupStatuses->addToGroup(grpItems.gradRectItem);
     }
 }
 
@@ -295,6 +302,7 @@ bool QTwitScene::removeStatus(qint64 id)
         GroupItems grpItems = it.value();
 
         //then remove from the scene
+        m_groupStatuses->removeFromGroup(grpItems.gradRectItem);
         removeItem(grpItems.gradRectItem);
         delete grpItems.gradRectItem;
         it = m_sceneItems.erase(it);
@@ -481,6 +489,7 @@ void QTwitScene::removeAll()
     while (i.hasNext()) {
         i.next();
         GroupItems grpItems = i.value();
+        m_groupStatuses->removeFromGroup(grpItems.gradRectItem);
         removeItem(grpItems.gradRectItem);
         delete grpItems.gradRectItem;
         i.remove();
