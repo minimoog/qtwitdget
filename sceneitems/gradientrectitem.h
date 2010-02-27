@@ -32,6 +32,7 @@ class GradientRectItem : public QObject, public QGraphicsRectItem
     Q_PROPERTY(QColor firstGradientColor READ firstGradientColor WRITE setFirstGradientColor)
     Q_PROPERTY(QColor secondGradientColor READ secondGradientColor WRITE setSecondGradientColor)
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 
 public:
     enum Gradient {
@@ -49,6 +50,7 @@ public:
     void setGradient(GradientRectItem::Gradient gradient);
     void setGradientAnim(GradientRectItem::Gradient gradient);
     void startFadeOutAnim();
+    void startMoveAnimY(qreal dy);
 
     QColor firstGradientColor() const;
     void setFirstGradientColor(const QColor& color);
@@ -67,6 +69,7 @@ private:
     QPropertyAnimation *m_gradient2Animation;
     QParallelAnimationGroup *m_parallelAnimation;
     QPropertyAnimation *m_fadeinoutAnimation;
+    QPropertyAnimation *m_moveAnimation;
 };
 
 #endif //GRADIENTRECTITEM_H

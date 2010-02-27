@@ -28,7 +28,8 @@ GradientRectItem::GradientRectItem(QGraphicsItem * parent)
     :	QGraphicsRectItem(parent), m_gradient1Animation(new QPropertyAnimation(this, "firstGradientColor", this)),
     m_gradient2Animation(new QPropertyAnimation(this, "secondGradientColor", this)),
     m_parallelAnimation(new QParallelAnimationGroup(this)),
-    m_fadeinoutAnimation(new QPropertyAnimation(this, "opacity", this))
+    m_fadeinoutAnimation(new QPropertyAnimation(this, "opacity", this)),
+    m_moveAnimation(new QPropertyAnimation(this, "pos", this))
 {
     setPen(QPen(Qt::NoPen));
     m_parallelAnimation->addAnimation(m_gradient1Animation);
@@ -40,7 +41,8 @@ GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradi
     :   QGraphicsRectItem(parent), m_gradient1Animation(new QPropertyAnimation(this, "firstGradientColor", this)),
     m_gradient2Animation(new QPropertyAnimation(this, "secondGradientColor", this)),
     m_parallelAnimation(new QParallelAnimationGroup (this)),
-    m_fadeinoutAnimation(new QPropertyAnimation(this, "opacity", this))
+    m_fadeinoutAnimation(new QPropertyAnimation(this, "opacity", this)),
+    m_moveAnimation(new QPropertyAnimation(this, "pos", this))
 {
     setWidth(width);
     setPen(QPen(Qt::NoPen));
@@ -97,8 +99,8 @@ void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 
 void GradientRectItem::setGradientAnim(GradientRectItem::Gradient gradient)
 {
-    m_gradient1Animation->setDuration(500);
-    m_gradient2Animation->setDuration(500);
+    m_gradient1Animation->setDuration(200);
+    m_gradient2Animation->setDuration(200);
 
     switch (gradient) {
     case Green:
@@ -156,8 +158,15 @@ void GradientRectItem::setTwoColorGradient()
 
 void GradientRectItem::startFadeOutAnim()
 {
-    m_fadeinoutAnimation->setDuration(500);
+    m_fadeinoutAnimation->setDuration(200);
     m_fadeinoutAnimation->setStartValue(1.0);
     m_fadeinoutAnimation->setEndValue(0.0);
     m_fadeinoutAnimation->start();
+}
+
+void GradientRectItem::startMoveAnimY(qreal dy)
+{
+    m_moveAnimation->setDuration(200);
+    m_moveAnimation->setEndValue(QPointF(0, pos().y() + dy));
+    m_moveAnimation->start();
 }
