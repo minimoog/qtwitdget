@@ -72,7 +72,8 @@ int QTwitView::valueVertScrollbar() const
 
 void QTwitView::moveToPointAnim(qreal y)
 {
-    qreal maxYMovement = sceneRect().height() - viewport()->height();
+    //WHY 17? scrollbar width/height?
+    qreal maxYMovement = sceneRect().height() - viewport()->height() + 17;
 
     if (maxYMovement > 0) {
         int vBarNextPosition = 0;
@@ -83,7 +84,7 @@ void QTwitView::moveToPointAnim(qreal y)
             vBarNextPosition = vBarMax;
         } else {
             //WHY -18????? FIX THIS !!!!!!!
-            vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement - 18;
+            vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement;
         }
 
         m_scrbarAnimation->setEndValue(vBarNextPosition);
