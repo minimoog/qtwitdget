@@ -31,6 +31,7 @@
 #include "shortenedurl.h"
 #include "qtwitview.h"
 #include "groupdialog.h"
+#include "signalwaiter.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
@@ -118,30 +119,21 @@ void MainWindow::authorize()
 	vc.setNetworkAccessManager(m_netManager);
 	vc.setOAuthTwitter(m_oauthTwitter);
 
-	QEventLoop q;
-	QTimer tT;
-	tT.setSingleShot(true);
+    SignalWaiter sigWait(&vc, SIGNAL(finished(bool)));
+    vc.verify();
 
-	connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
-	connect(&vc, SIGNAL(finished(bool)), &q, SLOT(quit()));
-
-	vc.verify();
-	tT.start(60000);
-	q.exec();
-
-	if(tT.isActive()){
-		tT.stop();
-		QTwitExtUserInfo extUserInfo = vc.userInfo();
-		//store settings
+    if (sigWait.wait(60000)) {
+        QTwitExtUserInfo extUserInfo = vc.userInfo();
+        //store settings
         QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-		settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
-		settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
-		settings.setValue("user_id", extUserInfo.id());
+        settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
+        settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
+        settings.setValue("user_id", extUserInfo.id());
 
-		startUp();
-	} else {
-		//timeout;
-	}
+        startUp();
+    } else {
+        qDebug() << "Verify credentials timeout";
+    }
 }
 
 void MainWindow::startUp()
