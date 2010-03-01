@@ -161,6 +161,7 @@ void GradientRectItem::startFadeOutAnim()
     m_fadeinoutAnimation->setDuration(200);
     m_fadeinoutAnimation->setStartValue(1.0);
     m_fadeinoutAnimation->setEndValue(0.0);
+    m_fadeinoutAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     m_fadeinoutAnimation->start();
 }
 
@@ -168,5 +169,6 @@ void GradientRectItem::startMoveAnimY(qreal dy)
 {
     m_moveAnimation->setDuration(200);
     m_moveAnimation->setEndValue(QPointF(0, pos().y() + dy));
+    m_moveAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     m_moveAnimation->start();
 }
