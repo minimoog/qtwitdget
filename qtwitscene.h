@@ -121,8 +121,6 @@ private slots:
     void deleteClicked(qint64 i);
     void favoritedClicked(qint64 i);
     void finishedFadeOut();
-    void testSlot(const QVariant& value);   //TESTTESTTEST
-    void finishedMoveAnim();
 	
 private:
 	GroupItems createStatusSceneItem(int count);
@@ -138,8 +136,6 @@ private:
     QNetworkAccessManager * m_netManager;
 
     QMap<qint64, GroupItems> m_sceneItems;
-    QPropertyAnimation *m_moveAnim;
-    StatusItemGroup *m_tempGroup;
 };
 
 #endif //QTWITSCENE_H

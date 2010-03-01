@@ -64,7 +64,7 @@ static QString replaceLinksWithHref(const QString &text)
 
 QTwitScene::QTwitScene(QObject *parent)
     :	QGraphicsScene(parent), m_netManager(0), m_numPages(1), m_lastStatus(0), m_firstStatus(0),
-    m_fadeoutId(0), m_moveAnim(new QPropertyAnimation(this)), m_tempGroup(0)
+    m_fadeoutId(0)
 {
 
 }
@@ -143,13 +143,13 @@ qint64 QTwitScene::addStatuses(const QList<QTwitStatus>& statuses, bool paging)
 {
     //TODO: remove then move down rest of statuses on the scene
 
-    //move all down
-    QMapIterator<qint64, GroupItems> i(m_sceneItems);
-    while (i.hasNext()) {
-        i.next();
-        //i.value().gradRectItem->moveBy(0, 101.0f * statuses.size());
-        //gradRectItemList << i.value().gradRectItem;
-        i.value().gradRectItem->startMoveAnimY(101.0f * statuses.size());
+    if (statuses.count()) {
+        //move all down
+        QMapIterator<qint64, GroupItems> i(m_sceneItems);
+        while (i.hasNext()) {
+            i.next();
+            i.value().gradRectItem->startMoveAnimY(101.0f * statuses.size());
+        }
     }
 
     //we need viewport width
@@ -500,16 +500,4 @@ void QTwitScene::finishedFadeOut()
     //after animation remove
     removeStatus(m_fadeoutId);
     m_fadeoutId = 0;
-}
-
-//////////TEST//////////////
-void QTwitScene::testSlot(const QVariant &value)
-{
-
-}
-
-void QTwitScene::finishedMoveAnim()
-{
-    destroyItemGroup(m_tempGroup);
-    m_tempGroup = 0;
 }
