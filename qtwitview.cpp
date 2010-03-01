@@ -83,7 +83,6 @@ void QTwitView::moveToPointAnim(qreal y)
         if (y > maxYMovement) {
             vBarNextPosition = vBarMax;
         } else {
-            //WHY -18????? FIX THIS !!!!!!!
             vBarNextPosition = vBarMin + (vBarMax - vBarMin) * y / maxYMovement;
         }
 
