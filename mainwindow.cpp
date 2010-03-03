@@ -438,6 +438,7 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    //BUG window position is written only on close event
     writeSettings();
 	hide();
 	e->ignore();

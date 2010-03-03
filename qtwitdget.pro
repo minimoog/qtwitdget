@@ -46,7 +46,57 @@ HEADERS += twitstatusedit.h \
     oauth/pindialog.h \
     timelinetabwidget.h \
     sceneitems/statusitemgroup.h \
-    signalwaiter.h
+    signalwaiter.h \
+    itemviews-ng/qtreewidgetng_p.h \
+    itemviews-ng/qtreewidgetng.h \
+    itemviews-ng/qtreeselectionmanager_p.h \
+    itemviews-ng/qtreeselectionmanager.h \
+    itemviews-ng/qtreemodelinterface.h \
+    itemviews-ng/qtreemodelbase.h \
+    itemviews-ng/qtreemodeladaptor_p.h \
+    itemviews-ng/qtreemodeladaptor.h \
+    itemviews-ng/qtreedefaultmodel.h \
+    itemviews-ng/qtreecontroller_p.h \
+    itemviews-ng/qtreecontroller.h \
+    itemviews-ng/qtablewidgetng_p.h \
+    itemviews-ng/qtablewidgetng.h \
+    itemviews-ng/qtableselectionmanager_p.h \
+    itemviews-ng/qtableselectionmanager.h \
+    itemviews-ng/qtablemodelinterface.h \
+    itemviews-ng/qtablemodeladaptor_p.h \
+    itemviews-ng/qtablemodeladaptor.h \
+    itemviews-ng/qtabledefaultmodel.h \
+    itemviews-ng/qtablecontroller_p.h \
+    itemviews-ng/qtablecontroller.h \
+    itemviews-ng/qsectionspans_p.h \
+    itemviews-ng/qlistwidgetng_p.h \
+    itemviews-ng/qlistwidgetng.h \
+    itemviews-ng/qlistselectionmanager_p.h \
+    itemviews-ng/qlistselectionmanager.h \
+    itemviews-ng/qlistmodelinterface.h \
+    itemviews-ng/qlistmodeladaptor_p.h \
+    itemviews-ng/qlistmodeladaptor.h \
+    itemviews-ng/qlistfromtreeadaptor_p.h \
+    itemviews-ng/qlistfromtreeadaptor.h \
+    itemviews-ng/qlistdefaultmodel.h \
+    itemviews-ng/qlistcontroller_p.h \
+    itemviews-ng/qlistcontroller.h \
+    itemviews-ng/qitemviewsglobal.h \
+    itemviews-ng/qgraphicstreeview_p.h \
+    itemviews-ng/qgraphicstreeview.h \
+    itemviews-ng/qgraphicstableview_p.h \
+    itemviews-ng/qgraphicstableview.h \
+    itemviews-ng/qgraphicslistview_p.h \
+    itemviews-ng/qgraphicslistview.h \
+    itemviews-ng/qgraphicsheader_p.h \
+    itemviews-ng/qgraphicsheader.h \
+    itemviews-ng/qdataroles_p.h \
+    itemviews-ng/experimental/qkineticlistcontroller_p.h \
+    itemviews-ng/experimental/qkineticlistcontroller.h \
+    itemviews-ng/experimental/qgraphicsscrollbar_p.h \
+    itemviews-ng/experimental/qgraphicsscrollbar.h \
+    itemviews-ng/experimental/qgraphicspathview.h \
+    itemviews-ng/experimental/qgraphicsgridview.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -81,7 +131,33 @@ SOURCES += main.cpp \
     oauth/pindialog.cpp \
     timelinetabwidget.cpp \
     sceneitems/statusitemgroup.cpp \
-    signalwaiter.cpp
+    signalwaiter.cpp \
+    itemviews-ng/qtreewidgetng.cpp \
+    itemviews-ng/qtreeselectionmanager.cpp \
+    itemviews-ng/qtreemodeladaptor.cpp \
+    itemviews-ng/qtreedefaultmodel.cpp \
+    itemviews-ng/qtreecontroller.cpp \
+    itemviews-ng/qtablewidgetng.cpp \
+    itemviews-ng/qtableselectionmanager.cpp \
+    itemviews-ng/qtablemodelinterface.cpp \
+    itemviews-ng/qtablemodeladaptor.cpp \
+    itemviews-ng/qtabledefaultmodel.cpp \
+    itemviews-ng/qtablecontroller.cpp \
+    itemviews-ng/qlistwidgetng.cpp \
+    itemviews-ng/qlistselectionmanager.cpp \
+    itemviews-ng/qlistmodelinterface.cpp \
+    itemviews-ng/qlistmodeladaptor.cpp \
+    itemviews-ng/qlistfromtreeadaptor.cpp \
+    itemviews-ng/qlistdefaultmodel.cpp \
+    itemviews-ng/qlistcontroller.cpp \
+    itemviews-ng/qgraphicstreeview.cpp \
+    itemviews-ng/qgraphicstableview.cpp \
+    itemviews-ng/qgraphicslistview.cpp \
+    itemviews-ng/qgraphicsheader.cpp \
+    itemviews-ng/experimental/qkineticlistcontroller.cpp \
+    itemviews-ng/experimental/qgraphicsscrollbar.cpp \
+    itemviews-ng/experimental/qgraphicspathview.cpp \
+    itemviews-ng/experimental/qgraphicsgridview.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \
@@ -90,3 +166,6 @@ TRANSLATIONS += translations/qtwitdget_en.ts \
     translations/qtwitdget_mk.ts
 RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc
+OTHER_FILES += 
+
+DEFINES += Q_ITEMVIEWSNG_EXPORT=""

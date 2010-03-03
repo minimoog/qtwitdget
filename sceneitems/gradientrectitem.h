@@ -50,6 +50,7 @@ public:
     void setGradient(GradientRectItem::Gradient gradient);
     void setGradientAnim(GradientRectItem::Gradient gradient);
     void startFadeOutAnim();
+    void startFadeInAnim();
     void startMoveAnimY(qreal dy);
 
     QColor firstGradientColor() const;
