@@ -96,7 +96,9 @@ HEADERS += twitstatusedit.h \
     itemviews-ng/experimental/qgraphicsscrollbar_p.h \
     itemviews-ng/experimental/qgraphicsscrollbar.h \
     itemviews-ng/experimental/qgraphicspathview.h \
-    itemviews-ng/experimental/qgraphicsgridview.h
+    itemviews-ng/experimental/qgraphicsgridview.h \
+    tweetmodel.h \
+    tweetviewitem.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -157,7 +159,9 @@ SOURCES += main.cpp \
     itemviews-ng/experimental/qkineticlistcontroller.cpp \
     itemviews-ng/experimental/qgraphicsscrollbar.cpp \
     itemviews-ng/experimental/qgraphicspathview.cpp \
-    itemviews-ng/experimental/qgraphicsgridview.cpp
+    itemviews-ng/experimental/qgraphicsgridview.cpp \
+    tweetmodel.cpp \
+    tweetviewitem.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \
@@ -167,5 +171,4 @@ TRANSLATIONS += translations/qtwitdget_en.ts \
 RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc
 OTHER_FILES += 
-
 DEFINES += Q_ITEMVIEWSNG_EXPORT=""
