@@ -98,7 +98,8 @@ HEADERS += twitstatusedit.h \
     itemviews-ng/experimental/qgraphicspathview.h \
     itemviews-ng/experimental/qgraphicsgridview.h \
     tweetmodel.h \
-    tweetviewitem.h
+    tweetviewitem.h \
+    tweetview.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -161,7 +162,8 @@ SOURCES += main.cpp \
     itemviews-ng/experimental/qgraphicspathview.cpp \
     itemviews-ng/experimental/qgraphicsgridview.cpp \
     tweetmodel.cpp \
-    tweetviewitem.cpp
+    tweetviewitem.cpp \
+    tweetview.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \
