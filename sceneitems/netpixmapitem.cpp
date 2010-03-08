@@ -72,6 +72,7 @@ QNetworkAccessManager* NetPixmapItem::networkAccessManager() const
 
 void NetPixmapItem::setPixmapUrl(const QUrl &url)
 {
+    /*
     //check if pixmap is already cache
     QPixmap pm;
 
@@ -87,7 +88,7 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
 
 		if (!query.next()) {
 			//there is not image on the database, download it
-            Q_ASSERT(m_netManager != 0);
+            //Q_ASSERT(m_netManager != 0);
             QNetworkRequest request;
             request.setUrl(url);
             
@@ -104,6 +105,7 @@ void NetPixmapItem::setPixmapUrl(const QUrl &url)
             setPixmap(pm);
         }
     }
+    */
 }
 
 void NetPixmapItem::downloadFinished()

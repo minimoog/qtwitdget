@@ -19,6 +19,7 @@
  */
 
 #include <QPen>
+#include "qtwit/qtwitstatus.h"
 #include "tweetviewitem.h"
 
 ////SET WIDTH!!!
@@ -73,14 +74,30 @@ TweetViewItem::TweetViewItem(int index, QtGraphicsListView *view) :
 
 void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
 {
-    //id, text, screenName, avatarUrl
-    const QHash<QByteArray, QVariant> hash = data(QList<QByteArray>() << "text" << "screenName" << "avatarUrl" );
+    const QHash<QByteArray, QVariant> hash = data(QList<QByteArray>() << "DisplayRole" );
 
-    const QString text = hash.value("text").toString();
-    const QString name = hash.value("screenName").toString();
-    const QString avatarUrl = hash.value("avatarUrl").toString();
+    QVariant s = hash.value("DisplayRole");
+    QTwitStatus tweet = s.value<QTwitStatus>();
 
-    m_textItem->setHtml(text);
-    m_nameItem->setPlainText(name);
-    m_avatarItem->setPixmapUrl(avatarUrl);
+    m_textItem->setHtml(tweet.text());
+    m_nameItem->setPlainText(tweet.screenName());
+    m_avatarItem->setPixmapUrl(tweet.profileImageUrl());
+
+    QtGraphicsListView *listView = view();
+    QRectF geometry = listView->geometry();
+
+    setWidth(geometry.width());
+}
+
+QSizeF TweetViewItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    return QSizeF(view()->geometry().width(), 101.0f);
+}
+
+void TweetViewItem::setWidth(int w)
+{
+    m_gradRectItem->setWidth(w);
+    m_textItem->setTextWidth(w - 84 - 10);
+    m_favoriteButtonItem->setPos(w - 50, 80);
+    m_lineItem->setLine(1, 99, w - 1, 99);
 }

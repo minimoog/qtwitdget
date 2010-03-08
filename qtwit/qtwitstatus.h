@@ -21,6 +21,7 @@
 #ifndef QTWITSTATUS_H
 #define QTWITSTATUS_H
 
+#include <QMetaType>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -43,6 +44,8 @@ public:
 
 	QTwitStatus(const QTwitStatus &other)
 		:	d(other.d) { }
+
+    ~QTwitStatus() {}
 
 	void setCreated(const QDateTime &datetime) { d->created = datetime; }
 	QDateTime created() const { return d->created; }
@@ -144,5 +147,7 @@ public:
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
+
+Q_DECLARE_METATYPE(QTwitStatus)
 
 #endif //QTWITSTATUS_H

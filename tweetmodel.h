@@ -27,12 +27,14 @@
 
 class TweetModel : public QtListModelInterface
 {
+    Q_OBJECT
 public:
     TweetModel(QObject *parent = 0);
     ~TweetModel();
 
     int count() const;
     QHash<QByteArray,QVariant> data(int index, const QList<QByteArray> &roles) const;
+    void fetchNewTweets();
 
 private:
     QList<QTwitStatus> m_statuses;

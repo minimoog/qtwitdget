@@ -33,7 +33,7 @@ void TweetView::setModel(QtListModelInterface *model_)
     if (model()) {
         disconnect(model(), SIGNAL(itemsInserted(int, int)), this, SLOT(itemsInserted(int,int)));
         disconnect(model(), SIGNAL(itemsChanged(int, int, const QList<QByteArray>&)),
-                   this, SLOT(itemsChanged(int,int,QList<QByteArray>&)));
+                   this, SLOT(itemsChanged(int,int,const QList<QByteArray>&)));
     }
 
     QtGraphicsListView::setModel(model_);
@@ -41,26 +41,26 @@ void TweetView::setModel(QtListModelInterface *model_)
     if (model()) {
         connect(model(), SIGNAL(itemsInserted(int, int)), this, SLOT(itemsInserted(int,int)));
         connect(model(), SIGNAL(itemsChanged(int, int, const QList<QByteArray>&)),
-                this, SLOT(itemsChanged(int,int,QList<QByteArray>&)));
+                this, SLOT(itemsChanged(int,int,const QList<QByteArray>&)));
     }
 }
 
 void TweetView::itemsInserted(int index, int count)
 {
+    doLayout();
+
     for (int i = 0; i < count; ++i) {
         if (TweetViewItem *item = static_cast<TweetViewItem*>(itemForIndex(index + i))) {
-            //something
+            
         }
     }
-
-    doLayout();
 }
 
 void TweetView::itemsChanged(int index, int count, const QList<QByteArray> &roles)
 {
     for (int i = 0; i < count; ++i) {
         if (TweetViewItem *item = static_cast<TweetViewItem*>(itemForIndex(index + i))) {
-            //do something
+            item->itemChanged(roles);
         }
     }
 

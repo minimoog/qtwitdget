@@ -33,6 +33,9 @@ class TweetViewItem : public QtGraphicsListViewItem
 public:
     TweetViewItem(int index, QtGraphicsListView* view);
     void itemChanged(const QList<QByteArray> &roles);
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
+    void setWidth(int w);
+
 private:
     GradientRectItem *m_gradRectItem;
     NetPixmapItem *m_avatarItem;

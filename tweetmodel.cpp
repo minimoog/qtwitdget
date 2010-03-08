@@ -23,6 +23,42 @@
 TweetModel::TweetModel(QObject *parent)
     : QtListModelInterface(parent)
 {
+
+}
+
+int TweetModel::count() const
+{
+    return m_statuses.count();
+}
+
+/*
+"FontRole"
+"TextAlignmentRole"
+"ForegroundRole"
+"CheckStateRole"
+"DecorationRole"
+"DisplayRole"
+"SizeHintRole"
+*/
+
+QHash<QByteArray,QVariant> TweetModel::data(int index, const QList<QByteArray> &roles) const
+{
+    QHash<QByteArray,QVariant> hash;
+    if (index >= 0 && index < m_statuses.count()) {
+        for (int i = 0; i < roles.count(); ++i) {
+            if (roles.at(i) == "DisplayRole") {
+                QVariant v;
+                v.setValue(m_statuses.at(index));
+                hash.insert("DisplayRole", v);
+            }
+        }
+    }
+
+    return hash;
+}
+
+void TweetModel::fetchNewTweets()
+{
     QSqlQuery query;
     QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl, isRead "
                          "FROM status "
@@ -44,30 +80,6 @@ TweetModel::TweetModel(QObject *parent)
     }
 
     emit itemsInserted(0, m_statuses.count());
-}
-
-int TweetModel::count() const
-{
-    return m_statuses.count();
-}
-
-QHash<QByteArray,QVariant> TweetModel::data(int index, const QList<QByteArray> &roles) const
-{
-    QHash<QByteArray,QVariant> hash;
-    if (index >= 0 && index < m_statuses.count()) {
-        for (int i = 0; i < roles.count(); ++i) {
-            if (roles.at(i) == "id")
-                hash.insert("id", m_statuses.at(index).id());
-            if (roles.at(i) == "text")
-                hash.insert("text", m_statuses.at(index).text());
-            if (roles.at(i) == "screenName")
-                hash.insert("screenName", m_statuses.at(index).screenName());
-            if (roles.at(i) == "avatarUrl")
-                hash.insert("avatar", m_statuses.at(index).profileImageUrl());
-        }
-    }
-
-    return hash;
 }
 
 TweetModel::~TweetModel()

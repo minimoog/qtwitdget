@@ -33,6 +33,11 @@
 #include "groupdialog.h"
 #include "signalwaiter.h"
 
+#include "itemviews-ng/experimental/qkineticlistcontroller.h"
+#include "tweetview.h"
+#include "tweetviewitem.h"
+#include "tweetmodel.h"
+
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
@@ -511,14 +516,15 @@ void MainWindow::updateTab(int i)
     if (i == -1)
         return;
 
-    QTwitScene *twitScene = m_twitScenes.at(i);
-    twitScene->updateStatuses();
+    //QTwitScene *twitScene = m_twitScenes.at(i);
+    //twitScene->updateStatuses();
 
     setTabTextUnreadStatuses(i);
 }
 
 void MainWindow::closeTab(int i)
 {
+    /*
     QTwitView *twitView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
     if (twitView) {
         QTwitScene *twitScene = qobject_cast<QTwitScene*>(twitView->scene());
@@ -532,6 +538,7 @@ void MainWindow::closeTab(int i)
     } else {
         qDebug() << "Error remove tab: Not a QGraphics View";
     }
+    */
 
 	ui.tabWidget->removeTab(i);
 
@@ -559,34 +566,34 @@ void MainWindow::createDefaultTwitGroups()
 	m_twitTabGroups.clear();
 
 	//default tabs
-    TwitTabGroup unread;
-    unread.setTabName(tr("Unread"));
-    unread.setQuery(QString(" isRead == 0 "));
-    unread.setType(TwitTabGroup::Unread);
-    unread.setCloseable(false);
+    //TwitTabGroup unread;
+    //unread.setTabName(tr("Unread"));
+    //unread.setQuery(QString(" isRead == 0 "));
+    //unread.setType(TwitTabGroup::Unread);
+    //unread.setCloseable(false);
 
-	TwitTabGroup allfriends;
-	allfriends.setTabName(tr("Friends"));
-	allfriends.setQuery(QString(" 1 == 1 "));
+    TwitTabGroup allfriends;
+    allfriends.setTabName(tr("Friends"));
+    allfriends.setQuery(QString(" 1 == 1 "));
     allfriends.setType(TwitTabGroup::Normal);
     allfriends.setCloseable(false);
 
-	TwitTabGroup myTwits;
-	myTwits.setTabName(tr("My twits"));
-	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
-    myTwits.setType(TwitTabGroup::Normal);
-    myTwits.setCloseable(false);
+    //TwitTabGroup myTwits;
+    //myTwits.setTabName(tr("My twits"));
+    //myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
+    //myTwits.setType(TwitTabGroup::Normal);
+    //myTwits.setCloseable(false);
 
-    TwitTabGroup mentions;
-    mentions.setTabName(tr("Mentions"));
-    mentions.setQuery(QString(" mention == 1"));
-    mentions.setType(TwitTabGroup::Normal);
-    mentions.setCloseable(false);
+    //TwitTabGroup mentions;
+    //mentions.setTabName(tr("Mentions"));
+    //mentions.setQuery(QString(" mention == 1"));
+    //mentions.setType(TwitTabGroup::Normal);
+    //mentions.setCloseable(false);
 
-    m_twitTabGroups.append(unread);
-	m_twitTabGroups.append(allfriends);
-	m_twitTabGroups.append(myTwits);
-    m_twitTabGroups.append(mentions);
+    //m_twitTabGroups.append(unread);
+    m_twitTabGroups.append(allfriends);
+    //m_twitTabGroups.append(myTwits);
+    //m_twitTabGroups.append(mentions);
 
     //read saved groups
     readGroupsSettings();
@@ -623,6 +630,22 @@ void MainWindow::createTabs()
 
 void MainWindow::addGroupTab(const TwitTabGroup& group)
 {
+    QGraphicsView *view = new QGraphicsView(this);
+    view->setScene(new QGraphicsScene(this));
+    view->setSceneRect(0, 0, 500, 500);
+
+    QtKineticListController *controller = new QtKineticListController(view);
+    controller->setView(new TweetView);
+    TweetModel *model = new TweetModel(controller);
+    controller->setModel(model);
+    controller->view()->setGeometry(0, 0, 500, 500);
+
+    view->scene()->addItem(controller->view());
+    static_cast<TweetModel*>(controller->model())->fetchNewTweets();
+
+    ui.tabWidget->addTab(view, group.tabName());
+
+    /*
     if (group.type() == TwitTabGroup::Normal) {
         QTwitScene *statusScene = new QTwitScene(this);
         statusScene->setNetworkAccessManager(m_netManager);
@@ -675,10 +698,12 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
             tabButton->setEnabled(false);
         }
     }
+    */
 }
 
 void MainWindow::nextStatuses()
 {
+    /*
 	int i = ui.tabWidget->currentIndex();
 
 	if(i == -1)
@@ -686,10 +711,12 @@ void MainWindow::nextStatuses()
 
     QTwitScene *twitScene = m_twitScenes.at(i);
     twitScene->nextStatuses();
+    */
 }
 
 void MainWindow::favorited(qint64 statusId)
 {
+    /*
     //first check if status is already favorited
     QSqlQuery query;
     QString sq = QString("SELECT favorited FROM status WHERE id = %1;").arg(statusId);
@@ -714,16 +741,19 @@ void MainWindow::favorited(qint64 statusId)
                 m_twitScenes.at(i)->setFavorited(statusId, true);
         }
     }
+    */
 }
 
 void MainWindow::reqDelete(qint64 statusId)
 {
     m_twitDestroy->deleteStatus(statusId);
 
+    /*
     //remove status from other tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
         m_twitScenes.at(i)->removeStatus(statusId);
     }
+    */
 }
 
 void MainWindow::retweet(qint64 statusId)
@@ -873,6 +903,7 @@ void MainWindow::setTabTextUnreadStatuses(int index)
 
 void MainWindow::markAllStatusesRead()
 {
+    /*
     QSqlQuery query;
     query.exec("UPDATE status SET isRead = 1 WHERE isRead = 0");
 
@@ -881,10 +912,12 @@ void MainWindow::markAllStatusesRead()
         m_twitScenes.at(i)->markAllRead();
         setTabTextUnreadStatuses(i);
     }
+    */
 }
 
 void MainWindow::gotoNextUnread()
 {
+    /*
      //!!!!! NEEDS REFACTORING !!!!!!!!!
 
     if (ui.tabWidget->currentIndex() == 0) {
@@ -968,6 +1001,7 @@ void MainWindow::gotoNextUnread()
             setTabTextUnreadStatuses(i);
         }
     }
+    */
 }
 
 MainWindow::~MainWindow()
