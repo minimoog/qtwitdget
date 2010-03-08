@@ -21,6 +21,7 @@
 #ifndef QTWITSTATUS_H
 #define QTWITSTATUS_H
 
+#include <QMetaType>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -144,5 +145,7 @@ public:
 private:
 	QSharedDataPointer<QTwitStatusData> d;
 };
+
+Q_DECLARE_METATYPE(QTwitStatus)
 
 #endif //QTWITSTATUS_H
