@@ -39,7 +39,7 @@ public:
 signals:
     void itemsInserted(int index, int count);
     void itemsRemoved(int index, int count);
-    void itemsMoved(int index, int count);
+    void itemsMoved(int from, int to, int count);
     void itemsChanged(int index, int count, const QList<QByteArray>& roles);
 
 private:
