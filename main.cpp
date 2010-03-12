@@ -20,9 +20,11 @@
 
 #include <QApplication>
 #include <QTranslator>
+#include <QNetworkAccessManager>
 #include "mainwindow.h"
 
 QTranslator *appTranslator;		//global translator object
+QNetworkAccessManager* MainWindow::m_s_netManager = 0;
 
 int main(int argc, char* argv[])
 {

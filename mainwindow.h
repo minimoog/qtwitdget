@@ -49,7 +49,8 @@ public:
 	MainWindow();
     ~MainWindow();
 	void startUp();
-	
+    static QNetworkAccessManager* networkAccessManager();
+
 private slots:
 	void authorize();
 	/*! Called when getting the friends timeline (statuses) is finished */
@@ -98,6 +99,7 @@ private:
 	Ui::MainWindowForm ui;
 
 	QNetworkAccessManager *m_netManager;
+    static QNetworkAccessManager *m_s_netManager;
 	OAuthTwitter *m_oauthTwitter;
 	HomeTimeline *m_homeTimeline;
     Mentions *m_mentions;

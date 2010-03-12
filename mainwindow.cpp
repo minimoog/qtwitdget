@@ -104,9 +104,16 @@ MainWindow::MainWindow()
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
 	
+    MainWindow::m_s_netManager = m_netManager;
+
 	setupTrayIcon();
 
     readSettings();
+}
+
+QNetworkAccessManager* MainWindow::networkAccessManager()
+{
+    return m_s_netManager;
 }
 
 void MainWindow::authorize()
