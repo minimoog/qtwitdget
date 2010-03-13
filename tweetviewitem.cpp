@@ -21,6 +21,7 @@
 #include <QPen>
 #include "qtwit/qtwitstatus.h"
 #include "tweetviewitem.h"
+#include "tweetmodel.h"
 
 ////SET WIDTH!!!
 
@@ -70,6 +71,8 @@ TweetViewItem::TweetViewItem(int index, QtGraphicsListView *view) :
 
     m_lineItem = new QGraphicsLineItem(m_gradRectItem);
     m_lineItem->setPen(QPen(QColor("#DDDDDD")));
+
+    setData();
 }
 
 void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
@@ -100,4 +103,20 @@ void TweetViewItem::setWidth(int w)
     m_textItem->setTextWidth(w - 84 - 10);
     m_favoriteButtonItem->setPos(w - 50, 80);
     m_lineItem->setLine(1, 99, w - 1, 99);
+}
+
+void TweetViewItem::setData()
+{
+    QHash<QByteArray, QVariant> hashdata = data(QList<QByteArray>() << "DisplayRole");
+    QTwitStatus s = hashdata.value("DisplayRole").value<QTwitStatus>();
+    m_avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
+    m_nameItem->setPlainText(s.screenName());
+    m_textItem->setHtml(s.text());
+
+    // ### others to do
+
+    if (s.isRead())
+        m_gradRectItem->setGradient(GradientRectItem::White);
+    else
+        m_gradRectItem->setGradient(GradientRectItem::Blue);
 }

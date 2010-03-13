@@ -37,6 +37,8 @@ public:
     void setWidth(int w);
 
 private:
+    void setData();
+
     GradientRectItem *m_gradRectItem;
     NetPixmapItem *m_avatarItem;
     QGraphicsTextItem *m_nameItem;
