@@ -23,12 +23,14 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsLineItem>
 #include <QPen>
+#include <QUrl>
 #include "sceneitems/pixmapbuttonitem.h"
 #include "sceneitems/gradientrectitem.h"
 #include "sceneitems/netpixmapitem.h"
 #include "sceneitems/statustextitem.h"
 #include "tweetviewitem.h"
 #include "mainwindow.h"
+#include "qtwit/qtwitstatus.h"
 
 TweetViewItem::TweetViewItem(int index, TweetListView *view)
     : QGraphicsItem(view), m_listView(view), m_index(index)
@@ -132,4 +134,17 @@ QRectF TweetViewItem::boundingRect() const
 void TweetViewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 
+}
+
+void TweetViewItem::setData()
+{
+    QTwitStatus s = m_listView->model()->data(m_index).value<QTwitStatus>();
+    m_avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
+    m_nameItem->setPlainText(s.screenName());
+    m_textItem->setHtml(s.text());
+
+    if (s.isRead())
+        m_gradRectItem->setGradient(GradientRectItem::White);
+    else
+        m_gradRectItem->setGradient(GradientRectItem::Blue);
 }

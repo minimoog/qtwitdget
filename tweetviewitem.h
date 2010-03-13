@@ -48,6 +48,8 @@ public:
     TweetListView* view() const;
 
 private:
+    void setData();
+
     int m_index;
     TweetListView* m_listView;
     int m_width;
