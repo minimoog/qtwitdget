@@ -32,6 +32,8 @@
 #include "qtwitview.h"
 #include "groupdialog.h"
 #include "signalwaiter.h"
+#include "tweetlistmodel.h"
+#include "tweetlistview.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
@@ -517,14 +519,15 @@ void MainWindow::updateTab(int i)
     if (i == -1)
         return;
 
-    QTwitScene *twitScene = m_twitScenes.at(i);
-    twitScene->updateStatuses();
+    //QTwitScene *twitScene = m_twitScenes.at(i);
+    //twitScene->updateStatuses();
 
     setTabTextUnreadStatuses(i);
 }
 
 void MainWindow::closeTab(int i)
 {
+    /*
     QTwitView *twitView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
     if (twitView) {
         QTwitScene *twitScene = qobject_cast<QTwitScene*>(twitView->scene());
@@ -539,6 +542,7 @@ void MainWindow::closeTab(int i)
         qDebug() << "Error remove tab: Not a QGraphics View";
     }
 
+    */
 	ui.tabWidget->removeTab(i);
 
 	m_twitTabGroups.removeAt(i);
@@ -565,11 +569,11 @@ void MainWindow::createDefaultTwitGroups()
 	m_twitTabGroups.clear();
 
 	//default tabs
-    TwitTabGroup unread;
-    unread.setTabName(tr("Unread"));
-    unread.setQuery(QString(" isRead == 0 "));
-    unread.setType(TwitTabGroup::Unread);
-    unread.setCloseable(false);
+    //TwitTabGroup unread;
+    //unread.setTabName(tr("Unread"));
+    //unread.setQuery(QString(" isRead == 0 "));
+    //unread.setType(TwitTabGroup::Unread);
+    //unread.setCloseable(false);
 
 	TwitTabGroup allfriends;
 	allfriends.setTabName(tr("Friends"));
@@ -577,22 +581,22 @@ void MainWindow::createDefaultTwitGroups()
     allfriends.setType(TwitTabGroup::Normal);
     allfriends.setCloseable(false);
 
-	TwitTabGroup myTwits;
-	myTwits.setTabName(tr("My twits"));
-	myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
-    myTwits.setType(TwitTabGroup::Normal);
-    myTwits.setCloseable(false);
+    //TwitTabGroup myTwits;
+    //myTwits.setTabName(tr("My twits"));
+    //myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
+    //myTwits.setType(TwitTabGroup::Normal);
+    //myTwits.setCloseable(false);
 
-    TwitTabGroup mentions;
-    mentions.setTabName(tr("Mentions"));
-    mentions.setQuery(QString(" mention == 1"));
-    mentions.setType(TwitTabGroup::Normal);
-    mentions.setCloseable(false);
+    //TwitTabGroup mentions;
+    //mentions.setTabName(tr("Mentions"));
+    //mentions.setQuery(QString(" mention == 1"));
+    //mentions.setType(TwitTabGroup::Normal);
+    //mentions.setCloseable(false);
 
-    m_twitTabGroups.append(unread);
+    //m_twitTabGroups.append(unread);
 	m_twitTabGroups.append(allfriends);
-	m_twitTabGroups.append(myTwits);
-    m_twitTabGroups.append(mentions);
+    //m_twitTabGroups.append(myTwits);
+    //m_twitTabGroups.append(mentions);
 
     //read saved groups
     readGroupsSettings();
@@ -629,6 +633,7 @@ void MainWindow::createTabs()
 
 void MainWindow::addGroupTab(const TwitTabGroup& group)
 {
+    /*
     if (group.type() == TwitTabGroup::Normal) {
         QTwitScene *statusScene = new QTwitScene(this);
         statusScene->setNetworkAccessManager(m_netManager);
@@ -681,6 +686,16 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
             tabButton->setEnabled(false);
         }
     }
+    */
+
+    QGraphicsScene *statusScene = new QGraphicsScene(this);
+    QGraphicsView *statusView = new QGraphicsView(statusScene, this);
+    ui.tabWidget->addTab(statusView, group.tabName());
+    TweetListModel *model = new TweetListModel(this);
+    TweetListView *viewlist = new TweetListView;
+    viewlist->setModel(model);
+    statusScene->addItem(viewlist);
+    model->fetchNewTweets();
 }
 
 void MainWindow::nextStatuses()
@@ -690,8 +705,10 @@ void MainWindow::nextStatuses()
 	if(i == -1)
 		return;
 
+    /*
     QTwitScene *twitScene = m_twitScenes.at(i);
     twitScene->nextStatuses();
+    */
 }
 
 void MainWindow::favorited(qint64 statusId)
@@ -708,16 +725,16 @@ void MainWindow::favorited(qint64 statusId)
             QString sqf = QString("UPDATE status SET favorited = 0 WHERE id = %1;").arg(statusId);
             query.exec(sqf);
 
-            for (int i = 0; i < ui.tabWidget->count(); ++i) 
-                m_twitScenes.at(i)->setFavorited(statusId, false);
+            //for (int i = 0; i < ui.tabWidget->count(); ++i) 
+                //m_twitScenes.at(i)->setFavorited(statusId, false);
 
         } else {            //set favorited
             m_twitFavorite->create(statusId);
             QString sqf = QString("UPDATE status SET favorited = 1 WHERE id = %1;").arg(statusId);
             query.exec(sqf);
 
-            for (int i = 0; i < ui.tabWidget->count(); ++i) 
-                m_twitScenes.at(i)->setFavorited(statusId, true);
+            //for (int i = 0; i < ui.tabWidget->count(); ++i) 
+                //m_twitScenes.at(i)->setFavorited(statusId, true);
         }
     }
 }
@@ -728,7 +745,7 @@ void MainWindow::reqDelete(qint64 statusId)
 
     //remove status from other tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        m_twitScenes.at(i)->removeStatus(statusId);
+        //m_twitScenes.at(i)->removeStatus(statusId);
     }
 }
 
@@ -884,8 +901,8 @@ void MainWindow::markAllStatusesRead()
 
     //update all tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        m_twitScenes.at(i)->markAllRead();
-        setTabTextUnreadStatuses(i);
+        //m_twitScenes.at(i)->markAllRead();
+        //setTabTextUnreadStatuses(i);
     }
 }
 
@@ -893,6 +910,7 @@ void MainWindow::gotoNextUnread()
 {
      //!!!!! NEEDS REFACTORING !!!!!!!!!
 
+    /*
     if (ui.tabWidget->currentIndex() == 0) {
         QSqlQuery query;
         query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
@@ -970,10 +988,11 @@ void MainWindow::gotoNextUnread()
 
         //on all tabs change read status gradient to read and update tabs names
         for (int i = 0; i < m_twitScenes.count(); ++i) {
-            m_twitScenes.at(i)->markRead(id);
-            setTabTextUnreadStatuses(i);
+            //m_twitScenes.at(i)->markRead(id);
+            //setTabTextUnreadStatuses(i);
         }
     }
+    */
 }
 
 MainWindow::~MainWindow()

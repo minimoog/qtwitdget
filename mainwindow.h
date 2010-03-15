@@ -116,7 +116,7 @@ private:
 	qint64 m_lastStatusId;
     qint64 m_lastMentionId;
     qint64 m_lastMarkedReadStatus;
-	QList<QTwitScene*> m_twitScenes;
+	//QList<QTwitScene*> m_twitScenes;
 	int m_userId;
 
 	QSqlDatabase m_database;
