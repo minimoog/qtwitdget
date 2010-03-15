@@ -33,11 +33,14 @@
 #include "qtwit/qtwitstatus.h"
 
 TweetViewItem::TweetViewItem(int index, TweetListView *view)
-    : QGraphicsItem(view), m_listView(view), m_index(index)
+    : QGraphicsItem(view), d(new TweetViewItemData)
 {
-    m_gradRectItem = new GradientRectItem(200, GradientRectItem::Blue, this);
+    d->listView = view;
+    d->index = index;
 
-    QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), m_gradRectItem);
+    d->gradRectItem = new GradientRectItem(200, GradientRectItem::Blue, this);
+
+    QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), d->gradRectItem);
     avatarBoxItem->setPos(7, 7);
 
     QGraphicsRectItem *whiteBorderItem = new QGraphicsRectItem(0, 0, 49, 49, avatarBoxItem);
@@ -45,65 +48,67 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     whiteBorderItem->setBrush(QBrush(Qt::NoBrush));
     whiteBorderItem->setPos(10, 10);
 
-    NetPixmapItem *m_avatarItem = new NetPixmapItem(MainWindow::networkAccessManager(), whiteBorderItem);
-    m_avatarItem->setPos(1, 1);
+    d->avatarItem = new NetPixmapItem(MainWindow::networkAccessManager(), whiteBorderItem);
+    d->avatarItem->setPos(1, 1);
 
-    QGraphicsTextItem *m_nameItem = new QGraphicsTextItem(m_gradRectItem);
-    m_nameItem->setDefaultTextColor(QColor("#018ad9"));
-    m_nameItem->setFont(QFont("Segoe UI", 11));
-    m_nameItem->setPos(84, 0);
+    d->nameItem = new QGraphicsTextItem(d->gradRectItem);
+    d->nameItem->setDefaultTextColor(QColor("#018ad9"));
+    d->nameItem->setFont(QFont("Segoe UI", 11));
+    d->nameItem->setPos(84, 0);
 
-    StatusTextItem *m_textItem = new StatusTextItem(m_gradRectItem);
-    m_textItem->setPos(84, 24);
+    d->textItem = new StatusTextItem(d->gradRectItem);
+    d->textItem->setPos(84, 24);
 
-    PixmapButtonItem *m_replyItem = new PixmapButtonItem(m_gradRectItem);
-    m_replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
-    m_replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
-    m_replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
-    m_replyItem->setPos(10, 80);
-    m_replyItem->setToolTip(QObject::tr("Reply to this status"));
+    d->replyItem = new PixmapButtonItem(d->gradRectItem);
+    d->replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+    d->replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+    d->replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+    d->replyItem->setPos(10, 80);
+    d->replyItem->setToolTip(QObject::tr("Reply to this status"));
 
-    PixmapButtonItem *m_retweetItem = new PixmapButtonItem(m_gradRectItem);
-    m_retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
-    m_retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
-    m_retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
-    m_retweetItem->setPos(43, 80);
-    m_retweetItem->setToolTip(QObject::tr("Retweet this status"));
+    d->retweetItem = new PixmapButtonItem(d->gradRectItem);
+    d->retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
+    d->retweetItem->setHoverPixmap(QPixmap(":/images/button_retweet_hover.png"));
+    d->retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
+    d->retweetItem->setPos(43, 80);
+    d->retweetItem->setToolTip(QObject::tr("Retweet this status"));
 
-    PixmapButtonItem *m_favoritedItem = new PixmapButtonItem(m_gradRectItem);
-    m_favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
-    m_favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
-    m_favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
-    m_favoritedItem->setToolTip(QObject::tr("Favorite this status"));
+    d->favoritedItem = new PixmapButtonItem(d->gradRectItem);
+    d->favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
+    d->favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
+    d->favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
+    d->favoritedItem->setToolTip(QObject::tr("Favorite this status"));
 
-    QGraphicsLineItem *m_lineItem = new QGraphicsLineItem(m_gradRectItem);
-    m_lineItem->setPen(QPen(QColor("#DDDDDD")));
+    d->lineItem = new QGraphicsLineItem(d->gradRectItem);
+    d->lineItem->setPen(QPen(QColor("#DDDDDD")));
+
+    setData();
 }
 
 int TweetViewItem::index() const
 {
-    return m_index;
+    return d->index;
 }
 
 void TweetViewItem::setIndex(int index)
 {
-    m_index = index;
+    d->index = index;
     itemChanged();
 }
 
 int TweetViewItem::width() const
 {
-    return m_width;
+    return d->width;
 }
 
 void TweetViewItem::setWidth(int w)
 {
-    m_width = w;
+    d->width = w;
 
-    m_gradRectItem->setWidth(w);
-    m_textItem->setTextWidth(w - 84 -10);
-    m_favoritedItem->setPos(w - 50, 80);
-    m_lineItem->setLine(1, 99, w - 1, 99);
+    d->gradRectItem->setWidth(w);
+    d->textItem->setTextWidth(w - 84 -10);
+    d->favoritedItem->setPos(w - 50, 80);
+    d->lineItem->setLine(1, 99, w - 1, 99);
 }
 
 void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
@@ -118,12 +123,12 @@ QVariant TweetViewItem::data() const
 
 TweetListView* TweetViewItem::view() const
 {
-    return m_listView;
+    return d->listView;
 }
 
 QSizeF TweetViewItem::size() const
 {
-    return QSizeF(m_width, 101.0f);
+    return QSizeF(d->width, 101.0f);
 }
 
 QRectF TweetViewItem::boundingRect() const
@@ -138,13 +143,13 @@ void TweetViewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 void TweetViewItem::setData()
 {
-    QTwitStatus s = m_listView->model()->data(m_index).value<QTwitStatus>();
-    m_avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
-    m_nameItem->setPlainText(s.screenName());
-    m_textItem->setHtml(s.text());
+    QTwitStatus s = d->listView->model()->data(d->index).value<QTwitStatus>();
+    d->avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
+    d->nameItem->setPlainText(s.screenName());
+    d->textItem->setHtml(s.text());
 
     if (s.isRead())
-        m_gradRectItem->setGradient(GradientRectItem::White);
+        d->gradRectItem->setGradient(GradientRectItem::White);
     else
-        m_gradRectItem->setGradient(GradientRectItem::Blue);
+        d->gradRectItem->setGradient(GradientRectItem::Blue);
 }

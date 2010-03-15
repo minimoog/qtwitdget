@@ -22,6 +22,7 @@
 #define TWEETVIEWITEM_H
 
 #include <QGraphicsItem>
+#include <QSharedData>
 #include "tweetlistview.h"
 
 class GradientRectItem;
@@ -30,6 +31,30 @@ class QGraphicsTextItem;
 class StatusTextItem;
 class PixmapButtonItem;
 class QGraphicsLineItem;
+
+class TweetViewItemData : public QSharedData
+{
+public:
+    TweetViewItemData() : index(0), width(0), listView(0), gradRectItem(0),
+    avatarItem(0), nameItem(0), textItem(0), replyItem(0), retweetItem(0),
+    favoritedItem(0), lineItem(0)
+    {}
+
+    // ### Copy Constructor?
+
+    int index;
+    int width;
+    TweetListView* listView;
+    GradientRectItem* gradRectItem;
+    NetPixmapItem* avatarItem;
+    QGraphicsTextItem* nameItem;
+    StatusTextItem* textItem;
+    PixmapButtonItem* replyItem;
+    PixmapButtonItem* retweetItem;
+    PixmapButtonItem* favoritedItem;
+    QGraphicsLineItem* lineItem;
+};
+
 
 class TweetViewItem : public QGraphicsItem
 {
@@ -46,22 +71,11 @@ public:
     void itemChanged(const QList<QByteArray> &roles = QList<QByteArray>());
     QVariant data() const;
     TweetListView* view() const;
-
+    
 private:
     void setData();
 
-    int m_index;
-    TweetListView* m_listView;
-    int m_width;
-
-    GradientRectItem* m_gradRectItem;
-    NetPixmapItem* m_avatarItem;
-    QGraphicsTextItem* m_nameItem;
-    StatusTextItem* m_textItem;
-    PixmapButtonItem* m_replyButtonItem;
-    PixmapButtonItem* m_retweetItem;
-    PixmapButtonItem* m_favoritedItem;
-    QGraphicsLineItem* m_lineItem;
+    QSharedDataPointer<TweetViewItemData> d;
 };
 
 #endif // TWEETVIEWITEM_H
