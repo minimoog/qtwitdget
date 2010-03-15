@@ -22,7 +22,7 @@
 #include "tweetviewitem.h"
 
 TweetListView::TweetListView(QGraphicsItem * parent)
-    : QGraphicsItem(parent)
+    : QGraphicsItem(parent), m_model(0)
 {
 }
 
@@ -84,7 +84,12 @@ void TweetListView::itemsInserted(int index, int count)
     //  !!! only vertical !!!
 
     //find from which position to move/insert
-    QPointF posFrom = m_items.at(index)->mapToParent(QPointF(0, 0));
+
+    QPointF posFrom(0, 0);
+
+    if (m_items.count())
+        posFrom = m_items.at(index)->mapToParent(QPointF(0, 0));
+
     qreal ymovement = 0.0;
 
     //insert items;
