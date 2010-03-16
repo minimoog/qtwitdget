@@ -47,6 +47,8 @@ public:
 
 signals:
 	void scrollBarMaxPos(bool maxPos);
+    void resizeWidth(int width);
+
 protected:
 	void resizeEvent(QResizeEvent *e);
 private slots:
