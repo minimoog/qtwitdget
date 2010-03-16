@@ -147,3 +147,10 @@ void TweetListView::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 {
     // nothing to paint, just a holder for list items
 }
+
+void TweetListView::resizeWidth(int w)
+{
+    foreach(TweetViewItem* item, m_items) {
+        item->setWidth(w);
+    }
+}

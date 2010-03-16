@@ -40,6 +40,9 @@ public:
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+public slots:
+    void resizeWidth(int w);
+
 private slots:
     void itemsInserted(int index, int count);
     void itemsRemoved(int index, int count);
