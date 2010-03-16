@@ -689,13 +689,19 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     */
 
     QGraphicsScene *statusScene = new QGraphicsScene(this);
-    QGraphicsView *statusView = new QGraphicsView(statusScene, this);
+    //QGraphicsView *statusView = new QGraphicsView(statusScene, this);
+    QTwitView *statusView = new QTwitView(this);
+    statusView->setScene(statusScene);
+    statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, group.tabName());
     TweetListModel *model = new TweetListModel(this);
     TweetListView *viewlist = new TweetListView;
     viewlist->setModel(model);
     statusScene->addItem(viewlist);
     model->fetchNewTweets();
+    viewlist->resizeWidth(statusView->viewport()->width());
+
+    connect(statusView, SIGNAL(resizeWidth(int)), viewlist, SLOT(resizeWidth(int)));
 }
 
 void MainWindow::nextStatuses()
