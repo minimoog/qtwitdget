@@ -56,8 +56,9 @@ public:
 };
 
 
-class TweetViewItem : public QGraphicsItem
+class TweetViewItem : public QObject, public QGraphicsItem
 {
+    Q_OBJECT
 
 public:
     TweetViewItem(int index, TweetListView * view);
@@ -71,7 +72,17 @@ public:
     void itemChanged(const QList<QByteArray> &roles = QList<QByteArray>());
     QVariant data() const;
     TweetListView* view() const;
+
+signals:
+    void replyDeleteClicked(int index);
+    void retweetClicked(int index);
+    void favoritedClicked(int index);
     
+private slots:
+    void replyDeleteButtonClicked();
+    void retweetButtonClicked();
+    void favoritedButtonClicked();
+
 private:
     void setData();
 

@@ -65,6 +65,7 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     d->replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
     d->replyItem->setPos(10, 80);
     d->replyItem->setToolTip(QObject::tr("Reply to this status"));
+    connect(d->replyItem, SIGNAL(clicked(qint64)), this, SLOT(replyDeleteButtonClicked()));
 
     d->retweetItem = new PixmapButtonItem(d->gradRectItem);
     d->retweetItem->setDefaultPixmap(QPixmap(":/images/button_retweet.png"));
@@ -72,17 +73,26 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     d->retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
     d->retweetItem->setPos(43, 80);
     d->retweetItem->setToolTip(QObject::tr("Retweet this status"));
+    connect(d->retweetItem, SIGNAL(clicked(qint64)), this, SLOT(replyDeleteButtonClicked()));
 
     d->favoritedItem = new PixmapButtonItem(d->gradRectItem);
     d->favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));
     d->favoritedItem->setHoverPixmap(QPixmap(":/images/button_favorited_hover.png"));
     d->favoritedItem->setClickedPixmap(QPixmap(":/images/button_favorited_click.png"));
     d->favoritedItem->setToolTip(QObject::tr("Favorite this status"));
+    connect(d->favoritedItem, SIGNAL(clicked(qint64)), this, SLOT(favoritedButtonClicked()));
 
     d->lineItem = new QGraphicsLineItem(d->gradRectItem);
     d->lineItem->setPen(QPen(QColor("#DDDDDD")));
 
     setData();
+
+    //connect model to button signals
+    // ### TODO: SignalMapper
+    TweetListModel *model = d->listView->model();
+    connect(this, SIGNAL(replyDeleteClicked(int)), model, SLOT(replyDeleteClicked(int)));
+    connect(this, SIGNAL(retweetClicked(int)), model, SLOT(retweetClicked(int)));
+    connect(this, SIGNAL(favoritedClicked(int)), model, SLOT(favoritedClicked(int)));
 }
 
 int TweetViewItem::index() const
@@ -152,4 +162,19 @@ void TweetViewItem::setData()
         d->gradRectItem->setGradient(GradientRectItem::White);
     else
         d->gradRectItem->setGradient(GradientRectItem::Blue);
+}
+
+void TweetViewItem::replyDeleteButtonClicked()
+{
+    emit replyDeleteClicked(d->index);
+}
+
+void TweetViewItem::retweetButtonClicked()
+{
+    emit retweetClicked(d->index);
+}
+
+void TweetViewItem::favoritedButtonClicked()
+{
+    emit favoritedClicked(d->index);
 }
