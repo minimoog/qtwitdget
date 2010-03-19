@@ -42,6 +42,11 @@ signals:
     void itemsMoved(int from, int to, int count);
     void itemsChanged(int index, int count, const QList<QByteArray>& roles);
 
+public slots:
+    void replyDeleteClicked(int index);
+    void retweetClicked(int index);
+    void favoritedClicked(int index);
+
 private:
     QList<QTwitStatus> m_statuses;
 };

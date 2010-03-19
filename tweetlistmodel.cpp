@@ -64,3 +64,18 @@ void TweetListModel::fetchNewTweets()
 
     emit itemsInserted(0, m_statuses.count());
 }
+
+void TweetListModel::replyDeleteClicked(int index)
+{
+    // ### TODO
+}
+
+void TweetListModel::retweetClicked(int index)
+{
+    // ### TODO
+}
+
+void TweetListModel::favoritedClicked(int index)
+{
+    // ### TODO
+}
