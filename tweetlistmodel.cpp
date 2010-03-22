@@ -68,8 +68,15 @@ void TweetListModel::fetchNewTweets()
 
 void TweetListModel::replyDeleteClicked(int index)
 {
-    // ### TODO
-    qDebug() << "reply/delete clicked";
+    if (m_statuses.at(index).userId() != m_userid) {
+        //reply
+        emit requestReply(m_statuses.at(index).id(), m_statuses.at(index).screenName());
+    } else {
+        //delete own
+        emit requestDelete(m_statuses.at(index).id());
+        m_statuses.removeAt(index);
+        emit itemsRemoved(index, 1);
+    }
 }
 
 void TweetListModel::retweetClicked(int index)

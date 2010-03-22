@@ -60,11 +60,7 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     d->textItem->setPos(84, 24);
 
     d->replyItem = new PixmapButtonItem(d->gradRectItem);
-    //d->replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
-    //d->replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
-    //d->replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
     d->replyItem->setPos(10, 80);
-    //d->replyItem->setToolTip(QObject::tr("Reply to this status"));
     connect(d->replyItem, SIGNAL(clicked(qint64)), this, SLOT(replyDeleteButtonClicked()));
 
     d->retweetItem = new PixmapButtonItem(d->gradRectItem);

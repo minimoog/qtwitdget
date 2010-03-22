@@ -702,6 +702,10 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     model->fetchNewTweets();
     viewlist->resizeWidth(statusView->viewport()->width());
 
+    connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setReply(qint64,QString)));
+    connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setFocus()));
+    connect(model, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
+
     connect(statusView, SIGNAL(resizeWidth(int)), viewlist, SLOT(resizeWidth(int)));
 }
 

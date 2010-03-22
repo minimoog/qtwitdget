@@ -120,8 +120,8 @@ void TweetListView::itemsRemoved(int index, int count)
 
     //move rest up
     for (int i = index; i < m_items.count(); ++i) {
-        m_items.at(i)->moveBy(posTo.x(), posFrom.y() - posTo.y());
-        m_items.at(i)->setIndex(i);
+        m_items.at(i)->moveBy(posTo.x(), posTo.y() - posFrom.y());
+        m_items.at(i)->setIndex(index);
     }
 }
 
