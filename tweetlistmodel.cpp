@@ -18,6 +18,7 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include "tweetlistmodel.h"
 
 TweetListModel::TweetListModel(QObject *parent) :
@@ -68,14 +69,27 @@ void TweetListModel::fetchNewTweets()
 void TweetListModel::replyDeleteClicked(int index)
 {
     // ### TODO
+    qDebug() << "reply/delete clicked";
 }
 
 void TweetListModel::retweetClicked(int index)
 {
     // ### TODO
+    qDebug() << "retweet clicked";
 }
 
 void TweetListModel::favoritedClicked(int index)
 {
     // ### TODO
+    qDebug() << "favorited clicked";
+}
+
+void TweetListModel::setUserid(int userid)
+{
+    m_userid = userid;
+}
+
+int TweetListModel::userid() const
+{
+    return m_userid;
 }

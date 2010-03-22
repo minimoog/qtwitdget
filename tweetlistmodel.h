@@ -35,6 +35,8 @@ public:
     int count() const;
     QVariant data(int index);
     void fetchNewTweets();
+    void setUserid(int userid);
+    int userid() const;
 
 signals:
     void itemsInserted(int index, int count);
@@ -49,6 +51,7 @@ public slots:
 
 private:
     QList<QTwitStatus> m_statuses;
+    int m_userid;
 };
 
 #endif // TWEETLISTMODEL_H

@@ -60,11 +60,11 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     d->textItem->setPos(84, 24);
 
     d->replyItem = new PixmapButtonItem(d->gradRectItem);
-    d->replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
-    d->replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
-    d->replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+    //d->replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+    //d->replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+    //d->replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
     d->replyItem->setPos(10, 80);
-    d->replyItem->setToolTip(QObject::tr("Reply to this status"));
+    //d->replyItem->setToolTip(QObject::tr("Reply to this status"));
     connect(d->replyItem, SIGNAL(clicked(qint64)), this, SLOT(replyDeleteButtonClicked()));
 
     d->retweetItem = new PixmapButtonItem(d->gradRectItem);
@@ -157,6 +157,18 @@ void TweetViewItem::setData()
     d->avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
     d->nameItem->setPlainText(s.screenName());
     d->textItem->setHtml(s.text());
+
+    if (s.userId() == view()->model()->userid()) {
+        d->replyItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
+        d->replyItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
+        d->replyItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
+        d->replyItem->setToolTip(QObject::tr("Delete this status"));
+    } else {
+        d->replyItem->setDefaultPixmap(QPixmap(":/images/button_reply.png"));
+        d->replyItem->setHoverPixmap(QPixmap(":/images/button_reply_hover.png"));
+        d->replyItem->setClickedPixmap(QPixmap(":/images/button_reply_click.png"));
+        d->replyItem->setToolTip(QObject::tr("Reply to this status"));
+    }
 
     if (s.isRead())
         d->gradRectItem->setGradient(GradientRectItem::White);

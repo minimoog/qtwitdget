@@ -698,6 +698,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     TweetListView *viewlist = new TweetListView;
     viewlist->setModel(model);
     statusScene->addItem(viewlist);
+    model->setUserid(m_userId);
     model->fetchNewTweets();
     viewlist->resizeWidth(statusView->viewport()->width());
 
