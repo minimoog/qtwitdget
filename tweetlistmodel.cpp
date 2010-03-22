@@ -86,8 +86,7 @@ void TweetListModel::retweetClicked(int index)
 
 void TweetListModel::favoritedClicked(int index)
 {
-    // ### TODO
-    qDebug() << "favorited clicked";
+    emit requestFavorited(m_statuses.at(index).id());
 }
 
 void TweetListModel::setUserid(int userid)

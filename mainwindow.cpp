@@ -689,7 +689,6 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     */
 
     QGraphicsScene *statusScene = new QGraphicsScene(this);
-    //QGraphicsView *statusView = new QGraphicsView(statusScene, this);
     QTwitView *statusView = new QTwitView(this);
     statusView->setScene(statusScene);
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
@@ -706,6 +705,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setFocus()));
     connect(model, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
     connect(model, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
+    connect(model, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
 
     connect(statusView, SIGNAL(resizeWidth(int)), viewlist, SLOT(resizeWidth(int)));
 }

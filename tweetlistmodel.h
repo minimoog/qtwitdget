@@ -47,6 +47,7 @@ signals:
     void requestReply(qint64 id, const QString& text);
     void requestDelete(qint64 id);
     void requestRetweet(qint64 id);
+    void requestFavorited(qint64 id);
 
 public slots:
     void replyDeleteClicked(int index);
