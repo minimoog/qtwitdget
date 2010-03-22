@@ -81,8 +81,7 @@ void TweetListModel::replyDeleteClicked(int index)
 
 void TweetListModel::retweetClicked(int index)
 {
-    // ### TODO
-    qDebug() << "retweet clicked";
+    emit requestRetweet(m_statuses.at(index).id());
 }
 
 void TweetListModel::favoritedClicked(int index)

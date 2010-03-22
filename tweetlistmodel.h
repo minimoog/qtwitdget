@@ -44,8 +44,9 @@ signals:
     void itemsMoved(int from, int to, int count);
     void itemsChanged(int index, int count, const QList<QByteArray>& roles);
 
-    void requestReply(qint64, const QString& text);
-    void requestDelete(qint64);
+    void requestReply(qint64 id, const QString& text);
+    void requestDelete(qint64 id);
+    void requestRetweet(qint64 id);
 
 public slots:
     void replyDeleteClicked(int index);

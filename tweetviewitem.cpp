@@ -69,7 +69,7 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     d->retweetItem->setClickedPixmap(QPixmap(":/images/button_retweet_click.png"));
     d->retweetItem->setPos(43, 80);
     d->retweetItem->setToolTip(QObject::tr("Retweet this status"));
-    connect(d->retweetItem, SIGNAL(clicked(qint64)), this, SLOT(replyDeleteButtonClicked()));
+    connect(d->retweetItem, SIGNAL(clicked(qint64)), this, SLOT(retweetButtonClicked()));
 
     d->favoritedItem = new PixmapButtonItem(d->gradRectItem);
     d->favoritedItem->setDefaultPixmap(QPixmap(":/images/button_favorited.png"));

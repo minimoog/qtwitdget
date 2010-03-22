@@ -705,6 +705,7 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setReply(qint64,QString)));
     connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setFocus()));
     connect(model, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
+    connect(model, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
 
     connect(statusView, SIGNAL(resizeWidth(int)), viewlist, SLOT(resizeWidth(int)));
 }
@@ -777,41 +778,13 @@ void MainWindow::retweetFinished()
     QSqlQuery query;
 
 	query.prepare("INSERT OR ABORT INTO status "
-		"(created, "
-		"id, "
-		"text, "
-		"source, "
-		"replyToStatusId, "
-		"replyToUserId, "
-		"favorited, "
-		"replyToScreenName, "
-		"userId, "
-		"name, "
-		"screenName, "
-		"location, "
-		"description, "
-		"profileImageUrl, "
-		"url, "
-		"followersCount, " 
-        "mention) "
-		"VALUES "
-		"(:created, "
-		":id, "
-		":text, "
-		":source, "
-		":replyToStatusId, "
-		":replyToUserId, "
-		":favorited, "
-		":replyToScreenName, "
-		":userId, "
-		":name, "
-		":screenName, "
-		":location, "
-		":description, "
-		":profileImageUrl, "
-		":url, "
-		":followersCount, "
-        ":mention);");
+        "(created, id, text, source, replyToStatusId, replyToUserId, "
+        "favorited, replyToScreenName, userId, name, screenName, "
+        "location, description, profileImageUrl, url, followersCount, "
+        "mention) VALUES (:created, :id, :text, :source, :replyToStatusId, "
+        ":replyToUserId, :favorited, :replyToScreenName, :userId, "
+        ":name, :screenName, :location, :description, :profileImageUrl, "
+        ":url, :followersCount, :mention);");
 
 		query.bindValue(":created", rs.created().toString(Qt::ISODate));
 		query.bindValue(":id", rs.id());
