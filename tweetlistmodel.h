@@ -37,6 +37,8 @@ public:
     void fetchNewTweets();
     void setUserid(int userid);
     int userid() const;
+    void setAdditionalQuery(const QString& query);
+    QString additionalQuery() const;
 
 signals:
     void itemsInserted(int index, int count);
@@ -57,6 +59,7 @@ public slots:
 private:
     QList<QTwitStatus> m_statuses;
     int m_userid;
+    QString m_additionalQuery;
 };
 
 #endif // TWEETLISTMODEL_H

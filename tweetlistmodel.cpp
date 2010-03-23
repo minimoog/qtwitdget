@@ -46,9 +46,9 @@ void TweetListModel::fetchNewTweets()
     QSqlQuery query;
     QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl, isRead "
                          "FROM status "
-                         "WHERE id > 0 "
+                         "WHERE id > 0 AND %1"
                          "ORDER BY id DESC "
-                         "LIMIT 20");
+                         "LIMIT 20").arg(m_additionalQuery);
     query.exec(qr);
 
     while (query.next()) {
@@ -98,3 +98,15 @@ int TweetListModel::userid() const
 {
     return m_userid;
 }
+
+void TweetListModel::setAdditionalQuery(const QString &query)
+{
+    m_additionalQuery = query;
+}
+
+QString TweetListModel::additionalQuery() const
+{
+    return m_additionalQuery;
+}
+
+
