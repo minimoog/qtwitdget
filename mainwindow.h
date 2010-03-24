@@ -34,7 +34,6 @@
 #include "qtwit/mentions.h"
 #include "qtwit/qtwitretweet.h"
 #include "oauth/oauthtwitter.h"
-#include "twittabgroup.h"
 #include "qtwitscene.h"
 
 class QTwitStatus;
@@ -85,16 +84,15 @@ private:
 	void setupTrayIcon();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
-	void createDefaultTwitGroups();
-	TwitTabGroup createUserTwitGroup(const QString& name, const QList<int>& usersId);
-	void createTabs();
+    void createDefaultTabs();
+    QString createUserQueryString(const QList<int>& usersId);
     void updateTab(int i);
-	void addGroupTab(const TwitTabGroup& group);
+    void addGroupTab(const QString& query, const QString& tabName);
     void setTabTextUnreadStatuses(int indexTab);
 	bool isDatabaseEmpty();
     void readSettings();
     void writeSettings();
-    void readGroupsSettings();
+    void createUserDefinedTabs();
     void setStatusIdRead(qint64 id);
 
 	Ui::MainWindowForm ui;
@@ -110,14 +108,11 @@ private:
     QTwitRetweet *m_twitRetweet;
 	QTimer *m_timer;
 
-	QList<QTwitStatus> m_statuses;
 	bool m_firstRun;
 
-	QList<TwitTabGroup> m_twitTabGroups;
 	qint64 m_lastStatusId;
     qint64 m_lastMentionId;
     qint64 m_lastMarkedReadStatus;
-	//QList<QTwitScene*> m_twitScenes;
     QList<TweetListModel*> m_models;
 	int m_userId;
 

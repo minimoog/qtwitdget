@@ -167,8 +167,8 @@ void MainWindow::startUp()
             m_lastMentionId = settings.value("lastMentionId").toLongLong();
 		}
 
-		createDefaultTwitGroups();
-		createTabs();
+        createDefaultTabs();
+        createUserDefinedTabs();
 
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
@@ -203,8 +203,9 @@ void MainWindow::createGrouping()
 {
 	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
 	groupDialog.exec();
-	TwitTabGroup group = createUserTwitGroup(groupDialog.getGroupName(), groupDialog.getGroupList());
-	addGroupTab(group);
+
+    QString query = createUserQueryString(groupDialog.getGroupList());
+    addGroupTab(query, groupDialog.getGroupName());
 
     //if save is checked, save group to settings
     if (groupDialog.isSaveGroupingChecked()) {
@@ -214,8 +215,8 @@ void MainWindow::createGrouping()
 
         settings.beginWriteArray("groups");
         settings.setArrayIndex(size);
-        settings.setValue("tabName", group.tabName());
-        settings.setValue("query", group.query());
+        settings.setValue("tabName", groupDialog.getGroupName());
+        settings.setValue("query", query);
 
         settings.endArray();
     }
@@ -545,8 +546,6 @@ void MainWindow::closeTab(int i)
 
     */
 	ui.tabWidget->removeTab(i);
-
-	m_twitTabGroups.removeAt(i);
 }
 
 void MainWindow::loadStyleSheet()
@@ -565,10 +564,8 @@ void MainWindow::loadStyleSheet()
 	}
 }
 
-void MainWindow::createDefaultTwitGroups()
+void MainWindow::createDefaultTabs()
 {
-	m_twitTabGroups.clear();
-
 	//default tabs
     //TwitTabGroup unread;
     //unread.setTabName(tr("Unread"));
@@ -576,11 +573,13 @@ void MainWindow::createDefaultTwitGroups()
     //unread.setType(TwitTabGroup::Unread);
     //unread.setCloseable(false);
 
-	TwitTabGroup allfriends;
-	allfriends.setTabName(tr("Friends"));
-	allfriends.setQuery(QString(" 1 == 1 "));
-    allfriends.setType(TwitTabGroup::Normal);
-    allfriends.setCloseable(false);
+    //TwitTabGroup allfriends;
+    //allfriends.setTabName(tr("Friends"));
+    //allfriends.setQuery(QString(" 1 == 1 "));
+    //allfriends.setType(TwitTabGroup::Normal);
+    //allfriends.setCloseable(false);
+
+    addGroupTab(" 1 == 1 ", tr("Friends"));
 
     //TwitTabGroup myTwits;
     //myTwits.setTabName(tr("My twits"));
@@ -595,19 +594,16 @@ void MainWindow::createDefaultTwitGroups()
     //mentions.setCloseable(false);
 
     //m_twitTabGroups.append(unread);
-	m_twitTabGroups.append(allfriends);
+    //m_twitTabGroups.append(allfriends);
     //m_twitTabGroups.append(myTwits);
     //m_twitTabGroups.append(mentions);
 
     //read saved groups
-    readGroupsSettings();
+    //readGroupsSettings();
 }
 
-TwitTabGroup MainWindow::createUserTwitGroup(const QString& name, const QList<int>& usersId)
+QString MainWindow::createUserQueryString(const QList<int>& usersId)
 {
-	TwitTabGroup twitGroup;
-	twitGroup.setTabName(name);
-
 	//build up query
 	QString query;
 	foreach(const int& id, usersId){
@@ -615,24 +611,10 @@ TwitTabGroup MainWindow::createUserTwitGroup(const QString& name, const QList<in
 	}
 	query.chop(2); //remove last OR
 
-	twitGroup.setQuery(query);
-
-	m_twitTabGroups.append(twitGroup);
-
-	return twitGroup;
+    return query;
 }
 
-void MainWindow::createTabs()
-{	
-	//add tabs
-	QListIterator<TwitTabGroup> iter(m_twitTabGroups);
-	while(iter.hasNext()){
-		TwitTabGroup tg = iter.next();		
-		addGroupTab(tg);
-	}
-}
-
-void MainWindow::addGroupTab(const TwitTabGroup& group)
+void MainWindow::addGroupTab(const QString& query, const QString& tabName)
 {
     /*
     if (group.type() == TwitTabGroup::Normal) {
@@ -693,14 +675,14 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     QTwitView *statusView = new QTwitView(this);
     statusView->setScene(statusScene);
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    ui.tabWidget->addTab(statusView, group.tabName());
+    ui.tabWidget->addTab(statusView, tabName);
     TweetListModel *model = new TweetListModel(this);
     m_models << model;
     TweetListView *viewlist = new TweetListView;
     viewlist->setModel(model);
     statusScene->addItem(viewlist);
     model->setUserid(m_userId);
-    model->setAdditionalQuery(group.query());
+    model->setAdditionalQuery(query);
     model->update();
     viewlist->resizeWidth(statusView->viewport()->width());
 
@@ -830,18 +812,14 @@ void MainWindow::writeSettings()
     settings.setValue("size", size());
 }
 
-void MainWindow::readGroupsSettings()
+void MainWindow::createUserDefinedTabs()
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     int size = settings.beginReadArray("groups");
     for (int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
 
-        TwitTabGroup ttg;
-        ttg.setTabName(settings.value("tabName").toString());
-        ttg.setQuery(settings.value("query").toString());
-
-        m_twitTabGroups.append(ttg);
+        addGroupTab(settings.value("query").toString(), settings.value("tabName").toString());
     }
 
     settings.endArray();
@@ -859,6 +837,7 @@ void MainWindow::setStatusIdRead(qint64 id)
 
 void MainWindow::setTabTextUnreadStatuses(int index)
 {
+    /*
     TwitTabGroup group = m_twitTabGroups.at(index);
     int numUnread = 0;
 
@@ -879,6 +858,7 @@ void MainWindow::setTabTextUnreadStatuses(int index)
     } else {
         ui.tabWidget->setTabText(index, group.tabName());
     }
+    */
 }
 
 void MainWindow::markAllStatusesRead()

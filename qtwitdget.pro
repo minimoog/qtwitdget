@@ -11,7 +11,6 @@ HEADERS += twitstatusedit.h \
     shortenedurl.h \
     mainwindow.h \
     langchangedialog.h \
-    twittabgroup.h \
     qtwitscene.h \
     qtwitsceneunread.h \
     qtwitview.h \
