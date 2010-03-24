@@ -80,7 +80,7 @@ void TweetListModel::update()
         if (m_statuses.count() > 20) {
             int oldCount = m_statuses.count();
 
-            for (int i = 0; i < m_statuses.count() - 20; ++i)
+            for (int i = 0; i < oldCount - 20; ++i)
                 m_statuses.removeLast();
         
             emit itemsRemoved(20, oldCount - 20);
