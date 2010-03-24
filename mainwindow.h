@@ -22,22 +22,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTimer>
 #include <QSystemTrayIcon>
 #include <QtSql>
-#include <QNetworkAccessManager>
 #include "ui_mainwindowform.h"
-#include "qtwit/hometimeline.h"
-#include "qtwit/qtwitdestroy.h"
-#include "qtwit/qtwitupdate.h"
-#include "qtwit/qtwitfavorites.h"
-#include "qtwit/mentions.h"
-#include "qtwit/qtwitretweet.h"
-#include "oauth/oauthtwitter.h"
-#include "qtwitscene.h"
 
 class QTwitStatus;
 class TweetListModel;
+class QNetworkAccessManager;
+class QTimer;
+class OAuthTwitter;
+class HomeTimeline;
+class QTwitUpdate;
+class QTwitDestroy;
+class QTwitFavorites;
+class QTwitRetweet;
+class Mentions;
 
 /*! Class MainWindow */
 class MainWindow : public QMainWindow
@@ -87,7 +86,7 @@ private:
     void createDefaultTabs();
     QString createUserQueryString(const QList<int>& usersId);
     void updateTab(int i);
-    void addGroupTab(const QString& query, const QString& tabName);
+    void addTimelineTab(const QString& query, const QString& tabName);
     void setTabTextUnreadStatuses(int indexTab);
 	bool isDatabaseEmpty();
     void readSettings();

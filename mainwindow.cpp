@@ -23,7 +23,16 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QTimer>
 #include "mainwindow.h"
+#include "oauth/oauthtwitter.h"
+#include "qtwit/hometimeline.h"
+#include "qtwit/qtwitupdate.h"
+#include "qtwit/qtwitdestroy.h"
+#include "qtwit/qtwitfavorites.h"
+#include "qtwit/qtwitretweet.h"
+#include "qtwit/mentions.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
 #include "qtwitscene.h"
@@ -205,7 +214,7 @@ void MainWindow::createGrouping()
 	groupDialog.exec();
 
     QString query = createUserQueryString(groupDialog.getGroupList());
-    addGroupTab(query, groupDialog.getGroupName());
+    addTimelineTab(query, groupDialog.getGroupName());
 
     //if save is checked, save group to settings
     if (groupDialog.isSaveGroupingChecked()) {
@@ -579,7 +588,7 @@ void MainWindow::createDefaultTabs()
     //allfriends.setType(TwitTabGroup::Normal);
     //allfriends.setCloseable(false);
 
-    addGroupTab(" 1 == 1 ", tr("Friends"));
+    addTimelineTab(" 1 == 1 ", tr("Friends"));
 
     //TwitTabGroup myTwits;
     //myTwits.setTabName(tr("My twits"));
@@ -587,11 +596,15 @@ void MainWindow::createDefaultTabs()
     //myTwits.setType(TwitTabGroup::Normal);
     //myTwits.setCloseable(false);
 
+    addTimelineTab(QString(" userId == %1 ").arg(m_userId), tr("My twits"));
+
     //TwitTabGroup mentions;
     //mentions.setTabName(tr("Mentions"));
     //mentions.setQuery(QString(" mention == 1"));
     //mentions.setType(TwitTabGroup::Normal);
     //mentions.setCloseable(false);
+
+    addTimelineTab(QString(" mention == 1 "), tr("Mentions"));
 
     //m_twitTabGroups.append(unread);
     //m_twitTabGroups.append(allfriends);
@@ -614,7 +627,7 @@ QString MainWindow::createUserQueryString(const QList<int>& usersId)
     return query;
 }
 
-void MainWindow::addGroupTab(const QString& query, const QString& tabName)
+void MainWindow::addTimelineTab(const QString& query, const QString& tabName)
 {
     /*
     if (group.type() == TwitTabGroup::Normal) {
@@ -819,7 +832,7 @@ void MainWindow::createUserDefinedTabs()
     for (int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
 
-        addGroupTab(settings.value("query").toString(), settings.value("tabName").toString());
+        addTimelineTab(settings.value("query").toString(), settings.value("tabName").toString());
     }
 
     settings.endArray();
