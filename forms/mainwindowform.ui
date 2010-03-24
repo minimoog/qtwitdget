@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="TimelineTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -27,7 +27,7 @@
        <bool>true</bool>
       </property>
       <property name="tabsClosable">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="movable">
        <bool>true</bool>
@@ -228,12 +228,6 @@
    <slots>
     <slot>shortUrls()</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>TimelineTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>timelinetabwidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
