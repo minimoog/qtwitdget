@@ -521,6 +521,7 @@ void MainWindow::updateTab(int i)
 
     //QTwitScene *twitScene = m_twitScenes.at(i);
     //twitScene->updateStatuses();
+    m_models.at(i)->update();
 
     setTabTextUnreadStatuses(i);
 }
@@ -694,12 +695,13 @@ void MainWindow::addGroupTab(const TwitTabGroup& group)
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, group.tabName());
     TweetListModel *model = new TweetListModel(this);
+    m_models << model;
     TweetListView *viewlist = new TweetListView;
     viewlist->setModel(model);
     statusScene->addItem(viewlist);
     model->setUserid(m_userId);
     model->setAdditionalQuery(group.query());
-    model->fetchNewTweets();
+    model->update();
     viewlist->resizeWidth(statusView->viewport()->width());
 
     connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setReply(qint64,QString)));

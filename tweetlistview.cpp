@@ -18,6 +18,8 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include "tweetlistview.h"
 #include "tweetviewitem.h"
 
@@ -95,7 +97,7 @@ void TweetListView::itemsInserted(int index, int count)
     //insert items;
     for (int i = 0; i < count; ++i) {
         TweetViewItem *item = new TweetViewItem(index + i, this);
-        m_items.insert(index + i, item);
+        m_items.insert(index + i, item);    // ### CHECK
         item->setPos(posFrom.x(), posFrom.y() + ymovement);
         ymovement += item->size().height();
     }
@@ -105,23 +107,47 @@ void TweetListView::itemsInserted(int index, int count)
         m_items.at(i)->moveBy(0, ymovement);
         m_items.at(i)->setIndex(i);
     }
+
+    resizeWidth(scene()->views().at(0)->viewport()->width());
 }
 
 void TweetListView::itemsRemoved(int index, int count)
 {
-    QPointF posTo = m_items.at(index)->mapToParent(QPointF(0, 0));
-    QPointF posFrom = m_items.at(index + count)->mapToParent(QPointF(0, 0));
+    if (m_items.isEmpty())
+        return;
+
+    if (index < 0) {
+        qDebug() << "Negative index";
+        return;
+    }
+
+    if (count == 0) {
+        qDebug() << "Count = 0, nothing to remove";
+        return;
+    }
+
+    if (index > (m_items.count() - 1) || (index + count) > m_items.count()) {
+        qDebug() << "Index Out of range";
+        return;
+    }
 
     //remove items
     for (int i = 0; i < count; ++i) {
-        TweetViewItem *item = m_items.takeAt(index + i);
+        TweetViewItem *item = m_items.takeAt(index);
+        scene()->removeItem(item);  // ### CHECK
         delete item;
     }
 
-    //move rest up
-    for (int i = index; i < m_items.count(); ++i) {
-        m_items.at(i)->moveBy(posTo.x(), posTo.y() - posFrom.y());
-        m_items.at(i)->setIndex(index);
+    //move rest of bottom items up, if any
+    if (index < m_items.count() - 1) {
+
+        QPointF posTo = m_items.at(index)->mapToParent(QPointF(0, 0));
+        QPointF posFrom = m_items.at(index + 1)->mapToParent(QPointF(0, 0));
+
+        for (int i = index; i < m_items.count(); ++i) {
+            m_items.at(i)->moveBy(posTo.x(), posTo.y() - posFrom.y());
+            m_items.at(i)->setIndex(i);
+        }
     }
 }
 

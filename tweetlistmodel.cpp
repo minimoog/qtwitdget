@@ -41,15 +41,22 @@ QVariant TweetListModel::data(int index)
     return s;
 }
 
-void TweetListModel::fetchNewTweets()
+void TweetListModel::update()
 {
+    qint64 topStatusId = 0;
+
+    if (!m_statuses.isEmpty())
+        topStatusId = m_statuses.at(0).id();
+
     QSqlQuery query;
     QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl, isRead "
                          "FROM status "
-                         "WHERE id > 0 AND %1"
+                         "WHERE id > %1 AND %2"
                          "ORDER BY id DESC "
-                         "LIMIT 20").arg(m_additionalQuery);
+                         "LIMIT 20").arg(topStatusId).arg(m_additionalQuery);
     query.exec(qr);
+
+    QList<QTwitStatus> newStatuses;
 
     while (query.next()) {
         QTwitStatus st;
@@ -60,10 +67,25 @@ void TweetListModel::fetchNewTweets()
         st.setScreenName(query.value(4).toString());
         st.setProfileImageUrl(query.value(5).toString());
         st.setRead(query.value(6).toInt());
-        m_statuses << st;
+        newStatuses.prepend(st);    //reverse order
     }
 
-    emit itemsInserted(0, m_statuses.count());
+    //batch inserting and removing
+    if (newStatuses.count()) {
+        foreach (const QTwitStatus& s, newStatuses)
+            m_statuses.prepend(s);
+
+        emit itemsInserted(0, newStatuses.count());
+
+        if (m_statuses.count() > 20) {
+            int oldCount = m_statuses.count();
+
+            for (int i = 0; i < m_statuses.count() - 20; ++i)
+                m_statuses.removeLast();
+        
+            emit itemsRemoved(20, oldCount - 20);
+        }
+    }
 }
 
 void TweetListModel::replyDeleteClicked(int index)

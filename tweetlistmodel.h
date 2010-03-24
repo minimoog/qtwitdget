@@ -34,11 +34,11 @@ public:
     TweetListModel(QObject *parent = 0);
     int count() const;
     QVariant data(int index);
-    void fetchNewTweets();
     void setUserid(int userid);
     int userid() const;
     void setAdditionalQuery(const QString& query);
     QString additionalQuery() const;
+    void update();
 
 signals:
     void itemsInserted(int index, int count);

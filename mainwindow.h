@@ -38,6 +38,7 @@
 #include "qtwitscene.h"
 
 class QTwitStatus;
+class TweetListModel;
 
 /*! Class MainWindow */
 class MainWindow : public QMainWindow
@@ -117,6 +118,7 @@ private:
     qint64 m_lastMentionId;
     qint64 m_lastMarkedReadStatus;
 	//QList<QTwitScene*> m_twitScenes;
+    QList<TweetListModel*> m_models;
 	int m_userId;
 
 	QSqlDatabase m_database;
