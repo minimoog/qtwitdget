@@ -32,6 +32,31 @@
 #include "mainwindow.h"
 #include "qtwit/qtwitstatus.h"
 
+static QString replaceLinksWithHref(const QString &text)
+{
+    QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive);
+
+    //make a copy
+    QString textWithHref(text);
+
+    //replace url links with href
+    int pos = 0;
+    while(pos >= 0){
+        pos = rx.indexIn(textWithHref, pos);
+
+        if(pos >= 0){
+            int length = rx.matchedLength();
+            QString matchedUrl = textWithHref.mid(pos, length);
+            QString href = "<a href=\"" + matchedUrl + "\">" + matchedUrl + "</a>";
+            textWithHref.replace(pos, length, href);
+            int advance = href.size() - matchedUrl.size(); //how much to advanced after replacement
+            pos += (length + advance);
+        }
+    }
+
+    return textWithHref;
+}
+
 TweetViewItem::TweetViewItem(int index, TweetListView *view)
     : QGraphicsItem(view), d(new TweetViewItemData)
 {
@@ -152,7 +177,7 @@ void TweetViewItem::setData()
     QTwitStatus s = d->listView->model()->data(d->index).value<QTwitStatus>();
     d->avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
     d->nameItem->setPlainText(s.screenName());
-    d->textItem->setHtml(s.text());
+    d->textItem->setHtml(replaceLinksWithHref(s.text()));
 
     if (s.userId() == view()->model()->userid()) {
         d->replyItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
