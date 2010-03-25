@@ -40,6 +40,7 @@ public:
     void setAdditionalQuery(const QString& query);
     QString additionalQuery() const;
     void update();
+    void nextPage();
     qint64 nextUnread();
     bool markRead(qint64 id);
 

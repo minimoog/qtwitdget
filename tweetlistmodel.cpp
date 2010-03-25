@@ -172,3 +172,39 @@ bool TweetListModel::markRead(qint64 id)
 
     return false;
 }
+
+void TweetListModel::nextPage()
+{
+    if (m_statuses.isEmpty())
+        return;
+
+    qint64 bottomStatusId = m_statuses.last().id();
+
+    QSqlQuery query;
+    QString sq = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl, isRead "
+                         "FROM status "
+                         "WHERE id < %1 AND %2 "
+                         "ORDER BY id DESC "
+                         "LIMIT 20").arg(bottomStatusId).arg(m_additionalQuery);
+    query.exec(sq);
+
+    int index = m_statuses.count();
+    int count = 0;
+
+    while (query.next()) {
+        QTwitStatus st;
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setFavorited(query.value(2).toBool());
+        st.setUserId(query.value(3).toInt());
+        st.setScreenName(query.value(4).toString());
+        st.setProfileImageUrl(query.value(5).toString());
+        st.setRead(query.value(6).toInt());
+        m_statuses << st;
+        ++count;
+    }
+
+    if (count) {
+        emit itemsInserted(index, count);
+    }
+}

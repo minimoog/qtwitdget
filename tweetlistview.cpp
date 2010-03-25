@@ -89,8 +89,12 @@ void TweetListView::itemsInserted(int index, int count)
 
     QPointF posFrom(0, 0);
 
-    if (m_items.count())
-        posFrom = m_items.at(index)->mapToParent(QPointF(0, 0));
+    if (m_items.count()) {
+        if (index > m_items.count() - 1)
+            posFrom = m_items.last()->mapToParent(QPointF(0, 0)) + QPointF(0, m_items.last()->size().height());
+        else
+            posFrom = m_items.at(index)->mapToParent(QPointF(0, 0));
+    }
 
     qreal ymovement = 0.0;
 
@@ -172,6 +176,9 @@ QRectF TweetListView::boundingRect() const
 void TweetListView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     // nothing to paint, just a holder for list items
+    Q_UNUSED(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 }
 
 void TweetListView::resizeWidth(int w)

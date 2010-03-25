@@ -689,6 +689,7 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName)
     statusView->setScene(statusScene);
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, tabName);
+
     TweetListModel *model = new TweetListModel(this);
     m_models << model;
     TweetListView *viewlist = new TweetListView;
@@ -706,6 +707,7 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName)
     connect(model, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
 
     connect(statusView, SIGNAL(resizeWidth(int)), viewlist, SLOT(resizeWidth(int)));
+    connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
 }
 
 void MainWindow::nextStatuses()
@@ -715,10 +717,7 @@ void MainWindow::nextStatuses()
 	if(i == -1)
 		return;
 
-    /*
-    QTwitScene *twitScene = m_twitScenes.at(i);
-    twitScene->nextStatuses();
-    */
+    m_models.at(i)->nextPage();
 }
 
 void MainWindow::favorited(qint64 statusId)
