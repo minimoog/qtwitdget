@@ -973,6 +973,13 @@ void MainWindow::gotoNextUnread()
         }
     }
     */
+
+    qint64 idTweet = m_models.at(ui.tabWidget->currentIndex())->nextUnread();
+
+    //mark unread on all tabs
+    for (int i = 0; i < m_models.count(); ++i)
+        m_models.at(i)->markRead(idTweet);
+
 }
 
 MainWindow::~MainWindow()

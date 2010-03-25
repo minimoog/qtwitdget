@@ -31,7 +31,7 @@ int TweetListModel::count() const
     return m_statuses.count();
 }
 
-QVariant TweetListModel::data(int index)
+QVariant TweetListModel::data(int index) const
 {
     QVariant s;
     if (index >= 0 && index < m_statuses.count()) {
@@ -39,6 +39,19 @@ QVariant TweetListModel::data(int index)
     }
 
     return s;
+}
+
+QHash<QByteArray, QVariant> TweetListModel::data(int index, const QList<QByteArray> &roles) const
+{
+    QHash<QByteArray,QVariant> hash;
+
+    if (index >= 0 && index < m_statuses.count()) {
+        for (int i = 0; i < roles.count(); ++i) {
+            hash.insert("isRead", m_statuses.at(index).isRead());
+        }
+    }
+
+    return hash;
 }
 
 void TweetListModel::update()
@@ -131,4 +144,31 @@ QString TweetListModel::additionalQuery() const
     return m_additionalQuery;
 }
 
+qint64 TweetListModel::nextUnread()
+{
+    //find oldest unread
+    for (int i = m_statuses.count() - 1; i >= 0; --i) {
+        if (!m_statuses.at(i).isRead()) {
+            //m_statuses[i].setRead(true);
+            //emit itemsChanged(i, 1, QList<QByteArray>() << "isRead");
 
+            return m_statuses.at(i).id();
+        }
+    }
+
+    return 0;
+}
+
+bool TweetListModel::markRead(qint64 id)
+{
+    // ### TODO: Hashing or Map
+    for (int i = 0; i < m_statuses.count(); ++i) {
+        if (m_statuses.at(i).id() == id) {
+            m_statuses[i].setRead(true);
+            emit itemsChanged(i, 1, QList<QByteArray>() << "isRead");
+            return true;
+        }
+    }
+
+    return false;
+}

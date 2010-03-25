@@ -144,7 +144,16 @@ void TweetViewItem::setWidth(int w)
 
 void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
 {
-    // ### TODO
+    QHash<QByteArray, QVariant> hash = d->listView->model()->data(d->index, roles);
+
+    for (int i = 0; i < roles.count(); ++i) {
+        if (roles.at(i) == "isRead") {
+            bool isRead = hash.value("isRead", QVariant(false)).toBool();
+
+            if (isRead)
+                d->gradRectItem->setGradient(GradientRectItem::White);
+        }
+    }
 }
 
 QVariant TweetViewItem::data() const

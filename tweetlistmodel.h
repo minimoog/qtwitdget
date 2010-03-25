@@ -33,12 +33,15 @@ class TweetListModel : public QObject
 public:
     TweetListModel(QObject *parent = 0);
     int count() const;
-    QVariant data(int index);
+    QVariant data(int index) const;
+    QHash<QByteArray, QVariant> data(int index, const QList<QByteArray>& roles) const;
     void setUserid(int userid);
     int userid() const;
     void setAdditionalQuery(const QString& query);
     QString additionalQuery() const;
     void update();
+    qint64 nextUnread();
+    bool markRead(qint64 id);
 
 signals:
     void itemsInserted(int index, int count);
