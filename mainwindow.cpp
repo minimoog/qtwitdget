@@ -837,7 +837,7 @@ void MainWindow::createUserDefinedTabs()
     settings.endArray();
 }
 
-void MainWindow::setStatusIdRead(qint64 id)
+void MainWindow::setTweetIdReadDatabase(qint64 id)
 {
     QSqlQuery query;
     query.prepare("UPDATE status SET isRead = 1 WHERE id = :id");
@@ -974,6 +974,7 @@ void MainWindow::gotoNextUnread()
     */
 
     qint64 idTweet = m_models.at(ui.tabWidget->currentIndex())->nextUnread();
+    setTweetIdReadDatabase(idTweet);
 
     //mark unread on all tabs
     for (int i = 0; i < m_models.count(); ++i)

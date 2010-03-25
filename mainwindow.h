@@ -92,7 +92,7 @@ private:
     void readSettings();
     void writeSettings();
     void createUserDefinedTabs();
-    void setStatusIdRead(qint64 id);
+    void setTweetIdReadDatabase(qint64 id);
 
 	Ui::MainWindowForm ui;
 
