@@ -21,7 +21,6 @@
 #include <QResizeEvent>
 #include <QPropertyAnimation>
 #include "qtwitview.h"
-#include "qtwitscene.h"
 
 QTwitView::QTwitView(QWidget *parent) 
     : QGraphicsView(parent),
