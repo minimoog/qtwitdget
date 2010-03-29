@@ -86,7 +86,7 @@ private:
     void createDefaultTabs();
     QString createUserQueryString(const QList<int>& usersId);
     void updateTab(int i);
-    void addTimelineTab(const QString& query, const QString& tabName);
+    void addTimelineTab(const QString& query, const QString& tabName, bool unread = false);
     void setTabTextUnreadStatuses(int indexTab);
 	bool isDatabaseEmpty();
     void readSettings();

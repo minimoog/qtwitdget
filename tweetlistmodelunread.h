@@ -18,30 +18,23 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
-#include "tweetlistmodelabstract.h"
+#ifndef TWEETLISTMODELUNREAD_H
+#define TWEETLISTMODELUNREAD_H
 
-TweetListModelAbstract::TweetListModelAbstract(QObject *parent) :
-    QObject(parent)
+#include <QtSql>
+#include "qtwit/qtwitstatus.h"
+#include "tweetlistmodel.h"
+
+class TweetListModelUnread : public TweetListModel
 {
-}
+    Q_OBJECT
+public:
+    TweetListModelUnread(QObject *parent = 0);
+    void update();
+    void nextPage();
+    qint64 nextUnread() const;
+    bool markRead(qint64 id);
+    void markAllRead();
+};
 
-int TweetListModelAbstract::userid() const
-{
-    return m_userid;
-}
-
-void TweetListModelAbstract::setUserid(int userid)
-{
-    m_userid = userid;
-}
-
-QString TweetListModelAbstract::additionalQuery() const
-{
-    return m_additionalQuery;
-}
-
-void TweetListModelAbstract::setAdditionalQuery(const QString &query)
-{
-    m_additionalQuery = query;
-}
-
+#endif // TWEETLISTMODELUNREAD_H

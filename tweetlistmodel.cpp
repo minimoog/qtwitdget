@@ -22,13 +22,33 @@
 #include "tweetlistmodel.h"
 
 TweetListModel::TweetListModel(QObject *parent) :
-    TweetListModelAbstract(parent)
+    QObject(parent)
 {
 }
 
 int TweetListModel::count() const
 {
     return m_statuses.count();
+}
+
+int TweetListModel::userid() const
+{
+    return m_userid;
+}
+
+void TweetListModel::setUserid(int userid)
+{
+    m_userid = userid;
+}
+
+QString TweetListModel::additionalQuery() const
+{
+    return m_additionalQuery;
+}
+
+void TweetListModel::setAdditionalQuery(const QString &query)
+{
+    m_additionalQuery = query;
 }
 
 QVariant TweetListModel::data(int index) const
@@ -124,7 +144,7 @@ void TweetListModel::favoritedClicked(int index)
     emit requestFavorited(m_statuses.at(index).id());
 }
 
-qint64 TweetListModel::nextUnread()
+qint64 TweetListModel::nextUnread() const
 {
     //find oldest unread
     for (int i = m_statuses.count() - 1; i >= 0; --i) {
@@ -152,7 +172,7 @@ bool TweetListModel::markRead(qint64 id)
     return false;
 }
 
-void TweetListModel::makeAllRead()
+void TweetListModel::markAllRead()
 {
     for (int i = 0; i < m_statuses.count(); ++i) {
         if (!m_statuses.at(i).isRead())

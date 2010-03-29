@@ -35,13 +35,12 @@
 #include "qtwit/mentions.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
-#include "qtwitscene.h"
-#include "qtwitsceneunread.h"
 #include "shortenedurl.h"
 #include "qtwitview.h"
 #include "groupdialog.h"
 #include "signalwaiter.h"
 #include "tweetlistmodel.h"
+#include "tweetlistmodelunread.h"
 #include "tweetlistview.h"
 
 MainWindow::MainWindow()
@@ -401,7 +400,7 @@ void MainWindow::finishedMentions()
 			updateTab(i);
 	}
 
-    //!!!!!!!!WHAT TO DO WITH TIMER???
+    // ### WHAT TO DO WITH TIMER???
     //start 60 seconds timer
     //m_timer->start(60000);
 }
@@ -524,11 +523,9 @@ void MainWindow::updateTab(int i)
     if (i == -1)
         return;
 
-    //QTwitScene *twitScene = m_twitScenes.at(i);
-    //twitScene->updateStatuses();
     m_models.at(i)->update();
 
-    setTabTextUnreadStatuses(i);
+    //setTabTextUnreadStatuses(i);
 }
 
 void MainWindow::closeTab(int i)
@@ -550,6 +547,8 @@ void MainWindow::closeTab(int i)
 
     */
 	ui.tabWidget->removeTab(i);
+
+    // ### TODO
 }
 
 void MainWindow::loadStyleSheet()
@@ -571,12 +570,7 @@ void MainWindow::loadStyleSheet()
 void MainWindow::createDefaultTabs()
 {
 	//default tabs
-    //TwitTabGroup unread;
-    //unread.setTabName(tr("Unread"));
-    //unread.setQuery(QString(" isRead == 0 "));
-    //unread.setType(TwitTabGroup::Unread);
-    //unread.setCloseable(false);
-
+    addTimelineTab(QString(), tr("Unread"), true);
     addTimelineTab(" 1 == 1 ", tr("Friends"));
     addTimelineTab(QString(" userId == %1 ").arg(m_userId), tr("My twits"));
     addTimelineTab(QString(" mention == 1 "), tr("Mentions"));
@@ -594,71 +588,21 @@ QString MainWindow::createUserQueryString(const QList<int>& usersId)
     return query;
 }
 
-void MainWindow::addTimelineTab(const QString& query, const QString& tabName)
+void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bool unread)
 {
-    /*
-    if (group.type() == TwitTabGroup::Normal) {
-        QTwitScene *statusScene = new QTwitScene(this);
-        statusScene->setNetworkAccessManager(m_netManager);
-        statusScene->setUserid(m_userId);
-        statusScene->setAdditionalQuery(group.query());
-        m_twitScenes << statusScene;
-
-        connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)),
-            ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
-        connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
-        connect(statusScene, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
-        connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
-        connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
-
-        QTwitView *statusView = new QTwitView;
-        statusView->setScene(statusScene);
-        statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
-        ui.tabWidget->addTab(statusView, group.tabName());
-
-        if (!group.closeable()) {
-            int index = ui.tabWidget->indexOf(statusView);
-            QWidget *tabButton = ui.tabWidget->getTabBar()->tabButton(index, QTabBar::RightSide);
-            tabButton->setEnabled(false);
-        }
-
-    } else if (group.type() == TwitTabGroup::Unread) {
-        QTwitSceneUnread *statusScene = new QTwitSceneUnread(this);
-        statusScene->setNetworkAccessManager(m_netManager);
-        statusScene->setUserid(m_userId);
-        statusScene->setAdditionalQuery(group.query());
-        m_twitScenes << statusScene;
-
-        connect(statusScene,	SIGNAL(requestReply(qint64, const QString&)),
-            ui.updateEdit,	SLOT(setReply(qint64, const QString&)));
-        connect(statusScene, SIGNAL(requestReply(qint64, const QString&)), ui.updateEdit, SLOT(setFocus()));
-        connect(statusScene, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
-        connect(statusScene, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
-        connect(statusScene, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
-
-        QTwitView *statusView = new QTwitView;
-        statusView->setScene(statusScene);
-        statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
-        ui.tabWidget->addTab(statusView, group.tabName());
-
-        if (!group.closeable()) {
-            int index = ui.tabWidget->indexOf(statusView);
-            QWidget *tabButton = ui.tabWidget->getTabBar()->tabButton(index, QTabBar::RightSide);
-            tabButton->setEnabled(false);
-        }
-    }
-    */
-
     QGraphicsScene *statusScene = new QGraphicsScene(this);
     QTwitView *statusView = new QTwitView(this);
     statusView->setScene(statusScene);
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, tabName);
-    ui.tabWidget->setFocusPolicy(Qt::TabFocus);
 
-    TweetListModel *model = new TweetListModel(this);
+    TweetListModel *model;
+
+    if (unread)
+        model = new TweetListModelUnread(this);
+    else
+        model = new TweetListModel(this);
+
     m_models << model;
     TweetListView *viewlist = new TweetListView;
     viewlist->setModel(model);
@@ -848,98 +792,12 @@ void MainWindow::markAllStatusesRead()
 
     //update all tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        m_models.at(i)->makeAllRead();
+        m_models.at(i)->markAllRead();
     }
 }
 
 void MainWindow::gotoNextUnread()
 {
-     //!!!!! NEEDS REFACTORING !!!!!!!!!
-
-    /*
-    if (ui.tabWidget->currentIndex() == 0) {
-        QSqlQuery query;
-        query.exec("SELECT id FROM status WHERE isRead == 0 ORDER BY id ASC LIMIT 1");
-
-        if (!query.next())
-            return;
-
-        qint64 id = query.value(0).toLongLong();
-
-        QTwitSceneUnread *twitScene = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
-
-        if (!twitScene->containsStatus(id))
-            return;
-
-        //delete previous read status
-        if (m_lastMarkedReadStatus)
-            twitScene->removeStatusAnim(m_lastMarkedReadStatus);
-
-        //add next unread status
-        twitScene->addNextUnreadStatus();
-
-        //move to unread status
-        QPointF posStatus = twitScene->statusScenePos(id);
-
-        QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-        twitView->moveToPointAnim(posStatus.y());
-
-        //set status read
-        setStatusIdRead(id);
-
-        m_lastMarkedReadStatus = id;
-
-        //on all tabs change read status gradient to read and update tabs names
-        for (int i = 0; i < m_twitScenes.count(); ++i) {
-            m_twitScenes.at(i)->markRead(id);
-            setTabTextUnreadStatuses(i);
-        }
-
-        return;
-    } else {
-        QSqlQuery query;
-        QString qs = QString("SELECT id "
-                             "FROM status "
-                             "WHERE isRead == 0 AND %1 "
-                             "ORDER BY id ASC LIMIT 1").arg(m_twitTabGroups.at(ui.tabWidget->currentIndex()).query());
-        query.exec(qs);
-
-        if (!query.next())
-            return;
-
-        qint64 id = query.value(0).toLongLong();
-
-        QTwitSceneUnread *twitSceneUnread = qobject_cast<QTwitSceneUnread*>(m_twitScenes.at(0));
-        QTwitScene *twitScene = m_twitScenes.at(ui.tabWidget->currentIndex());
-
-        if (!twitScene->containsStatus(id))
-            return;
-
-        //delete previus read status from Unread timeline
-        if (m_lastMarkedReadStatus)
-            twitSceneUnread->removeStatus(m_lastMarkedReadStatus);
-
-        twitSceneUnread->addNextUnreadStatus();
-
-        //move on selected view to unread status
-        QPointF pos = twitScene->statusScenePos(id);
-
-        QTwitView *twitView = qobject_cast<QTwitView*>(twitScene->views().at(0));
-        twitView->moveToPointAnim(pos.y());
-
-        //set status read
-        setStatusIdRead(id);
-
-        m_lastMarkedReadStatus = id;
-
-        //on all tabs change read status gradient to read and update tabs names
-        for (int i = 0; i < m_twitScenes.count(); ++i) {
-            //m_twitScenes.at(i)->markRead(id);
-            //setTabTextUnreadStatuses(i);
-        }
-    }
-    */
-
     qint64 idTweet = m_models.at(ui.tabWidget->currentIndex())->nextUnread();
     setTweetIdReadDatabase(idTweet);
 

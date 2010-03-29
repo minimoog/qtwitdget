@@ -11,8 +11,6 @@ HEADERS += twitstatusedit.h \
     shortenedurl.h \
     mainwindow.h \
     langchangedialog.h \
-    qtwitscene.h \
-    qtwitsceneunread.h \
     qtwitview.h \
     groupdialog.h \
     sceneitems/pixmapbuttonitem.h \
@@ -48,14 +46,12 @@ HEADERS += twitstatusedit.h \
     tweetlistmodel.h \
     tweetviewitem.h \
     tweetlistview.h \
-    tweetlistmodelabstract.h
+    tweetlistmodelunread.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
     mainwindow.cpp \
     langchangedialog.cpp \
-    qtwitscene.cpp \
-    qtwitsceneunread.cpp \
     qtwitview.cpp \
     groupdialog.cpp \
     sceneitems/pixmapbuttonitem.cpp \
@@ -86,7 +82,7 @@ SOURCES += main.cpp \
     tweetlistmodel.cpp \
     tweetviewitem.cpp \
     tweetlistview.cpp \
-    tweetlistmodelabstract.cpp
+    tweetlistmodelunread.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \
