@@ -42,6 +42,7 @@ public:
     void update();
     void nextPage();
     qint64 nextUnread();
+    void makeAllRead();
     bool markRead(qint64 id);
 
 signals:

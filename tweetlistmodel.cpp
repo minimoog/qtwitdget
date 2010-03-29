@@ -173,6 +173,16 @@ bool TweetListModel::markRead(qint64 id)
     return false;
 }
 
+void TweetListModel::makeAllRead()
+{
+    for (int i = 0; i < m_statuses.count(); ++i) {
+        if (!m_statuses.at(i).isRead())
+            m_statuses[i].setRead(true);
+
+        emit itemsChanged(i, 1, QList<QByteArray>() << "isRead");
+    }
+}
+
 void TweetListModel::nextPage()
 {
     if (m_statuses.isEmpty())

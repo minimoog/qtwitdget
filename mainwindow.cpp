@@ -76,11 +76,6 @@ MainWindow::MainWindow()
 	ui.setupUi(this);
 	ui.updateEdit->setLimit(140);
 	
-	//remove tab that Designer creates
-	QWidget* tab1Widget = ui.tabWidget->widget(0);
-	ui.tabWidget->clear();
-	delete tab1Widget;
-
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
@@ -582,37 +577,9 @@ void MainWindow::createDefaultTabs()
     //unread.setType(TwitTabGroup::Unread);
     //unread.setCloseable(false);
 
-    //TwitTabGroup allfriends;
-    //allfriends.setTabName(tr("Friends"));
-    //allfriends.setQuery(QString(" 1 == 1 "));
-    //allfriends.setType(TwitTabGroup::Normal);
-    //allfriends.setCloseable(false);
-
     addTimelineTab(" 1 == 1 ", tr("Friends"));
-
-    //TwitTabGroup myTwits;
-    //myTwits.setTabName(tr("My twits"));
-    //myTwits.setQuery(QString(" userId == %1 ").arg(m_userId));
-    //myTwits.setType(TwitTabGroup::Normal);
-    //myTwits.setCloseable(false);
-
     addTimelineTab(QString(" userId == %1 ").arg(m_userId), tr("My twits"));
-
-    //TwitTabGroup mentions;
-    //mentions.setTabName(tr("Mentions"));
-    //mentions.setQuery(QString(" mention == 1"));
-    //mentions.setType(TwitTabGroup::Normal);
-    //mentions.setCloseable(false);
-
     addTimelineTab(QString(" mention == 1 "), tr("Mentions"));
-
-    //m_twitTabGroups.append(unread);
-    //m_twitTabGroups.append(allfriends);
-    //m_twitTabGroups.append(myTwits);
-    //m_twitTabGroups.append(mentions);
-
-    //read saved groups
-    //readGroupsSettings();
 }
 
 QString MainWindow::createUserQueryString(const QList<int>& usersId)
@@ -689,6 +656,7 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName)
     statusView->setScene(statusScene);
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, tabName);
+    ui.tabWidget->setFocusPolicy(Qt::TabFocus);
 
     TweetListModel *model = new TweetListModel(this);
     m_models << model;
@@ -880,8 +848,7 @@ void MainWindow::markAllStatusesRead()
 
     //update all tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        //m_twitScenes.at(i)->markAllRead();
-        //setTabTextUnreadStatuses(i);
+        m_models.at(i)->makeAllRead();
     }
 }
 

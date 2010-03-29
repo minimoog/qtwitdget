@@ -30,7 +30,7 @@ public:
 	StatusTextItem(QGraphicsItem * parent = 0);
 	StatusTextItem(const QString& text, QGraphicsItem * parent = 0);
 	
-	virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
 };
 
 #endif //STATUSTEXTITEM_H

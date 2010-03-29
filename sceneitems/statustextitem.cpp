@@ -41,9 +41,11 @@ StatusTextItem::StatusTextItem(const QString& text, QGraphicsItem * parent)
 	setTextInteractionFlags(Qt::TextBrowserInteraction);
 }
 
+
 void StatusTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
 	QStyleOptionGraphicsItem *o = const_cast<QStyleOptionGraphicsItem*>(option);
 	o->state &= ~(QStyle::State_Selected | QStyle::State_HasFocus);
 	QGraphicsTextItem::paint(painter, o, widget);
 }
+
