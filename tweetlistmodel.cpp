@@ -22,7 +22,7 @@
 #include "tweetlistmodel.h"
 
 TweetListModel::TweetListModel(QObject *parent) :
-    QObject(parent)
+    TweetListModelAbstract(parent)
 {
 }
 
@@ -66,7 +66,7 @@ void TweetListModel::update()
                          "FROM status "
                          "WHERE id > %1 AND %2"
                          "ORDER BY id DESC "
-                         "LIMIT 20").arg(topStatusId).arg(m_additionalQuery);
+                         "LIMIT 20").arg(topStatusId).arg(additionalQuery());
     query.exec(qr);
 
     QList<QTwitStatus> newStatuses;
@@ -103,7 +103,7 @@ void TweetListModel::update()
 
 void TweetListModel::replyDeleteClicked(int index)
 {
-    if (m_statuses.at(index).userId() != m_userid) {
+    if (m_statuses.at(index).userId() != userid()) {
         //reply
         emit requestReply(m_statuses.at(index).id(), m_statuses.at(index).screenName());
     } else {
@@ -124,26 +124,6 @@ void TweetListModel::favoritedClicked(int index)
     emit requestFavorited(m_statuses.at(index).id());
 }
 
-void TweetListModel::setUserid(int userid)
-{
-    m_userid = userid;
-}
-
-int TweetListModel::userid() const
-{
-    return m_userid;
-}
-
-void TweetListModel::setAdditionalQuery(const QString &query)
-{
-    m_additionalQuery = query;
-}
-
-QString TweetListModel::additionalQuery() const
-{
-    return m_additionalQuery;
-}
-
 qint64 TweetListModel::nextUnread()
 {
     //find oldest unread
@@ -155,7 +135,6 @@ qint64 TweetListModel::nextUnread()
             return m_statuses.at(i).id();
         }
     }
-
     return 0;
 }
 
@@ -195,7 +174,7 @@ void TweetListModel::nextPage()
                          "FROM status "
                          "WHERE id < %1 AND %2 "
                          "ORDER BY id DESC "
-                         "LIMIT 20").arg(bottomStatusId).arg(m_additionalQuery);
+                         "LIMIT 20").arg(bottomStatusId).arg(additionalQuery());
     query.exec(sq);
 
     int index = m_statuses.count();

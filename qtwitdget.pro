@@ -47,7 +47,8 @@ HEADERS += twitstatusedit.h \
     signalwaiter.h \
     tweetlistmodel.h \
     tweetviewitem.h \
-    tweetlistview.h
+    tweetlistview.h \
+    tweetlistmodelabstract.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -84,7 +85,8 @@ SOURCES += main.cpp \
     signalwaiter.cpp \
     tweetlistmodel.cpp \
     tweetviewitem.cpp \
-    tweetlistview.cpp
+    tweetlistview.cpp \
+    tweetlistmodelabstract.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \

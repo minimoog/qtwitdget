@@ -26,8 +26,9 @@
 #include <QObject>
 #include <QtSql>
 #include "qtwit/qtwitstatus.h"
+#include "tweetlistmodelabstract.h"
 
-class TweetListModel : public QObject
+class TweetListModel : public TweetListModelAbstract
 {
     Q_OBJECT
 public:
@@ -35,10 +36,10 @@ public:
     int count() const;
     QVariant data(int index) const;
     QHash<QByteArray, QVariant> data(int index, const QList<QByteArray>& roles) const;
-    void setUserid(int userid);
-    int userid() const;
-    void setAdditionalQuery(const QString& query);
-    QString additionalQuery() const;
+    //void setUserid(int userid);
+    //int userid() const;
+    //void setAdditionalQuery(const QString& query);
+    //QString additionalQuery() const;
     void update();
     void nextPage();
     qint64 nextUnread();
@@ -46,10 +47,10 @@ public:
     bool markRead(qint64 id);
 
 signals:
-    void itemsInserted(int index, int count);
-    void itemsRemoved(int index, int count);
-    void itemsMoved(int from, int to, int count);
-    void itemsChanged(int index, int count, const QList<QByteArray>& roles);
+    //void itemsInserted(int index, int count);
+    //void itemsRemoved(int index, int count);
+    //void itemsMoved(int from, int to, int count);
+    //void itemsChanged(int index, int count, const QList<QByteArray>& roles);
 
     void requestReply(qint64 id, const QString& text);
     void requestDelete(qint64 id);
@@ -63,8 +64,8 @@ public slots:
 
 private:
     QList<QTwitStatus> m_statuses;
-    int m_userid;
-    QString m_additionalQuery;
+    //int m_userid;
+    //QString m_additionalQuery;
 };
 
 #endif // TWEETLISTMODEL_H
