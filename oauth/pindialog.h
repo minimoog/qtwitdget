@@ -28,6 +28,9 @@ namespace Ui
     class PinDialog;
 }
 
+/*!
+    Dialog for entering 7 pin number (OAuth Twitter authorization)
+ */
 class PinDialog : public QDialog
 {
     Q_OBJECT

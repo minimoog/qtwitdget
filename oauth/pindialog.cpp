@@ -21,19 +21,29 @@
 #include "pindialog.h"
 #include "ui_pindialogform.h"
 
+/*!
+    Constructor
+ */
 PinDialog::PinDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::PinDialog)
 {
     ui->setupUi(this);
 }
 
+/*!
+    Desctructor
+ */
 PinDialog::~PinDialog()
 {
     delete ui;
 }
 
+/*!
+    Gets pin number
+    \return pin number
+ */
 int PinDialog::getPin() const
 {
-    //TODO: validation
+    // ### TODO: validation
     return ui->pinLineEdit->text().toInt();
 }
