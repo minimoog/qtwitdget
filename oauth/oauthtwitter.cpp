@@ -24,24 +24,38 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QTimer>
+#include <QNetworkAccessManager>
 #include "oauthtwitter.h"
 #include "pindialog.h"
 
+/*!
+    Constructor
+ */
 OAuthTwitter::OAuthTwitter(QObject *parent)
 	:	OAuth(parent), m_netManager(0)
 {
 }
 
+/*!
+    Sets network access manager
+    \remark Must be set to work properly
+ */
 void OAuthTwitter::setNetworkAccessManager(QNetworkAccessManager* netManager)
 {
 	m_netManager = netManager;
 }
 
+/*!
+    Gets network access manager
+ */
 QNetworkAccessManager* OAuthTwitter::networkAccessManager() const
 {
 	return m_netManager;
 }
 
+/*!
+    First step of OAuth Twitter authorization
+ */
 void OAuthTwitter::requestToken()
 {
 	Q_ASSERT(m_netManager != 0);
@@ -53,6 +67,7 @@ void OAuthTwitter::requestToken()
 	QNetworkRequest req(url);
 	req.setRawHeader("Authorization", oauthHeader);
 
+    // ### TODO: Use SignalWaiter or use signal/finished chaining
 	QEventLoop q;
 	QTimer tT;
 	tT.setSingleShot(true);
@@ -82,6 +97,9 @@ void OAuthTwitter::requestToken()
 	}
 }
 
+/*!
+    Second step of OAuth twitter authorization (opens browser)
+ */
 void OAuthTwitter::requestAuthorization()
 {
 	QUrl authorizeUrl(TWITTER_AUTHORIZE_URL);
@@ -90,6 +108,9 @@ void OAuthTwitter::requestAuthorization()
 	QDesktopServices::openUrl(authorizeUrl);
 }
 
+/*!
+    Fourth and final step of authorization (getting access tokens)
+ */
 void OAuthTwitter::requestAccessToken(int pin)
 {
 	Q_ASSERT(m_netManager != 0);
@@ -124,6 +145,9 @@ void OAuthTwitter::requestAccessToken(int pin)
 	}
 }
 
+/*!
+    Third step of OAuth Twitter authorizition (users enters pin code)
+ */
 int OAuthTwitter::authorizationWidget()
 {
 	//PIN based http://apiwiki.twitter.com/Authentication
@@ -136,6 +160,9 @@ int OAuthTwitter::authorizationWidget()
     }    
 }
 
+/*!
+    Starts OAuth Authentication flow to get access tokens from Twitter
+ */
 void OAuthTwitter::authorize()
 {
 	requestToken();

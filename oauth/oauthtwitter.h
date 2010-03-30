@@ -25,30 +25,28 @@
 #ifndef OAUTHTWITTER_H
 #define OAUTHTWITTER_H
 
-#include <QNetworkAccessManager>
 #include "oauth.h"
 
 #define TWITTER_REQUEST_TOKEN_URL "http://twitter.com/oauth/request_token"
 #define TWITTER_ACCESS_TOKEN_URL "http://twitter.com/oauth/access_token"
 #define TWITTER_AUTHORIZE_URL "http://twitter.com/oauth/authorize"
 
+class QNetworkAccessManager;
+
+/*!
+    OAuth Twitter authorization class
+ */
 class OAuthTwitter : public OAuth
 {
 	Q_OBJECT
 public:
-	/*! Constructor */
 	OAuthTwitter(QObject *parent = 0);
-	/*! Sets network access manager 
-	 * \remark Must be set
-	 */
 	void setNetworkAccessManager(QNetworkAccessManager* netManager);
-	/*! Gets network access manager */
 	QNetworkAccessManager* networkAccessManager() const;
-	/*! OAuth Authentication flow to get access tokens */
 	void authorize();
 protected:
 	/*! Reimplement this if you want other widget to get confirm of the authorization */ 
-	int authorizationWidget();
+    virtual int authorizationWidget();
 
 private slots:
 	void error();
