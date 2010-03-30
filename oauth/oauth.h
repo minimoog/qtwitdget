@@ -35,33 +35,22 @@ typedef unsigned char * (*FPHMAC)(const EVP_MD *, const void *, int,
 typedef const EVP_MD * (*FPEVPSHA1)(void);
 
 /*! \class OAuth
- *	\brief Base OAuth class
+    \brief Base OAuth class
  */
 class OAuth : public QObject
 {
 	Q_OBJECT
 
 public:
-	/*! Constructor */
 	OAuth(QObject *parent = 0);
 	
 	enum HttpMethod {GET, POST, PUT, DELETE};
-	/*! Parses oauth_token and oauth_token_secret from response of the service provider
-	 *  and sets m_oauthToken and m_oauthTokenSecret accordingly 
-	 * \param response Response from service provider 
-	 */
+
 	void parseTokens(const QByteArray& response);
-	/*! Generates Authorization Header 
-	 * \remark If HttpMethod is POST put query items in url (QUrl::addEncodedQueryItem)
-	 */
 	QByteArray generateAuthorizationHeader(const QUrl& url, HttpMethod method);
-	/*! Sets oauth_token */
 	void setOAuthToken(const QByteArray& token);
-	/*! Sets oauth_token_secret */
 	void setOAuthTokenSecret(const QByteArray& tokenSecret);
-	/*! Gets oauth_token */
 	QByteArray oauthToken() const;
-	/*! Gets oauth_token_secret */
 	QByteArray oauthTokenSecret() const;
 	
 private:
