@@ -94,10 +94,34 @@ bool TweetListModelUnread::markRead(qint64 id)
             //don't change just remove it
             m_statuses.removeAt(i);
             emit itemsRemoved(i, 1);
+
+            qint64 topStatusId = 0;
+
+            if (!m_statuses.isEmpty())
+                topStatusId = m_statuses.at(0).id();
+
+            QSqlQuery query;
+            QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
+                                     "FROM status "
+                                     "WHERE id > %1 AND isRead = 0 "
+                                     "ORDER BY id ASC "
+                                     "LIMIT 1").arg(topStatusId);
+            query.exec(qr);
+
+            if (query.next()) {
+                QTwitStatus st;
+                st.setId(query.value(0).toLongLong());
+                st.setText(query.value(1).toString());
+                st.setFavorited(query.value(2).toBool());
+                st.setUserId(query.value(3).toInt());
+                st.setScreenName(query.value(4).toString());
+                st.setProfileImageUrl(query.value(5).toString());
+                m_statuses.prepend(st);
+                emit itemsInserted(0, 1);
+            }
             return true;
         }
     }
-
     return false;
 }
 
