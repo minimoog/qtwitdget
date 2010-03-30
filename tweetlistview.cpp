@@ -113,6 +113,7 @@ void TweetListView::itemsInserted(int index, int count)
     }
 
     resizeWidth(scene()->views().at(0)->viewport()->width());
+    adjustSceneRect();
 }
 
 void TweetListView::itemsRemoved(int index, int count)
@@ -153,6 +154,8 @@ void TweetListView::itemsRemoved(int index, int count)
             m_items.at(i)->setIndex(i);
         }
     }
+
+    adjustSceneRect();
 }
 
 void TweetListView::itemsMoved(int from, int to, int count)
@@ -186,4 +189,20 @@ void TweetListView::resizeWidth(int w)
     foreach(TweetViewItem* item, m_items) {
         item->setWidth(w);
     }
+
+    m_width = w;
+
+    adjustSceneRect();
+}
+
+void TweetListView::adjustSceneRect()
+{
+    //since all items have same height it's easy to calc scene rect
+    if (m_items.isEmpty())
+        return;
+
+    QSizeF size = m_items.at(0)->size();
+
+    // ### Should setting scene rect be here???
+    scene()->setSceneRect(0, 0, m_width, size.height() * m_items.count());
 }

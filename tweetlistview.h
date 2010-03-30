@@ -50,8 +50,11 @@ private slots:
     void itemsChanged(int index, int count, const QList<QByteArray> &roles);
 
 private:
+    void adjustSceneRect();
+
     TweetListModel *m_model;
     QList<TweetViewItem*> m_items;
+    int m_width;
 };
 
 #endif // TWEETLISTVIEW_H
