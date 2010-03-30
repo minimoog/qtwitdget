@@ -19,11 +19,19 @@
 #include <QtDebug>
 #include "qtwitupdate.h"
 
+/*!
+    Constructor
+ */
 QTwitUpdate::QTwitUpdate(QObject *parent)
 :	QTwitBase(parent)
 {
 }
 
+/*!
+    Updates status for user
+    \param update Update text
+    \param inReplyToStatusId If user is replying set this to id of tweet id to whom is user replying
+ */
 void QTwitUpdate::setUpdate(const QString &update, qint64 inReplyToStatusId)
 {
 	QByteArray statusUtf8 = update.toUtf8();

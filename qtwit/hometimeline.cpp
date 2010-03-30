@@ -25,16 +25,28 @@ const int maxCount = 200;
 //that if you have less then 150 statuses there are no new subsequent statuses  
 const int possibleCount = 150;
 
+/*!
+    Constructor
+ */
 HomeTimeline::HomeTimeline(QObject *parent)
     :   QTwitHomeTimeline(parent)
 {
 }
 
+/*!
+    Gets tweets of home timeline
+    \return List of tweets
+ */
 QList<QTwitStatus> HomeTimeline::statuses() const
 {
     return m_statuses;
 }
 
+/*!
+    Starts fetching home timeline
+    \param sinceid Fetch timeline tweets from sinceid tweet (newer from sinceid tweet)
+    \remarks Clears previous fetched tweets
+ */
 void HomeTimeline::timeline(qint64 sinceid)
 {
     m_sinceid = sinceid;

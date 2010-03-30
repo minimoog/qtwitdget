@@ -24,12 +24,18 @@
 static const QNetworkRequest::Attribute createFavoriteAttribute = static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 1);
 static const QNetworkRequest::Attribute idAttribute = static_cast<QNetworkRequest::Attribute>(QNetworkRequest::User + 2);
 
-
+/*!
+    Constructor
+ */
 QTwitFavorites::QTwitFavorites(QObject *parent)
 :	QTwitBase(parent)
 {	
 }
 
+/*!
+    Favorites tweet with given id
+    \param id tweet id
+ */
 void QTwitFavorites::create(qint64 id)
 {
     QString urlString = QString("http://api.twitter.com/1/favorites/create/%1.xml").arg(id);
@@ -47,6 +53,10 @@ void QTwitFavorites::create(qint64 id)
     connect(netReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
 
+/*!
+    Unfavorites tweet with given id
+    \param id tweet id
+ */
 void QTwitFavorites::destroy(qint64 id)
 {
     QString urlString = QString("http://api.twitter.com/1/favorites/destroy/%1.xml").arg(id);

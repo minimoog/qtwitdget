@@ -23,17 +23,16 @@
 
 #include "qtwitbase.h"
  
-/*! class QTwitDestroy */
+/*!
+    Deletes tweets with given id
+ */
 class QTwitDestroy : public QTwitBase
 {
-	Q_OBJECT
-	
+	Q_OBJECT	
 public:
-	/*! Constructor */
 	QTwitDestroy(QObject *parent = 0);
 
 public slots:
-	/*! Delete twitter status of auth. user with status id */
 	void deleteStatus(qint64 id);
 	
 signals:

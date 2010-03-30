@@ -24,7 +24,12 @@
 #include "qtwitbase.h"
 #include "qtwitextuserinfo.h"
 
-/*! QTwitFriends class */
+// ### TODO: Write new version of this class, now Twitter API uses cursor
+
+/*!
+    Gets user's friends
+    \obsolete
+ */
 class QTwitFriends : public QTwitBase
 {
 	Q_OBJECT

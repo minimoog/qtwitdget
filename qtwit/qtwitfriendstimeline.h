@@ -27,7 +27,10 @@
 #include "qtwitbase.h"
 #include "qtwitstatus.h"
 
-/*! class QTwitFriendsTimeline */
+/*!
+    Fetches user timeline
+    \obsolete Depreciated by Twitter API
+ */
 class QTwitFriendsTimeline : public QTwitBase
 {
 	Q_OBJECT

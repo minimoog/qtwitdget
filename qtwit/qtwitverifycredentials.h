@@ -24,19 +24,15 @@
 #include "qtwitbase.h"
 #include "qtwitextuserinfo.h"
  
-/*! class QTwitVerifyCredentials */
+/*!
+    Verifies user Twitter credentials (is user properly authenticated?)
+ */
 class QTwitVerifyCredentials : public QTwitBase
 {
 	Q_OBJECT
-	
 public:
-	/*! Constructor */
 	QTwitVerifyCredentials(QObject *parent = 0);
-	/*! Verify credentials */
 	void verify();
-	/*! Gets user info 
-	 * \remark Only after verifying 
-	 */
 	QTwitExtUserInfo userInfo() const;
 
 signals:

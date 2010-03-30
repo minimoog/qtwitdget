@@ -38,7 +38,7 @@ OAuthTwitter::OAuthTwitter(QObject *parent)
 
 /*!
     Sets network access manager
-    \remark Must be set to work properly
+    \remarks Must be set to work properly
  */
 void OAuthTwitter::setNetworkAccessManager(QNetworkAccessManager* netManager)
 {

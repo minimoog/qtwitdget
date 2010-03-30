@@ -20,31 +20,56 @@
 
 #include "qtwitbase.h"
 
+/*!
+    Constructor
+ */
 QTwitBase::QTwitBase(QObject *parent)
 	:	QObject(parent), m_netManager(0), m_oauthTwitter(0)	
 {
 }
 
+/*!
+    Constructor
+    \param netManager Network Access Manager
+    \param oauthTwitter OAuth Twitter
+    \param parent QObject parent
+ */
 QTwitBase::QTwitBase(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent)
 :	QObject(parent), m_netManager(netManager), m_oauthTwitter(oauthTwitter)
 {
 }
 
+/*!
+    Sets network access manager
+    \param netManager Network access manager
+ */
 void QTwitBase::setNetworkAccessManager(QNetworkAccessManager* netManager)
 {
 	m_netManager = netManager;
 }
 
+/*!
+    Gets network access manager
+    \return Network access manager
+ */
 QNetworkAccessManager* QTwitBase::networkAccessManager() const
 {
 	return m_netManager;
 }
 
+/*!
+    Sets OAuth Twitter authorization
+    \param oauthTwitter OAuth Twitter
+ */
 void QTwitBase::setOAuthTwitter(OAuthTwitter* oauthTwitter)
 {
 	m_oauthTwitter = oauthTwitter;
 }
 
+/*!
+    Gets OAuth Twitter authorization
+    \return OAuth Twitter
+ */
 OAuthTwitter* QTwitBase::oauthTwitter() const
 {
 	return m_oauthTwitter;

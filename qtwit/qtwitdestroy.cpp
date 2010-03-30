@@ -21,11 +21,19 @@
 #include <QtDebug>
 #include "qtwitdestroy.h"
 
+/*!
+    Constructor
+ */
 QTwitDestroy::QTwitDestroy(QObject *parent)
 :	QTwitBase(parent)
 {
 }
 
+/*!
+    Delete tweet with id
+    \param id tweet id
+    \remarks tweet must be user's own
+*/
 void QTwitDestroy::deleteStatus(qint64 id)
 {
 	Q_ASSERT(networkAccessManager() != 0);

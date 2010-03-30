@@ -23,6 +23,9 @@
 
 #include "qtwitbase.h"
 
+/*!
+    Favorites/unfavorites tweet with given id
+ */
 class QTwitFavorites : public QTwitBase
 {
 	Q_OBJECT
@@ -32,6 +35,11 @@ public:
 	void destroy(qint64 id);
 
 signals:
+    /*!
+        Emited when done creating/destroing favoriting
+        \param id id of the tweet
+        \param created true if is favorited, false if is unfavorited
+     */
 	void finished(qint64 id, bool created);
 
 private slots:

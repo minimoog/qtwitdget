@@ -269,7 +269,7 @@ QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, cons
 
 /*!
     Generates Authorization Header
-    \remark If HttpMethod is POST put query items in url (QUrl::addEncodedQueryItem)
+    \remarks If HttpMethod is POST put query items in url (QUrl::addEncodedQueryItem)
     \param[in] url Url with query items embedded
     \param[in] method Type of http method
  */

@@ -24,11 +24,23 @@
 #include "qtwithometimeline.h"
 #include "xml/xmlreaderstatus.h"
 
+/*!
+    Constructor
+ */
 QTwitHomeTimeline::QTwitHomeTimeline(QObject *parent)
 :	QTwitBase(parent)
 {
 }
 
+/*!
+    Updates home timeline
+    \param sinceid fetch tweets newest then sinceid tweet
+    \param maxid fetch tweets older then maxid tweet
+    \param count number of tweet to fetch (maximum 200)
+    \param page page number (starts with 1)
+    \remarks Set parameters to zero or default ctr to NOT query them
+    \remarks clears all fetched statuses
+ */
 void QTwitHomeTimeline::update(qint64 sinceId, qint64 maxId, int count, int page)
 {
 	Q_ASSERT(networkAccessManager() != 0);
@@ -90,6 +102,10 @@ void QTwitHomeTimeline::error()
     emit networkError(QString());
 }
 
+/*!
+    Gets statuses
+    \return List of statuses
+ */
 QList<QTwitStatus> QTwitHomeTimeline::getStatuses() const
 {
 	return m_statuses;

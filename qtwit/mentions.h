@@ -23,6 +23,9 @@
 
 #include "qtwitmentions.h"
 
+/*!
+    Fetches Mentions timeline
+ */
 class Mentions : public QTwitMentions
 {
     Q_OBJECT
@@ -33,6 +36,7 @@ public:
     QList<QTwitStatus> statuses() const;
 
 signals:
+    /*! Emited when fetching is finished */
     void finishedTimeline();
 
 private slots:

@@ -23,11 +23,18 @@
 #include "qtwitretweet.h"
 #include "xml/xmlreaderstatus.h"
 
+/*!
+    Constructor
+ */
 QTwitRetweet::QTwitRetweet(QObject *parent)
 :   QTwitBase(parent)
 {
 }
 
+/*!
+    Retweets tweet with id
+    \param statusid tweet id
+ */
 void QTwitRetweet::retweet(qint64 statusid)
 {
     Q_ASSERT(networkAccessManager() != 0);
@@ -90,6 +97,11 @@ void QTwitRetweet::error()
     }
 }
 
+/*!
+    Getsid of last retweeted tweet
+    \return id of last retweet
+    \remarks If retweeting was with error id is zero
+ */
 QTwitStatus QTwitRetweet::getRetweetedStatus() const
 {
     return m_retweetStatus;

@@ -27,19 +27,15 @@
 #include "qtwitbase.h"
 #include "qtwitstatus.h"
 
-/*! class QTwitHomeTimeline */
+/*!
+    Fetches user home timeline
+*/
 class QTwitHomeTimeline : public QTwitBase
 {
 	Q_OBJECT
 public:
-	/*! Constructor */
 	QTwitHomeTimeline(QObject *parent = 0);
-	/*! Updates home timeline 
-	 * \remark Set parameters to zero or default ctr to NOT query them
-	 * \remark clears all statuses
-	 */
 	void update(qint64 sinceId = 0, qint64 maxId = 0, int count = 0, int page = 0);
-	/*! Gets statuses */
 	QList<QTwitStatus> getStatuses() const;
 
 private slots:

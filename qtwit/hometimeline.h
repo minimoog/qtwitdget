@@ -23,10 +23,12 @@
 
 #include "qtwithometimeline.h"
 
+/*!
+    Fetches Twitter home timeline
+ */
 class HomeTimeline : public QTwitHomeTimeline
 {
     Q_OBJECT
-
 public:
     HomeTimeline(QObject *parent = 0);
 
@@ -34,6 +36,7 @@ public:
     QList<QTwitStatus> statuses() const;
 
 signals:
+    /*! Emited when fetching of tweets is finished */
     void finishedTimeline();
 
 private slots:

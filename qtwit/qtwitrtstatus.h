@@ -29,6 +29,9 @@
 
 //implicitly shared class
 
+/*!
+    Data class for storing retweet information of tweet
+ */
 class QTwitRtStatus
 {
 public:

@@ -22,11 +22,17 @@
 #include "qtwitverifycredentials.h"
 #include "xml/xmlreaderextuserinfo.h"
 
+/*!
+    Constructor
+ */
 QTwitVerifyCredentials::QTwitVerifyCredentials(QObject *parent)
 	:	QTwitBase(parent)
 {
 }
 
+/*!
+    Verify credentials
+ */
 void QTwitVerifyCredentials::verify()
 {
 	Q_ASSERT(networkAccessManager() != 0);
@@ -61,6 +67,11 @@ void QTwitVerifyCredentials::error()
 	emit finished(false);
 }
 
+/*!
+    Gets user extended info
+    \return Extended user info
+    \remark Only after verifying user info is valid
+ */
 QTwitExtUserInfo QTwitVerifyCredentials::userInfo() const
 {
 	return m_userinfo;

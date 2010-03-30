@@ -24,17 +24,15 @@
 #include "qtwitbase.h"
 #include "qtwitstatus.h"
 
+/*!
+    Retweets tweet with given id
+ */
 class QTwitRetweet : public QTwitBase
 {
     Q_OBJECT
 public:
-    /*! Constructor */
     QTwitRetweet(QObject *parent = 0);
-    /*! Retweets status with id statusid */
     void retweet(qint64 statusid);
-    /*! Gets last retweeted status
-     * \remark If retweeting was with error status id is zero 
-     */
     QTwitStatus getRetweetedStatus() const;
     
 private slots:

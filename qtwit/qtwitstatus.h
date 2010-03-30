@@ -28,14 +28,15 @@
 #include <QLocale>
 #include <QSharedData>
 #include "qtwitrtstatus.h"
-
-//forward declaration doesn't work in VS
 #include "qtwitstatusdata.h"
 
 //class QTwitStatusData;
 
 //implicitly shared class
 
+/*!
+    Data class for storing information of tweet
+ */
 class QTwitStatus
 {
 public:

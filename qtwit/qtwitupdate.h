@@ -23,17 +23,16 @@
 
 #include "qtwitbase.h"
 
-/*! QTwitUpdate class */
+/*!
+    Updates Twitter status (aka tweet)
+ */
 class QTwitUpdate : public QTwitBase
 {
 	Q_OBJECT
-
 public:
-	/*! Constructor */
 	QTwitUpdate(QObject *parent = 0);
 
 public slots:
-	/*! Updates status for authenticated user */
 	void setUpdate(const QString &update, qint64 inReplyToStatusId = 0);
 
 private slots:

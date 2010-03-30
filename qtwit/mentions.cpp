@@ -25,16 +25,28 @@
 const int maxCount = 200;
 const int possibleCount = 150;
 
+/*!
+    Constructor
+ */
 Mentions::Mentions(QObject *parent)
 :   QTwitMentions(parent)
 {
 }
 
+/*!
+    Gets statuses from fetched mentions timeline
+    \return List of tweets
+ */
 QList<QTwitStatus> Mentions::statuses() const
 {
     return m_statuses;
 }
 
+/*!
+    Fetched mentions timeline from sinceid tweet
+    \param sinceid From which id tweet to fetch (newest mentions tweets from sinceid tweet)
+    \remarks Clears previous fetched tweets
+ */
 void Mentions::timeline(qint64 sinceid)
 {
     m_sinceid = sinceid;

@@ -25,13 +25,14 @@
 #include <QNetworkReply>
 #include "oauth/oauthtwitter.h"
 
-/*! QTwitBase class */
+/*!
+    Base class for Twitter API classes
+ */
 class QTwitBase : public QObject
 {
 	Q_OBJECT
 
 public:
-	/*! Constructor */
 	QTwitBase(QObject *parent = 0);
 	QTwitBase(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent = 0);
 
@@ -44,6 +45,7 @@ public:
 signals:
 	/*! emited when finished downloading and processing */
 	void finished();
+    /*! emited when there is network error */
     void networkError(const QString &errorString);
 
 private:

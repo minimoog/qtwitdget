@@ -25,6 +25,9 @@
 
 //implicitly shared class
 
+/*!
+    Data class for storing extended twitter user information
+ */
 class QTwitExtUserInfo 
 {
 public:
