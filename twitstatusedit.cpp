@@ -22,27 +22,45 @@
 #include "twitstatusedit.h"
 #include "shortenedurl.h"
 
+/*!
+    Constructor
+ */
 TwitStatusEdit::TwitStatusEdit(QWidget *parent)
 	:	QPlainTextEdit(parent), m_limit(16777215), m_isOverLimit(false), m_statusId(0)
 {
 	connect(this, SIGNAL(textChanged()), SLOT(onTextChanged()));
 }
 
+/*!
+    Sets limit
+    \param limit number of character
+    \remarks If limit is reached background changes to red, and cannot post update to twitter (140 default)
+ */
 void TwitStatusEdit::setLimit(int limit)
 {
 	m_limit = limit;
 }
 
+/*!
+    \returns limit of characters
+ */
 int TwitStatusEdit::limit() const
 {
 	return m_limit;
 }
 
+/*!
+    \param statusId Tweet id
+    \remarks Used for replying
+ */
 void TwitStatusEdit::setStatusId(qint64 statusId)
 {
 	m_statusId = statusId;
 }
 
+/*!
+    \returns tweet id
+ */
 qint64 TwitStatusEdit::statusId() const
 {
 	return m_statusId;
@@ -72,6 +90,11 @@ void TwitStatusEdit::onTextChanged()
 	}
 }
 
+/*!
+    Sets reply.
+    \param id tweet id of the replying tweet
+    \param screenName ScreenName to append in the text (@ScreenName)
+ */
 void TwitStatusEdit::setReply(qint64 id, const QString& screenName)
 {
 	m_statusId = id;
@@ -79,6 +102,9 @@ void TwitStatusEdit::setReply(qint64 id, const QString& screenName)
 	appendPlainText(QString('@') + screenName + QString(' '));
 }
 
+/*!
+    \obsolete
+ */
 void TwitStatusEdit::setRetweet(const QString& text, const QString& screenName)
 {
 	m_statusId = 0;
@@ -104,6 +130,9 @@ void TwitStatusEdit::keyPressEvent(QKeyEvent *e)
 	}
 }
 
+/*!
+    Shortens urls in the text
+ */
 void TwitStatusEdit::shortUrls()
 {
 	QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive, QRegExp::RegExp2);	

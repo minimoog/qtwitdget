@@ -23,15 +23,15 @@
 
 #include <QPlainTextEdit>
 
-/*! class TwitStatusEdit */
+/*!
+    Editor for tweet updates
+*/
 class TwitStatusEdit : public QPlainTextEdit
 {
 	Q_OBJECT
 	Q_PROPERTY(int limit READ limit WRITE setLimit)
-	
 public:
 	TwitStatusEdit(QWidget *parent = 0);
-
 	void setLimit(int limit);
 	int limit() const;
 	void setStatusId(qint64 statusId);
