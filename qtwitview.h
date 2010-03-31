@@ -26,6 +26,9 @@
 
 class QPropertyAnimation;
 
+/*!
+    Graphics View for showing tweets
+ */
 class QTwitView : public QGraphicsView
 {
 	Q_OBJECT
@@ -33,16 +36,8 @@ class QTwitView : public QGraphicsView
 public:
 	QTwitView(QWidget *parent = 0);
 
-    /* sets/gets value of vertical scrollbar */
     void setValueVertScrollbar(int value);
     int valueVertScrollbar() const;
-
-    /* since horizontal scrollbar is disabled, and statuses are resizable to get whole x sizing
-     * we need just y position to focus to y position of status
-     *
-     * y should be y position of status to be centered (top left corner)
-     * uses scrollbar for moving
-     */
     void moveToPointAnim(qreal y);
 
 signals:

@@ -38,32 +38,24 @@ class QTwitFavorites;
 class QTwitRetweet;
 class Mentions;
 
-/*! Class MainWindow */
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	/*! Constructor */
 	MainWindow();
     ~MainWindow();
 	void startUp();
     static QNetworkAccessManager* networkAccessManager();
 
 private slots:
-	void authorize();
-	/*! Called when getting the friends timeline (statuses) is finished */
 	void finishedFriendsTimeline();
-	/*! Periodically called for updating timeline */
 	void updateTimeline();
-	/*! Called when user request to destroy (delete) status */
-	/*! \param id ID of the status */
 	void statusDestroyed(qint64 id);
     void finishedMentions();
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void createGrouping();
-	void languageChanged();
 	void loadStyleSheet();
 	void closeTab(int i);
 	void nextStatuses();
@@ -80,6 +72,8 @@ protected:
 	void changeEvent(QEvent *e);
 
 private:
+    void authorize();
+    void languageChanged();
 	void setupTrayIcon();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();

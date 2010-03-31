@@ -23,13 +23,13 @@
 
 #include "ui_langchangedialogform.h"
 
-/*! \class LangChangeDialog */
-/* Language Change Dialog */
+/*!
+    Dialog for changing UI language
+ */
 class LangChangeDialog : public QDialog
 {
 	Q_OBJECT
 public:
-	/*! Constructor */
 	LangChangeDialog(QWidget *parent = 0);
 
 protected:

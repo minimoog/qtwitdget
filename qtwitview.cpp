@@ -22,6 +22,9 @@
 #include <QPropertyAnimation>
 #include "qtwitview.h"
 
+/*!
+    Constructor
+ */
 QTwitView::QTwitView(QWidget *parent) 
     : QGraphicsView(parent),
       m_scrbarAnimation(new QPropertyAnimation(this, "valueVertScrollBar", this))
@@ -47,6 +50,9 @@ void QTwitView::scrollBarPos(int pos)
 		emit scrollBarMaxPos(false);
 }
 
+/*!
+    \reimp
+ */
 void QTwitView::resizeEvent(QResizeEvent *e)
 {
 	QSize s = e->size();
@@ -56,16 +62,35 @@ void QTwitView::resizeEvent(QResizeEvent *e)
 	QWidget::resizeEvent(e);
 }
 
+/*!
+    Sets vertical scrollbar position
+    \param value Vertical scrollbar position
+ */
 void QTwitView::setValueVertScrollbar(int value)
 {
     verticalScrollBar()->setValue(value);
 }
 
+/*!
+    Gets vertical scrollbar position
+ */
 int QTwitView::valueVertScrollbar() const
 {
     return verticalScrollBar()->value();
 }
 
+/* since horizontal scrollbar is disabled, and statuses are resizable to get whole x sizing
+ * we need just y position to focus to y position of status
+ *
+ * y should be y position of status to be centered (top left corner)
+ * uses scrollbar for moving
+ */
+
+/*!
+    Starts animated move of view (by moving vertical scrollbar) to center on given y position
+    \param y Where to move
+    \remarks x position is fixed (0)
+ */
 void QTwitView::moveToPointAnim(qreal y)
 {
     //WHY 17? scrollbar width/height?

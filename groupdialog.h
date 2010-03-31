@@ -25,6 +25,10 @@
 #include "qtwit/qtwitfriends.h"
 #include "ui_groupdialogform.h"
 
+/*!
+    Shows dialog for grouping twitter user's friends
+    \obsolete
+ */
 class GroupDialog : public QDialog 
 {
     Q_OBJECT

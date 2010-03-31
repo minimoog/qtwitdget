@@ -24,6 +24,10 @@
 
 extern QTranslator *appTranslator;	//global
 
+/*!
+    Constructor
+    \param parent Parent widget
+ */
 LangChangeDialog::LangChangeDialog(QWidget *parent)
 	:	QDialog(parent)
 {
@@ -41,6 +45,9 @@ LangChangeDialog::LangChangeDialog(QWidget *parent)
 	}
 }
 
+/*!
+    \reimp
+ */
 void LangChangeDialog::changeEvent(QEvent *e)
 {
 	if(e->type() == QEvent::LanguageChange)

@@ -116,11 +116,17 @@ MainWindow::MainWindow()
     readSettings();
 }
 
+/*!
+    Returns network access manager
+ */
 QNetworkAccessManager* MainWindow::networkAccessManager()
 {
     return m_s_netManager;
 }
 
+/*!
+    Start authorization process
+ */
 void MainWindow::authorize()
 {
 	//oauth flow
@@ -202,6 +208,9 @@ void MainWindow::updateButtonClicked()
 	}
 }
 
+/*!
+    \obsolete
+ */
 void MainWindow::createGrouping()
 {
 	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
