@@ -22,6 +22,11 @@
 #include <QEventLoop>
 #include "signalwaiter.h"
 
+/*!
+    Constructor
+    \param sender Sender of the signal
+    \param signal On which signal to wait
+ */
 SignalWaiter::SignalWaiter(const QObject* sender, const char* signal) :
     m_timer(new QTimer(this)),
     m_eventLoop(new QEventLoop(this)),
@@ -32,6 +37,11 @@ SignalWaiter::SignalWaiter(const QObject* sender, const char* signal) :
     connect(sender, signal, m_eventLoop, SLOT(quit()));
 }
 
+/*!
+    Wait for the signal, meantime event loop is executed  to not stall UI
+    \param msec How many milliseconds to wait for the signal
+    \return True if signal emited in waiting time, false otherwise (timeouts)
+ */
 bool SignalWaiter::wait(int msec)
 {
     m_timer->start(msec);
