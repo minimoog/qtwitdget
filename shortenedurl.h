@@ -23,13 +23,15 @@
  
 #include <QNetworkAccessManager>
 
-/*! class ShortenedUrl */
+/*!
+    Class for shortening url
+    \remarks Uses 0.mk services
+    \obsolete 0.mk uses new API
+ */
 class ShortenedUrl
 {
 public:
-	/*! constructor */
 	ShortenedUrl();
-	/*! Short url */
 	QString shortUrl(const QString& url);
 
 private:

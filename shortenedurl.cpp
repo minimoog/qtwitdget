@@ -26,10 +26,18 @@
 #include <QTimer>
 #include "shortenedurl.h"
 
+/*!
+    Constructor
+ */
 ShortenedUrl::ShortenedUrl()
 {
 }
 
+/*!
+   Shortens url
+   \param url Url to shorten
+   \return Shorten url
+ */
 QString ShortenedUrl::shortUrl(const QString &url)
 {
 	//TODO: Add other services for shortening
