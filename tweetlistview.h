@@ -27,6 +27,9 @@
 
 class TweetViewItem;
 
+/*!
+    View of the TweetListModel
+ */
 class TweetListView : public QObject, public QGraphicsItem
 {
     Q_OBJECT

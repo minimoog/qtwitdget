@@ -55,7 +55,9 @@ public:
     QGraphicsLineItem* lineItem;
 };
 
-
+/*!
+    Item for the MVC (TweetListView, TweetListModel
+ */
 class TweetViewItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT

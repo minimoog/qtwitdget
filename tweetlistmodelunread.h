@@ -25,6 +25,10 @@
 #include "qtwit/qtwitstatus.h"
 #include "tweetlistmodel.h"
 
+/*!
+    Specialization of TweetListModel for handling list of unread tweets.
+    List contains only unread tweets.
+ */
 class TweetListModelUnread : public TweetListModel
 {
     Q_OBJECT

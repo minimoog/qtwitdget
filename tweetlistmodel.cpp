@@ -21,36 +21,62 @@
 #include <QtDebug>
 #include "tweetlistmodel.h"
 
+/*!
+    Constructor
+    \param parent Object parent
+ */
 TweetListModel::TweetListModel(QObject *parent) :
     QObject(parent)
 {
 }
 
+/*!
+    \returns number of list items
+ */
 int TweetListModel::count() const
 {
     return m_statuses.count();
 }
 
+/*!
+    \returns twitter user id
+ */
 int TweetListModel::userid() const
 {
     return m_userid;
 }
 
+/*!
+    Sets twitter user id
+    \param userid user id
+ */
 void TweetListModel::setUserid(int userid)
 {
     m_userid = userid;
 }
 
+/*!
+    \returns additional query
+ */
 QString TweetListModel::additionalQuery() const
 {
     return m_additionalQuery;
 }
 
+/*!
+    Sets additional query
+    \param query additional query
+ */
 void TweetListModel::setAdditionalQuery(const QString &query)
 {
     m_additionalQuery = query;
 }
 
+/*!
+    Gets data for given item index
+    \param index item index in the list
+    \return Data, or default QVariant if index id out of bounds
+ */
 QVariant TweetListModel::data(int index) const
 {
     QVariant s;
@@ -61,6 +87,12 @@ QVariant TweetListModel::data(int index) const
     return s;
 }
 
+/*!
+    Gets data for given roles of the item
+    \param index Index of the item in the list
+    \roles roles List of roles
+    \return data of the requested roles
+ */
 QHash<QByteArray, QVariant> TweetListModel::data(int index, const QList<QByteArray> &roles) const
 {
     QHash<QByteArray,QVariant> hash;
@@ -74,6 +106,9 @@ QHash<QByteArray, QVariant> TweetListModel::data(int index, const QList<QByteArr
     return hash;
 }
 
+/*!
+    Updates list items
+ */
 void TweetListModel::update()
 {
     qint64 topStatusId = 0;
@@ -144,6 +179,9 @@ void TweetListModel::favoritedClicked(int index)
     emit requestFavorited(m_statuses.at(index).id());
 }
 
+/*!
+    \returns id of tweet who is oldest unread tweet in the list
+ */
 qint64 TweetListModel::nextUnread() const
 {
     //find oldest unread
@@ -158,6 +196,11 @@ qint64 TweetListModel::nextUnread() const
     return 0;
 }
 
+/*!
+    Marks read tweei in the list
+    \param id Tweet id
+    \return true if tweet is in the list, false otherwise
+ */
 bool TweetListModel::markRead(qint64 id)
 {
     // ### TODO: Hashing or Map
@@ -172,6 +215,9 @@ bool TweetListModel::markRead(qint64 id)
     return false;
 }
 
+/*!
+    Marks all read tweets in the list
+ */
 void TweetListModel::markAllRead()
 {
     for (int i = 0; i < m_statuses.count(); ++i) {
@@ -182,6 +228,9 @@ void TweetListModel::markAllRead()
     }
 }
 
+/*!
+    Add another page of tweets to the list. (Increases number of list items)
+ */
 void TweetListModel::nextPage()
 {
     if (m_statuses.isEmpty())

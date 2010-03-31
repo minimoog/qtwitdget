@@ -20,11 +20,18 @@
 
 #include "tweetlistmodelunread.h"
 
+/*!
+    Constructor
+ */
 TweetListModelUnread::TweetListModelUnread(QObject *parent) :
     TweetListModel(parent)
 {
 }
 
+/*!
+    Updates tweet list
+    \reimp
+ */
 void TweetListModelUnread::update()
 {
     qint64 topStatusId = 0;
@@ -73,11 +80,18 @@ void TweetListModelUnread::update()
     }
 }
 
+/*!
+    Does nothing.
+    \reimp
+ */
 void TweetListModelUnread::nextPage()
 {
     //nothing
 }
 
+/*!
+    Return oldest tweet in the list
+ */
 qint64 TweetListModelUnread::nextUnread() const
 {
     if (m_statuses.count())
@@ -86,6 +100,11 @@ qint64 TweetListModelUnread::nextUnread() const
     return 0;
 }
 
+/*!
+    Marks tweet read, removes from the list, then adds next newest unread tweet
+    \param id Tweet id to mark unread
+    \return true if tweet was in the list, otherwise false
+ */
 bool TweetListModelUnread::markRead(qint64 id)
 {
     // ### TODO: Hashing or Map
@@ -125,6 +144,9 @@ bool TweetListModelUnread::markRead(qint64 id)
     return false;
 }
 
+/*!
+    Removes all tweets in the list
+ */
 void TweetListModelUnread::markAllRead()
 {
     //remove all

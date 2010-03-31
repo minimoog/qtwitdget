@@ -27,6 +27,9 @@
 #include <QtSql>
 #include "qtwit/qtwitstatus.h"
 
+/*!
+    List model (MVC pattern) based on itemviews-ng
+ */
 class TweetListModel : public QObject
 {
     Q_OBJECT
@@ -46,9 +49,13 @@ public:
     virtual bool markRead(qint64 id);
 
 signals:
+    /*! emited when items are inserted at index position */
     void itemsInserted(int index, int count);
+    /*! emited when items are removed */
     void itemsRemoved(int index, int count);
+    /*! emited when items are moved */
     void itemsMoved(int from, int to, int count);
+    /*! emited when items are changed */
     void itemsChanged(int index, int count, const QList<QByteArray>& roles);
 
     void requestReply(qint64 id, const QString& text);

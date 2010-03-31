@@ -32,6 +32,11 @@
 #include "mainwindow.h"
 #include "qtwit/qtwitstatus.h"
 
+/*!
+    Replaces parsed url with href
+    \param text
+    \return text with replaced url/links
+ */
 static QString replaceLinksWithHref(const QString &text)
 {
     QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive);
@@ -57,6 +62,11 @@ static QString replaceLinksWithHref(const QString &text)
     return textWithHref;
 }
 
+/*!
+    Constructor
+    \param index Index of the item in the model
+    \param view View
+ */
 TweetViewItem::TweetViewItem(int index, TweetListView *view)
     : QGraphicsItem(view), d(new TweetViewItemData)
 {
@@ -116,22 +126,35 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
     connect(this, SIGNAL(favoritedClicked(int)), model, SLOT(favoritedClicked(int)));
 }
 
+/*!
+    \returns index of the item
+ */
 int TweetViewItem::index() const
 {
     return d->index;
 }
 
+/*!
+    \param index Sets index of the item
+ */
 void TweetViewItem::setIndex(int index)
 {
     d->index = index;
     itemChanged();
 }
 
+/*!
+    \returns width of the item
+ */
 int TweetViewItem::width() const
 {
     return d->width;
 }
 
+/*!
+    Sets the width of the item
+    \param w width
+ */
 void TweetViewItem::setWidth(int w)
 {
     d->width = w;
@@ -142,6 +165,9 @@ void TweetViewItem::setWidth(int w)
     d->lineItem->setLine(1, 99, w - 1, 99);
 }
 
+/*!
+    \param roles Roles in with item changed
+ */
 void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
 {
     QHash<QByteArray, QVariant> hash = d->listView->model()->data(d->index, roles);
@@ -156,16 +182,25 @@ void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
     }
 }
 
+/*!
+    \returns data of the item
+ */
 QVariant TweetViewItem::data() const
 {
     return QVariant();
 }
 
+/*!
+    \returns List view
+ */
 TweetListView* TweetViewItem::view() const
 {
     return d->listView;
 }
 
+/*!
+    \returns items geometry
+ */
 QSizeF TweetViewItem::size() const
 {
     return QSizeF(d->width, 101.0f);

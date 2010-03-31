@@ -23,16 +23,26 @@
 #include "tweetlistview.h"
 #include "tweetviewitem.h"
 
+/*!
+    Constructor
+ */
 TweetListView::TweetListView(QGraphicsItem * parent)
     : QGraphicsItem(parent), m_model(0)
 {
 }
 
+/*!
+    \returns model of the view
+ */
 TweetListModel* TweetListView::model() const
 {
     return m_model;
 }
 
+/*!
+    Sets model
+    \param model model
+ */
 void TweetListView::setModel(TweetListModel *model)
 {
     if (model == m_model)
@@ -59,18 +69,32 @@ void TweetListView::setModel(TweetListModel *model)
     }
 }
 
+/*!
+    Gets index of item for a given position
+    \param position Position
+    \return Index of item which contains position
+ */
 int TweetListView::itemAt(const QPointF &position) const
 {
     // ### TODO
     return 0;
 }
 
+/*!
+    Gets item geometry for given index in the model
+    \param index Index of item in the model
+    \return geometry of the item
+ */
 QSizeF TweetListView::itemGeometry(int index) const
 {
     // ### TODO
     return QSizeF();
 }
 
+/*!
+    \param index Index of the item
+    \return Graphics Item of the item
+ */
 QGraphicsItem* TweetListView::itemForIndex(int index) const
 {
     if (index >=0 && index < m_model->count()) {
