@@ -23,6 +23,10 @@
 
 #include "xmlreaderextuserinfo.h"
 
+/*!
+    Parses XML Twitter use list
+    \obsolete
+ */
 class XmlReaderExtUsers : public XmlReaderExtUserInfo
 {
 public:

@@ -20,15 +20,27 @@
 
 #include "xmlreaderextuserinfo.h"
 
+/*!
+    Constructor
+ */
 XmlReaderExtUserInfo::XmlReaderExtUserInfo()
 {
 }
 
+/*!
+    Returns extended user information
+    \remarks Valid after correct parsing
+ */
 QTwitExtUserInfo XmlReaderExtUserInfo::userInfo() const
 {
 	return m_userInfo;
 }
 
+/*!
+    Reads and parses XML extended user information
+    \param device Device from where XML is read
+    \return True if parsing was succesful, otherwise false
+ */
 bool XmlReaderExtUserInfo::read(QIODevice *device)
 {
 	setDevice(device);

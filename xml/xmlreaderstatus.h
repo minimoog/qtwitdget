@@ -24,6 +24,9 @@
 #include <QXmlStreamReader>
 #include "qtwit/qtwitstatus.h"
 
+/*!
+    Parses XML Twitter list of statuses
+ */
 class XmlReaderStatus : public QXmlStreamReader
 {
 public:

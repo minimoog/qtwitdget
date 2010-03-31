@@ -24,6 +24,9 @@
 #include <QXmlStreamReader>
 #include "qtwit/qtwitextuserinfo.h"
 
+/*!
+    Parses XML Twitter extended user info
+ */
 class XmlReaderExtUserInfo : public QXmlStreamReader
 {
 public:

@@ -22,15 +22,27 @@
 
 //TODO: Use skipCurrentElement
 
+/*!
+    Constructor
+ */
 XmlReaderStatus::XmlReaderStatus()
 {
 }
 
+/*!
+    Return list of statuses
+    \remarks Valid after succesfull parsing
+ */
 QList<QTwitStatus> XmlReaderStatus::statuses() const
 {
 	return m_statuses;
 }
 
+/*!
+    Reads and parses XML status list
+    \param device Device from which to read XML status list
+    \return True if parsing is succesfull, otherwise false
+ */
 bool XmlReaderStatus::read(QIODevice *device)
 {
 	setDevice(device);
