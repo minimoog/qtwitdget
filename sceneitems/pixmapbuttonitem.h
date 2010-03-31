@@ -23,7 +23,9 @@
  
 #include <QGraphicsPixmapItem>
 
-/*! Button with 3 state/pixmaps */
+/*!
+    Graphics item simple button with 3 state/pixmaps
+ */
 class PixmapButtonItem : public  QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
@@ -35,9 +37,6 @@ public:
 	QPixmap clickedPixmap() const;
 	void setDefaultPixmap(const QPixmap &pixmap);
 	QPixmap defaultPixmap() const;
-	/*! Sets id with which signal is emited when is clicked on pixmap */
-	void setId(qint64 i);
-	qint64 id() const;
 signals:
 	void clicked(qint64 i);
 protected:

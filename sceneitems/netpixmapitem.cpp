@@ -29,6 +29,10 @@
 #include <QtSql>
 #include "netpixmapitem.h"
 
+/*!
+    Strips url path for pixmap/image url
+    \return Unique string identifying pixmap from url
+ */
 static QString decodeTwitterImageUrlToFilename(const QUrl& url)
 {
     QString wholePath = url.path();
@@ -50,26 +54,52 @@ static QString decodeTwitterImageUrlToFilename(const QUrl& url)
     return path + '_' + basename;
 }
 
+/*!
+    Constructor
+    \param parent Graphics item parent
+ */
 NetPixmapItem::NetPixmapItem(QGraphicsItem * parent)
 :   QGraphicsPixmapItem(parent), m_netManager(0)
 {
 }
 
+/*!
+    Constructor
+    \param netManager Network Access Manager
+    \param Graphics Item parent
+ */
 NetPixmapItem::NetPixmapItem(QNetworkAccessManager * netManager, QGraphicsItem * parent)
 :   QGraphicsPixmapItem(parent), m_netManager(netManager)
 {
 }
 
+/*!
+    Sets network access manager
+    \param netManager Network access manager
+ */
 void NetPixmapItem::setNetworkAccessManager(QNetworkAccessManager *netManager)
 {
     m_netManager = netManager;
 }
 
+/*!
+    Gets network access manager
+    \return network access manager
+ */
 QNetworkAccessManager* NetPixmapItem::networkAccessManager() const
 {
     return m_netManager;
 }
 
+/*!
+    Sets pixmap url.
+
+    First check if pixmap is in QPixmapCache.
+    If it isn't then check if it is in the local database.
+    If it isn't then downloads the pixmap
+
+    \param url Url of the pixmap
+ */
 void NetPixmapItem::setPixmapUrl(const QUrl &url)
 {
     //check if pixmap is already cache

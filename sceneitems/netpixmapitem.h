@@ -25,23 +25,17 @@
 #include <QNetworkAccessManager>
 #include <QUrl>
 
-/*! Network Pixmap (remote url) QGraphics Pixmap Item with memory/disk caching */
+/*!
+    Network Pixmap (remote url) QGraphics Pixmap Item with memory/disk caching
+ */
 class NetPixmapItem : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
-
 public:
-    /*! Constructor */
 	NetPixmapItem(QGraphicsItem * parent = 0);
-    /*! Constructor */
     NetPixmapItem(QNetworkAccessManager * netManager, QGraphicsItem * parent = 0);
-
-    /*! Sets network access manager */
     void setNetworkAccessManager(QNetworkAccessManager * netManager);
-    /*! Gets network access maanger */
     QNetworkAccessManager* networkAccessManager() const;
-
-    /*! Sets url pixmap */
     void setPixmapUrl(const QUrl& url);
 
 private slots:
@@ -49,8 +43,7 @@ private slots:
     void error();
 
 private:
-    QNetworkAccessManager * m_netManager;
-    
+    QNetworkAccessManager * m_netManager; 
 };
 
 #endif //NETPIXMAPITEM_H

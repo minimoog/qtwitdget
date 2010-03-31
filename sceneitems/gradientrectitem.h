@@ -26,6 +26,9 @@
 class QPropertyAnimation;
 class QParallelAnimationGroup;
 
+/*!
+    Simple rectangle item with linear gradient
+ */
 class GradientRectItem : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT

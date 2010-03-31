@@ -41,7 +41,6 @@ HEADERS += twitstatusedit.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
     oauth/pindialog.h \
-    sceneitems/statusitemgroup.h \
     signalwaiter.h \
     tweetlistmodel.h \
     tweetviewitem.h \
@@ -77,7 +76,6 @@ SOURCES += main.cpp \
     oauth/oauth.cpp \
     oauth/oauthtwitter.cpp \
     oauth/pindialog.cpp \
-    sceneitems/statusitemgroup.cpp \
     signalwaiter.cpp \
     tweetlistmodel.cpp \
     tweetviewitem.cpp \

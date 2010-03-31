@@ -22,6 +22,10 @@
 #include <QGraphicsSceneHoverEvent>
 #include "pixmapbuttonitem.h"
 
+/*!
+    Constructor
+    \param Graphics item parent
+ */
 PixmapButtonItem::PixmapButtonItem(QGraphicsItem *parent)
 	:	QGraphicsPixmapItem(parent)
 {
@@ -29,47 +33,61 @@ PixmapButtonItem::PixmapButtonItem(QGraphicsItem *parent)
 	setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
 }
 
+/*!
+    Sets hover pixmap
+    \param pixmap hover pixmap
+ */
 void PixmapButtonItem::setHoverPixmap(const QPixmap &pixmap)
 {
 	m_hoverPixmap = pixmap;
 }
 
+/*!
+    Sets click pixmap when item is clicked
+    \param pixmap Click pixmap
+ */
 void PixmapButtonItem::setClickedPixmap(const QPixmap &pixmap)
 {
 	m_clickedPixmap = pixmap;
 }
 
+/*!
+    \return Hover pixmap
+ */
 QPixmap PixmapButtonItem::hoverPixmap() const
 {
 	return m_hoverPixmap;
 }
 
+/*!
+    \return Clicked pixmap
+ */
 QPixmap PixmapButtonItem::clickedPixmap() const
 {
 	return m_clickedPixmap;
 }
 
+/*!
+    Sets default pixmap
+    \param pixmap Default pixmap
+ */
 void PixmapButtonItem::setDefaultPixmap(const QPixmap &pixmap)
 {
 	m_defaultPixmap = pixmap;
 	setPixmap(m_defaultPixmap);
 }
 
+/*!
+    \return Default pixmap
+ */
 QPixmap PixmapButtonItem::defaultPixmap() const
 {
 	return m_defaultPixmap;
 }
 
-void PixmapButtonItem::setId(qint64 i)
-{
-	m_id = i;
-}
-
-qint64 PixmapButtonItem::id() const
-{
-	return m_id;
-}
-
+/*!
+    \reimp
+ */
 void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 {
 	setPixmap(m_hoverPixmap);
@@ -79,6 +97,9 @@ void PixmapButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
 	QGraphicsPixmapItem::hoverEnterEvent(e);
 }
 
+/*!
+    \reimp
+ */
 void PixmapButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
 {
 	setPixmap(m_defaultPixmap);
@@ -86,6 +107,9 @@ void PixmapButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
 	QGraphicsPixmapItem::hoverLeaveEvent(e);
 }
 
+/*!
+    \reimp
+ */
 void PixmapButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
 	if(e->button() == Qt::LeftButton){
@@ -95,6 +119,9 @@ void PixmapButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 	}
 }
 
+/*!
+    \reimp
+ */
 void PixmapButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
 	if(e->button() == Qt::LeftButton){

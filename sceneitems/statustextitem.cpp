@@ -22,7 +22,11 @@
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 #include "statustextitem.h"
- 
+
+/*!
+    Constructor
+    \param parent Graphics item parent
+ */
 StatusTextItem::StatusTextItem(QGraphicsItem * parent)
 	:	QGraphicsTextItem(parent)
 {
@@ -32,6 +36,11 @@ StatusTextItem::StatusTextItem(QGraphicsItem * parent)
 	setTextInteractionFlags(Qt::TextBrowserInteraction);
 }
 
+/*!
+    Constructor
+    \param text Item text
+    \param parent Graphics item parent
+ */
 StatusTextItem::StatusTextItem(const QString& text, QGraphicsItem * parent)
 	:	QGraphicsTextItem(text, parent)
 {
@@ -41,7 +50,10 @@ StatusTextItem::StatusTextItem(const QString& text, QGraphicsItem * parent)
 	setTextInteractionFlags(Qt::TextBrowserInteraction);
 }
 
-
+/*!
+    Removes dashed line around text item
+    \reimp
+ */
 void StatusTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
 	QStyleOptionGraphicsItem *o = const_cast<QStyleOptionGraphicsItem*>(option);

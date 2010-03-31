@@ -21,9 +21,12 @@
 #ifndef STATUSTEXTITEM_H
 #define STATUSTEXTITEM_H
 
-/*! Removes dashed box around text which QGraphicsTextItem has */
 #include <QGraphicsTextItem>
 
+/*!
+    Removes dashed box around text which QGraphicsTextItem has.
+    Also sets default options
+ */
 class StatusTextItem : public QGraphicsTextItem
 {
 public:

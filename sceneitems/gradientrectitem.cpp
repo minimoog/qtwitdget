@@ -24,6 +24,10 @@
 #include <QParallelAnimationGroup>
 #include "gradientrectitem.h"
 
+/*!
+    Constructor
+    \param parent Parent graphics item
+ */
 GradientRectItem::GradientRectItem(QGraphicsItem * parent)
     :	QGraphicsRectItem(parent), m_gradient1Animation(new QPropertyAnimation(this, "firstGradientColor", this)),
     m_gradient2Animation(new QPropertyAnimation(this, "secondGradientColor", this)),
@@ -37,6 +41,12 @@ GradientRectItem::GradientRectItem(QGraphicsItem * parent)
     connect(m_fadeinoutAnimation, SIGNAL(finished()), this, SIGNAL(fadeInOutFinished()));
 }
 
+/*!
+    Constructor
+    \param width Width of the rectangle
+    \param gradient Type of color gradient
+    \param parent Parent graphics item
+ */
 GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradient, QGraphicsItem * parent)
     :   QGraphicsRectItem(parent), m_gradient1Animation(new QPropertyAnimation(this, "firstGradientColor", this)),
     m_gradient2Animation(new QPropertyAnimation(this, "secondGradientColor", this)),
@@ -53,6 +63,11 @@ GradientRectItem::GradientRectItem(qreal width, GradientRectItem::Gradient gradi
     connect(m_fadeinoutAnimation, SIGNAL(finished()), this, SIGNAL(fadeInOutFinished()));
 }
 
+/*!
+    Sets width of the rectangle item
+    \param width Width
+    \remarks Height is 100
+ */
 void GradientRectItem::setWidth(qreal width)
 {
     QRectF rectItem = rect();
@@ -64,11 +79,20 @@ void GradientRectItem::setWidth(qreal width)
     setRect(rectItem);
 }
 
+/*!
+    Gets width
+    \return Width of the item
+ */
 qreal GradientRectItem::width() const
 {
     return rect().width();
 }
 
+/*!
+    Sets color gradient
+    \param gradient Type of color
+    \remarks Gradient is linear on y axis
+ */
 void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
 {
     switch (gradient) {
@@ -97,6 +121,10 @@ void GradientRectItem::setGradient(GradientRectItem::Gradient gradient)
     setTwoColorGradient();
 }
 
+/*!
+    Sets and starts animating to choosen color gradient
+    \param gradient Color of the gradient
+ */
 void GradientRectItem::setGradientAnim(GradientRectItem::Gradient gradient)
 {
     m_gradient1Animation->setDuration(200);
@@ -124,28 +152,47 @@ void GradientRectItem::setGradientAnim(GradientRectItem::Gradient gradient)
     m_parallelAnimation->start();
 }
 
+/*!
+    Gets first color gradient (color of top of the rectangle)
+    \return Color
+ */
 QColor GradientRectItem::firstGradientColor() const
 {
     return m_firstGradColor;
 }
 
+/*!
+    Sets first color gradient (top of the rectangle)
+    \param color Color
+ */
 void GradientRectItem::setFirstGradientColor(const QColor &color)
 {
     m_firstGradColor = color;
     setTwoColorGradient();
 }
 
+/*!
+    Sets second color of the gradient (bottom of rectangle)
+    \param Color
+ */
 void GradientRectItem::setSecondGradientColor(const QColor &color)
 {
     m_secondGradColor  = color;
     setTwoColorGradient();
 }
 
+/*!
+    Gets second color of gradient
+    \return Second color
+ */
 QColor GradientRectItem::secondGradientColor() const
 {
     return m_secondGradColor;
 }
 
+/*!
+    Sets the gradient of rectangle
+ */
 void GradientRectItem::setTwoColorGradient()
 {
     QLinearGradient linearGradient(0, 0, 0, 1);
@@ -156,6 +203,9 @@ void GradientRectItem::setTwoColorGradient()
     setBrush(linearGradient);
 }
 
+/*!
+    Starts fade out animation (changes alpha channel)
+ */
 void GradientRectItem::startFadeOutAnim()
 {
     m_fadeinoutAnimation->setDuration(200);
@@ -165,6 +215,11 @@ void GradientRectItem::startFadeOutAnim()
     m_fadeinoutAnimation->start();
 }
 
+/*!
+    Starts moving animation to item (item coordinates)
+    \param dy How much to move on y axis
+    \remarks Only y axis
+ */
 void GradientRectItem::startMoveAnimY(qreal dy)
 {
     m_moveAnimation->setDuration(200);
