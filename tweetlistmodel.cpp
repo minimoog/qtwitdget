@@ -21,12 +21,14 @@
 #include <QtDebug>
 #include "tweetlistmodel.h"
 
+const int TweetsPerPage = 20;
+
 /*!
     Constructor
     \param parent Object parent
  */
 TweetListModel::TweetListModel(QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_pagecount(1)
 {
 }
 
@@ -90,7 +92,7 @@ QVariant TweetListModel::data(int index) const
 /*!
     Gets data for given roles of the item
     \param index Index of the item in the list
-    \roles roles List of roles
+    \param roles roles List of roles
     \return data of the requested roles
  */
 QHash<QByteArray, QVariant> TweetListModel::data(int index, const QList<QByteArray> &roles) const
@@ -121,7 +123,7 @@ void TweetListModel::update()
                          "FROM status "
                          "WHERE id > %1 AND %2"
                          "ORDER BY id DESC "
-                         "LIMIT 20").arg(topStatusId).arg(additionalQuery());
+                         "LIMIT %3").arg(topStatusId).arg(additionalQuery()).arg(TweetsPerPage * m_pagecount);
     query.exec(qr);
 
     QList<QTwitStatus> newStatuses;
@@ -145,13 +147,14 @@ void TweetListModel::update()
 
         emit itemsInserted(0, newStatuses.count());
 
-        if (m_statuses.count() > 20) {
+        //remove old statuses
+        if (m_statuses.count() > TweetsPerPage * m_pagecount) {
             int oldCount = m_statuses.count();
 
-            for (int i = 0; i < oldCount - 20; ++i)
+            for (int i = 0; i < oldCount - TweetsPerPage * m_pagecount; ++i)
                 m_statuses.removeLast();
         
-            emit itemsRemoved(20, oldCount - 20);
+            emit itemsRemoved(TweetsPerPage * m_pagecount, TweetsPerPage * m_pagecount - 20);
         }
     }
 }
@@ -243,7 +246,7 @@ void TweetListModel::nextPage()
                          "FROM status "
                          "WHERE id < %1 AND %2 "
                          "ORDER BY id DESC "
-                         "LIMIT 20").arg(bottomStatusId).arg(additionalQuery());
+                         "LIMIT %3").arg(bottomStatusId).arg(additionalQuery()).arg(TweetsPerPage);
     query.exec(sq);
 
     int index = m_statuses.count();
@@ -264,5 +267,6 @@ void TweetListModel::nextPage()
 
     if (count) {
         emit itemsInserted(index, count);
+        m_pagecount += 1;
     }
 }

@@ -61,6 +61,8 @@ private slots:
 	void nextStatuses();
     void markAllStatusesRead();
     void gotoNextUnread();
+    void languageChanged();
+    void authorize();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
@@ -72,8 +74,6 @@ protected:
 	void changeEvent(QEvent *e);
 
 private:
-    void authorize();
-    void languageChanged();
 	void setupTrayIcon();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();

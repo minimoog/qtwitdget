@@ -74,6 +74,7 @@ protected:
 private:
     int m_userid;
     QString m_additionalQuery;
+    int m_pagecount;
 };
 
 #endif // TWEETLISTMODEL_H
