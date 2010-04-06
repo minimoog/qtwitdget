@@ -160,6 +160,14 @@ void TweetListView::itemsRemoved(int index, int count)
         return;
     }
 
+    int oldIndexMove = index + count;
+    int oldLastIndex = m_items.count() - 1;
+
+    QPointF posTo = m_items.at(index)->mapToParent(0, 0);
+
+    QSizeF sizeLast = m_items.at(index + count - 1)->size();
+    QPointF posFrom = m_items.at(index + count - 1)->mapToParent(0, 0) + QPointF(sizeLast.width(), sizeLast.height());
+
     //remove items
     for (int i = 0; i < count; ++i) {
         TweetViewItem *item = m_items.takeAt(index);
@@ -168,11 +176,7 @@ void TweetListView::itemsRemoved(int index, int count)
     }
 
     //move rest of bottom items up, if any
-    if (index < m_items.count() - 1) {
-
-        QPointF posTo = m_items.at(index)->mapToParent(QPointF(0, 0));
-        QPointF posFrom = m_items.at(index + 1)->mapToParent(QPointF(0, 0));
-
+    if (oldIndexMove <= oldLastIndex) {
         for (int i = index; i < m_items.count(); ++i) {
             m_items.at(i)->moveBy(posTo.x(), posTo.y() - posFrom.y());
             m_items.at(i)->setIndex(i);

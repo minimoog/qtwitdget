@@ -154,7 +154,7 @@ void TweetListModel::update()
             for (int i = 0; i < oldCount - TweetsPerPage * m_pagecount; ++i)
                 m_statuses.removeLast();
         
-            emit itemsRemoved(TweetsPerPage * m_pagecount, TweetsPerPage * m_pagecount - 20);
+            emit itemsRemoved(TweetsPerPage * m_pagecount, oldCount - TweetsPerPage * m_pagecount);
         }
     }
 }

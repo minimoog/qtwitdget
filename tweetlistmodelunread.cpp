@@ -20,6 +20,8 @@
 
 #include "tweetlistmodelunread.h"
 
+const int TweetLimit = 50;
+
 /*!
     Constructor
  */
@@ -34,10 +36,13 @@ TweetListModelUnread::TweetListModelUnread(QObject *parent) :
  */
 void TweetListModelUnread::update()
 {
-    qint64 topStatusId = 0;
+    if (m_statuses.count() >= TweetLimit) //nothing to update
+        return;
+
+    qint64 bottomStatusId = 0;
 
     if (!m_statuses.isEmpty())
-        topStatusId = m_statuses.at(0).id();
+        bottomStatusId = m_statuses.last().id();
 
     QSqlQuery query;
     //bigger but reasonable limit
@@ -45,7 +50,7 @@ void TweetListModelUnread::update()
                          "FROM status "
                          "WHERE id > %1 AND isRead = 0 "
                          "ORDER BY id ASC "
-                         "LIMIT 50").arg(topStatusId);
+                         "LIMIT %2").arg(bottomStatusId).arg(TweetLimit - m_statuses.count());
     query.exec(qr);
 
     QList<QTwitStatus> newStatuses;
@@ -62,20 +67,23 @@ void TweetListModelUnread::update()
         newStatuses.append(st);
     }
 
+    int index = m_statuses.count();
+
     //batch inserting and removing
     if (newStatuses.count()) {
         foreach (const QTwitStatus& s, newStatuses)
-            m_statuses.prepend(s);
+            m_statuses.append(s);
 
-        emit itemsInserted(0, newStatuses.count());
+        emit itemsInserted(index, newStatuses.count());
 
-        if (m_statuses.count() > 50) {
+        //Shouldn't happen
+        if (m_statuses.count() > TweetLimit) {
             int oldCount = m_statuses.count();
 
-            for (int i = 0; i < oldCount - 50; ++i)
+            for (int i = 0; i < oldCount - TweetLimit; ++i)
                 m_statuses.removeLast();
 
-            emit itemsRemoved(50, oldCount - 50);
+            emit itemsRemoved(TweetLimit, oldCount - TweetLimit);
         }
     }
 }
@@ -95,7 +103,7 @@ void TweetListModelUnread::nextPage()
 qint64 TweetListModelUnread::nextUnread() const
 {
     if (m_statuses.count())
-        return m_statuses.last().id();
+        return m_statuses.first().id();
 
     return 0;
 }
@@ -114,17 +122,17 @@ bool TweetListModelUnread::markRead(qint64 id)
             m_statuses.removeAt(i);
             emit itemsRemoved(i, 1);
 
-            qint64 topStatusId = 0;
+            qint64 bottomStatusId = 0;
 
             if (!m_statuses.isEmpty())
-                topStatusId = m_statuses.at(0).id();
+                bottomStatusId = m_statuses.last().id();
 
             QSqlQuery query;
             QString qr = QString("SELECT id, text, favorited, userId, screenName, profileImageUrl "
                                      "FROM status "
                                      "WHERE id > %1 AND isRead = 0 "
                                      "ORDER BY id ASC "
-                                     "LIMIT 1").arg(topStatusId);
+                                     "LIMIT 1").arg(bottomStatusId);
             query.exec(qr);
 
             if (query.next()) {
@@ -135,8 +143,8 @@ bool TweetListModelUnread::markRead(qint64 id)
                 st.setUserId(query.value(3).toInt());
                 st.setScreenName(query.value(4).toString());
                 st.setProfileImageUrl(query.value(5).toString());
-                m_statuses.prepend(st);
-                emit itemsInserted(0, 1);
+                m_statuses.append(st);
+                emit itemsInserted(m_statuses.count() - 1, 1);
             }
             return true;
         }
