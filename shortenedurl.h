@@ -21,21 +21,23 @@
 #ifndef SHORTENEDURL_H
 #define SHORTENEDURL_H
  
-#include <QNetworkAccessManager>
+#include <QUrl>
+
+class QNetworkAccessManager;
 
 /*!
     Class for shortening url
-    \remarks Uses 0.mk services
-    \obsolete 0.mk uses new API
+    \remarks Uses bit.ly services
  */
-class ShortenedUrl
+class ShortenedUrl : public QObject
 {
 public:
-	ShortenedUrl();
+    ShortenedUrl(QObject *parent = 0);
+    ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent = 0);
 	QString shortUrl(const QString& url);
 
 private:
-	QNetworkAccessManager m_netManager;
+    QNetworkAccessManager *m_netManager;
 };
  
 #endif //SHORTENEDEURL_H

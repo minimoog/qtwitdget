@@ -148,7 +148,7 @@ void TwitStatusEdit::shortUrls()
 			int length = rx.matchedLength();
 			QString matchedUrl = txt.mid(pos, length);
 
-			if(!matchedUrl.contains("http://is.gd/")){
+            if(!matchedUrl.contains("http://bit.ly/")){ // ### move detection of already shorten url to ShortenedUrl
 				ShortenedUrl sUrl;
 				QString newUrl = sUrl.shortUrl(matchedUrl);
 

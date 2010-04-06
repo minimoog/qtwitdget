@@ -19,18 +19,35 @@
  */
 
 #include <QtDebug>
-#include <QUrl>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QTimer>
+#include <QNetworkAccessManager>
 #include "shortenedurl.h"
+#include "mainwindow.h"
+#include "signalwaiter.h"
 
 /*!
     Constructor
+    \param parent QObject parent
+    \remarks Uses global network access manager from MainWindow class
  */
-ShortenedUrl::ShortenedUrl()
+ShortenedUrl::ShortenedUrl(QObject *parent)
+    : QObject(parent)
 {
+    m_netManager = MainWindow::networkAccessManager();
+}
+
+/*!
+    Constructor
+    \param netManager Network Access Manager
+    \param parent Object parent
+ */
+ShortenedUrl::ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent)
+    : QObject(parent)
+{
+    m_netManager = netManager;
 }
 
 /*!
@@ -41,27 +58,18 @@ ShortenedUrl::ShortenedUrl()
 QString ShortenedUrl::shortUrl(const QString &url)
 {
 	//TODO: Add other services for shortening
-	QUrl urlService("http://api.0.mk/");
-	urlService.addQueryItem("dolg", url);
+    QUrl urlService("http://api.bit.ly/v3/shorten");
+    urlService.addQueryItem("login", "minimoog");
+    urlService.addQueryItem("apiKey", "R_17b8dfb25efd629d31c8c8f93ea51b9e");
+    urlService.addQueryItem("longUrl", url);
+    urlService.addQueryItem("format", "txt");
 
 	QNetworkRequest req(urlService);
-	
-    QEventLoop eventloop;
-    
-    QTimer timer;
-    timer.setSingleShot(true);
+    QNetworkReply *reply = m_netManager->get(req);
 
-    QObject::connect(&timer, SIGNAL(timeout()), &eventloop, SLOT(quit()));
-    QObject::connect(&m_netManager, SIGNAL(finished(QNetworkReply*)), &eventloop, SLOT(quit()));
+    SignalWaiter signalWaiter(reply, SIGNAL(finished()));
 
-    QNetworkReply *reply = m_netManager.get(req);
-
-	timer.start(5000);
-    eventloop.exec();
-
-    if (timer.isActive()) {
-        timer.stop();
-
+    if (signalWaiter.wait(2000)) {
         if (reply->error() != QNetworkReply::NoError) {
             qDebug() << "Error shortening url";
             qDebug() << reply->readAll();
@@ -70,7 +78,6 @@ QString ShortenedUrl::shortUrl(const QString &url)
         }
 
         return reply->readAll();
-
     } else {
         qDebug() << "Timeout";
         return QString();
