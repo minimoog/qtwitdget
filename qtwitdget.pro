@@ -45,7 +45,9 @@ HEADERS += twitstatusedit.h \
     tweetlistmodel.h \
     tweetviewitem.h \
     tweetlistview.h \
-    tweetlistmodelunread.h
+    tweetlistmodelunread.h \
+    qtwit/qtwituserdata.h \
+    qtwit/qtwituser.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \

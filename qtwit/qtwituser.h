@@ -1,5 +1,5 @@
-/* Copyright (c) 2008, Antonie Jovanoski
- *	
+/* Copyright (c) 2010, Antonie Jovanoski
+ *
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,42 +15,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Contact e-mail: Antonie Jovanoski <minimoog77@gmail.com>
+ * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
 #ifndef QTWITUSER_H
 #define QTWITUSER_H
 
-#include <QString>
+#include <QSharedDataPointer>
+#include "qtwituserdata.h"
 
-/* QTwitUser class
- *
- * \remark Not fully implemented and used
+/*!
+    Data class for storing information on twitter user
  */
 class QTwitUser
 {
 public:
-	QTwitUser() {};
-
-	void setId(int id) { m_id = id; }
-	int getId() const { return m_id; }
-
-	void setScreenName(QString &screenName) { m_screenName = screenName; }
-	QString getScreenName() const { return m_screenName; }
-
-	void setProfileImageUrl(QString &imageUrl) { m_profileImageUrl = imageUrl; }
-	QString getProfileImageUrl() const { return m_profileImageUrl; }
+    QTwitUser() : d(new QTwitUserData) { }
+    void setId(int id) { d->id = id; }
+    int id() const { return d->id; }
+    void setName(const QString& name) { d->name = name; }
+    QString name() const { return d->name; }
+    void setLocation(const QString& location) { d->location = location; }
+    QString location() const { return d->location; }
+    void setDescription(const QString& desc) { d->description = desc; }
+    QString description() const { return d->description; }
+    void setProfileImageUrl(const QString& url) { d->profileImageUrl = url; }
+    QString profileImageUrl() const { return d->profileImageUrl; }
+    void setUrl(const QString& url) { d->url = url; }
+    QString url() const { return d->url; }
 
 private:
-	int m_id;
-	QString m_name;				//not implemented
-	QString m_screenName;
-	QString m_location;			//not implemented
-	QString m_description;		//not implemented
-	QString m_profileImageUrl;	
-	QString m_url;				//not implemented
-	bool m_protected;			//not implemented
-	int m_followersCount;		//not implemented
+    QSharedDataPointer<QTwitUserData> d;
 };
 
-#endif //QTWITUSER_H
+#endif // QTWITUSER_H
