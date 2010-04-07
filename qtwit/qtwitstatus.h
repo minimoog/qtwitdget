@@ -41,10 +41,7 @@ class QTwitStatus
 {
 public:
 
-	QTwitStatus() { d = new QTwitStatusData(); }
-
-	QTwitStatus(const QTwitStatus &other)
-		:	d(other.d) { }
+    QTwitStatus() : d(new QTwitStatusData) { }
 
 	void setCreated(const QDateTime &datetime) { d->created = datetime; }
 	QDateTime created() const { return d->created; }
@@ -127,21 +124,9 @@ public:
     void setRead(bool read) { d->isRead = read; }
     bool isRead() const { return d->isRead; }
 
-    void setRetweetStatus(const QTwitRtStatus& rtStatus)
-    {
-        if (!d->rtStatus) 
-            d->rtStatus = new QTwitRtStatus;
+    void setRetweetStatus(const QTwitRtStatus& rtStatus) { d->rtStatus = rtStatus; }
 
-        *d->rtStatus = rtStatus;
-    }
-
-    QTwitRtStatus retweetStatus() const
-    {
-        if (!d->rtStatus)
-            return QTwitRtStatus();
-
-        return *d->rtStatus;
-    }
+    QTwitRtStatus retweetStatus() const { return d->rtStatus; }
 
 private:
 	QSharedDataPointer<QTwitStatusData> d;

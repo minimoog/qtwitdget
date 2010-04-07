@@ -32,47 +32,7 @@ public:
 	QTwitRtStatusData() : id(0), replyToStatusId(0), replyToUserId(0), favorited(false), userId(0), followersCount(0), 
         friendsCount(0), favouritesCount(0), utcOffset(0), statusesCount(0), geoEnabled(false),
         verified(false), following(false)
-	{	text.clear(); 
-		source.clear();
-		replyToScreenName.clear();
-		name.clear();
-		screenName.clear();
-		location.clear();
-		description.clear();
-		profileImageUrl.clear();
-		url.clear(); 
-        timezone.clear(); }
-
-	QTwitRtStatusData(const QTwitRtStatusData &other) 
-		: QSharedData(other), 
-		created(other.created), 
-		id(other.id), 
-		text(other.text),
-		source(other.source),
-		replyToStatusId(other.replyToStatusId),
-		replyToUserId(other.replyToUserId),
-		favorited(other.favorited),
-		replyToScreenName(other.replyToScreenName),
-		userId(other.userId),
-		name(other.name),
-		screenName(other.screenName),
-		location(other.location),
-		description(other.description),
-		profileImageUrl(other.profileImageUrl),
-		url(other.url),
-		followersCount(other.followersCount),
-        friendsCount(other.friendsCount),
-        userCreatedAt(other.userCreatedAt),
-        favouritesCount(other.favouritesCount),
-        utcOffset(other.utcOffset),
-        timezone(other.timezone),
-        statusesCount(other.statusesCount),
-        geoEnabled(other.geoEnabled),
-        verified(other.verified),
-        following(other.following)
-		 { }
-
-	~QTwitRtStatusData() { }
+    { }
 
 	QDateTime created;
 	qint64 id;		

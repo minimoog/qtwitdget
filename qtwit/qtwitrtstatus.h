@@ -23,8 +23,6 @@
 
 #include <QString>
 #include <QSharedData>
-
-//forward declaration doesn't work in VS
 #include "qtwitrtstatusdata.h"
 
 //implicitly shared class
@@ -36,10 +34,7 @@ class QTwitRtStatus
 {
 public:
 
-	QTwitRtStatus() { d = new QTwitRtStatusData(); }
-
-	QTwitRtStatus(const QTwitRtStatus &other)
-		:	d(other.d) { }
+    QTwitRtStatus() : d(new QTwitRtStatusData) { }
 
 	void setCreated(const QDateTime &datetime) { d->created = datetime; }
 	QDateTime created() const { return d->created; }
