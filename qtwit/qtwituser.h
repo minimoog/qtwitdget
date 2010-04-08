@@ -35,6 +35,8 @@ public:
     int id() const { return d->id; }
     void setName(const QString& name) { d->name = name; }
     QString name() const { return d->name; }
+    void setScreenName(const QString& screenName) { d->screenName = screenName; }
+    QString screenName() const { return d->screenName; }
     void setLocation(const QString& location) { d->location = location; }
     QString location() const { return d->location; }
     void setDescription(const QString& desc) { d->description = desc; }
