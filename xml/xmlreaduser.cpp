@@ -28,12 +28,16 @@ bool XmlReadUser::read(QIODevice *device)
 {
     xml.setDevice(device);
 
+    readUser();
+
+    /*
     if (xml.readNextStartElement()) {
         if (xml.name() == "user")
             readUser();
         else
             xml.raiseError(QObject::tr("Not a user xml element"));
     }
+    */
 
     return !xml.error();
 }

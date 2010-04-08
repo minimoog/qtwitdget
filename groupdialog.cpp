@@ -29,7 +29,7 @@ GroupDialog::GroupDialog(QWidget *parent)
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
 	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(removeButtonClicked()));
-	m_twitFriends->updateFriends();
+    m_twitFriends->updateFriends(0, 0, QString(), QString("-1"));
 }
 
 GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent)
@@ -41,7 +41,7 @@ GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthT
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
 	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(removeButtonClicked()));
-	m_twitFriends->updateFriends();
+    m_twitFriends->updateFriends(0, 0, QString(), QString("-1"));
 }
 
 void GroupDialog::setNetworkManager(QNetworkAccessManager* netManager)
@@ -69,9 +69,10 @@ void GroupDialog::changeEvent(QEvent *e)
 
 void GroupDialog::finishedFriends()
 {
-	QList<QTwitExtUserInfo> listFriends = m_twitFriends->getFriends();
+    // ### TODO    
+    QList<QTwitUser> listFriends = m_twitFriends->getFriends();
 
-	foreach(const QTwitExtUserInfo& fr, listFriends){
+    foreach(const QTwitUser& fr, listFriends){
 		m_ui.friendsListWidget->addItem(fr.screenName());
 		m_scrNameToId.insert(fr.screenName(), fr.id());
 	}
