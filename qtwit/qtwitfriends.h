@@ -22,32 +22,32 @@
 #define QTWITFRIENDS_H
 
 #include "qtwitbase.h"
-#include "qtwitextuserinfo.h"
-
-// ### TODO: Write new version of this class, now Twitter API uses cursor
+#include "qtwituser.h"
 
 /*!
     Gets user's friends
-    \obsolete
  */
 class QTwitFriends : public QTwitBase
 {
 	Q_OBJECT
 
 public:
-	/*! Constructor */
 	QTwitFriends(QObject *parent = 0);
 	QTwitFriends(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent = 0);
-	/*! Updates friends for authenticated user */
-	void updateFriends(int id = 0, int userId = 0, const QString& screenName = QString(), int page = 0);
-	QList<QTwitExtUserInfo> getFriends() const;
+    void updateFriends(int id = 0,
+                       int userId = 0,
+                       const QString& screenName = QString(),
+                       const QString& cursor = QString());
 
-private:
-	QList<QTwitExtUserInfo> m_friends;
+    QList<QTwitUser> getFriends() const;
 
 private slots:
-	void reply();
-	void error();
+    void reply();
+    void error();
+
+private:
+    QList<QTwitUser> m_friends;
+    bool m_paging;
 };
 
 #endif //QTWITFRIENDS_H

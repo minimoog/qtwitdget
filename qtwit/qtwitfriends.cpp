@@ -19,49 +19,50 @@
 #include <QtDebug>
 #include <QNetworkReply>
 #include "qtwitfriends.h"
-#include "xml/xmlreaderextusers.h"
+#include "xml/xmlreaduserlist.h"
 
 QTwitFriends::QTwitFriends(QObject *parent)
-	:	QTwitBase(parent)
+	:	QTwitBase(parent), m_paging(false)
 {
 }
 
 QTwitFriends::QTwitFriends(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent)
-:	QTwitBase(netManager, oauthTwitter, parent)
+:	QTwitBase(netManager, oauthTwitter, parent), m_paging(false)
 {
 }
 
-QList<QTwitExtUserInfo> QTwitFriends::getFriends() const
+QList<QTwitUser> QTwitFriends::getFriends() const
 {
 	return m_friends;
 }
 
-void QTwitFriends::updateFriends(int id, int userId, const QString& screenName, int page)
+void QTwitFriends::updateFriends(int id, int userId, const QString& screenName, const QString& cursor)
 {
 	Q_ASSERT(networkAccessManager() != 0);
 
-	m_friends.clear();
+    if (!m_paging)
+	    m_friends.clear();
 
     QUrl url("http://api.twitter.com/1/statuses/friends.xml");
 
-	if(id != 0){
+    if (id != 0) {
 		QString strId = QString("%1").arg(id);
 		url.addQueryItem("id", strId);
 	}
 
-	if(userId != 0){
+    if (userId != 0) {
 		QString strUserId = QString("%1").arg(userId);
 		url.addQueryItem("user_id", strUserId);
 	}
 
-	if(!screenName.isEmpty()){
+    if (!screenName.isEmpty()) {
 		url.addQueryItem("screen_name", screenName);
 	}
 
-	if (page != 0){
-		QString strPage = QString("%1").arg(page);
-		url.addQueryItem("page", strPage);
-	}
+    if (!cursor.isEmpty()) {
+        url.addQueryItem("cursor", cursor);
+        m_paging = true;
+    }
 
 	QNetworkRequest req(url);
 	QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
@@ -75,12 +76,20 @@ void QTwitFriends::reply()
 {
 	QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
 	if(netReply){
-		XmlReaderExtUsers xrextusers;
-		xrextusers.readUsers(netReply);
-		m_friends = xrextusers.users();
-	}
+        XmlReadUserList xmlUserList;
+        xmlUserList.read(netReply);
 
-	emit finished();
+        m_friends.append(xmlUserList.users());
+
+        if (xmlUserList.nextCursor() != QString("0")) {
+            m_paging = true;
+            updateFriends(0, 0, QString(), xmlUserList.nextCursor());
+        } else {
+            m_paging = false;
+            emit finished();
+        }
+	}
+	//emit finished();
 }
 
 
