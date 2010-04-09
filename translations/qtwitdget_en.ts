@@ -1,29 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="en">
+<!DOCTYPE TS>
+<TS version="2.0" language="en">
+<context>
+    <name>GroupDialog</name>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="14"/>
+        <source>Grouping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="26"/>
+        <source>Friends:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="80"/>
+        <source>Group:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="129"/>
+        <source>Insert &gt;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="161"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="172"/>
+        <source>Group Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="195"/>
+        <source>Save Grouping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="219"/>
+        <source>Create Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="226"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>LangChangeDialogForm</name>
     <message>
-        <location filename="../langchangedialogform.ui" line="19"/>
+        <location filename="../forms/langchangedialogform.ui" line="19"/>
         <source>Languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="25"/>
+        <location filename="../forms/langchangedialogform.ui" line="25"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="35"/>
+        <location filename="../forms/langchangedialogform.ui" line="35"/>
         <source>Macedonian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="13"/>
+        <location filename="../forms/langchangedialogform.ui" line="13"/>
         <source>Change Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="58"/>
+        <location filename="../forms/langchangedialogform.ui" line="58"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -31,172 +80,236 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="86"/>
-        <source>Invalid credentials</source>
+        <location filename="../mainwindow.cpp" line="142"/>
+        <source>Verifying Twitter credentials.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="86"/>
-        <source>Username or password invalid</source>
+        <location filename="../mainwindow.cpp" line="189"/>
+        <source>Please authorize twitter account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="195"/>
+        <source>Updating timelines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="248"/>
+        <source>New %1 tweets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="572"/>
+        <source>Unread</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="573"/>
+        <source>Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="574"/>
+        <source>My twits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="575"/>
+        <source>Mentions</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindowForm</name>
     <message>
-        <location filename="../mainwindowform.ui" line="13"/>
+        <location filename="../forms/mainwindowform.ui" line="14"/>
         <source>QTwitdget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="48"/>
-        <source>...</source>
+        <location filename="../forms/mainwindowform.ui" line="43"/>
+        <source>Shows more tweets.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="113"/>
+        <location filename="../forms/mainwindowform.ui" line="46"/>
+        <source>...More...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="74"/>
+        <source>Updates your twitter status.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="80"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="120"/>
+        <location filename="../forms/mainwindowform.ui" line="87"/>
+        <source>Shortens longs url links in the update text.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="90"/>
         <source>Short Urls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="155"/>
-        <source>File</source>
+        <location filename="../forms/mainwindowform.ui" line="122"/>
+        <source>&amp;Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="163"/>
-        <source>Help</source>
+        <location filename="../forms/mainwindowform.ui" line="130"/>
+        <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="170"/>
-        <source>Options</source>
+        <location filename="../forms/mainwindowform.ui" line="137"/>
+        <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="182"/>
+        <location filename="../forms/mainwindowform.ui" line="146"/>
+        <source>&amp;Tweets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="169"/>
+        <source>&amp;Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="174"/>
+        <source>&amp;About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="179"/>
+        <source>About &amp;Qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="184"/>
+        <source>&amp;Authorize</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="189"/>
+        <source>Se&amp;ttings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="194"/>
+        <source>Change &amp;Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="199"/>
+        <source>Change &amp;Style Sheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="202"/>
+        <source>Ctrl+Shift+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="210"/>
+        <source>&amp;Create Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="215"/>
+        <source>&amp;Mark All Read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="218"/>
+        <source>Mark All Tweets Read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="223"/>
+        <source>&amp;Goto to Next Unread</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="226"/>
+        <source>Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="159"/>
         <source>Minimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="187"/>
+        <location filename="../forms/mainwindowform.ui" line="164"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>PinDialog</name>
     <message>
-        <location filename="../mainwindowform.ui" line="192"/>
-        <source>Quit</source>
+        <location filename="../forms/pindialogform.ui" line="14"/>
+        <source>Please Enter Twitter Pin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="197"/>
-        <source>About</source>
+        <location filename="../forms/pindialogform.ui" line="22"/>
+        <source>Enter Pin Number:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="202"/>
-        <source>About Qt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindowform.ui" line="207"/>
-        <source>Change Twit User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindowform.ui" line="212"/>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindowform.ui" line="217"/>
-        <source>Change Language</source>
+        <location filename="../forms/pindialogform.ui" line="32"/>
+        <source>9999999; </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>QTwitdgetForm</name>
+    <name>QObject</name>
     <message>
-        <location filename="../qtwitdget.ui" line="13"/>
-        <source>QTwitdget</source>
+        <location filename="../tweetviewitem.cpp" line="106"/>
+        <source>Retweet this status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qtwitdget.ui" line="30"/>
-        <source>&lt;-</source>
+        <location filename="../tweetviewitem.cpp" line="113"/>
+        <source>Favorite this status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qtwitdget.ui" line="37"/>
-        <source>-&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>StatusForm</name>
-    <message>
-        <location filename="../statusform.ui" line="13"/>
-        <source>Frame</source>
+        <location filename="../tweetviewitem.cpp" line="232"/>
+        <source>Delete this status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statusform.ui" line="119"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../tweetviewitem.cpp" line="237"/>
+        <source>Reply to this status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statusform.ui" line="164"/>
-        <source>Reply</source>
+        <location filename="../xml/xmlreaderextuserinfo.cpp" line="55"/>
+        <location filename="../xml/xmlreaderextusers.cpp" line="43"/>
+        <location filename="../xml/xmlreaderstatus.cpp" line="57"/>
+        <source>parse error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statusform.ui" line="216"/>
-        <source>Short Urls</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>StatusWidget</name>
-    <message>
-        <location filename="../statuswidget.cpp" line="69"/>
-        <source>Delete</source>
+        <location filename="../xml/xmlreaduser.cpp" line="67"/>
+        <location filename="../xml/xmlreaduserlist.cpp" line="94"/>
+        <source>%1
+Line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statuswidget.cpp" line="76"/>
-        <source>Reply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../statuswidget.cpp" line="109"/>
-        <source> from </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserPassDialog</name>
-    <message>
-        <location filename="../userpass.ui" line="13"/>
-        <source>Username/Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../userpass.ui" line="19"/>
-        <source>Username:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../userpass.ui" line="29"/>
-        <source>Password:</source>
+        <location filename="../xml/xmlreaduserlist.cpp" line="38"/>
+        <source>Not a user xml element</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

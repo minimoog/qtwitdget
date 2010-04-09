@@ -1,30 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="mk_MK">
-<defaultcodec></defaultcodec>
+<!DOCTYPE TS>
+<TS version="2.0" language="mk_MK">
+<context>
+    <name>GroupDialog</name>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="14"/>
+        <source>Grouping</source>
+        <translation>Групирање</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="26"/>
+        <source>Friends:</source>
+        <translation>Пријатели:</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="80"/>
+        <source>Group:</source>
+        <translation>Група:</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="129"/>
+        <source>Insert &gt;&gt;</source>
+        <translation>Внеси&gt;&gt;</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="161"/>
+        <source>Remove</source>
+        <translation>Тргни</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="172"/>
+        <source>Group Name: </source>
+        <translation>Име на групата:</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="195"/>
+        <source>Save Grouping</source>
+        <translation>Сними ја групата</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="219"/>
+        <source>Create Group</source>
+        <translation>Креирај група</translation>
+    </message>
+    <message>
+        <location filename="../forms/groupdialogform.ui" line="226"/>
+        <source>Cancel</source>
+        <translation>Откажи</translation>
+    </message>
+</context>
 <context>
     <name>LangChangeDialogForm</name>
     <message>
-        <location filename="../langchangedialogform.ui" line="19"/>
+        <location filename="../forms/langchangedialogform.ui" line="19"/>
         <source>Languages</source>
         <translation>Јазици</translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="25"/>
+        <location filename="../forms/langchangedialogform.ui" line="25"/>
         <source>English</source>
         <translation>Англиски</translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="35"/>
+        <location filename="../forms/langchangedialogform.ui" line="35"/>
         <source>Macedonian</source>
         <translation>Македонски</translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="13"/>
+        <location filename="../forms/langchangedialogform.ui" line="13"/>
         <source>Change Language</source>
         <translation>Смени јазик</translation>
     </message>
     <message>
-        <location filename="../langchangedialogform.ui" line="58"/>
+        <location filename="../forms/langchangedialogform.ui" line="58"/>
         <source>OK</source>
         <translation>Во ред</translation>
     </message>
@@ -32,173 +80,333 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="86"/>
         <source>Invalid credentials</source>
-        <translation>Неуспешна автентикација</translation>
+        <translation type="obsolete">Неуспешна автентикација</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="86"/>
         <source>Username or password invalid</source>
-        <translation>Username или лозинката погрешна</translation>
+        <translation type="obsolete">Username или лозинката погрешна</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="142"/>
+        <source>Verifying Twitter credentials.</source>
+        <translation>Проверка на Твитер  акредитацијата.</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="189"/>
+        <source>Please authorize twitter account.</source>
+        <translation>Молам авторизирај ја твитер сметкака.</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="195"/>
+        <source>Updating timelines.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="248"/>
+        <source>New %1 tweets</source>
+        <translation>Нови %1 твитови</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="572"/>
+        <source>Unread</source>
+        <translation>Непрочитани</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="573"/>
+        <source>Friends</source>
+        <translation>Пријатели</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="574"/>
+        <source>My twits</source>
+        <translation>Мои твитови</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="575"/>
+        <source>Mentions</source>
+        <translation>Споменат</translation>
     </message>
 </context>
 <context>
     <name>MainWindowForm</name>
     <message>
-        <location filename="../mainwindowform.ui" line="13"/>
+        <location filename="../forms/mainwindowform.ui" line="14"/>
         <source>QTwitdget</source>
         <translation>QTwitdget</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="48"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="obsolete">...</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="113"/>
+        <location filename="../forms/mainwindowform.ui" line="43"/>
+        <source>Shows more tweets.</source>
+        <translation>Прикажува повеќе твитови.</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="46"/>
+        <source>...More...</source>
+        <translation>...Повеќе...</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="74"/>
+        <source>Updates your twitter status.</source>
+        <translation>Го упдејтира твојот твитер статус.</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="80"/>
         <source>Update</source>
         <translation>Ажурирај</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="120"/>
+        <location filename="../forms/mainwindowform.ui" line="87"/>
+        <source>Shortens longs url links in the update text.</source>
+        <translation>Ги крати долгите линкови.</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="90"/>
         <source>Short Urls</source>
         <translation>Скрати линкови</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="155"/>
+        <location filename="../forms/mainwindowform.ui" line="122"/>
+        <source>&amp;Account</source>
+        <translation>&amp;Сметка</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="130"/>
+        <source>&amp;Help</source>
+        <translation>&amp;Помош</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="137"/>
+        <source>&amp;Options</source>
+        <translation>&amp;Опции</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="146"/>
+        <source>&amp;Tweets</source>
+        <translation>&amp;Твитови</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="169"/>
+        <source>&amp;Quit</source>
+        <translation>&amp;Излези</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="174"/>
+        <source>&amp;About</source>
+        <translation>&amp;За</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="179"/>
+        <source>About &amp;Qt</source>
+        <translation>За &amp;Qt</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="184"/>
+        <source>&amp;Authorize</source>
+        <translation>&amp;Авторизирај</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="189"/>
+        <source>Se&amp;ttings</source>
+        <translation>По&amp;десувања</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="194"/>
+        <source>Change &amp;Language</source>
+        <translation>Смени &amp;јазик</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="199"/>
+        <source>Change &amp;Style Sheet</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="202"/>
+        <source>Ctrl+Shift+C</source>
+        <translation>Ctrl+Shift+Ц</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="210"/>
+        <source>&amp;Create Group</source>
+        <translation>&amp;Креирај група</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="215"/>
+        <source>&amp;Mark All Read</source>
+        <translation>&amp;Маркирај ги сите прочитани</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="218"/>
+        <source>Mark All Tweets Read</source>
+        <translation>Маркирај ги сите твитови прочитани</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="223"/>
+        <source>&amp;Goto to Next Unread</source>
+        <translation>&amp;Оди на следниот непрочитан</translation>
+    </message>
+    <message>
+        <location filename="../forms/mainwindowform.ui" line="226"/>
+        <source>Space</source>
+        <translation>Space</translation>
+    </message>
+    <message>
         <source>File</source>
-        <translation>Датотека</translation>
+        <translation type="obsolete">Датотека</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="163"/>
         <source>Help</source>
-        <translation>Помош</translation>
+        <translation type="obsolete">Помош</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="170"/>
         <source>Options</source>
-        <translation>Опции</translation>
+        <translation type="obsolete">Опции</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="182"/>
+        <location filename="../forms/mainwindowform.ui" line="159"/>
         <source>Minimize</source>
         <translation>Минимизирај</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="187"/>
+        <location filename="../forms/mainwindowform.ui" line="164"/>
         <source>Restore</source>
         <translation>Обнови</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="192"/>
         <source>Quit</source>
-        <translation>Излези</translation>
+        <translation type="obsolete">Излези</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="197"/>
         <source>About</source>
-        <translation>За апликацијата</translation>
+        <translation type="obsolete">За апликацијата</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="202"/>
         <source>About Qt</source>
-        <translation>За QT</translation>
+        <translation type="obsolete">За QT</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="207"/>
         <source>Change Twit User</source>
-        <translation>Смени Twitter корисник</translation>
+        <translation type="obsolete">Смени Twitter корисник</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="212"/>
         <source>Settings</source>
-        <translation>Поставки</translation>
+        <translation type="obsolete">Поставки</translation>
     </message>
     <message>
-        <location filename="../mainwindowform.ui" line="217"/>
         <source>Change Language</source>
-        <translation>Смени јазик</translation>
+        <translation type="obsolete">Смени јазик</translation>
+    </message>
+</context>
+<context>
+    <name>PinDialog</name>
+    <message>
+        <location filename="../forms/pindialogform.ui" line="14"/>
+        <source>Please Enter Twitter Pin</source>
+        <translation>Внесете Twitter ПИН</translation>
+    </message>
+    <message>
+        <location filename="../forms/pindialogform.ui" line="22"/>
+        <source>Enter Pin Number:</source>
+        <translation>Внесете Пин број:</translation>
+    </message>
+    <message>
+        <location filename="../forms/pindialogform.ui" line="32"/>
+        <source>9999999; </source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../tweetviewitem.cpp" line="106"/>
+        <source>Retweet this status</source>
+        <translation>Ретвитни</translation>
+    </message>
+    <message>
+        <location filename="../tweetviewitem.cpp" line="113"/>
+        <source>Favorite this status</source>
+        <translation>Фаворизирај</translation>
+    </message>
+    <message>
+        <location filename="../tweetviewitem.cpp" line="232"/>
+        <source>Delete this status</source>
+        <translation>Избриши</translation>
+    </message>
+    <message>
+        <location filename="../tweetviewitem.cpp" line="237"/>
+        <source>Reply to this status</source>
+        <translation>Одговори</translation>
+    </message>
+    <message>
+        <location filename="../xml/xmlreaderextuserinfo.cpp" line="55"/>
+        <location filename="../xml/xmlreaderextusers.cpp" line="43"/>
+        <location filename="../xml/xmlreaderstatus.cpp" line="57"/>
+        <source>parse error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../xml/xmlreaduser.cpp" line="67"/>
+        <location filename="../xml/xmlreaduserlist.cpp" line="94"/>
+        <source>%1
+Line %2, column %3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../xml/xmlreaduserlist.cpp" line="38"/>
+        <source>Not a user xml element</source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>QTwitdgetForm</name>
     <message>
-        <location filename="../qtwitdget.ui" line="13"/>
         <source>QTwitdget</source>
-        <translation>QTwitdget</translation>
+        <translation type="obsolete">QTwitdget</translation>
     </message>
     <message>
-        <location filename="../qtwitdget.ui" line="30"/>
         <source>&lt;-</source>
-        <translation>Претходни</translation>
+        <translation type="obsolete">Претходни</translation>
     </message>
     <message>
-        <location filename="../qtwitdget.ui" line="37"/>
         <source>-&gt;</source>
-        <translation>Наредни</translation>
+        <translation type="obsolete">Наредни</translation>
     </message>
 </context>
 <context>
     <name>StatusForm</name>
     <message>
-        <location filename="../statusform.ui" line="13"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../statusform.ui" line="119"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../statusform.ui" line="164"/>
         <source>Reply</source>
-        <translation>Одговори</translation>
+        <translation type="obsolete">Одговори</translation>
     </message>
     <message>
-        <location filename="../statusform.ui" line="216"/>
         <source>Short Urls</source>
-        <translation>Скрати Линкови</translation>
+        <translation type="obsolete">Скрати Линкови</translation>
     </message>
 </context>
 <context>
     <name>StatusWidget</name>
     <message>
-        <location filename="../statuswidget.cpp" line="69"/>
         <source>Delete</source>
-        <translation>Избриши</translation>
+        <translation type="obsolete">Избриши</translation>
     </message>
     <message>
-        <location filename="../statuswidget.cpp" line="76"/>
         <source>Reply</source>
-        <translation>Одговори</translation>
+        <translation type="obsolete">Одговори</translation>
     </message>
     <message>
-        <location filename="../statuswidget.cpp" line="109"/>
         <source> from </source>
-        <translation> од </translation>
+        <translation type="obsolete"> од </translation>
     </message>
 </context>
 <context>
     <name>UserPassDialog</name>
     <message>
-        <location filename="../userpass.ui" line="13"/>
-        <source>Username/Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../userpass.ui" line="19"/>
-        <source>Username:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../userpass.ui" line="29"/>
         <source>Password:</source>
-        <translation>Лозинка:</translation>
+        <translation type="obsolete">Лозинка:</translation>
     </message>
 </context>
 </TS>
