@@ -208,9 +208,6 @@ void MainWindow::updateButtonClicked()
 	}
 }
 
-/*!
-    \obsolete
- */
 void MainWindow::createGrouping()
 {
 	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
@@ -253,7 +250,6 @@ void MainWindow::finishedFriendsTimeline()
 			"(created, "
 			"id, "
 			"text, "
-			"source, "
 			"replyToStatusId, "
 			"replyToUserId, "
 			"favorited, "
@@ -265,14 +261,12 @@ void MainWindow::finishedFriendsTimeline()
 			"description, "
 			"profileImageUrl, "
 			"url, "
-			"followersCount, " 
             "mention, " 
             "isRead) "
 			"VALUES "
 			"(:created, "
 			":id, "
 			":text, "
-			":source, "
 			":replyToStatusId, "
 			":replyToUserId, "
 			":favorited, "
@@ -284,7 +278,6 @@ void MainWindow::finishedFriendsTimeline()
 			":description, "
 			":profileImageUrl, "
 			":url, "
-			":followersCount, "
             ":mention, "
             ":isRead);");
 
@@ -296,7 +289,6 @@ void MainWindow::finishedFriendsTimeline()
 			query.bindValue(":created", s.created().toString(Qt::ISODate));
 			query.bindValue(":id", s.id());
 			query.bindValue(":text", s.text());
-			query.bindValue(":source", s.source());
 			query.bindValue(":replyToStatusId", s.replyToStatusId());
 			query.bindValue(":replyToUserId", s.replyToUserId());
 			query.bindValue(":favorited", static_cast<int>(s.favorited()));
@@ -308,7 +300,6 @@ void MainWindow::finishedFriendsTimeline()
 			query.bindValue(":description", s.description());
 			query.bindValue(":profileImageUrl", s.profileImageUrl());
 			query.bindValue(":url", s.url());
-			query.bindValue(":followersCount", s.folllowersCount());
             query.bindValue(":mention", 0); //not a mention
             query.bindValue(":isRead", 0); //not readed
 			
@@ -340,7 +331,6 @@ void MainWindow::finishedMentions()
 			"(created, "
 			"id, "
 			"text, "
-			"source, "
 			"replyToStatusId, "
 			"replyToUserId, "
 			"favorited, "
@@ -352,14 +342,12 @@ void MainWindow::finishedMentions()
 			"description, "
 			"profileImageUrl, "
 			"url, "
-			"followersCount, " 
             "mention, "
             "isRead) "
 			"VALUES "
 			"(:created, "
 			":id, "
 			":text, "
-			":source, "
 			":replyToStatusId, "
 			":replyToUserId, "
 			":favorited, "
@@ -371,7 +359,6 @@ void MainWindow::finishedMentions()
 			":description, "
 			":profileImageUrl, "
 			":url, "
-			":followersCount, "
             ":mention, "
             ":isRead);");
 
@@ -383,7 +370,6 @@ void MainWindow::finishedMentions()
 			query.bindValue(":created", s.created().toString(Qt::ISODate));
 			query.bindValue(":id", s.id());
 			query.bindValue(":text", s.text());
-			query.bindValue(":source", s.source());
 			query.bindValue(":replyToStatusId", s.replyToStatusId());
 			query.bindValue(":replyToUserId", s.replyToUserId());
 			query.bindValue(":favorited", static_cast<int>(s.favorited()));
@@ -395,7 +381,6 @@ void MainWindow::finishedMentions()
 			query.bindValue(":description", s.description());
 			query.bindValue(":profileImageUrl", s.profileImageUrl());
 			query.bindValue(":url", s.url());
-			query.bindValue(":followersCount", s.folllowersCount());
             query.bindValue(":mention", 1); //a mention
             query.bindValue(":isRead", 0); //not read
 			
@@ -495,7 +480,6 @@ void MainWindow::createDatabase(const QString& databaseName)
 				"created DATETIME, "
 				"id INTEGER, "
 				"text TEXT, "
-				"source TEXT, "
 				"replyToStatusId INTEGER, "
 				"replyToUserId INTEGER, "
 				"favorited INTEGER, "
@@ -507,7 +491,6 @@ void MainWindow::createDatabase(const QString& databaseName)
 				"description TEXT, "
 				"profileImageUrl TEXT, "
 				"url TEXT, "
-				"followersCount INTEGER, "
                 "mention INTEGER, "
                 "isRead INTEGER, "
                 "UNIQUE (id));");
@@ -696,18 +679,17 @@ void MainWindow::retweetFinished()
     QSqlQuery query;
 
 	query.prepare("INSERT OR ABORT INTO status "
-        "(created, id, text, source, replyToStatusId, replyToUserId, "
+        "(created, id, text, replyToStatusId, replyToUserId, "
         "favorited, replyToScreenName, userId, name, screenName, "
-        "location, description, profileImageUrl, url, followersCount, "
-        "mention) VALUES (:created, :id, :text, :source, :replyToStatusId, "
+        "location, description, profileImageUrl, url, mention) "
+        "VALUES (:created, :id, :text, :replyToStatusId, "
         ":replyToUserId, :favorited, :replyToScreenName, :userId, "
         ":name, :screenName, :location, :description, :profileImageUrl, "
-        ":url, :followersCount, :mention);");
+        ":url, :mention);");
 
 		query.bindValue(":created", rs.created().toString(Qt::ISODate));
 		query.bindValue(":id", rs.id());
 		query.bindValue(":text", rs.text());
-		query.bindValue(":source", rs.source());
 		query.bindValue(":replyToStatusId", rs.replyToStatusId());
 		query.bindValue(":replyToUserId", rs.replyToUserId());
 		query.bindValue(":favorited", static_cast<int>(rs.favorited()));
@@ -719,7 +701,6 @@ void MainWindow::retweetFinished()
 		query.bindValue(":description", rs.description());
 		query.bindValue(":profileImageUrl", rs.profileImageUrl());
 		query.bindValue(":url", rs.url());
-		query.bindValue(":followersCount", rs.folllowersCount());
         query.bindValue(":mention", 0); //not a mention
 
         query.exec();

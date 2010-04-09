@@ -28,15 +28,14 @@ class QTwitStatusData : public QSharedData
 {
 public:
 
-	QTwitStatusData() : id(0), replyToStatusId(0), replyToUserId(0), favorited(false), userId(0), followersCount(0), 
-        isRetweet(false), friendsCount(0), favouritesCount(0), utcOffset(0), statusesCount(0), geoEnabled(false),
-        verified(false), isRead(false)
+    QTwitStatusData() : id(0), replyToStatusId(0), replyToUserId(0), favorited(false), userId(0),
+        isRetweet(false), isRead(false)
     { }
 
 	QDateTime created;
 	qint64 id;		
 	QString text;		
-	QString source;
+    //QString source;
 	qint64 replyToStatusId;
 	int replyToUserId;
 	bool favorited;
@@ -49,15 +48,15 @@ public:
 	QString description;
 	QString profileImageUrl;
 	QString url;
-	int followersCount;
-    int friendsCount;
-    QDateTime userCreatedAt;
-    int favouritesCount;
-    int utcOffset;
-    QString timezone;
-    int statusesCount;
-    bool geoEnabled;
-    bool verified;
+    //int followersCount;
+    //int friendsCount;
+    //QDateTime userCreatedAt;
+    //int favouritesCount;
+    //int utcOffset;
+    //QString timezone;
+    //int statusesCount;
+    //bool geoEnabled;
+    //bool verified;
     bool isRead;
     QTwitRtStatus rtStatus;
 };

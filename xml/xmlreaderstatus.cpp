@@ -109,8 +109,8 @@ void XmlReaderStatus::readStatus(QTwitStatus& ts)
 				ts.setId(readElementText().toLongLong());
 			else if(name() == "text")
 				ts.setText(readElementText());
-			else if(name() == "source")
-				ts.setSource(readElementText());
+            //else if(name() == "source")
+                //ts.setSource(readElementText());
 			else if(name() == "in_reply_to_status_id")
 				readInReplyToStatusId(ts);
 			else if(name() == "in_reply_to_user_id"){
@@ -170,30 +170,30 @@ void XmlReaderStatus::readUser(QTwitStatus& ts)
 				ts.setProfileImageUrl(readElementText());
 			else if(name() == "url")
 				ts.setUrl(readElementText());
-			else if(name() == "followers_count")
-				ts.setFollowersCount(readElementText().toInt());
-            else if(name() == "friends_count")
-                ts.setFriendsCount(readElementText().toInt());
+            //else if(name() == "followers_count")
+            //	ts.setFollowersCount(readElementText().toInt());
+            //else if(name() == "friends_count")
+            //  ts.setFriendsCount(readElementText().toInt());
             //else if(name() == "created_at") 
-                //ts.setUserCreatedAt(QDateTime()); //TODO    
-            else if(name() == "favourites_count")
-                ts.setFavouritesCount(readElementText().toInt());
-            else if(name() == "utc_offset")
-                ts.setUtcOffset(readElementText().toInt());
-            else if(name() == "time_zone")
-                ts.setTimezone(readElementText());
-            else if(name() == "statuses_count")
-                ts.setStatusesCount(readElementText().toInt());
-            else if(name() == "geo_enabled")
-                if(readElementText() == "true")
-                    ts.setGeoEnabled(true);
-                else
-                    ts.setGeoEnabled(false);
-            else if(name() == "verified")
-                if(readElementText() == "true")
-                    ts.setVerified(true);
-                else
-                    ts.setVerified(false);
+            //  ts.setUserCreatedAt(QDateTime()); //TODO
+            //else if(name() == "favourites_count")
+            //    ts.setFavouritesCount(readElementText().toInt());
+            //else if(name() == "utc_offset")
+            //    ts.setUtcOffset(readElementText().toInt());
+            //else if(name() == "time_zone")
+            //    ts.setTimezone(readElementText());
+            //else if(name() == "statuses_count")
+            //    ts.setStatusesCount(readElementText().toInt());
+            //else if(name() == "geo_enabled")
+            //    if(readElementText() == "true")
+            //        ts.setGeoEnabled(true);
+            //    else
+            //        ts.setGeoEnabled(false);
+            //else if(name() == "verified")
+            //    if(readElementText() == "true")
+            //        ts.setVerified(true);
+            //    else
+            //        ts.setVerified(false);
 			else
 				readUnknownElement();
 		}

@@ -52,8 +52,8 @@ public:
 	void setText(const QString& text) { d->text = text; }
 	QString text() const { return d->text; }
 
-	void setSource(const QString& source) { d->source = source; }
-	QString source() const { return d->source; }
+    //void setSource(const QString& source) { d->source = source; }
+    //QString source() const { return d->source; }
 
 	void setReplyToStatusId(qint64 statusId) { d->replyToStatusId = statusId; }
 	qint64 replyToStatusId() const { return d->replyToStatusId; }
@@ -88,8 +88,8 @@ public:
 	void setUrl(const QString& url) { d->url = url; }
 	QString url() const { return d->url; }
 
-	void setFollowersCount(int followersCount) { d->followersCount = followersCount; }
-	int folllowersCount() const { return d->followersCount; }
+    //void setFollowersCount(int followersCount) { d->followersCount = followersCount; }
+    //int folllowersCount() const { return d->followersCount; }
 
 	void setCreatedFromTwitter (const QString &twitterDate);
 	QString toTwitterDate() const;
@@ -97,29 +97,29 @@ public:
     bool isRetweet() const { return d->isRetweet; }
     void setRetweet(bool rt) { d->isRetweet = rt; }
 
-    void setFriendsCount(int count) { d->friendsCount = count; }
-    int friendsCount() const { return d->friendsCount; }
+    //void setFriendsCount(int count) { d->friendsCount = count; }
+    //int friendsCount() const { return d->friendsCount; }
 
-    void setUserCreatedAt(const QDateTime& datetime) { d->userCreatedAt = datetime; }
-    QDateTime userCreatedAt() const { return d->userCreatedAt; }
+    //void setUserCreatedAt(const QDateTime& datetime) { d->userCreatedAt = datetime; }
+    //QDateTime userCreatedAt() const { return d->userCreatedAt; }
 
-    void setFavouritesCount(int count) { d->favouritesCount = count; }
-    int favouritesCount() const { return d->favouritesCount; }
+    //void setFavouritesCount(int count) { d->favouritesCount = count; }
+    //int favouritesCount() const { return d->favouritesCount; }
 
-    void setUtcOffset(int offset) { d->utcOffset = offset; }
-    int utcOffset() const { return d->utcOffset; }
+    //void setUtcOffset(int offset) { d->utcOffset = offset; }
+    //int utcOffset() const { return d->utcOffset; }
 
-    void setTimezone(const QString& timezone) { d->timezone = timezone; }
-    QString timezone() const { return d->timezone; }
+    //void setTimezone(const QString& timezone) { d->timezone = timezone; }
+    //QString timezone() const { return d->timezone; }
 
-    void setStatusesCount(int count) { d->statusesCount = count; }
-    int statusesCount() const { return d->statusesCount; }
+    //void setStatusesCount(int count) { d->statusesCount = count; }
+    //int statusesCount() const { return d->statusesCount; }
 
-    void setGeoEnabled(bool enable) { d->geoEnabled = enable; }
-    bool isGeoEnabled() const { return d->geoEnabled; }
+    //void setGeoEnabled(bool enable) { d->geoEnabled = enable; }
+    //bool isGeoEnabled() const { return d->geoEnabled; }
 
-    void setVerified(bool verify) { d->verified = verify; }
-    bool isVerified() const { return d->verified; }
+    //void setVerified(bool verify) { d->verified = verify; }
+    //bool isVerified() const { return d->verified; }
 
     void setRead(bool read) { d->isRead = read; }
     bool isRead() const { return d->isRead; }
