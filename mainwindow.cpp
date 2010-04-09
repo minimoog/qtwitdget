@@ -139,6 +139,7 @@ void MainWindow::authorize()
 
     SignalWaiter sigWait(&vc, SIGNAL(finished(bool)));
     vc.verify();
+    statusBar()->showMessage(tr("Verifying Twitter credentials."), 2000);
 
     if (sigWait.wait(60000)) {
         QTwitExtUserInfo extUserInfo = vc.userInfo();
@@ -148,6 +149,7 @@ void MainWindow::authorize()
         settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
         settings.setValue("user_id", extUserInfo.id());
 
+        statusBar()->showMessage("Credentials ok.", 2000);
         startUp();
     } else {
         qDebug() << "Verify credentials timeout";
@@ -183,11 +185,15 @@ void MainWindow::startUp()
 			updateTab(i);
 
 		updateTimeline();
-	}
+    } else {
+        statusBar()->showMessage(tr("Please authorize twitter account."));
+    }
 }
 
 void MainWindow::updateTimeline()
 {
+    statusBar()->showMessage(tr("Updating timelines."), 1000);
+
 	if(m_firstRun){
 		m_firstRun = false;
         m_homeTimeline->timeline(0);
@@ -239,6 +245,7 @@ void MainWindow::finishedFriendsTimeline()
 	QList<QTwitStatus> lastStatuses = m_homeTimeline->statuses();
 
 	if(!lastStatuses.isEmpty()){
+        statusBar()->showMessage(QString(tr("New %1 tweets")).arg(lastStatuses.count()));
 		//get last status id
 		m_lastStatusId = lastStatuses.at(0).id();
 

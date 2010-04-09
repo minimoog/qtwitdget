@@ -54,6 +54,10 @@ void QTwitDestroy::deleteStatus(qint64 id)
 
 void QTwitDestroy::reply()
 {
+    QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
+    if(netReply)
+        netReply->deleteLater();
+
 	/*
 	if(reply->error() != QNetworkReply::NoError){
 		qDebug() << reply->error();

@@ -67,6 +67,10 @@ void QTwitUpdate::setUpdate(const QString &update, qint64 inReplyToStatusId)
 
 void QTwitUpdate::reply()
 {
+    QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
+    if(netReply)
+        netReply->deleteLater();
+
 	//TODO: Check result
 	emit finished();
 }

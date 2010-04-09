@@ -88,8 +88,10 @@ void QTwitFriends::reply()
             m_paging = false;
             emit finished();
         }
+        netReply->deleteLater();
 	}
 	//emit finished();
+
 }
 
 

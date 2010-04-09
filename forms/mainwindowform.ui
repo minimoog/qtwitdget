@@ -39,6 +39,9 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
+      <property name="toolTip">
+       <string>Shows more tweets.</string>
+      </property>
       <property name="text">
        <string>...More...</string>
       </property>
@@ -67,6 +70,12 @@
       </property>
       <item>
        <widget class="QPushButton" name="updateButton">
+        <property name="toolTip">
+         <string>Updates your twitter status.</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
         <property name="text">
          <string>Update</string>
         </property>
@@ -74,6 +83,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="shortUrlsButton">
+        <property name="toolTip">
+         <string>Shortens longs url links in the update text.</string>
+        </property>
         <property name="text">
          <string>Short Urls</string>
         </property>
