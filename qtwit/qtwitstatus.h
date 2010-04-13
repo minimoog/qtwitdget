@@ -46,7 +46,7 @@ public:
 	void setCreated(const QDateTime &datetime) { d->created = datetime; }
 	QDateTime created() const { return d->created; }
 
-	void setId(qint64 id) { d->id = id; }
+    void setId(qint64 id) { d->id =     id; }
 	qint64 id() const { return d->id; }
 
 	void setText(const QString& text) { d->text = text; }

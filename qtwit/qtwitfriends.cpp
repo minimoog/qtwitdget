@@ -90,8 +90,6 @@ void QTwitFriends::reply()
         }
         netReply->deleteLater();
 	}
-	//emit finished();
-
 }
 
 

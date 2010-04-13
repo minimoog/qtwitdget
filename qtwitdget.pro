@@ -48,7 +48,9 @@ HEADERS += twitstatusedit.h \
     qtwit/qtwituserdata.h \
     qtwit/qtwituser.h \
     xml/xmlreaduser.h \
-    xml/xmlreaduserlist.h
+    xml/xmlreaduserlist.h \
+    qtwit/qtwitdmstatusdata.h \
+    qtwit/qtwitdmstatus.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
