@@ -36,14 +36,13 @@ class QTwitHomeTimeline : public QTwitBase
 public:
 	QTwitHomeTimeline(QObject *parent = 0);
 	void update(qint64 sinceId = 0, qint64 maxId = 0, int count = 0, int page = 0);
-	QList<QTwitStatus> getStatuses() const;
+
+signals:
+    void finishedHomeTimeline(const QList<QTwitStatus>& statuses);
 
 private slots:
 	void reply();
 	void error();
-
-private:
-	QList<QTwitStatus> m_statuses;
 };
 
 #endif //QTWITHOMETIMELINE_H

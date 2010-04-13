@@ -39,13 +39,10 @@ QTwitHomeTimeline::QTwitHomeTimeline(QObject *parent)
     \param count number of tweet to fetch (maximum 200)
     \param page page number (starts with 1)
     \remarks Set parameters to zero or default ctr to NOT query them
-    \remarks clears all fetched statuses
  */
 void QTwitHomeTimeline::update(qint64 sinceId, qint64 maxId, int count, int page)
 {
 	Q_ASSERT(networkAccessManager() != 0);
-
-	m_statuses.clear();
 
 	QUrl url("http://api.twitter.com/1/statuses/home_timeline.xml");
 	
@@ -88,11 +85,9 @@ void QTwitHomeTimeline::reply()
 	if(netReply){
 		XmlReaderStatus xrs;
 		if(xrs.read(&response))
-			m_statuses = xrs.statuses();		
+            emit finishedHomeTimeline(xrs.statuses());
 
 		netReply->deleteLater();
-
-		emit finished();
 	}
 }
 
@@ -100,13 +95,4 @@ void QTwitHomeTimeline::error()
 {
 	qDebug() << "Home Timeline Error";
     emit networkError(QString());
-}
-
-/*!
-    Gets statuses
-    \return List of statuses
- */
-QList<QTwitStatus> QTwitHomeTimeline::getStatuses() const
-{
-	return m_statuses;
 }

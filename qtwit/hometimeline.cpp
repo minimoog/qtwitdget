@@ -52,39 +52,37 @@ void HomeTimeline::timeline(qint64 sinceid)
     m_sinceid = sinceid;
     m_statuses.clear();
 
-    disconnect(SIGNAL(finished()));
-    connect(this, SIGNAL(finished()), this, SLOT(finishedFirstRequest()));
+    disconnect(SIGNAL(finishedHomeTimeline(QList<QTwitStatus>)));
+    connect(this, SIGNAL(finishedHomeTimeline(QList<QTwitStatus>)), this, SLOT(finishedFirstRequest(QList<QTwitStatus>)));
 
     update(sinceid, 0, maxCount, 0);
 }
 
-void HomeTimeline::finishedFirstRequest()
+void HomeTimeline::finishedFirstRequest(const QList<QTwitStatus>& statuses)
 {
-    QList<QTwitStatus> newStatuses = getStatuses();
-    m_statuses.append(newStatuses);
+    m_statuses.append(statuses);
 
     if (m_statuses.count() > possibleCount) {
         //get maxid
         m_maxid = m_statuses.last().id();
 
-        //disconnect to other slot
-        disconnect(SIGNAL(finished()));
-        connect(this, SIGNAL(finished()), this, SLOT(finishedSubsequentRequest()));
+        disconnect(SIGNAL(finishedHomeTimeline(QList<QTwitStatus>)));
+        connect(this, SIGNAL(finishedHomeTimeline(QList<QTwitStatus>)), this, SLOT(finishedSubsequentRequest(QList<QTwitStatus>)));
         update(m_sinceid, m_maxid, maxCount, 0);
     } else {
         emit finishedTimeline();
     }
 }
 
-void HomeTimeline::finishedSubsequentRequest()
+void HomeTimeline::finishedSubsequentRequest(const QList<QTwitStatus>& statuses)
 {
-    QList<QTwitStatus> newStatuses = getStatuses();
-
-    if (newStatuses.isEmpty()) {
+    if (statuses.isEmpty()) {
         emit finishedTimeline();
         return;
     }
 
+    //copy
+    QList<QTwitStatus> newStatuses(statuses);
     //remove front status (maxid)
     newStatuses.removeFirst();
 
