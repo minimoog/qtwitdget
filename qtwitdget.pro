@@ -27,7 +27,6 @@ HEADERS += twitstatusedit.h \
     qtwit/qtwitextuserinfodata.h \
     qtwit/qtwitextuserinfo.h \
     qtwit/qtwitbase.h \
-    qtwit/qtwitfriendstimeline.h \
     qtwit/qtwitdestroy.h \
     qtwit/qtwitfavorites.h \
     qtwit/qtwithometimeline.h \
@@ -62,7 +61,6 @@ SOURCES += main.cpp \
     sceneitems/netpixmapitem.cpp \
     sceneitems/statustextitem.cpp \
     qtwit/qtwitbase.cpp \
-    qtwit/qtwitfriendstimeline.cpp \
     qtwit/qtwitupdate.cpp \
     qtwit/qtwitstatus.cpp \
     qtwit/qtwitverifycredentials.cpp \
