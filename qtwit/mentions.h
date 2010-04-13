@@ -40,8 +40,8 @@ signals:
     void finishedTimeline();
 
 private slots:
-    void finishedFirstRequest();
-    void finishedSubsequentRequest();
+    void finishedFirstRequest(const QList<QTwitStatus>& statuses);
+    void finishedSubsequentRequest(const QList<QTwitStatus>& statuses);
 
 private:
     void moreTimeline();

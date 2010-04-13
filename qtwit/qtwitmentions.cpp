@@ -32,8 +32,6 @@ void QTwitMentions::update(qint64 sinceid, qint64 maxid, int count, int page)
 {
     Q_ASSERT(networkAccessManager() != 0);
 
-    m_statuses.clear();
-
     QUrl url("http://api.twitter.com/1/statuses/mentions.xml");
 
     if (sinceid != 0)
@@ -65,7 +63,7 @@ void QTwitMentions::reply()
         XmlReaderStatus xrs;
 
         if (xrs.read(netReply))
-            m_statuses = xrs.statuses();
+            emit finishedMentions(xrs.statuses());
 
         netReply->deleteLater();
 
@@ -76,9 +74,4 @@ void QTwitMentions::reply()
 void QTwitMentions::error()
 {
     qDebug() << "Mentions error";
-}
-
-QList<QTwitStatus> QTwitMentions::getStatuses() const
-{
-    return m_statuses;
 }

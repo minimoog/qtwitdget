@@ -37,14 +37,13 @@ public:
      * \remark Clears all previous statuses
      */
     void update(qint64 sinceid = 0, qint64 maxid = 0, int count = 0, int page = 0);
-    QList<QTwitStatus> getStatuses() const;
+
+signals:
+    void finishedMentions(const QList<QTwitStatus>& statuses);
 
 private slots:
     void reply();
     void error();
-
-private:
-    QList<QTwitStatus> m_statuses;
 };
 
 #endif //QTWITMENTIONS_H
