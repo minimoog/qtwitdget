@@ -44,6 +44,7 @@ void XmlReadDirectMessages::readDirectMessages()
         if (m_xml.name() == "direct_message") {
             QTwitDMStatus dmStatus;
             readDirectMessage(dmStatus);
+            m_directMessages.append(dmStatus);
         }
         else
             m_xml.skipCurrentElement();
@@ -70,4 +71,9 @@ void XmlReadDirectMessages::readDirectMessage(QTwitDMStatus& dmStatus)
         else
             m_xml.skipCurrentElement();
     }
+}
+
+QList<QTwitDMStatus> XmlReadDirectMessages::directMessages() const
+{
+    return m_directMessages;
 }
