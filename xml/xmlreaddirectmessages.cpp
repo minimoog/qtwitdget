@@ -62,8 +62,8 @@ void XmlReadDirectMessages::readDirectMessage(QTwitDMStatus& dmStatus)
             dmStatus.setText(m_xml.readElementText());
         else if (m_xml.name() == "recipient_id")
             dmStatus.setRecipientId(m_xml.readElementText().toInt());
-        else if (m_xml.name() == "created_at")
-            ;                                   // ### TODO
+        //else if (m_xml.name() == "created_at")
+        //    ;                                   // ### TODO
         else if (m_xml.name() == "sender_screen_name")
             dmStatus.setSenderScreenName(m_xml.readElementText());
         else if (m_xml.name() == "recipient_screen_name")
