@@ -52,7 +52,8 @@ HEADERS += twitstatusedit.h \
     qtwit/qtwitdmstatusdata.h \
     qtwit/qtwitdmstatus.h \
     xml/xmlreaddirectmessages.h \
-    qtwit/qtwitdirectmessages.h
+    qtwit/qtwitdirectmessages.h \
+    listmodelinterface.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -90,7 +91,8 @@ SOURCES += main.cpp \
     xml/xmlreaduser.cpp \
     xml/xmlreaduserlist.cpp \
     xml/xmlreaddirectmessages.cpp \
-    qtwit/qtwitdirectmessages.cpp
+    qtwit/qtwitdirectmessages.cpp \
+    listmodelinterface.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \

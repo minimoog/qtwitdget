@@ -33,6 +33,7 @@
 #include "qtwit/qtwitfavorites.h"
 #include "qtwit/qtwitretweet.h"
 #include "qtwit/mentions.h"
+#include "qtwit/qtwitdirectmessages.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
 #include "shortenedurl.h"
@@ -201,6 +202,13 @@ void MainWindow::updateTimeline()
 	} else {
         m_homeTimeline->timeline(m_lastStatusId);
         m_mentions->timeline(m_lastMentionId);
+
+        QTwitDirectMessages *dm = new QTwitDirectMessages(this);
+        dm->setNetworkAccessManager(m_netManager);
+        dm->setOAuthTwitter(m_oauthTwitter);
+        connect(dm, SIGNAL(finishedDirectMessages(QList<QTwitDMStatus>)),
+                this, SLOT(finishedDM(QList<QTwitDMStatus>)));
+        dm->directMessages();
 	}
 }
 
@@ -319,6 +327,14 @@ void MainWindow::finishedFriendsTimeline()
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
 	}
+}
+
+void MainWindow::finishedDM(const QList<QTwitDMStatus> &messages)
+{
+    QTwitDirectMessages *dm = qobject_cast<QTwitDirectMessages*>(sender());
+    if (dm) {
+        dm->deleteLater();
+    }
 }
 
 void MainWindow::finishedMentions()
