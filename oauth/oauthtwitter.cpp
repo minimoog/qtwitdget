@@ -26,7 +26,6 @@
 #include <QTimer>
 #include <QNetworkAccessManager>
 #include "oauthtwitter.h"
-#include "pindialog.h"
 #include "signalwaiter.h"
 #include "userpassdialog.h"
 
