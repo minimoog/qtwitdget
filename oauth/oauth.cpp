@@ -23,8 +23,8 @@
 #include <QtDebug>
 #include "oauth.h"
 
-#define CONSUMER_KEY "consumer_key"
-#define CONSUMER_SECRET "consumer_secret"
+#define CONSUMER_KEY "wkSFmqWRwBreCjgzLJFEew"
+#define CONSUMER_SECRET "gYMpnMFb24igIv9LwSxfQUgpjb9PvoK9qT9chRJnQ0"
 
 /*!
     Generates time stamp

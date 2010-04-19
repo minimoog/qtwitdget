@@ -27,12 +27,14 @@
 #include <QNetworkAccessManager>
 #include "oauthtwitter.h"
 #include "pindialog.h"
+#include "signalwaiter.h"
+#include "userpassdialog.h"
 
 /*!
     Constructor
  */
 OAuthTwitter::OAuthTwitter(QObject *parent)
-	:	OAuth(parent), m_netManager(0)
+    :	OAuth(parent), m_netManager(0)
 {
 }
 
@@ -53,119 +55,41 @@ QNetworkAccessManager* OAuthTwitter::networkAccessManager() const
 	return m_netManager;
 }
 
-/*!
-    First step of OAuth Twitter authorization
- */
-void OAuthTwitter::requestToken()
+void OAuthTwitter::requestAccessTokenXAuth(const QString &username, const QString &password)
 {
-	Q_ASSERT(m_netManager != 0);
+    Q_ASSERT(m_netManager != 0);
 
-	QUrl url(TWITTER_REQUEST_TOKEN_URL);
+    QUrl url(TWITTER_ACCESS_TOKEN_XAUTH_URL);
+    url.addQueryItem("x_auth_username", username);
+    url.addQueryItem("x_auth_password", password);
+    url.addQueryItem("x_auth_mode", "client_auth");
 
-	QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
+    QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
 
-	QNetworkRequest req(url);
-	req.setRawHeader("Authorization", oauthHeader);
+    QNetworkRequest req(url);
+    req.setRawHeader("Authorization", oauthHeader);
 
-    // ### TODO: Use SignalWaiter or use signal/finished chaining
-	QEventLoop q;
-	QTimer tT;
-	tT.setSingleShot(true);
-	connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
+    QNetworkReply *reply = m_netManager->post(req, QByteArray());
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 
-	QNetworkReply *reply = m_netManager->post(req, QByteArray());
-	connect(reply, SIGNAL(finished()), &q, SLOT(quit()));
-	connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+    SignalWaiter sigWait(reply, SIGNAL(finished()));
 
-	tT.start(5000);
-	q.exec();
-
-	if(tT.isActive()){
-		tT.stop();
-		QByteArray response = reply->readAll();
-		parseTokens(response);
-
-		reply->deleteLater();
-		requestAuthorization();
-
-        int pin = authorizationWidget();
-        if (pin) {
-            requestAccessToken(pin);
-        }
-	} else {
-		qDebug() << "Timeout";
-	}
-}
-
-/*!
-    Second step of OAuth twitter authorization (opens browser)
- */
-void OAuthTwitter::requestAuthorization()
-{
-	QUrl authorizeUrl(TWITTER_AUTHORIZE_URL);
-	authorizeUrl.addEncodedQueryItem("oauth_token", oauthToken());
-
-	QDesktopServices::openUrl(authorizeUrl);
-}
-
-/*!
-    Fourth and final step of authorization (getting access tokens)
- */
-void OAuthTwitter::requestAccessToken(int pin)
-{
-	Q_ASSERT(m_netManager != 0);
-
-	QUrl url(TWITTER_ACCESS_TOKEN_URL);
-    url.addEncodedQueryItem("oauth_verifier", QByteArray::number(pin));
-
-	QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
-
-	QEventLoop q;
-	QTimer tT;
-	tT.setSingleShot(true);
-
-	connect(&tT, SIGNAL(timeout()), &q, SLOT(quit()));
-
-	QNetworkRequest req(url);
-	req.setRawHeader("Authorization", oauthHeader);
-
-	QNetworkReply *reply = m_netManager->post(req, QByteArray());
-	connect(reply, SIGNAL(finished()), &q, SLOT(quit()));
-	connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
-
-	tT.start(5000);
-	q.exec();
-
-	if(tT.isActive()){
-		QByteArray response = reply->readAll();
-		parseTokens(response);
-		reply->deleteLater();
-	} else {
-		qDebug() << "Timeout";
-	}
-}
-
-/*!
-    Third step of OAuth Twitter authorizition (users enters pin code)
- */
-int OAuthTwitter::authorizationWidget()
-{
-	//PIN based http://apiwiki.twitter.com/Authentication
-    PinDialog pinDialog;
-
-    if (pinDialog.exec()) {
-        return pinDialog.getPin();
+    if (sigWait.wait(5000)) {
+        QByteArray response = reply->readAll();
+        parseTokens(response);
+        reply->deleteLater();
     } else {
-        return 0;
-    }    
+        qDebug() << "Timeout";
+    }
 }
 
-/*!
-    Starts OAuth Authentication flow to get access tokens from Twitter
- */
-void OAuthTwitter::authorize()
+void OAuthTwitter::authorizeXAuth()
 {
-	requestToken();
+    UserPassDialog userpassdialog;
+
+    if (userpassdialog.exec()) {
+        requestAccessTokenXAuth(userpassdialog.username(), userpassdialog.password());
+    }
 }
 
 void OAuthTwitter::error()

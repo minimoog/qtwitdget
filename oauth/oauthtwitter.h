@@ -30,6 +30,7 @@
 #define TWITTER_REQUEST_TOKEN_URL "http://twitter.com/oauth/request_token"
 #define TWITTER_ACCESS_TOKEN_URL "http://twitter.com/oauth/access_token"
 #define TWITTER_AUTHORIZE_URL "http://twitter.com/oauth/authorize"
+#define TWITTER_ACCESS_TOKEN_XAUTH_URL "https://api.twitter.com/oauth/access_token"
 
 class QNetworkAccessManager;
 
@@ -43,18 +44,13 @@ public:
 	OAuthTwitter(QObject *parent = 0);
 	void setNetworkAccessManager(QNetworkAccessManager* netManager);
 	QNetworkAccessManager* networkAccessManager() const;
-	void authorize();
-protected:
-	/*! Reimplement this if you want other widget to get confirm of the authorization */ 
-    virtual int authorizationWidget();
+    void authorizeXAuth();
 
 private slots:
 	void error();
 
 private:
-	void requestToken();
-	void requestAuthorization();
-	void requestAccessToken(int pin);
+    void requestAccessTokenXAuth(const QString& username, const QString& password);
 
 	QNetworkAccessManager *m_netManager;
 };	

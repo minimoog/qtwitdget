@@ -28,7 +28,7 @@ const int TweetsPerPage = 20;
     \param parent Object parent
  */
 TweetListModel::TweetListModel(QObject *parent) :
-    QObject(parent), m_pagecount(1)
+    ListModelInterface(parent), m_pagecount(1)
 {
 }
 

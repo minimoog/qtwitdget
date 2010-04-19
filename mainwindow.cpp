@@ -131,7 +131,7 @@ QNetworkAccessManager* MainWindow::networkAccessManager()
 void MainWindow::authorize()
 {
 	//oauth flow
-	m_oauthTwitter->authorize();
+    m_oauthTwitter->authorizeXAuth();
 
 	//verify credentials
 	QTwitVerifyCredentials vc;

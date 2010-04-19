@@ -39,7 +39,6 @@ HEADERS += twitstatusedit.h \
     xml/xmlreaderextusers.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
-    oauth/pindialog.h \
     signalwaiter.h \
     tweetlistmodel.h \
     tweetviewitem.h \
@@ -53,7 +52,9 @@ HEADERS += twitstatusedit.h \
     qtwit/qtwitdmstatus.h \
     xml/xmlreaddirectmessages.h \
     qtwit/qtwitdirectmessages.h \
-    listmodelinterface.h
+    listmodelinterface.h \
+    listviewinterface.h \
+    oauth/userpassdialog.h
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -82,7 +83,6 @@ SOURCES += main.cpp \
     xml/xmlreaderextusers.cpp \
     oauth/oauth.cpp \
     oauth/oauthtwitter.cpp \
-    oauth/pindialog.cpp \
     signalwaiter.cpp \
     tweetlistmodel.cpp \
     tweetviewitem.cpp \
@@ -92,11 +92,13 @@ SOURCES += main.cpp \
     xml/xmlreaduserlist.cpp \
     xml/xmlreaddirectmessages.cpp \
     qtwit/qtwitdirectmessages.cpp \
-    listmodelinterface.cpp
+    listmodelinterface.cpp \
+    listviewinterface.cpp \
+    oauth/userpassdialog.cpp
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui \
-    forms/pindialogform.ui
+    oauth/userpassdialog.ui
 TRANSLATIONS += translations/qtwitdget_en.ts \
     translations/qtwitdget_mk.ts
 RESOURCES = qtwitdget.qrc
