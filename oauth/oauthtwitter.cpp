@@ -82,13 +82,11 @@ void OAuthTwitter::requestAccessTokenXAuth(const QString &username, const QStrin
     }
 }
 
-void OAuthTwitter::authorizeXAuth()
+void OAuthTwitter::authorizeXAuth(const QString& username, const QString& password)
 {
-    UserPassDialog userpassdialog;
-
-    if (userpassdialog.exec()) {
-        requestAccessTokenXAuth(userpassdialog.username(), userpassdialog.password());
-    }
+    // ### TODO: Move to one method
+    // ### TODO: Error checking return tokens, return true/false for valid/nonvalid tokens/errors
+    requestAccessTokenXAuth(username, password);
 }
 
 void OAuthTwitter::error()

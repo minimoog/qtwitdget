@@ -93,10 +93,11 @@ MainWindow::MainWindow()
 	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
     connect(ui.actionMarkAllRead, SIGNAL(triggered()), this, SLOT(markAllStatusesRead()));
     connect(ui.actionGotoToNextUnread, SIGNAL(triggered()), this, SLOT(gotoNextUnread()));
+    connect(ui.userpassButtonBox, SIGNAL(accepted()), this, SLOT(authorize()));
+    connect(ui.usernameLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));
+    connect(ui.passwordLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));
 	
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
-
-	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
@@ -130,8 +131,13 @@ QNetworkAccessManager* MainWindow::networkAccessManager()
  */
 void MainWindow::authorize()
 {
-	//oauth flow
-    m_oauthTwitter->authorizeXAuth();
+    //disconnect timer (fetching tweets)
+    disconnect(m_timer, SIGNAL(timeout()), 0, 0);
+
+    //xAuth flow
+    m_oauthTwitter->authorizeXAuth(ui.usernameLineEdit->text(), ui.passwordLineEdit->text());
+    ui.usernameLineEdit->clear();
+    ui.passwordLineEdit->clear();
 
 	//verify credentials
 	QTwitVerifyCredentials vc;
@@ -142,10 +148,10 @@ void MainWindow::authorize()
     vc.verify();
     statusBar()->showMessage(tr("Verifying Twitter credentials."), 2000);
 
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     if (sigWait.wait(60000)) {
         QTwitExtUserInfo extUserInfo = vc.userInfo();
         //store settings
-        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
         settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
         settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
         settings.setValue("user_id", extUserInfo.id());
@@ -154,6 +160,9 @@ void MainWindow::authorize()
         startUp();
     } else {
         qDebug() << "Verify credentials timeout";
+        settings.remove("oauth_token");
+        settings.remove("oauth_token_secret");
+        settings.remove("user_id");
     }
 }
 
@@ -168,6 +177,8 @@ void MainWindow::startUp()
 	if(m_userId != 0 && !oauthToken.isEmpty() && !oauthTokenSecret.isEmpty()){
 		m_oauthTwitter->setOAuthToken(oauthToken.toUtf8());
 		m_oauthTwitter->setOAuthTokenSecret(oauthTokenSecret.toUtf8());
+
+        ui.stackedWidget->setCurrentIndex(0);
 
 		//create or change database according to user id
 		createDatabase(QString::number(m_userId));
@@ -185,9 +196,13 @@ void MainWindow::startUp()
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
 
+        //start fetching tweets
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 		updateTimeline();
     } else {
         statusBar()->showMessage(tr("Please authorize twitter account."));
+        ui.stackedWidget->setCurrentIndex(1);
+        ui.usernameLineEdit->setFocus();
     }
 }
 

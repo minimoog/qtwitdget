@@ -44,7 +44,7 @@ public:
 	OAuthTwitter(QObject *parent = 0);
 	void setNetworkAccessManager(QNetworkAccessManager* netManager);
 	QNetworkAccessManager* networkAccessManager() const;
-    void authorizeXAuth();
+    void authorizeXAuth(const QString& username, const QString& password);
 
 private slots:
 	void error();
