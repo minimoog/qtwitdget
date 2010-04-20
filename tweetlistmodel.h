@@ -28,6 +28,8 @@
 #include "qtwit/qtwitstatus.h"
 #include "listmodelinterface.h"
 
+class TweetListView;
+
 /*!
     List model (MVC pattern) based on itemviews-ng
  */
@@ -36,6 +38,8 @@ class TweetListModel : public ListModelInterface
     Q_OBJECT
 public:
     TweetListModel(QObject *parent = 0);
+    void setView(TweetListView *view);
+    TweetListView* view() const;
     void setUserid(int userid);
     int userid() const;
     void setAdditionalQuery(const QString& query);
@@ -67,6 +71,7 @@ private:
     int m_userid;
     QString m_additionalQuery;
     int m_pagecount;
+    TweetListView *m_view;
 };
 
 #endif // TWEETLISTMODEL_H

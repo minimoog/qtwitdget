@@ -600,6 +600,21 @@ void MainWindow::closeTab(int i)
     }
 
     */
+
+    //first delete model/view
+    TweetListModel* model = m_models.takeAt(i);
+    TweetListView* view = model->view();
+
+    delete view;
+    delete model;
+
+    //delete scene/view
+    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
+    QGraphicsScene* scene = statusView->scene();
+
+    delete scene;
+    delete statusView;
+
 	ui.tabWidget->removeTab(i);
 
     // ### TODO

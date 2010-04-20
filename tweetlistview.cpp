@@ -66,6 +66,8 @@ void TweetListView::setModel(TweetListModel *model)
         connect(m_model, SIGNAL(itemsRemoved(int,int)), this, SLOT(itemsRemoved(int,int)));
         connect(m_model, SIGNAL(itemsMoved(int,int,int)), this, SLOT(itemsMoved(int,int,int)));
         // ### signal: destroyed()  ????
+
+        m_model->setView(this);
     }
 }
 
