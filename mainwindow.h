@@ -89,6 +89,8 @@ private:
     void writeSettings();
     void createUserDefinedTabs();
     void setTweetIdReadDatabase(qint64 id);
+    qint64 getLastStatusId();
+    qint64 getLastMentionId();
 
 	Ui::MainWindowForm ui;
 

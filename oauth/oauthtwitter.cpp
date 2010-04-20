@@ -27,7 +27,6 @@
 #include <QNetworkAccessManager>
 #include "oauthtwitter.h"
 #include "signalwaiter.h"
-#include "userpassdialog.h"
 
 /*!
     Constructor

@@ -186,8 +186,8 @@ void MainWindow::startUp()
 		if(isDatabaseEmpty()){
 			m_firstRun = true;
 		} else {
-            m_lastStatusId = settings.value("lastStatusId").toLongLong();
-            m_lastMentionId = settings.value("lastMentionId").toLongLong();
+            m_lastStatusId = getLastStatusId();
+            m_lastMentionId = getLastMentionId();
 		}
 
         createDefaultTabs();
@@ -204,6 +204,30 @@ void MainWindow::startUp()
         ui.stackedWidget->setCurrentIndex(1);
         ui.usernameLineEdit->setFocus();
     }
+}
+
+qint64 MainWindow::getLastStatusId()
+{
+    QSqlQuery query;
+    query.exec("SELECT id FROM status ORDER BY id DESC LIMIT 1");
+
+    if (query.next()) {
+        return query.value(0).toLongLong();
+    }
+
+    return 0;
+}
+
+qint64 MainWindow::getLastMentionId()
+{
+    QSqlQuery query;
+    query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY id DESC LIMIT 1");
+
+    if (query.next()) {
+        return query.value(0).toLongLong();
+    }
+
+    return 0;
 }
 
 void MainWindow::updateTimeline()
@@ -837,8 +861,5 @@ void MainWindow::gotoNextUnread()
 
 MainWindow::~MainWindow()
 {
-    //wrote lastStatusId from home_timeline and mentions_timeline
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-    settings.setValue("lastStatusId", m_lastStatusId);
-    settings.setValue("lastMentionId", m_lastMentionId);
+
 }
