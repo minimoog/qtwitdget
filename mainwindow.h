@@ -65,6 +65,8 @@ private slots:
     void gotoNextUnread();
     void languageChanged();
     void authorize();
+    void changeUserPass();
+    void cancelUserPass();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);

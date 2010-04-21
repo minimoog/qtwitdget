@@ -94,14 +94,13 @@ MainWindow::MainWindow()
     connect(ui.actionMarkAllRead, SIGNAL(triggered()), this, SLOT(markAllStatusesRead()));
     connect(ui.actionGotoToNextUnread, SIGNAL(triggered()), this, SLOT(gotoNextUnread()));
     connect(ui.userpassButtonBox, SIGNAL(accepted()), this, SLOT(authorize()));
+    connect(ui.userpassButtonBox, SIGNAL(rejected()), this, SLOT(cancelUserPass()));
     connect(ui.usernameLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));
-    connect(ui.passwordLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));
-	
-	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
-
+    connect(ui.passwordLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));	
+    //connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
-	connect(ui.actionAuthorize, SIGNAL(triggered()), SLOT(authorize()));
+    connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
     
     //timer is single shot, avoid conflict with HomeTimeline
@@ -132,9 +131,11 @@ QNetworkAccessManager* MainWindow::networkAccessManager()
 void MainWindow::authorize()
 {
     //disconnect timer (fetching tweets)
+    // ### TODO: Disconnect other signals ???
     disconnect(m_timer, SIGNAL(timeout()), 0, 0);
 
     //xAuth flow
+    m_oauthTwitter->clearTokens();
     m_oauthTwitter->authorizeXAuth(ui.usernameLineEdit->text(), ui.passwordLineEdit->text());
     ui.usernameLineEdit->clear();
     ui.passwordLineEdit->clear();
@@ -157,6 +158,10 @@ void MainWindow::authorize()
         settings.setValue("user_id", extUserInfo.id());
 
         statusBar()->showMessage("Credentials ok.", 2000);
+
+        while (ui.tabWidget->count())
+            closeTab(0);
+
         startUp();
     } else {
         qDebug() << "Verify credentials timeout";
@@ -164,6 +169,19 @@ void MainWindow::authorize()
         settings.remove("oauth_token_secret");
         settings.remove("user_id");
     }
+}
+
+void MainWindow::changeUserPass()
+{
+    ui.stackedWidget->setCurrentIndex(1);
+    ui.usernameLineEdit->setFocus();
+}
+
+void MainWindow::cancelUserPass()
+{
+    ui.usernameLineEdit->clear();
+    ui.passwordLineEdit->clear();
+    ui.stackedWidget->setCurrentIndex(0);
 }
 
 void MainWindow::startUp()
@@ -200,9 +218,7 @@ void MainWindow::startUp()
         connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 		updateTimeline();
     } else {
-        statusBar()->showMessage(tr("Please authorize twitter account."));
-        ui.stackedWidget->setCurrentIndex(1);
-        ui.usernameLineEdit->setFocus();
+        changeUserPass();
     }
 }
 
@@ -584,23 +600,6 @@ void MainWindow::updateTab(int i)
 
 void MainWindow::closeTab(int i)
 {
-    /*
-    QTwitView *twitView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
-    if (twitView) {
-        QTwitScene *twitScene = qobject_cast<QTwitScene*>(twitView->scene());
-
-        if (twitScene) {
-            m_twitScenes.removeOne(twitScene);
-            delete twitScene;
-        }
-
-        delete twitView;
-    } else {
-        qDebug() << "Error remove tab: Not a QGraphics View";
-    }
-
-    */
-
     //first delete model/view
     TweetListModel* model = m_models.takeAt(i);
     TweetListView* view = model->view();
@@ -616,8 +615,6 @@ void MainWindow::closeTab(int i)
     delete statusView;
 
 	ui.tabWidget->removeTab(i);
-
-    // ### TODO
 }
 
 void MainWindow::loadStyleSheet()
