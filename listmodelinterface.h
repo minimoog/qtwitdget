@@ -24,11 +24,15 @@
 #include <QObject>
 #include <QHash>
 
+class ListViewInterface;
+
 class ListModelInterface : public QObject
 {
     Q_OBJECT
 public:
     ListModelInterface(QObject *parent = 0);
+    void setView(ListViewInterface* view);
+    ListViewInterface* view() const;
     virtual int count() const = 0;
     virtual QVariant data(int index) const = 0;
     virtual QHash<QByteArray, QVariant> data(int index, const QList<QByteArray>& roles) const = 0;
@@ -38,6 +42,9 @@ signals:
     void itemsRemoved(int index, int count);
     void itemsMoved(int from, int to, int count);
     void itemsChanged(int index, int count, const QList<QByteArray>& roles);
+
+private:
+    ListViewInterface* m_view;
 };
 
 #endif // LISTMODELINTERFACE_H

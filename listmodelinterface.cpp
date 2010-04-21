@@ -19,8 +19,20 @@
  */
 
 #include "listmodelinterface.h"
+#include "listviewinterface.h"
 
 ListModelInterface::ListModelInterface(QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_view(0)
 {
+}
+
+void ListModelInterface::setView(ListViewInterface *view)
+{
+    // ### TODO: signals?
+    m_view = view;
+}
+
+ListViewInterface* ListModelInterface::view() const
+{
+    return m_view;
 }
