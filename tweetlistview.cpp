@@ -20,6 +20,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include "tweetlistmodel.h"
 #include "tweetlistview.h"
 #include "tweetviewitem.h"
 
@@ -27,48 +28,8 @@
     Constructor
  */
 TweetListView::TweetListView(QGraphicsItem * parent)
-    : QGraphicsItem(parent), m_model(0)
+    : ListViewInterface(parent)
 {
-}
-
-/*!
-    \returns model of the view
- */
-TweetListModel* TweetListView::model() const
-{
-    return m_model;
-}
-
-/*!
-    Sets model
-    \param model model
- */
-void TweetListView::setModel(TweetListModel *model)
-{
-    if (model == m_model)
-        return;
-
-    if (m_model) {
-        disconnect(m_model, SIGNAL(itemsChanged(int,int,QList<QByteArray>)),
-                   this, SLOT(itemsChanged(int,int,QList<QByteArray>)));
-        disconnect(m_model, SIGNAL(itemsInserted(int,int)), this, SLOT(itemsInserted(int,int)));
-        disconnect(m_model, SIGNAL(itemsRemoved(int,int)), this, SLOT(itemsRemoved(int,int)));
-        disconnect(m_model, SIGNAL(itemsMoved(int,int,int)), this, SLOT(itemsMoved(int,int,int)));
-        // ### signal: destroyed()  ????
-    }
-
-    m_model = model;
-
-    if (m_model) {
-        connect(m_model, SIGNAL(itemsChanged(int,int,QList<QByteArray>)),
-                this, SLOT(itemsChanged(int,int,QList<QByteArray>)));
-        connect(m_model, SIGNAL(itemsInserted(int,int)), this, SLOT(itemsInserted(int,int)));
-        connect(m_model, SIGNAL(itemsRemoved(int,int)), this, SLOT(itemsRemoved(int,int)));
-        connect(m_model, SIGNAL(itemsMoved(int,int,int)), this, SLOT(itemsMoved(int,int,int)));
-        // ### signal: destroyed()  ????
-
-        m_model->setView(this);
-    }
 }
 
 /*!
@@ -99,7 +60,7 @@ QSizeF TweetListView::itemGeometry(int index) const
  */
 QGraphicsItem* TweetListView::itemForIndex(int index) const
 {
-    if (index >=0 && index < m_model->count()) {
+    if (index >=0 && index < model()->count()) {
         return m_items.at(index);
     }
 
@@ -198,20 +159,6 @@ void TweetListView::itemsChanged(int index, int count, const QList<QByteArray> &
     for (int i = 0; i < count; ++i) {
         m_items.at(index + i)->itemChanged(roles);
     }
-}
-
-QRectF TweetListView::boundingRect() const
-{
-    // nothing to do
-    return QRectF();
-}
-
-void TweetListView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    // nothing to paint, just a holder for list items
-    Q_UNUSED(painter);
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
 }
 
 void TweetListView::resizeWidth(int w)

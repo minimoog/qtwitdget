@@ -22,31 +22,26 @@
 #define TWEETLISTVIEW_H
 
 #include <QGraphicsItem>
-#include "tweetlistmodel.h"
-//#include "tweetviewitem.h"
+#include "listviewinterface.h"
 
 class TweetViewItem;
 
 /*!
     View of the TweetListModel
  */
-class TweetListView : public QObject, public QGraphicsItem
+class TweetListView : public ListViewInterface
 {
     Q_OBJECT
 public:
     TweetListView(QGraphicsItem * parent = 0);
-    TweetListModel* model() const;
-    void setModel(TweetListModel *model);
     int itemAt(const QPointF &position) const;
     QSizeF itemGeometry(int index) const;
     QGraphicsItem* itemForIndex(int index) const;
-    virtual QRectF boundingRect() const;
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public slots:
     void resizeWidth(int w);
 
-private slots:
+protected slots:
     void itemsInserted(int index, int count);
     void itemsRemoved(int index, int count);
     void itemsMoved(int from, int to, int count);
@@ -55,7 +50,6 @@ private slots:
 private:
     void adjustSceneRect();
 
-    TweetListModel *m_model;
     QList<TweetViewItem*> m_items;
     int m_width;
 };

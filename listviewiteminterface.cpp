@@ -39,7 +39,7 @@ void ListViewItemInterface::setIndex(int index)
     m_index = index;
 }
 
-QVariant ListViewItemInterface::data() const
+ListViewInterface* ListViewItemInterface::view() const
 {
-    return QVariant();
+    return m_view;
 }

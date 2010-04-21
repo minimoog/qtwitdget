@@ -24,6 +24,7 @@
 #include <QGraphicsItem>
 #include <QSharedData>
 #include "tweetlistview.h"
+#include "listviewiteminterface.h"
 
 class GradientRectItem;
 class NetPixmapItem;
@@ -35,16 +36,14 @@ class QGraphicsLineItem;
 class TweetViewItemData : public QSharedData
 {
 public:
-    TweetViewItemData() : index(0), width(0), listView(0), gradRectItem(0),
-    avatarItem(0), nameItem(0), textItem(0), replyItem(0), retweetItem(0),
+    TweetViewItemData() : width(0), gradRectItem(0), avatarItem(0),
+    nameItem(0), textItem(0), replyItem(0), retweetItem(0),
     favoritedItem(0), lineItem(0)
     {}
 
     // ### Copy Constructor?
 
-    int index;
     int width;
-    TweetListView* listView;
     GradientRectItem* gradRectItem;
     NetPixmapItem* avatarItem;
     QGraphicsTextItem* nameItem;
@@ -58,14 +57,12 @@ public:
 /*!
     Item for the MVC (TweetListView, TweetListModel
  */
-class TweetViewItem : public QObject, public QGraphicsItem
+class TweetViewItem : public QObject, public ListViewItemInterface
 {
     Q_OBJECT
 
 public:
-    TweetViewItem(int index, TweetListView * view);
-    int index() const;
-    void setIndex(int index);
+    TweetViewItem(int index, ListViewInterface* view);
     int width() const;
     void setWidth(int w);
     QSizeF size() const;
@@ -73,7 +70,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void itemChanged(const QList<QByteArray> &roles = QList<QByteArray>());
     QVariant data() const;
-    TweetListView* view() const;
 
 signals:
     void replyDeleteClicked(int index);

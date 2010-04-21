@@ -46,6 +46,7 @@ void ListViewInterface::setModel(ListModelInterface *model)
     }
 
     m_model = model;
+    m_model->setView(this);
 
     if (m_model) {
         connect(m_model, SIGNAL(itemsChanged(int,int,QList<QByteArray>)),

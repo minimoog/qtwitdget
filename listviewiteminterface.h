@@ -33,7 +33,7 @@ public:
     void setIndex(int index);
     virtual QSizeF size() const = 0;
     virtual void itemChanged(const QList<QByteArray> &roles = QList<QByteArray>()) = 0;
-    virtual QVariant data() const;
+    virtual QVariant data() const = 0;
     ListViewInterface* view() const;
 
 private:

@@ -29,6 +29,7 @@
 #include "sceneitems/netpixmapitem.h"
 #include "sceneitems/statustextitem.h"
 #include "tweetviewitem.h"
+#include "tweetlistmodel.h"
 #include "mainwindow.h"
 #include "qtwit/qtwitstatus.h"
 
@@ -67,12 +68,9 @@ static QString replaceLinksWithHref(const QString &text)
     \param index Index of the item in the model
     \param view View
  */
-TweetViewItem::TweetViewItem(int index, TweetListView *view)
-    : QGraphicsItem(view), d(new TweetViewItemData)
+TweetViewItem::TweetViewItem(int index, ListViewInterface *viewInterface)
+    : ListViewItemInterface(index, viewInterface), d(new TweetViewItemData)
 {
-    d->listView = view;
-    d->index = index;
-
     d->gradRectItem = new GradientRectItem(200, GradientRectItem::Blue, this);
 
     QGraphicsPixmapItem *avatarBoxItem = new QGraphicsPixmapItem(QPixmap(":/images/avatar_box.png"), d->gradRectItem);
@@ -120,27 +118,11 @@ TweetViewItem::TweetViewItem(int index, TweetListView *view)
 
     //connect model to button signals
     // ### TODO: SignalMapper
-    TweetListModel *model = d->listView->model();
+    //TweetListModel *model = qobject_cast<TweetListModel*>(view()->model());
+    TweetListModel *model = qobject_cast<TweetListModel*>(view()->model());
     connect(this, SIGNAL(replyDeleteClicked(int)), model, SLOT(replyDeleteClicked(int)));
     connect(this, SIGNAL(retweetClicked(int)), model, SLOT(retweetClicked(int)));
     connect(this, SIGNAL(favoritedClicked(int)), model, SLOT(favoritedClicked(int)));
-}
-
-/*!
-    \returns index of the item
- */
-int TweetViewItem::index() const
-{
-    return d->index;
-}
-
-/*!
-    \param index Sets index of the item
- */
-void TweetViewItem::setIndex(int index)
-{
-    d->index = index;
-    itemChanged();
 }
 
 /*!
@@ -170,7 +152,7 @@ void TweetViewItem::setWidth(int w)
  */
 void TweetViewItem::itemChanged(const QList<QByteArray> &roles)
 {
-    QHash<QByteArray, QVariant> hash = d->listView->model()->data(d->index, roles);
+    QHash<QByteArray, QVariant> hash = view()->model()->data(index(), roles);
 
     for (int i = 0; i < roles.count(); ++i) {
         if (roles.at(i) == "isRead") {
@@ -189,14 +171,6 @@ QVariant TweetViewItem::data() const
 {
     // ### TODO:
     return QVariant();
-}
-
-/*!
-    \returns List view
- */
-TweetListView* TweetViewItem::view() const
-{
-    return d->listView;
 }
 
 /*!
@@ -221,12 +195,14 @@ void TweetViewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 void TweetViewItem::setData()
 {
-    QTwitStatus s = d->listView->model()->data(d->index).value<QTwitStatus>();
+    TweetListModel *model = qobject_cast<TweetListModel*>(view()->model());
+
+    QTwitStatus s = model->data(index()).value<QTwitStatus>();
     d->avatarItem->setPixmapUrl(QUrl(s.profileImageUrl()));
     d->nameItem->setPlainText(s.screenName());
     d->textItem->setHtml(replaceLinksWithHref(s.text()));
 
-    if (s.userId() == view()->model()->userid()) {
+    if (s.userId() == model->userid()) {
         d->replyItem->setDefaultPixmap(QPixmap(":/images/button_delete.png"));
         d->replyItem->setHoverPixmap(QPixmap(":/images/button_delete_hover.png"));
         d->replyItem->setClickedPixmap(QPixmap(":/images/button_delete_click.png"));
@@ -246,15 +222,15 @@ void TweetViewItem::setData()
 
 void TweetViewItem::replyDeleteButtonClicked()
 {
-    emit replyDeleteClicked(d->index);
+    emit replyDeleteClicked(index());
 }
 
 void TweetViewItem::retweetButtonClicked()
 {
-    emit retweetClicked(d->index);
+    emit retweetClicked(index());
 }
 
 void TweetViewItem::favoritedButtonClicked()
 {
-    emit favoritedClicked(d->index);
+    emit favoritedClicked(index());
 }
