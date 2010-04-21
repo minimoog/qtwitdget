@@ -160,6 +160,12 @@ QByteArray OAuth::oauthTokenSecret() const
 	return m_oauthTokenSecret;
 }
 
+void OAuth::clearTokens()
+{
+    m_oauthToken.clear();
+    m_oauthTokenSecret.clear();
+}
+
 /*!
     Generates HMAC-SHA1 signature
     \param[in] signatureBase String

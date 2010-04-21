@@ -50,6 +50,7 @@ public:
 	QByteArray generateAuthorizationHeader(const QUrl& url, HttpMethod method);
 	void setOAuthToken(const QByteArray& token);
 	void setOAuthTokenSecret(const QByteArray& tokenSecret);
+    void clearTokens();
 	QByteArray oauthToken() const;
 	QByteArray oauthTokenSecret() const;
 	
