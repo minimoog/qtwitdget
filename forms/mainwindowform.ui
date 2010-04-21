@@ -199,7 +199,7 @@
     <property name="title">
      <string>&amp;Account</string>
     </property>
-    <addaction name="actionAuthorize"/>
+    <addaction name="actionChangeUserPass"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -257,9 +257,9 @@
     <string>About &amp;Qt</string>
    </property>
   </action>
-  <action name="actionAuthorize">
+  <action name="actionChangeUserPass">
    <property name="text">
-    <string>&amp;Authorize</string>
+    <string>&amp;Change Username and Password</string>
    </property>
   </action>
   <action name="actionSettings">
