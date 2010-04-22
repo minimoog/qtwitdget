@@ -21,7 +21,6 @@
 #include <QtDebug>
 #include <QBuffer>
 #include "qtwitretweet.h"
-#include "xml/xmlreaderstatus.h"
 
 /*!
     Constructor
@@ -41,7 +40,7 @@ void QTwitRetweet::retweet(qint64 statusid)
 
     m_retweetStatus.setId(0);
 
-    QString urlString = QString("http://api.twitter.com/1/statuses/retweet/%1.xml").arg(statusid);
+    QString urlString = QString("http://api.twitter.com/1/statuses/retweet/%1.json").arg(statusid);
     QUrl url(urlString);
 
     QNetworkRequest req(url);
@@ -58,28 +57,8 @@ void QTwitRetweet::reply()
 {
     QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
     if (netReply) {
-        XmlReaderStatus xrs;
 
-        QByteArray replyArray = netReply->readAll();
-        //HACK: prepend <statuses> and append </statuses> tags to parse them like statuses array
-        int prIndex = replyArray.indexOf("<status>");
-        
-        if (prIndex == -1)
-            //something wrong
-            return;
-
-        replyArray.insert(prIndex, "<statuses>");
-        replyArray.append("</statuses>");
-
-        //TODO:
-        //XmlReaderStatus -> parse one status
-        //XmlReaderStatusArray -> parse array of statuses
-
-        QBuffer replyBuffer(&replyArray);
-        replyBuffer.open(QIODevice::ReadOnly);
-
-        if (xrs.read(&replyBuffer))
-            m_retweetStatus = xrs.statuses().at(0); //fails if there are no statuses
+        m_retweetStatus = parseStatusJSON(netReply);
 
         netReply->deleteLater();
 
