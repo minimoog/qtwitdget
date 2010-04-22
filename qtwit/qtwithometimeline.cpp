@@ -21,8 +21,10 @@
 #include <QtDebug>
 #include <QBuffer>
 #include <QUrl>
+#include <QVariant>
 #include "qtwithometimeline.h"
-#include "xml/xmlreaderstatus.h"
+#include "qtwitstatus.h"
+#include "qjson/parser.h"
 
 /*!
     Constructor
@@ -44,7 +46,7 @@ void QTwitHomeTimeline::update(qint64 sinceId, qint64 maxId, int count, int page
 {
 	Q_ASSERT(networkAccessManager() != 0);
 
-	QUrl url("http://api.twitter.com/1/statuses/home_timeline.xml");
+    QUrl url("http://api.twitter.com/1/statuses/home_timeline.json");
 	
 	if(sinceId != 0){
 		QString strSinceId = QString("%1").arg(sinceId);
@@ -83,9 +85,47 @@ void QTwitHomeTimeline::reply()
     response.open(QIODevice::ReadOnly);
 
 	if(netReply){
-		XmlReaderStatus xrs;
-		if(xrs.read(&response))
-            emit finishedHomeTimeline(xrs.statuses());
+        //XmlReaderStatus xrs;
+        //if(xrs.read(&response))
+        //    emit finishedHomeTimeline(xrs.statuses());
+
+        QJson::Parser parser;
+        bool ok;
+
+        QVariant jsonResponse = parser.parse(arrayReply, &ok);
+        if (!ok) {
+            qFatal("An error occured while parsing json response");
+            return;
+        }
+
+        QList<QTwitStatus> qtStatuses;
+        QList<QVariant> listStatuses = jsonResponse.toList();
+
+        foreach(const QVariant& status, listStatuses) {
+            QTwitStatus qtStatus;
+            QVariantMap statusMap = status.toMap();
+            //qDebug() << statusMap["created_at"].toString();
+
+            qtStatus.setId(statusMap["id"].toLongLong());
+            qtStatus.setText(statusMap["text"].toString());
+            qtStatus.setReplyToStatusId(statusMap["in_reply_to_status_id"].toLongLong());
+            qtStatus.setReplyToUserId(statusMap["in_reply_to_user_id"].toInt());
+            qtStatus.setFavorited(statusMap["favorited"].toBool());
+            qtStatus.setReplyToScreenName(statusMap["in_reply_to_screen_name"].toString());
+
+            QVariantMap user = statusMap["user"].toMap();
+            qtStatus.setUserId(user["id"].toInt());
+            qtStatus.setName(user["name"].toString());
+            qtStatus.setScreenName(user["screen_name"].toString());
+            qtStatus.setLocation(user["location"].toString());
+            qtStatus.setDescription(user["description"].toString());
+            qtStatus.setProfileImageUrl(user["profile_image_url"].toString());
+            qtStatus.setUrl(user["url"].toString());
+
+            qtStatuses.append(qtStatus);
+        }
+
+        emit finishedHomeTimeline(qtStatuses);
 
 		netReply->deleteLater();
 	}
