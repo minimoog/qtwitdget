@@ -116,3 +116,37 @@ QList<QTwitStatus> QTwitBase::parseStatusesListJSON(QIODevice *device)
 
     return qtStatuses;
 }
+
+QTwitStatus QTwitBase::parseStatusJSON(QIODevice *device)
+{
+    QTwitStatus status;
+    QJson::Parser parser;
+    bool ok;
+
+    QVariant jsonResponse = parser.parse(device, &ok);
+    if (!ok) {
+        qFatal("An error occured while parsing json response");
+        return status;
+    }
+
+    QVariantMap statusMap = jsonResponse.toMap();
+    //qDebug() << statusMap["created_at"].toString();
+
+    status.setId(statusMap["id"].toLongLong());
+    status.setText(statusMap["text"].toString());
+    status.setReplyToStatusId(statusMap["in_reply_to_status_id"].toLongLong());
+    status.setReplyToUserId(statusMap["in_reply_to_user_id"].toInt());
+    status.setFavorited(statusMap["favorited"].toBool());
+    status.setReplyToScreenName(statusMap["in_reply_to_screen_name"].toString());
+
+    QVariantMap user = statusMap["user"].toMap();
+    status.setUserId(user["id"].toInt());
+    status.setName(user["name"].toString());
+    status.setScreenName(user["screen_name"].toString());
+    status.setLocation(user["location"].toString());
+    status.setDescription(user["description"].toString());
+    status.setProfileImageUrl(user["profile_image_url"].toString());
+    status.setUrl(user["url"].toString());
+
+    return status;
+}

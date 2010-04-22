@@ -44,7 +44,8 @@ public:
 	OAuthTwitter* oauthTwitter() const;
 
     QList<QTwitStatus> parseStatusesListJSON(QIODevice* device);
-	
+    QTwitStatus parseStatusJSON(QIODevice* device);
+
 signals:
 	/*! emited when finished downloading and processing */
 	void finished();
