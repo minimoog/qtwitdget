@@ -21,7 +21,6 @@
 #include <QtDebug>
 #include <QUrl>
 #include "qtwitmentions.h"
-#include "xml/xmlreaderstatus.h"
 
 QTwitMentions::QTwitMentions(QObject *parent)
 :   QTwitBase(parent)
@@ -32,7 +31,7 @@ void QTwitMentions::update(qint64 sinceid, qint64 maxid, int count, int page)
 {
     Q_ASSERT(networkAccessManager() != 0);
 
-    QUrl url("http://api.twitter.com/1/statuses/mentions.xml");
+    QUrl url("http://api.twitter.com/1/statuses/mentions.json");
 
     if (sinceid != 0)
         url.addQueryItem("since_id", QString::number(sinceid));
@@ -60,10 +59,9 @@ void QTwitMentions::reply()
 {
     QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
     if (netReply) {
-        XmlReaderStatus xrs;
+        QList<QTwitStatus> statuses = parseStatusesListJSON(netReply);
 
-        if (xrs.read(netReply))
-            emit finishedMentions(xrs.statuses());
+        emit finishedMentions(statuses);
 
         netReply->deleteLater();
 
