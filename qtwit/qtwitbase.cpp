@@ -19,6 +19,7 @@
  */
 
 #include "qtwitbase.h"
+#include "qjson/parser.h"
 
 /*!
     Constructor
@@ -73,4 +74,45 @@ void QTwitBase::setOAuthTwitter(OAuthTwitter* oauthTwitter)
 OAuthTwitter* QTwitBase::oauthTwitter() const
 {
 	return m_oauthTwitter;
+}
+
+QList<QTwitStatus> QTwitBase::parseStatusesListJSON(QIODevice *device)
+{
+    QList<QTwitStatus> qtStatuses;
+    QJson::Parser parser;
+    bool ok;
+
+    QVariant jsonResponse = parser.parse(device, &ok);
+    if (!ok) {
+        qFatal("An error occured while parsing json response");
+        return qtStatuses;
+    }
+
+    QList<QVariant> listStatuses = jsonResponse.toList();
+
+    foreach(const QVariant& status, listStatuses) {
+        QTwitStatus qtStatus;
+        QVariantMap statusMap = status.toMap();
+        //qDebug() << statusMap["created_at"].toString();
+
+        qtStatus.setId(statusMap["id"].toLongLong());
+        qtStatus.setText(statusMap["text"].toString());
+        qtStatus.setReplyToStatusId(statusMap["in_reply_to_status_id"].toLongLong());
+        qtStatus.setReplyToUserId(statusMap["in_reply_to_user_id"].toInt());
+        qtStatus.setFavorited(statusMap["favorited"].toBool());
+        qtStatus.setReplyToScreenName(statusMap["in_reply_to_screen_name"].toString());
+
+        QVariantMap user = statusMap["user"].toMap();
+        qtStatus.setUserId(user["id"].toInt());
+        qtStatus.setName(user["name"].toString());
+        qtStatus.setScreenName(user["screen_name"].toString());
+        qtStatus.setLocation(user["location"].toString());
+        qtStatus.setDescription(user["description"].toString());
+        qtStatus.setProfileImageUrl(user["profile_image_url"].toString());
+        qtStatus.setUrl(user["url"].toString());
+
+        qtStatuses.append(qtStatus);
+    }
+
+    return qtStatuses;
 }
