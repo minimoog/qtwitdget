@@ -5,6 +5,7 @@ INCLUDEPATH += .
 QT += network \
     xml \
     sql
+
 # win32:LIBS += libeay32.lib
 # unix:LIBS += -lcrypto
 HEADERS += twitstatusedit.h \
@@ -35,7 +36,6 @@ HEADERS += twitstatusedit.h \
     qtwit/mentions.h \
     qtwit/qtwitretweet.h \
     xml/xmlreaderextuserinfo.h \
-    xml/xmlreaderstatus.h \
     xml/xmlreaderextusers.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
@@ -57,13 +57,12 @@ HEADERS += twitstatusedit.h \
     listviewiteminterface.h
 
 # QJSON
-HEADERS += \
-    qjson/json_parser.hh \
+HEADERS += qjson/json_parser.hh \
     qjson/json_scanner.h \
     qjson/location.hh \
-    qjson/parser_p.h  \
+    qjson/parser_p.h \
     qjson/position.hh \
-    qjson/qjson_debug.h  \
+    qjson/qjson_debug.h \
     qjson/stack.hh \
     qjson/parser.h \
     qjson/parserrunnable.h \
@@ -71,7 +70,6 @@ HEADERS += \
     qjson/serializer.h \
     qjson/serializerrunnable.h \
     qjson/qjson_export.h
-
 SOURCES += main.cpp \
     twitstatusedit.cpp \
     shortenedurl.cpp \
@@ -95,7 +93,6 @@ SOURCES += main.cpp \
     qtwit/hometimeline.cpp \
     qtwit/mentions.cpp \
     qtwit/qtwitretweet.cpp \
-    xml/xmlreaderstatus.cpp \
     xml/xmlreaderextuserinfo.cpp \
     xml/xmlreaderextusers.cpp \
     oauth/oauth.cpp \
@@ -114,15 +111,13 @@ SOURCES += main.cpp \
     listviewiteminterface.cpp
 
 # QJSON
-SOURCES += \
-    qjson/json_parser.cc \
+SOURCES += qjson/json_parser.cc \
     qjson/json_scanner.cpp \
     qjson/parser.cpp \
     qjson/parserrunnable.cpp \
     qjson/qobjecthelper.cpp \
     qjson/serializer.cpp \
     qjson/serializerrunnable.cpp
-
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui \
     forms/groupdialogform.ui
