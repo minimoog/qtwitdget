@@ -75,19 +75,6 @@ void QTwitFriends::reply()
 {
 	QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
 	if(netReply){
-//        XmlReadUserList xmlUserList;
-//        xmlUserList.read(netReply);
-//
-//        m_friends.append(xmlUserList.users());
-//
-//        if (xmlUserList.nextCursor() != QString("0")) {
-//            m_paging = true;
-//            updateFriends(0, 0, QString(), xmlUserList.nextCursor());
-//        } else {
-//            m_paging = false;
-//            emit finished();
-//        }
-
         QString nextCursor;
         QString prevCursor;
 
