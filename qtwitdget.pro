@@ -35,7 +35,6 @@ HEADERS += twitstatusedit.h \
     qtwit/hometimeline.h \
     qtwit/mentions.h \
     qtwit/qtwitretweet.h \
-    xml/xmlreaderextusers.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
     signalwaiter.h \
@@ -92,7 +91,6 @@ SOURCES += main.cpp \
     qtwit/hometimeline.cpp \
     qtwit/mentions.cpp \
     qtwit/qtwitretweet.cpp \
-    xml/xmlreaderextusers.cpp \
     oauth/oauth.cpp \
     oauth/oauthtwitter.cpp \
     signalwaiter.cpp \
