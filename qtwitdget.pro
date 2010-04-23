@@ -44,7 +44,6 @@ HEADERS += twitstatusedit.h \
     tweetlistmodelunread.h \
     qtwit/qtwituserdata.h \
     qtwit/qtwituser.h \
-    xml/xmlreaduser.h \
     xml/xmlreaduserlist.h \
     qtwit/qtwitdmstatusdata.h \
     qtwit/qtwitdmstatus.h \
@@ -98,7 +97,6 @@ SOURCES += main.cpp \
     tweetviewitem.cpp \
     tweetlistview.cpp \
     tweetlistmodelunread.cpp \
-    xml/xmlreaduser.cpp \
     xml/xmlreaduserlist.cpp \
     xml/xmlreaddirectmessages.cpp \
     qtwit/qtwitdirectmessages.cpp \
