@@ -20,7 +20,6 @@
 
 #include <QtDebug>
 #include "qtwitverifycredentials.h"
-#include "xml/xmlreaderextuserinfo.h"
 
 /*!
     Constructor
@@ -37,7 +36,7 @@ void QTwitVerifyCredentials::verify()
 {
 	Q_ASSERT(networkAccessManager() != 0);
 
-    QUrl url("http://api.twitter.com/1/account/verify_credentials.xml");
+    QUrl url("http://api.twitter.com/1/account/verify_credentials.json");
 
 	QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
 	QNetworkRequest req(url);
@@ -52,9 +51,7 @@ void QTwitVerifyCredentials::reply()
 {
 	QNetworkReply *netReply = qobject_cast<QNetworkReply*>(sender());
 	if(netReply){
-		XmlReaderExtUserInfo xr;
-		if(xr.read(netReply))
-			m_userinfo = xr.userInfo();
+        m_userinfo = parseExtUserInfoJSON(netReply);
 
 		netReply->deleteLater();
 	}
