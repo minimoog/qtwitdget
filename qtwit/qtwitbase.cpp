@@ -84,7 +84,7 @@ QList<QTwitStatus> QTwitBase::parseStatusesListJSON(QIODevice *device)
 
     QVariant jsonResponse = parser.parse(device, &ok);
     if (!ok) {
-        qFatal("An error occured while parsing json response");
+        qFatal("Json parsing error: List of statutes");
         return qtStatuses;
     }
 
@@ -125,7 +125,7 @@ QTwitStatus QTwitBase::parseStatusJSON(QIODevice *device)
 
     QVariant jsonResponse = parser.parse(device, &ok);
     if (!ok) {
-        qFatal("An error occured while parsing json response");
+        qFatal("Json parsing error: Single status");
         return status;
     }
 
@@ -149,4 +149,26 @@ QTwitStatus QTwitBase::parseStatusJSON(QIODevice *device)
     status.setUrl(user["url"].toString());
 
     return status;
+}
+
+QTwitExtUserInfo QTwitBase::parseExtUserInfoJSON(QIODevice *device)
+{
+    QTwitExtUserInfo extInfo;
+    QJson::Parser parser;
+    bool ok;
+
+    QVariantMap userMap = parser.parse(device, &ok).toMap();
+    if (!ok) {
+        qFatal("Json parsing error: Extended User Info");
+        return extInfo;
+    }
+
+    extInfo.setId(userMap["id"].toInt());
+    extInfo.setName(userMap["name"].toString());
+    extInfo.setScreenName(userMap["screen_name"].toString());
+    extInfo.setLocation(userMap["location"].toString());
+    extInfo.setDescription(userMap["description"].toString());
+    extInfo.setProfileImageUrl(userMap["profile_image_url"].toString());
+
+    return extInfo;
 }
