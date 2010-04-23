@@ -172,3 +172,38 @@ QTwitExtUserInfo QTwitBase::parseExtUserInfoJSON(QIODevice *device)
 
     return extInfo;
 }
+
+QList<QTwitUser> QTwitBase::parseUserListJSON(QIODevice *device, QString &nextCursor, QString &prevCursor)
+{
+    QList<QTwitUser> userList;
+    QJson::Parser parser;
+    bool ok;
+
+    QVariantMap listMap = parser.parse(device, &ok).toMap();
+    if (!ok) {
+        qFatal("Json parsing error: User list");
+        return userList;
+    }
+
+    nextCursor = listMap["next_cursor_str"].toString();
+    prevCursor = listMap["previous_cursor_str"].toString();
+
+    QList<QVariant> arrayUser = listMap["users"].toList();
+
+    foreach(const QVariant& user, arrayUser) {
+        QTwitUser qtUser;
+        QVariantMap userMap = user.toMap();
+
+        qtUser.setId(userMap["id"].toInt());
+        qtUser.setName(userMap["name"].toString());
+        qtUser.setScreenName(userMap["screen_name"].toString());
+        qtUser.setLocation(userMap["location"].toString());
+        qtUser.setDescription(userMap["description"].toString());
+        qtUser.setProfileImageUrl(userMap["profile_image_url"].toString());
+        qtUser.setUrl(userMap["url"].toString());
+
+        userList.append(qtUser);
+    }
+
+    return userList;
+}
