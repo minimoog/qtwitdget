@@ -26,6 +26,7 @@
 #include <qtwit/qtwitstatus.h>
 #include <qtwit/qtwitextuserinfo.h>
 #include <qtwit/qtwituser.h>
+#include <qtwit/qtwitdmstatus.h>
 #include "oauth/oauthtwitter.h"
 
 /*!
@@ -49,6 +50,7 @@ public:
     QTwitStatus parseStatusJSON(QIODevice* device);
     QTwitExtUserInfo parseExtUserInfoJSON(QIODevice* device);
     QList<QTwitUser> parseUserListJSON(QIODevice* device, QString& nextCursor, QString& prevCursor);
+    QList<QTwitDMStatus> parseDirectMessagesListJSON(QIODevice* device);
 
 signals:
 	/*! emited when finished downloading and processing */

@@ -20,7 +20,6 @@
 
 #include <QtDebug>
 #include "qtwitdirectmessages.h"
-#include "xml/xmlreaddirectmessages.h"
 
 QTwitDirectMessages::QTwitDirectMessages(QObject *parent) :
     QTwitBase(parent)
@@ -31,7 +30,7 @@ void QTwitDirectMessages::directMessages(qint64 sinceid, qint64 maxid, int count
 {
     Q_ASSERT(networkAccessManager() != 0);
 
-    QUrl url("http://api.twitter.com/1/direct_messages.xml");
+    QUrl url("http://api.twitter.com/1/direct_messages.json");
 
     if (sinceid != 0)
         url.addQueryItem("since_id", QString::number(sinceid));
@@ -59,9 +58,8 @@ void QTwitDirectMessages::reply()
 {
     QNetworkReply* netReply = qobject_cast<QNetworkReply*>(sender());
     if (netReply) {
-        XmlReadDirectMessages xml;
-        if (xml.read(netReply))
-            emit finishedDirectMessages(xml.directMessages());
+        QList<QTwitDMStatus> dm = parseDirectMessagesListJSON(netReply);
+        emit finishedDirectMessages(dm);
 
         netReply->deleteLater();
     }

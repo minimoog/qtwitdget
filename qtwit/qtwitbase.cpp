@@ -207,3 +207,32 @@ QList<QTwitUser> QTwitBase::parseUserListJSON(QIODevice *device, QString &nextCu
 
     return userList;
 }
+
+QList<QTwitDMStatus> QTwitBase::parseDirectMessagesListJSON(QIODevice *device)
+{
+    QList<QTwitDMStatus> dmList;
+    QJson::Parser parser;
+    bool ok;
+
+    QList<QVariant> array = parser.parse(device, &ok).toList();
+    if (!ok) {
+        qFatal("Json parsing error: Direct Messages list");
+        return dmList;
+    }
+
+    foreach(const QVariant& dm, array) {
+        QTwitDMStatus dmStatus;
+        QVariantMap dmMap = dm.toMap();
+
+        dmStatus.setId(dmMap["id"].toInt());
+        dmStatus.setSenderId(dmMap["sender_id"].toInt());
+        dmStatus.setText(dmMap["text"].toString());
+        dmStatus.setRecipientId(dmMap["recipient_id"].toInt());
+        dmStatus.setSenderScreenName(dmMap["sender_screen_name"].toString());
+        dmStatus.setRecipientScreenName(dmMap["recipient_screen_name"].toString());
+
+        dmList.append(dmStatus);
+    }
+
+    return dmList;
+}
