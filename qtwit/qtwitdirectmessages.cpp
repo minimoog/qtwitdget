@@ -67,6 +67,6 @@ void QTwitDirectMessages::reply()
 
 void QTwitDirectMessages::error()
 {
-    qDebug() << "http://api.twitter.com/1/direct_messages.xml error";
+    qDebug() << "http://api.twitter.com/1/direct_messages.json error";
     emit networkError(QString());
 }
