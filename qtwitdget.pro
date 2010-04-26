@@ -3,7 +3,6 @@ TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
 QT += network \
-    xml \
     sql
 
 # win32:LIBS += libeay32.lib
@@ -46,7 +45,6 @@ HEADERS += twitstatusedit.h \
     qtwit/qtwituser.h \
     qtwit/qtwitdmstatusdata.h \
     qtwit/qtwitdmstatus.h \
-    xml/xmlreaddirectmessages.h \
     qtwit/qtwitdirectmessages.h \
     listmodelinterface.h \
     listviewinterface.h \
@@ -96,7 +94,6 @@ SOURCES += main.cpp \
     tweetviewitem.cpp \
     tweetlistview.cpp \
     tweetlistmodelunread.cpp \
-    xml/xmlreaddirectmessages.cpp \
     qtwit/qtwitdirectmessages.cpp \
     listmodelinterface.cpp \
     listviewinterface.cpp \
