@@ -93,6 +93,7 @@ private:
     void setTweetIdReadDatabase(qint64 id);
     qint64 getLastStatusId();
     qint64 getLastMentionId();
+    qint64 getLastDirectMessageId();
 
 	Ui::MainWindowForm ui;
 
@@ -111,6 +112,7 @@ private:
 
 	qint64 m_lastStatusId;
     qint64 m_lastMentionId;
+    qint64 m_lastDirectMessageId;
     qint64 m_lastMarkedReadStatus;
     QList<TweetListModel*> m_models;
 	int m_userId;

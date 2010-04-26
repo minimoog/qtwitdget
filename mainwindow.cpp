@@ -56,6 +56,7 @@ MainWindow::MainWindow()
 	m_timer(new QTimer(this)),
     m_lastStatusId(0),
     m_lastMentionId(0),
+    m_lastDirectMessageId(0),
     m_lastMarkedReadStatus(0)
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
@@ -206,6 +207,7 @@ void MainWindow::startUp()
 		} else {
             m_lastStatusId = getLastStatusId();
             m_lastMentionId = getLastMentionId();
+            m_lastDirectMessageId = getLastDirectMessageId();
 		}
 
         createDefaultTabs();
@@ -246,24 +248,37 @@ qint64 MainWindow::getLastMentionId()
     return 0;
 }
 
+qint64 MainWindow::getLastDirectMessageId()
+{
+    QSqlQuery query;
+    query.exec("SELECT id FROM directmessages ORDER BY id DESC LIMIT 1");
+
+    if (query.next()) {
+        return query.value(0).toLongLong();
+    }
+
+    return 0;
+}
+
 void MainWindow::updateTimeline()
 {
     statusBar()->showMessage(tr("Updating timelines."), 1000);
+
+    QTwitDirectMessages *dm = new QTwitDirectMessages(this);
+    dm->setNetworkAccessManager(m_netManager);
+    dm->setOAuthTwitter(m_oauthTwitter);
+    connect(dm, SIGNAL(finishedDirectMessages(QList<QTwitDMStatus>)),
+            this, SLOT(finishedDM(QList<QTwitDMStatus>)));
 
 	if(m_firstRun){
 		m_firstRun = false;
         m_homeTimeline->timeline(0);
         m_mentions->timeline(0);
+        dm->directMessages(0);
 	} else {
         m_homeTimeline->timeline(m_lastStatusId);
         m_mentions->timeline(m_lastMentionId);
-
-        QTwitDirectMessages *dm = new QTwitDirectMessages(this);
-        dm->setNetworkAccessManager(m_netManager);
-        dm->setOAuthTwitter(m_oauthTwitter);
-        connect(dm, SIGNAL(finishedDirectMessages(QList<QTwitDMStatus>)),
-                this, SLOT(finishedDM(QList<QTwitDMStatus>)));
-        dm->directMessages();
+        dm->directMessages(m_lastDirectMessageId);
 	}
 }
 
@@ -388,6 +403,31 @@ void MainWindow::finishedDM(const QList<QTwitDMStatus> &messages)
 {
     QTwitDirectMessages *dm = qobject_cast<QTwitDirectMessages*>(sender());
     if (dm) {
+        if (!messages.isEmpty()) {
+            m_lastDirectMessageId = messages.at(0).id();
+
+            QSqlQuery query;
+            query.exec("BEGIN;");
+
+            query.prepare("INSERT OR REPLACE INTO directmessages "
+                          "(id, senderId, text, recipientId, created, "
+                          "senderScreenName, recipientScreenName) "
+                          "VALUES (:id, :senderId, :text, :recipientId, "
+                          ":created, :senderScreenName, :recipientScreenName);");
+
+            foreach (const QTwitDMStatus& msg, messages) {
+                query.bindValue(":id", msg.id());
+                query.bindValue(":senderId", msg.senderId());
+                query.bindValue(":text", msg.text());
+                query.bindValue(":recipientId", msg.recipientId());
+                query.bindValue(":created", msg.createdAt());
+                query.bindValue(":senderScreenName", msg.senderScreenName());
+                query.bindValue(":recipientScreenName", msg.recipientScreenName());
+
+                query.exec();
+            }
+            query.exec("COMMIT;");
+        }
         dm->deleteLater();
     }
 }
@@ -573,6 +613,17 @@ void MainWindow::createDatabase(const QString& databaseName)
                 "isRead INTEGER, "
                 "UNIQUE (id));");
 				
+    query.exec("CREATE TABLE IF NOT EXISTS directmessages "
+               "(key INTEGER PRIMARY KEY, "
+               "id INTEGER, "
+               "senderId INTEGER, "
+               "text TEXT, "
+               "recipientId INTEGER, "
+               "created DATETIME, "
+               "senderScreenName TEXT, "
+               "recipientScreenName TEXT, "
+               "UNIQUE (id));");
+
 	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
 }
 
