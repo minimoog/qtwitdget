@@ -32,6 +32,7 @@
 #include "qtwit/qtwitdestroy.h"
 #include "qtwit/qtwitfavorites.h"
 #include "qtwit/qtwitretweet.h"
+#include "qtwit/qtwitfriends.h"
 #include "qtwit/mentions.h"
 #include "qtwit/qtwitdirectmessages.h"
 #include "langchangedialog.h"
@@ -215,6 +216,11 @@ void MainWindow::startUp()
 
 		for(int i = 0; i < ui.tabWidget->count(); ++i)
 			updateTab(i);
+
+        //get friends
+        QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
+        connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
+        friends->updateFriends(0, 0, QString(), QString("-1"));
 
         //start fetching tweets
         connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
@@ -432,6 +438,36 @@ void MainWindow::finishedDM(const QList<QTwitDMStatus> &messages)
     }
 }
 
+void MainWindow::finishedFriends(const QList<QTwitUser> &friends)
+{
+    QTwitFriends *friendsReply = qobject_cast<QTwitFriends*>(sender());
+    if (friendsReply) {
+        QSqlQuery query;
+        query.exec("BEGIN;");
+
+        query.prepare("INSERT OR REPLACE INTO friends "
+                      "(id, name, screenName, location, description, "
+                      "profileImageUrl, url) "
+                      "VALUES (:id, :name, :screenName, :location, :description, "
+                      ":profileImageUrl, :url);");
+
+        foreach (const QTwitUser& user, friends) {
+            query.bindValue(":id", user.id());
+            query.bindValue(":name", user.name());
+            query.bindValue(":screenName", user.screenName());
+            query.bindValue(":location", user.location());
+            query.bindValue(":description", user.description());
+            query.bindValue(":profileImageUrl", user.profileImageUrl());
+            query.bindValue(":url", user.url());
+
+            query.exec();
+        }
+
+        query.exec("COMMTI;");
+    }
+    friendsReply->deleteLater();
+}
+
 void MainWindow::finishedMentions()
 {
     QList<QTwitStatus> mentions = m_mentions->statuses();
@@ -622,6 +658,18 @@ void MainWindow::createDatabase(const QString& databaseName)
                "created DATETIME, "
                "senderScreenName TEXT, "
                "recipientScreenName TEXT, "
+               "UNIQUE (id));");
+
+    //temp table for friends
+    query.exec("CREATE TEMPORARY TABLE IF NOT EXISTS friends "
+               "(key INTEGER PRIMARY KEY, "
+               "id INTEGER, "
+               "name TEXT, "
+               "screenName TEXT, "
+               "location TEXT, "
+               "description TEXT, "
+               "profileImageUrl TEXT, "
+               "url TEXT, "
                "UNIQUE (id));");
 
 	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");

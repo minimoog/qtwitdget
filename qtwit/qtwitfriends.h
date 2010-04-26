@@ -41,6 +41,9 @@ public:
 
     QList<QTwitUser> getFriends() const;
 
+signals:
+    void finishedFriends(const QList<QTwitUser>& users);
+
 private slots:
     void reply();
     void error();

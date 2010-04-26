@@ -25,6 +25,7 @@
 #include <QSystemTrayIcon>
 #include <QtSql>
 #include "qtwit/qtwitdmstatus.h"
+#include "qtwit/qtwituser.h"
 #include "ui_mainwindowform.h"
 
 class QTwitStatus;
@@ -52,6 +53,7 @@ public:
 private slots:
 	void finishedFriendsTimeline();
     void finishedDM(const QList<QTwitDMStatus>& messages);
+    void finishedFriends(const QList<QTwitUser>& friends);
 	void updateTimeline();
 	void statusDestroyed(qint64 id);
     void finishedMentions();
