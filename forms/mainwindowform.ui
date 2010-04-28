@@ -46,9 +46,9 @@
        <enum>QFrame::NoFrame</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
-      <widget class="QWidget" name="page1">
+      <widget class="QWidget" name="update">
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="margin">
          <number>0</number>
@@ -127,7 +127,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page2">
+      <widget class="QWidget" name="userpass">
        <layout class="QGridLayout" name="gridLayout_2">
         <property name="margin">
          <number>0</number>
@@ -182,6 +182,90 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="directMessage">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Friend:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QComboBox" name="friendsComboBox">
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContents</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3" colspan="3">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>289</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" colspan="6">
+         <widget class="TwitStatusEdit" name="directMessageEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>48</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QPushButton" name="sendDMPushButton">
+          <property name="text">
+           <string>Send DM</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" colspan="2">
+         <widget class="QPushButton" name="shortUrlsDMPushButton">
+          <property name="text">
+           <string>Short Urls</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>168</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="5">
+         <widget class="QPushButton" name="cancelDMPushButton">
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -225,6 +309,7 @@
     </property>
     <addaction name="actionMarkAllRead"/>
     <addaction name="actionGotoToNextUnread"/>
+    <addaction name="actionSendDirectMessage"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTweets"/>
@@ -302,6 +387,11 @@
    </property>
    <property name="shortcut">
     <string>Space</string>
+   </property>
+  </action>
+  <action name="actionSendDirectMessage">
+   <property name="text">
+    <string>Send &amp;Direct Message</string>
    </property>
   </action>
  </widget>
