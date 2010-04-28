@@ -22,12 +22,10 @@
 #define GROUPDIALOG_H
 
 #include <QHash>
-#include "qtwit/qtwitfriends.h"
 #include "ui_groupdialogform.h"
 
 /*!
     Shows dialog for grouping twitter user's friends
-    \obsolete
  */
 class GroupDialog : public QDialog 
 {
@@ -35,9 +33,6 @@ class GroupDialog : public QDialog
    
 public:
     GroupDialog(QWidget *parent = 0);
-	GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent = 0);
-	void setNetworkManager(QNetworkAccessManager* netManager);
-	void setOAuthTwitter(OAuthTwitter* oauthTwitter);
 	QList<int> getGroupList() const;
 	QString getGroupName() const;
     bool isSaveGroupingChecked() const;
@@ -46,14 +41,14 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private slots:
-	void finishedFriends();
 	void insertButtonClicked();
 	void createGroupButtonClicked();
 	void removeButtonClicked();
 
 private:
+    void setFriendsList();
+
     Ui::GroupDialog m_ui;
-	QTwitFriends *m_twitFriends;
 	QHash<QString, int> m_scrNameToId;
 	QList<int> m_groupList;
 

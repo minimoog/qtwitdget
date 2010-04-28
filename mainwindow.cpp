@@ -300,7 +300,7 @@ void MainWindow::updateButtonClicked()
 
 void MainWindow::createGrouping()
 {
-	GroupDialog groupDialog(m_netManager, m_oauthTwitter);
+	GroupDialog groupDialog;
 	groupDialog.exec();
 
     QString query = createUserQueryString(groupDialog.getGroupList());

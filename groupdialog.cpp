@@ -19,39 +19,28 @@
  */
 
 #include <QtDebug>
+#include <QtSql>
 #include "groupdialog.h"
 
 GroupDialog::GroupDialog(QWidget *parent) 
-	: QDialog(parent), m_twitFriends(new QTwitFriends(this))
+    : QDialog(parent)
 {
     m_ui.setupUi(this);
-	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
 	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
 	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
 	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(removeButtonClicked()));
-    m_twitFriends->updateFriends(0, 0, QString(), QString("-1"));
+    setFriendsList();
 }
 
-GroupDialog::GroupDialog(QNetworkAccessManager* netManager, OAuthTwitter *oauthTwitter, QWidget *parent)
-:	QDialog(parent),
-	m_twitFriends(new QTwitFriends(netManager, oauthTwitter, this))
+void GroupDialog::setFriendsList()
 {
-	m_ui.setupUi(this);
-	connect(m_twitFriends, SIGNAL(finished()), this, SLOT(finishedFriends()));
-	connect(m_ui.insertButton, SIGNAL(clicked()), this, SLOT(insertButtonClicked()));
-	connect(m_ui.createGroupButton, SIGNAL(clicked()), this, SLOT(createGroupButtonClicked()));
-	connect(m_ui.removeButton, SIGNAL(clicked()), this, SLOT(removeButtonClicked()));
-    m_twitFriends->updateFriends(0, 0, QString(), QString("-1"));
-}
+    QSqlQuery query;
+    query.exec("SELECT screenName, id FROM friends");
 
-void GroupDialog::setNetworkManager(QNetworkAccessManager* netManager)
-{
-	m_twitFriends->setNetworkAccessManager(netManager);
-}
-
-void GroupDialog::setOAuthTwitter(OAuthTwitter* oauthTwitter)
-{
-	m_twitFriends->setOAuthTwitter(oauthTwitter);
+    while (query.next()) {
+        m_ui.friendsListWidget->addItem(query.value(0).toString());
+        m_scrNameToId.insert(query.value(0).toString(), query.value(1).toInt());
+    }
 }
 
 void GroupDialog::changeEvent(QEvent *e)
@@ -65,17 +54,6 @@ void GroupDialog::changeEvent(QEvent *e)
     default:
         break;
     }
-}
-
-void GroupDialog::finishedFriends()
-{
-    // ### TODO    
-    QList<QTwitUser> listFriends = m_twitFriends->getFriends();
-
-    foreach(const QTwitUser& fr, listFriends){
-		m_ui.friendsListWidget->addItem(fr.screenName());
-		m_scrNameToId.insert(fr.screenName(), fr.id());
-	}
 }
 
 void GroupDialog::insertButtonClicked()
