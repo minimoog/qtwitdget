@@ -54,6 +54,7 @@ private slots:
 	void finishedFriendsTimeline();
     void finishedDM(const QList<QTwitDMStatus>& messages);
     void finishedFriends(const QList<QTwitUser>& friends);
+    void finishedSendingDirectMessage();
 	void updateTimeline();
 	void statusDestroyed(qint64 id);
     void finishedMentions();
@@ -68,7 +69,9 @@ private slots:
     void languageChanged();
     void authorize();
     void changeUserPass();
-    void cancelUserPass();
+    void cancelUserPassDirectMessage();
+    void showDirectMessageEdit();
+    void sendDirectMessage();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);

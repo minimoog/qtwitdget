@@ -35,6 +35,7 @@
 #include "qtwit/qtwitfriends.h"
 #include "qtwit/mentions.h"
 #include "qtwit/qtwitdirectmessages.h"
+#include "qtwit/qtwitnewdirectmessage.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
 #include "shortenedurl.h"
@@ -92,17 +93,21 @@ MainWindow::MainWindow()
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
     connect(m_twitRetweet, SIGNAL(finished()), SLOT(retweetFinished()));
     connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
+    connect(ui.shortUrlsDMPushButton, SIGNAL(clicked()), ui.directMessageEdit, SLOT(shortUrls()));
 	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
     connect(ui.actionMarkAllRead, SIGNAL(triggered()), this, SLOT(markAllStatusesRead()));
     connect(ui.actionGotoToNextUnread, SIGNAL(triggered()), this, SLOT(gotoNextUnread()));
     connect(ui.userpassButtonBox, SIGNAL(accepted()), this, SLOT(authorize()));
-    connect(ui.userpassButtonBox, SIGNAL(rejected()), this, SLOT(cancelUserPass()));
+    connect(ui.userpassButtonBox, SIGNAL(rejected()), this, SLOT(cancelUserPassDirectMessage()));
+    connect(ui.cancelDMPushButton, SIGNAL(clicked()), this, SLOT(cancelUserPassDirectMessage()));
+    connect(ui.sendDMPushButton, SIGNAL(clicked()), this, SLOT(sendDirectMessage()));
     connect(ui.usernameLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));
     connect(ui.passwordLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));	
     //connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
+    connect(ui.actionSendDirectMessage, SIGNAL(triggered()), this, SLOT(showDirectMessageEdit()));
 	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
     
     //timer is single shot, avoid conflict with HomeTimeline
@@ -179,11 +184,51 @@ void MainWindow::changeUserPass()
     ui.usernameLineEdit->setFocus();
 }
 
-void MainWindow::cancelUserPass()
+void MainWindow::showDirectMessageEdit()
+{
+    ui.stackedWidget->setCurrentIndex(2);
+    ui.directMessageEdit->setFocus();
+
+    // ### TODO: Icons/Avatars
+
+    //fill combo box if it isn't filled
+    if (!ui.friendsComboBox->count()) {
+        QSqlQuery query;
+        query.exec("SELECT screenName FROM friends");
+
+        while (query.next()) {
+            ui.friendsComboBox->addItem(query.value(0).toString());
+        }
+    }
+}
+
+void MainWindow::cancelUserPassDirectMessage()
 {
     ui.usernameLineEdit->clear();
     ui.passwordLineEdit->clear();
+    ui.directMessageEdit->clear();
     ui.stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::sendDirectMessage()
+{
+    if (!ui.directMessageEdit->toPlainText().isEmpty()) {
+        QTwitNewDirectMessage *dm = new QTwitNewDirectMessage(m_netManager, m_oauthTwitter);
+        connect(dm, SIGNAL(finished()), this, SLOT(finishedSendingDirectMessage()));
+
+        dm->sendMessage(ui.friendsComboBox->currentText(), ui.directMessageEdit->toPlainText());
+    }
+}
+
+void MainWindow::finishedSendingDirectMessage()
+{
+    QTwitNewDirectMessage *dm = qobject_cast<QTwitNewDirectMessage*>(sender());
+    if (dm) {
+        ui.statusbar->showMessage(tr("Direct message sent."));
+        dm->deleteLater();
+    }
+
+    cancelUserPassDirectMessage();
 }
 
 void MainWindow::startUp()

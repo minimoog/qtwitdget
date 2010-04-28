@@ -26,6 +26,11 @@ QTwitNewDirectMessage::QTwitNewDirectMessage(QObject *parent) :
 {
 }
 
+QTwitNewDirectMessage::QTwitNewDirectMessage(QNetworkAccessManager *netManager, OAuthTwitter *oauthTwitter, QObject *parent)
+    :   QTwitBase(netManager, oauthTwitter, parent)
+{
+}
+
 void QTwitNewDirectMessage::sendMessage(qint64 userId, const QString &text)
 {
     Q_ASSERT(networkAccessManager() != 0);

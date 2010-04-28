@@ -28,6 +28,7 @@ class QTwitNewDirectMessage : public QTwitBase
     Q_OBJECT
 public:
     QTwitNewDirectMessage(QObject *parent = 0);
+    QTwitNewDirectMessage(QNetworkAccessManager* netManager, OAuthTwitter* oauthTwitter, QObject *parent = 0);
     void sendMessage(qint64 userId, const QString& text);
     void sendMessage(const QString& screenName, const QString& text);
 
