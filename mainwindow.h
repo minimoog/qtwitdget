@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QtSql>
+#include <QHash>
 #include "qtwit/qtwitdmstatus.h"
 #include "qtwit/qtwituser.h"
 #include "ui_mainwindowform.h"
@@ -39,6 +40,7 @@ class QTwitDestroy;
 class QTwitFavorites;
 class QTwitRetweet;
 class Mentions;
+class QTwitView;
 
 class MainWindow : public QMainWindow
 {
@@ -72,6 +74,7 @@ private slots:
     void cancelUserPassDirectMessage();
     void showDirectMessageEdit();
     void sendDirectMessage();
+    void tabCloseButtonClicked();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
@@ -89,7 +92,7 @@ private:
     void createDefaultTabs();
     QString createUserQueryString(const QList<int>& usersId);
     void updateTab(int i);
-    void addTimelineTab(const QString& query, const QString& tabName, bool unread = false);
+    void addTimelineTab(const QString& query, const QString& tabName, bool unread = false, bool closable = false);
     void setTabTextUnreadStatuses(int indexTab);
 	bool isDatabaseEmpty();
     void readSettings();
@@ -119,7 +122,7 @@ private:
     qint64 m_lastMentionId;
     qint64 m_lastDirectMessageId;
     qint64 m_lastMarkedReadStatus;
-    QList<TweetListModel*> m_models;
+    QHash<QTwitView*, TweetListModel*> m_models;
 	int m_userId;
 
 	QSqlDatabase m_database;

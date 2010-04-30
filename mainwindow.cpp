@@ -80,11 +80,10 @@ MainWindow::MainWindow()
 	ui.updateEdit->setLimit(140);
 	
     //tab close button
-    QPushButton *tabCloseButton = new QPushButton(this);
+    QPushButton *tabCloseButton = new QPushButton(ui.tabWidget);
     tabCloseButton->setIcon(QIcon(QPixmap(":images/button_closetab.png")));
     tabCloseButton->setMinimumSize(24, 20);
     tabCloseButton->setMaximumSize(24, 20);
-    //tabCloseButton->setFlat(true);
     ui.tabWidget->setCornerWidget(tabCloseButton);
 
 	qApp->setOrganizationName("QTwitdget");
@@ -117,6 +116,7 @@ MainWindow::MainWindow()
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
     connect(ui.actionSendDirectMessage, SIGNAL(triggered()), this, SLOT(showDirectMessageEdit()));
 	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
+    connect(tabCloseButton, SIGNAL(clicked()), this, SLOT(tabCloseButtonClicked()));
     
     //timer is single shot, avoid conflict with HomeTimeline
     m_timer->setSingleShot(true);
@@ -516,7 +516,7 @@ void MainWindow::finishedFriends(const QList<QTwitUser> &friends)
             query.exec();
         }
 
-        query.exec("COMMTI;");
+        query.exec("COMMIT;");
     }
     friendsReply->deleteLater();
 }
@@ -745,28 +745,49 @@ void MainWindow::updateTab(int i)
     if (i == -1)
         return;
 
-    m_models.at(i)->update();
+    QTwitView* statusView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
+    TweetListModel *model = m_models.value(statusView);
+    model->update();
 
     //setTabTextUnreadStatuses(i);
 }
 
 void MainWindow::closeTab(int i)
 {
+    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
+    QGraphicsScene* scene = statusView->scene();
+
     //first delete model/view
-    TweetListModel* model = m_models.takeAt(i);
+    TweetListModel* model = m_models.take(statusView);
     TweetListView* view = model->view();
 
     delete view;
     delete model;
 
     //delete scene/view
-    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
-    QGraphicsScene* scene = statusView->scene();
-
     delete scene;
     delete statusView;
 
-	ui.tabWidget->removeTab(i);
+	//ui.tabWidget->removeTab(i);
+}
+
+void MainWindow::tabCloseButtonClicked()
+{
+    int index = ui.tabWidget->currentIndex();
+
+    // ### TODO: FIX IT!
+    switch (index) {
+    case 0:
+        return;
+    case 1:
+        return;
+    case 2:
+        return;
+    case 3:
+        return;
+    default:
+        closeTab(index);
+    }
 }
 
 void MainWindow::loadStyleSheet()
@@ -806,7 +827,7 @@ QString MainWindow::createUserQueryString(const QList<int>& usersId)
     return query;
 }
 
-void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bool unread)
+void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bool unread, bool closable)
 {
     QGraphicsScene *statusScene = new QGraphicsScene(this);
     QTwitView *statusView = new QTwitView(this);
@@ -821,7 +842,7 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
     else
         model = new TweetListModel(this);
 
-    m_models << model;
+    m_models.insert(statusView, model);
     TweetListView *viewlist = new TweetListView;
     viewlist->setModel(model);
     statusScene->addItem(viewlist);
@@ -842,12 +863,12 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
 
 void MainWindow::nextStatuses()
 {
-	int i = ui.tabWidget->currentIndex();
+    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
 
-	if(i == -1)
+    if (!statusView)
 		return;
 
-    m_models.at(i)->nextPage();
+    m_models.value(statusView)->nextPage();
 }
 
 void MainWindow::favorited(qint64 statusId)
@@ -1008,19 +1029,20 @@ void MainWindow::markAllStatusesRead()
 
     //update all tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        m_models.at(i)->markAllRead();
+        QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
+        m_models.value(statusView)->markAllRead();
     }
 }
 
 void MainWindow::gotoNextUnread()
 {
-    qint64 idTweet = m_models.at(ui.tabWidget->currentIndex())->nextUnread();
+    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
+    qint64 idTweet = m_models.value(statusView)->nextUnread();
     setTweetIdReadDatabase(idTweet);
 
     //mark unread on all tabs
-    for (int i = 0; i < m_models.count(); ++i)
-        m_models.at(i)->markRead(idTweet);
-
+    foreach (TweetListModel* model, m_models)
+        model->markRead(idTweet);
 }
 
 MainWindow::~MainWindow()
