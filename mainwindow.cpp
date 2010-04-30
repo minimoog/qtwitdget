@@ -79,6 +79,14 @@ MainWindow::MainWindow()
 	ui.setupUi(this);
 	ui.updateEdit->setLimit(140);
 	
+    //tab close button
+    QPushButton *tabCloseButton = new QPushButton(this);
+    tabCloseButton->setIcon(QIcon(QPixmap(":images/button_closetab.png")));
+    tabCloseButton->setMinimumSize(24, 20);
+    tabCloseButton->setMaximumSize(24, 20);
+    //tabCloseButton->setFlat(true);
+    ui.tabWidget->setCornerWidget(tabCloseButton);
+
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
