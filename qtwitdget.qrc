@@ -18,6 +18,7 @@
 	<file>images/button_delete_hover.png</file>
 	<file>images/button_delete_click.png</file>
 	<file>images/avatar_box.png</file>
+	<file>images/button_closetab.png</file>
 	<file>translations/qtwitdget_en.qm</file>
 	<file>translations/qtwitdget_mk.qm</file>
 </qresource>
