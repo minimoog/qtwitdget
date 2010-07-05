@@ -52,6 +52,8 @@ void QTwitUpdate::setUpdate(const QString &update, qint64 inReplyToStatusId)
 	QNetworkRequest req(url);
 	req.setRawHeader("Authorization", oauthHeader);
 
+    QByteArray statusPost = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
+
 	//build status post
 	QByteArray post = key + '=' + status;
 	
