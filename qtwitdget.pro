@@ -116,3 +116,6 @@ TRANSLATIONS += translations/qtwitdget_en.ts \
     translations/qtwitdget_mk.ts
 RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc
+
+OTHER_FILES += \
+    qml/Button.qml
