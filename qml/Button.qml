@@ -1,42 +1,50 @@
 import Qt 4.7
 
-Rectangle {
+// ### TODO: animation is wrong
+
+Item {
     id: container
-    width: 30
-    height: 11
+
+    property string buttonImageUrl
+    property string hoverButtonImageUrl
+    property string clickedButtonImageUrl
 
     signal clicked
 
-    BorderImage {
+    Image {
         id: buttonImage
-        width: container.width; height: container.height
-        source: "../images/button_reply.png"
-    }
-
-    BorderImage {
-        id: hoverImage
-        opacity: 0
-        source: "../images/button_reply_hover.png"
-        width: container.width; height: container.height
+        source: buttonImageUrl
 
         Behavior on opacity {
             NumberAnimation {
                 duration: 300
-                easing.type: Easing.InOutQuad
+                easing.type: Easing.Linear
             }
         }
     }
 
-    BorderImage {
-        id: clickImage
+    Image {
+        id: hoverImage
         opacity: 0
-        source: "../images/button_reply_click.png"
-        width: container.width; height: container.height
+        source: hoverButtonImageUrl
 
         Behavior on opacity {
             NumberAnimation {
                 duration: 300
-                easing.type: Easing.InOutQuad
+                easing.type: Easing.Linear
+            }
+        }
+    }
+
+    Image {
+        id: clickImage
+        opacity: 0
+        source: clickedButtonImageUrl
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.Linear
             }
         }
     }
@@ -56,6 +64,11 @@ Rectangle {
                 target: clickImage
                 opacity: 1
             }
+            PropertyChanges {
+                target: buttonImage
+                opacity: 0
+            }
+
         },
         State {
             name: "Hovered"
@@ -63,6 +76,10 @@ Rectangle {
             PropertyChanges {
                 target: hoverImage
                 opacity: 1
+            }
+            PropertyChanges {
+                target: buttonImage
+                opacity: 0
             }
         }
     ]
