@@ -1,25 +1,26 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-	<file>images/twitter_32.ico</file>
-	<file>images/twitter_blabla.png</file>
-	<file>images/button_reply.png</file>
-	<file>images/button_reply_hover.png</file>
-	<file>images/button_reply_click.png</file>
-	<file>images/button_retweet.png</file>
-	<file>images/button_retweet_hover.png</file>
-	<file>images/button_retweet_click.png</file>
-	<file>images/button_favorited.png</file>
-	<file>images/button_favorited_hover.png</file>
-	<file>images/button_favorited_click.png</file>
-	<file>images/button_unfavorited.png</file>
-	<file>images/button_unfavorited_hover.png</file>
-	<file>images/button_unfavorited_click.png</file>
-	<file>images/button_delete.png</file>
-	<file>images/button_delete_hover.png</file>
-	<file>images/button_delete_click.png</file>
-	<file>images/avatar_box.png</file>
-	<file>images/button_closetab.png</file>
-	<file>translations/qtwitdget_en.qm</file>
-	<file>translations/qtwitdget_mk.qm</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>images/twitter_32.ico</file>
+        <file>images/twitter_blabla.png</file>
+        <file>images/button_reply.png</file>
+        <file>images/button_reply_hover.png</file>
+        <file>images/button_reply_click.png</file>
+        <file>images/button_retweet.png</file>
+        <file>images/button_retweet_hover.png</file>
+        <file>images/button_retweet_click.png</file>
+        <file>images/button_favorited.png</file>
+        <file>images/button_favorited_hover.png</file>
+        <file>images/button_favorited_click.png</file>
+        <file>images/button_unfavorited.png</file>
+        <file>images/button_unfavorited_hover.png</file>
+        <file>images/button_unfavorited_click.png</file>
+        <file>images/button_delete.png</file>
+        <file>images/button_delete_hover.png</file>
+        <file>images/button_delete_click.png</file>
+        <file>images/avatar_box.png</file>
+        <file>images/button_closetab.png</file>
+        <file>translations/qtwitdget_en.qm</file>
+        <file>translations/qtwitdget_mk.qm</file>
+        <file>images/default_avatar.png</file>
+    </qresource>
 </RCC>

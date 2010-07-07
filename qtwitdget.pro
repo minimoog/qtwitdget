@@ -118,4 +118,5 @@ RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc
 
 OTHER_FILES += \
-    qml/Button.qml
+    qml/Button.qml \
+    qml/Tweet.qml
