@@ -2,6 +2,15 @@ import Qt 4.7
 
 Rectangle {
     id: gradRect
+    property string tweetid     //no support for 64 integers
+    property string tweetScreenName: "Screen Name"
+    property string tweetText: "Lorem ipsum dolor sit amet."
+    property bool isOwnTweet: false
+
+    signal replyDeleteButtonClicked(string id)
+    signal retweetButtonClicked(string id)
+    //signal favoriteButtonClicked(string id) // ### TODO
+
     height: 100
     gradient: Gradient {
         GradientStop {
@@ -14,7 +23,6 @@ Rectangle {
             color: "#e5faff"
         }
     }
-    width: 200
 
     Image {
         id: avatarBox
@@ -40,7 +48,7 @@ Rectangle {
         x: 84; y: avatarBox.y
         width: gradRect.width - 84
         color: "#018ad9"
-        text: "Screen name"
+        text: gradRect.tweetScreenName
         smooth: false
         font.pointSize: 11
         font.family: "Segoe UI"
@@ -51,7 +59,7 @@ Rectangle {
         x: 84; y: 27
         width: gradRect.width - statusText.x
         color: "#222222"
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac bibendum lectus. Cras et lacus nec nisi sagittis auctor sit amet quis nullam. "
+        text: gradRect.tweetText
         wrapMode: "WordWrap"
         font.pointSize: 9
         font.family: "Segoe UI"
@@ -60,9 +68,28 @@ Rectangle {
     Button {
         id: replyButton
         x: 10; y: 80
-        buttonImageUrl: "../images/button_reply.png"
-        hoverButtonImageUrl: "../images/button_reply_hover.png"
-        clickedButtonImageUrl: "../images/button_reply_click.png"
+        buttonImageUrl: {
+            if (isOwnTweet)
+                return "../images/button_delete.png"
+            else
+                return "../images/button_reply.png"
+        }
+
+        hoverButtonImageUrl: {
+            if (isOwnTweet)
+                return "../images/button_delete_hover.png"
+            else
+                return "../images/button_reply_hover.png"
+        }
+
+        clickedButtonImageUrl: {
+            if (isOwnTweet)
+                return "../images/button_delete_click.png"
+            else
+                return "../images/button_reply_click.png"
+        }
+
+        onClicked: gradRect.replyDeleteButtonClicked(gradRect.tweetid)
     }
 
     Button {
@@ -71,6 +98,8 @@ Rectangle {
         buttonImageUrl: "../images/button_retweet.png"
         hoverButtonImageUrl: "../images/button_retweet_hover.png"
         clickedButtonImageUrl: "../images/button_retweet_click.png"
+
+        onClicked: gradRect.retweetButtonClicked(gradRect.tweetid)
     }
 
     Button {
