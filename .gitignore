@@ -14,3 +14,8 @@ qtwitdget.pro.user.1.3
 *.vcxproj
 *.vcxproj.filters
 qtwitdget.pro.user.2.2pre1
+lib/*.lib
+lib/*.ilk
+lib/*.exp
+lib/*.dll
+lib/tmp/*
