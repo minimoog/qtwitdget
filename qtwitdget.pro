@@ -49,7 +49,8 @@ HEADERS += twitstatusedit.h \
     listmodelinterface.h \
     listviewinterface.h \
     listviewiteminterface.h \
-    qtwit/qtwitnewdirectmessage.h
+    qtwit/qtwitnewdirectmessage.h \
+    tweetqmllistmodel.h
 
 # QJSON
 HEADERS += qjson/json_parser.hh \
@@ -99,7 +100,8 @@ SOURCES += main.cpp \
     listmodelinterface.cpp \
     listviewinterface.cpp \
     listviewiteminterface.cpp \
-    qtwit/qtwitnewdirectmessage.cpp
+    qtwit/qtwitnewdirectmessage.cpp \
+    tweetqmllistmodel.cpp
 
 # QJSON
 SOURCES += qjson/json_parser.cc \
