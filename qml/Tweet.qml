@@ -11,6 +11,7 @@ Rectangle {
     signal retweetButtonClicked(string id)
     //signal favoriteButtonClicked(string id) // ### TODO
 
+    width: gradRect.ListView.view.width;
     height: 100
     gradient: Gradient {
         GradientStop {

@@ -3,7 +3,8 @@ TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
 QT += network \
-    sql
+    sql \
+    declarative
 
 # win32:LIBS += libeay32.lib
 # unix:LIBS += -lcrypto
@@ -50,6 +51,7 @@ HEADERS += twitstatusedit.h \
     listviewinterface.h \
     listviewiteminterface.h \
     qtwit/qtwitnewdirectmessage.h \
+    tweetqmllistmodel.h
 
 # QJSON
 HEADERS += qjson/json_parser.hh \
@@ -100,6 +102,7 @@ SOURCES += main.cpp \
     listviewinterface.cpp \
     listviewiteminterface.cpp \
     qtwit/qtwitnewdirectmessage.cpp \
+    tweetqmllistmodel.cpp
 
 # QJSON
 SOURCES += qjson/json_parser.cc \
@@ -119,4 +122,5 @@ win32:RC_FILE = qtwitdget.rc
 
 OTHER_FILES += \
     qml/Button.qml \
-    qml/Tweet.qml
+    qml/Tweet.qml \
+    qml/TweetList.qml

@@ -19,3 +19,4 @@ lib/*.ilk
 lib/*.exp
 lib/*.dll
 lib/tmp/*
+ipch/*
