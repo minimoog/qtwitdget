@@ -122,7 +122,6 @@ private:
     qint64 m_lastMentionId;
     qint64 m_lastDirectMessageId;
     qint64 m_lastMarkedReadStatus;
-    QHash<QTwitView*, TweetListModel*> m_models;
 	int m_userId;
 
 	QSqlDatabase m_database;

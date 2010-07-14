@@ -25,6 +25,10 @@
 #include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QTimer>
+#include <QDeclarativeEngine>
+#include <QDeclarativeComponent>
+#include <QDeclarativeContext>
+#include <QGraphicsObject>
 #include "mainwindow.h"
 #include "oauth/oauthtwitter.h"
 #include "qtwit/hometimeline.h"
@@ -42,9 +46,7 @@
 #include "qtwitview.h"
 #include "groupdialog.h"
 #include "signalwaiter.h"
-#include "tweetlistmodel.h"
-#include "tweetlistmodelunread.h"
-#include "tweetlistview.h"
+#include "tweetqmllistmodel.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
@@ -726,6 +728,9 @@ void MainWindow::createDatabase(const QString& databaseName)
                "UNIQUE (id));");
 
 	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
+
+    // ### right place????
+    //qmlRegisterType<TweetQmlListModel>("TweetLib", 1, 0, "TweetListModel");
 }
 
 bool MainWindow::isDatabaseEmpty()
@@ -745,9 +750,7 @@ void MainWindow::updateTab(int i)
     if (i == -1)
         return;
 
-    QTwitView* statusView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
-    TweetListModel *model = m_models.value(statusView);
-    model->update();
+    //QTwitView* statusView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
 
     //setTabTextUnreadStatuses(i);
 }
@@ -756,13 +759,6 @@ void MainWindow::closeTab(int i)
 {
     QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
     QGraphicsScene* scene = statusView->scene();
-
-    //first delete model/view
-    TweetListModel* model = m_models.take(statusView);
-    TweetListView* view = model->view();
-
-    delete view;
-    delete model;
 
     //delete scene/view
     delete scene;
@@ -809,10 +805,10 @@ void MainWindow::loadStyleSheet()
 void MainWindow::createDefaultTabs()
 {
 	//default tabs
-    addTimelineTab(QString(), tr("Unread"), true);
+    //addTimelineTab(QString(), tr("Unread"), true);
     addTimelineTab(" 1 == 1 ", tr("Friends"));
-    addTimelineTab(QString(" userId == %1 ").arg(m_userId), tr("My twits"));
-    addTimelineTab(QString(" mention == 1 "), tr("Mentions"));
+    //addTimelineTab(QString(" userId == %1 ").arg(m_userId), tr("My twits"));
+    //addTimelineTab(QString(" mention == 1 "), tr("Mentions"));
 }
 
 QString MainWindow::createUserQueryString(const QList<int>& usersId)
@@ -835,29 +831,18 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, tabName);
 
-    TweetListModel *model;
+    QDeclarativeEngine *engine = new QDeclarativeEngine;
 
-    if (unread)
-        model = new TweetListModelUnread(this);
-    else
-        model = new TweetListModel(this);
+    //TEST
+    TweetQmlListModel *listModel = new TweetQmlListModel();
+    engine->rootContext()->setContextProperty("tweetListModel", listModel);
 
-    m_models.insert(statusView, model);
-    TweetListView *viewlist = new TweetListView;
-    viewlist->setModel(model);
-    statusScene->addItem(viewlist);
-    model->setUserid(m_userId);
-    model->setAdditionalQuery(query);
-    model->update();
-    viewlist->resizeWidth(statusView->viewport()->width());
+    QDeclarativeComponent component(engine, QUrl::fromLocalFile("qml/TweetList.qml"));
+    QGraphicsObject *object = qobject_cast<QGraphicsObject *>(component.create());
 
-    connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setReply(qint64,QString)));
-    connect(model, SIGNAL(requestReply(qint64,QString)), ui.updateEdit, SLOT(setFocus()));
-    connect(model, SIGNAL(requestDelete(qint64)), this, SLOT(reqDelete(qint64)));
-    connect(model, SIGNAL(requestRetweet(qint64)), this, SLOT(retweet(qint64)));
-    connect(model, SIGNAL(requestFavorited(qint64)), this, SLOT(favorited(qint64)));
+    statusScene->addItem(object);
+    statusScene->setSceneRect(QRectF());
 
-    connect(statusView, SIGNAL(resizeWidth(int)), viewlist, SLOT(resizeWidth(int)));
     connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
 }
 
@@ -867,8 +852,6 @@ void MainWindow::nextStatuses()
 
     if (!statusView)
 		return;
-
-    m_models.value(statusView)->nextPage();
 }
 
 void MainWindow::favorited(qint64 statusId)
@@ -1029,20 +1012,16 @@ void MainWindow::markAllStatusesRead()
 
     //update all tabs
     for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
-        m_models.value(statusView)->markAllRead();
+        //QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
     }
 }
 
 void MainWindow::gotoNextUnread()
 {
-    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
-    qint64 idTweet = m_models.value(statusView)->nextUnread();
-    setTweetIdReadDatabase(idTweet);
+    //QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
+    //setTweetIdReadDatabase(idTweet);
 
     //mark unread on all tabs
-    foreach (TweetListModel* model, m_models)
-        model->markRead(idTweet);
 }
 
 MainWindow::~MainWindow()

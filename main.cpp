@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QNetworkAccessManager>
+#include "qdeclarative.h"
 #include "mainwindow.h"
 
 QTranslator *appTranslator;		//global translator object
