@@ -38,18 +38,11 @@ HEADERS += twitstatusedit.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
     signalwaiter.h \
-    tweetlistmodel.h \
-    tweetviewitem.h \
-    tweetlistview.h \
-    tweetlistmodelunread.h \
     qtwit/qtwituserdata.h \
     qtwit/qtwituser.h \
     qtwit/qtwitdmstatusdata.h \
     qtwit/qtwitdmstatus.h \
     qtwit/qtwitdirectmessages.h \
-    listmodelinterface.h \
-    listviewinterface.h \
-    listviewiteminterface.h \
     qtwit/qtwitnewdirectmessage.h \
     tweetqmllistmodel.h
 
@@ -93,14 +86,7 @@ SOURCES += main.cpp \
     oauth/oauth.cpp \
     oauth/oauthtwitter.cpp \
     signalwaiter.cpp \
-    tweetlistmodel.cpp \
-    tweetviewitem.cpp \
-    tweetlistview.cpp \
-    tweetlistmodelunread.cpp \
     qtwit/qtwitdirectmessages.cpp \
-    listmodelinterface.cpp \
-    listviewinterface.cpp \
-    listviewiteminterface.cpp \
     qtwit/qtwitnewdirectmessage.cpp \
     tweetqmllistmodel.cpp
 
