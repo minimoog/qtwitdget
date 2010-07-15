@@ -29,6 +29,7 @@
 #include <QDeclarativeComponent>
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
+#include <QDeclarativeProperty>
 #include "mainwindow.h"
 #include "oauth/oauthtwitter.h"
 #include "qtwit/hometimeline.h"
@@ -58,6 +59,7 @@ MainWindow::MainWindow()
     m_twitFavorite(new QTwitFavorites(this)),
     m_twitRetweet(new QTwitRetweet(this)),
 	m_timer(new QTimer(this)),
+    m_qmlEngine(new QDeclarativeEngine(this)),
     m_lastStatusId(0),
     m_lastMentionId(0),
     m_lastDirectMessageId(0),
@@ -831,19 +833,29 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
     statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     ui.tabWidget->addTab(statusView, tabName);
 
-    QDeclarativeEngine *engine = new QDeclarativeEngine;
-
-    //TEST
     TweetQmlListModel *listModel = new TweetQmlListModel();
-    engine->rootContext()->setContextProperty("tweetListModel", listModel);
+    m_qmlEngine->rootContext()->setContextProperty("tweetListModel", listModel);
+    m_qmlEngine->rootContext()->setContextProperty("viewWidth", 500);
+    m_viewModelHash.insert(statusView, listModel);
 
-    QDeclarativeComponent component(engine, QUrl::fromLocalFile("qml/TweetList.qml"));
-    QGraphicsObject *object = qobject_cast<QGraphicsObject *>(component.create());
+    QDeclarativeComponent *qmlComponent = new QDeclarativeComponent(m_qmlEngine, QUrl::fromLocalFile("qml/TweetList.qml"));
+    m_viewQmlComponentHash.insert(statusView, qmlComponent);
+    QGraphicsObject *object = qobject_cast<QGraphicsObject *>(qmlComponent->create());
 
     statusScene->addItem(object);
     statusScene->setSceneRect(QRectF());
 
     connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
+    connect(statusView, SIGNAL(resizeWidth(int)), this, SLOT(resizeWidth(int)));
+}
+
+void MainWindow::resizeWidth(int w)
+{
+    //resize tweets for all tabs
+    for (int i = 0; i < ui.tabWidget->count(); ++i) {
+        // ### TEST
+        m_qmlEngine->rootContext()->setContextProperty("viewWidth", w);
+    }
 }
 
 void MainWindow::nextStatuses()
