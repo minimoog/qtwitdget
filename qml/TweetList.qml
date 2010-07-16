@@ -10,9 +10,11 @@ Item {
         model: tweetListModel
         width: parent.width
         height: parent.height
+        interactive: false
 		delegate: Tweet {
             tweetScreenName: screenNameRole
             tweetText: statusTextRole
+            tweetAvatar: avatarUrlRole
 		}
 	}
 }

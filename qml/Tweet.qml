@@ -5,6 +5,8 @@ Rectangle {
     property string tweetid     //no support for 64 integers
     property string tweetScreenName: "Screen Name"
     property string tweetText: "Lorem ipsum dolor sit amet."
+    property string tweetAvatar: "../images/default_avatar.png"
+
     property bool isOwnTweet: false
 
     signal replyDeleteButtonClicked(string id)
@@ -39,7 +41,10 @@ Rectangle {
             Image {
                 id: avatarImage
                 x: 1; y: 1
-                source: "../images/default_avatar.png"
+                width: 48; height: 48
+                fillMode: Image.Stretch
+                smooth: true
+                source: tweetAvatar
             }
         }
     }
