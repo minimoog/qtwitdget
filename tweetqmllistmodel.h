@@ -30,13 +30,13 @@ class TweetQmlListModel : public QAbstractListModel
 public:
     enum TweetRoles {
         ScreenNameRole = Qt::UserRole + 1,
-        StatusTextRole
+        StatusTextRole,
+        AvatarUrlRole
     };
 
     TweetQmlListModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void setStatuses(const QTwitStatus& statuses);
 
 private:
     QList<QTwitStatus> m_statuses;

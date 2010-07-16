@@ -27,15 +27,17 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
     roles[StatusTextRole] = "statusTextRole";
+    roles[AvatarUrlRole] = "avatarUrlRole";
     setRoleNames(roles);
 
     QSqlQuery query;
-    query.exec("SELECT text, screenName FROM status ORDER BY id DESC LIMIT 20");
+    query.exec("SELECT text, screenName, profileImageUrl FROM status ORDER BY id DESC LIMIT 20");
 
     while (query.next()) {
         QTwitStatus st;
         st.setText(query.value(0).toString());
         st.setScreenName(query.value(1).toString());
+        st.setProfileImageUrl(query.value(2).toString());
         m_statuses.prepend(st);
     }
 }
@@ -57,11 +59,8 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
         return st.screenName();
     else if (role == StatusTextRole)
         return st.text();
+    else if (role == AvatarUrlRole)
+        return st.profileImageUrl();
 
     return QVariant();
-}
-
-void TweetQmlListModel::setStatuses(const QTwitStatus &statuses)
-{
-    //m_statuses = statuses;
 }
