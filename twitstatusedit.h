@@ -46,6 +46,7 @@ signals:
 public slots:
 	void shortUrls();
 	void setReply(qint64 id, const QString& screenName);
+    void setReply(const QString& id, const QString& screenName);
 	void setRetweet(const QString& text, const QString& screenName);
 
 protected:

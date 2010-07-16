@@ -102,6 +102,20 @@ void TwitStatusEdit::setReply(qint64 id, const QString& screenName)
 	appendPlainText(QString('@') + screenName + QString(' '));
 }
 
+void TwitStatusEdit::setReply(const QString &stringid, const QString &screenName)
+{
+    bool ok;
+
+    qint64 id = stringid.toLongLong(&ok);
+
+    if (!ok)
+        return;
+
+    m_statusId = id;
+
+    appendPlainText(QString('@') + screenName + QString(' '));
+}
+
 /*!
     \obsolete
  */
