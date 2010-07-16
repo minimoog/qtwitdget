@@ -9,7 +9,7 @@ Rectangle {
 
     property bool isOwnTweet: false
 
-    signal replyDeleteButtonClicked(string id)
+    signal replyDeleteButtonClicked(string id, string screenname)
     signal retweetButtonClicked(string id)
     //signal favoriteButtonClicked(string id) // ### TODO
 
@@ -50,12 +50,12 @@ Rectangle {
     }
 
     Text {
-        id: screenName
+        id: screenNameText
         x: 84; y: avatarBox.y
         width: gradRect.width - 84
         color: "#018ad9"
         text: gradRect.tweetScreenName
-        smooth: false
+        smooth: true
         font.pointSize: 11
         font.family: "Segoe UI"
     }
@@ -67,6 +67,7 @@ Rectangle {
         color: "#222222"
         text: gradRect.tweetText
         wrapMode: "WordWrap"
+        smooth: true
         font.pointSize: 9
         font.family: "Segoe UI"
     }
@@ -95,7 +96,7 @@ Rectangle {
                 return "../images/button_reply_click.png"
         }
 
-        onClicked: gradRect.replyDeleteButtonClicked(gradRect.tweetid)
+        onClicked: gradRect.replyDeleteButtonClicked(gradRect.tweetid, gradRect.tweetScreenName)
     }
 
     Button {
