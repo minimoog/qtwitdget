@@ -20,3 +20,5 @@ lib/*.exp
 lib/*.dll
 lib/tmp/*
 ipch/*
+qtwitdget.pro.user.*
+*.opensdf

@@ -70,7 +70,6 @@ private slots:
 	void closeTab(int i);
 	void nextStatuses();
     void markAllStatusesRead();
-    void gotoNextUnread();
     void languageChanged();
     void authorize();
     void changeUserPass();

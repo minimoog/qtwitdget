@@ -1028,14 +1028,6 @@ void MainWindow::markAllStatusesRead()
     }
 }
 
-void MainWindow::gotoNextUnread()
-{
-    //QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
-    //setTweetIdReadDatabase(idTweet);
-
-    //mark unread on all tabs
-}
-
 MainWindow::~MainWindow()
 {
 
