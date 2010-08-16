@@ -12,7 +12,6 @@ HEADERS += twitstatusedit.h \
     shortenedurl.h \
     mainwindow.h \
     langchangedialog.h \
-    qtwitview.h \
     groupdialog.h \
     sceneitems/pixmapbuttonitem.h \
     sceneitems/gradientrectitem.h \
@@ -65,7 +64,6 @@ SOURCES += main.cpp \
     shortenedurl.cpp \
     mainwindow.cpp \
     langchangedialog.cpp \
-    qtwitview.cpp \
     groupdialog.cpp \
     sceneitems/pixmapbuttonitem.cpp \
     sceneitems/gradientrectitem.cpp \

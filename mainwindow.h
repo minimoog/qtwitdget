@@ -32,6 +32,7 @@
 class QTwitStatus;
 class TweetListModel;
 class QNetworkAccessManager;
+class QDeclarativeView;
 class QTimer;
 class OAuthTwitter;
 class HomeTimeline;
@@ -40,8 +41,6 @@ class QTwitDestroy;
 class QTwitFavorites;
 class QTwitRetweet;
 class Mentions;
-class QTwitView;
-class QDeclarativeEngine;
 class QDeclarativeComponent;
 class TweetQmlListModel;
 
@@ -77,7 +76,6 @@ private slots:
     void showDirectMessageEdit();
     void sendDirectMessage();
     void tabCloseButtonClicked();
-    void resizeWidth(int w);
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
@@ -117,11 +115,8 @@ private:
     QTwitFavorites *m_twitFavorite;
     QTwitRetweet *m_twitRetweet;
 	QTimer *m_timer;
-    QDeclarativeEngine *m_qmlEngine;
 
-    // ### TODO: same hash key for two classes? TODO: use one hash key
-    QHash<QTwitView*, TweetQmlListModel*> m_viewModelHash;
-    QHash<QTwitView*, QDeclarativeComponent*> m_viewQmlComponentHash;
+    QHash<QDeclarativeView*, TweetQmlListModel*> m_viewModelHash;
 
 	bool m_firstRun;
 

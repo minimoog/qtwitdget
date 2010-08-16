@@ -30,6 +30,7 @@
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
 #include <QDeclarativeProperty>
+#include <QDeclarativeView>
 #include "mainwindow.h"
 #include "oauth/oauthtwitter.h"
 #include "qtwit/hometimeline.h"
@@ -44,7 +45,6 @@
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
 #include "shortenedurl.h"
-#include "qtwitview.h"
 #include "groupdialog.h"
 #include "signalwaiter.h"
 #include "tweetqmllistmodel.h"
@@ -59,7 +59,6 @@ MainWindow::MainWindow()
     m_twitFavorite(new QTwitFavorites(this)),
     m_twitRetweet(new QTwitRetweet(this)),
 	m_timer(new QTimer(this)),
-    m_qmlEngine(new QDeclarativeEngine(this)),
     m_lastStatusId(0),
     m_lastMentionId(0),
     m_lastDirectMessageId(0),
@@ -107,7 +106,6 @@ MainWindow::MainWindow()
     connect(ui.shortUrlsDMPushButton, SIGNAL(clicked()), ui.directMessageEdit, SLOT(shortUrls()));
 	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
     connect(ui.actionMarkAllRead, SIGNAL(triggered()), this, SLOT(markAllStatusesRead()));
-    connect(ui.actionGotoToNextUnread, SIGNAL(triggered()), this, SLOT(gotoNextUnread()));
     connect(ui.userpassButtonBox, SIGNAL(accepted()), this, SLOT(authorize()));
     connect(ui.userpassButtonBox, SIGNAL(rejected()), this, SLOT(cancelUserPassDirectMessage()));
     connect(ui.cancelDMPushButton, SIGNAL(clicked()), this, SLOT(cancelUserPassDirectMessage()));
@@ -759,7 +757,7 @@ void MainWindow::updateTab(int i)
 
 void MainWindow::closeTab(int i)
 {
-    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->widget(i));
+    QGraphicsView* statusView = qobject_cast<QGraphicsView *>(ui.tabWidget->widget(i));
     QGraphicsScene* scene = statusView->scene();
 
     //delete scene/view
@@ -827,43 +825,26 @@ QString MainWindow::createUserQueryString(const QList<int>& usersId)
 
 void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bool unread, bool closable)
 {
-    QGraphicsScene *statusScene = new QGraphicsScene(this);
-    QTwitView *statusView = new QTwitView(this);
-    statusView->setScene(statusScene);
-    statusView->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    QDeclarativeView *statusView = new QDeclarativeView(this);
+    statusView->setResizeMode(QDeclarativeView::SizeRootObjectToView);
     ui.tabWidget->addTab(statusView, tabName);
 
     TweetQmlListModel *listModel = new TweetQmlListModel();
-    m_qmlEngine->rootContext()->setContextProperty("tweetListModel", listModel);
-    m_qmlEngine->rootContext()->setContextProperty("viewWidth", 500);
+    statusView->rootContext()->setContextProperty("tweetListModel", listModel);
+    statusView->rootContext()->setContextProperty("viewWidth", 500);
     m_viewModelHash.insert(statusView, listModel);
 
-    QDeclarativeComponent *qmlComponent = new QDeclarativeComponent(m_qmlEngine, QUrl::fromLocalFile("qml/TweetList.qml"));
-    m_viewQmlComponentHash.insert(statusView, qmlComponent);
-    QGraphicsObject *object = qobject_cast<QGraphicsObject *>(qmlComponent->create());
+    statusView->setSource(QUrl::fromLocalFile("qml/TweetList.qml"));
 
-    statusScene->addItem(object);
-    statusScene->setSceneRect(QRectF());
-
-    connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
-    connect(statusView, SIGNAL(resizeWidth(int)), this, SLOT(resizeWidth(int)));
-}
-
-void MainWindow::resizeWidth(int w)
-{
-    //resize tweets for all tabs
-    for (int i = 0; i < ui.tabWidget->count(); ++i) {
-        // ### TEST
-        m_qmlEngine->rootContext()->setContextProperty("viewWidth", w);
-    }
+    //connect(statusView, SIGNAL(scrollBarMaxPos(bool)), ui.moreButton, SLOT(setEnabled(bool)));
 }
 
 void MainWindow::nextStatuses()
 {
-    QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
+    //QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
 
-    if (!statusView)
-		return;
+    //if (!statusView)
+    //	return;
 }
 
 void MainWindow::favorited(qint64 statusId)
