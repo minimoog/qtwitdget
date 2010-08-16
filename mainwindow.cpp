@@ -991,32 +991,6 @@ void MainWindow::setTweetIdReadDatabase(qint64 id)
     //should return true or false
 }
 
-void MainWindow::setTabTextUnreadStatuses(int index)
-{
-    /*
-    TwitTabGroup group = m_twitTabGroups.at(index);
-    int numUnread = 0;
-
-    //TODO: move to QTwitScene
-    QSqlQuery query;
-    QString qr = QString("SELECT COUNT(id) FROM status WHERE isRead = 0 AND %1").arg(group.query());
-    query.exec(qr);
-
-    if (query.next())
-        numUnread = query.value(0).toInt();
-
-    if (numUnread) {
-        QString currentTabText = group.tabName();
-        QString numText = QString(" (%1)").arg(numUnread);
-        currentTabText += numText;
-
-        ui.tabWidget->setTabText(index, currentTabText);
-    } else {
-        ui.tabWidget->setTabText(index, group.tabName());
-    }
-    */
-}
-
 void MainWindow::markAllStatusesRead()
 {
     QSqlQuery query;

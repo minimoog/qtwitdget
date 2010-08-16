@@ -96,7 +96,6 @@ private:
     QString createUserQueryString(const QList<int>& usersId);
     void updateTab(int i);
     void addTimelineTab(const QString& query, const QString& tabName, bool unread = false, bool closable = false);
-    void setTabTextUnreadStatuses(int indexTab);
 	bool isDatabaseEmpty();
     void readSettings();
     void writeSettings();
