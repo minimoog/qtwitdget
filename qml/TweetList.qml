@@ -2,8 +2,6 @@ import Qt 4.7
 
 Item {
     id: tweetListViewItem
-    height: tweetListView.count * 100
-    width: /* 500 */  viewWidth
 
 	ListView {
         id: tweetListView

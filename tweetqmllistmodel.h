@@ -37,6 +37,7 @@ public:
     TweetQmlListModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    void update();
 
 private:
     QList<QTwitStatus> m_statuses;

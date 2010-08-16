@@ -31,14 +31,65 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     setRoleNames(roles);
 
     QSqlQuery query;
-    query.exec("SELECT text, screenName, profileImageUrl FROM status ORDER BY id DESC LIMIT 20");
+    query.exec("SELECT id, text, screenName, profileImageUrl FROM status ORDER BY id DESC LIMIT 20");
 
     while (query.next()) {
         QTwitStatus st;
-        st.setText(query.value(0).toString());
-        st.setScreenName(query.value(1).toString());
-        st.setProfileImageUrl(query.value(2).toString());
-        m_statuses.prepend(st);
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setScreenName(query.value(2).toString());
+        st.setProfileImageUrl(query.value(3).toString());
+        m_statuses.append(st);
+    }
+}
+
+void TweetQmlListModel::update()
+{
+    qint64 topStatusId = 0;
+
+    if (!m_statuses.isEmpty())
+        topStatusId = m_statuses.at(0).id();
+
+    QSqlQuery query;
+    query.prepare("SELECT id, text, screenName, profileImageUrl "
+                  "FROM status "
+                  "WHERE id > :id "
+                  "ORDER BY id DESC "
+                  "LIMIT 20 ");
+    query.bindValue(":id", topStatusId);
+    query.exec();
+
+    QList<QTwitStatus> newStatuses;
+
+    while (query.next()) {
+        QTwitStatus st;
+        st.setId(query.value(0).toLongLong());
+        st.setText(query.value(1).toString());
+        st.setScreenName(query.value(2).toString());
+        st.setProfileImageUrl(query.value(3).toString());
+        newStatuses.prepend(st);
+    }
+
+    if (newStatuses.count()) {
+
+        beginInsertRows(QModelIndex(), 0, newStatuses.count() - 1);
+
+        foreach (const QTwitStatus& s, newStatuses)
+            m_statuses.prepend(s);
+
+        endInsertRows();
+
+
+        if (m_statuses.count() > 20) {
+            int oldCount = m_statuses.count();
+
+            beginRemoveRows(QModelIndex(), 20, oldCount - 1);
+
+            for (int i = 0; i < oldCount - 20; ++i)
+                m_statuses.removeLast();
+
+            endRemoveRows();
+        }
     }
 }
 

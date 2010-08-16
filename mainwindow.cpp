@@ -750,19 +750,22 @@ void MainWindow::updateTab(int i)
     if (i == -1)
         return;
 
-    //QTwitView* statusView = qobject_cast<QTwitView*>(ui.tabWidget->widget(i));
+    QDeclarativeView* statusView = qobject_cast<QDeclarativeView*>(ui.tabWidget->widget(i));
+
+    TweetQmlListModel *listModel = m_viewModelHash.value(statusView);
+    listModel->update();
 
     //setTabTextUnreadStatuses(i);
 }
 
 void MainWindow::closeTab(int i)
 {
-    QGraphicsView* statusView = qobject_cast<QGraphicsView *>(ui.tabWidget->widget(i));
-    QGraphicsScene* scene = statusView->scene();
+    //QGraphicsView* statusView = qobject_cast<QGraphicsView *>(ui.tabWidget->widget(i));
+    //QGraphicsScene* scene = statusView->scene();
 
     //delete scene/view
-    delete scene;
-    delete statusView;
+    //delete scene;
+    //delete statusView;
 
 	//ui.tabWidget->removeTab(i);
 }
