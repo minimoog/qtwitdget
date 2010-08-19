@@ -107,7 +107,6 @@ MainWindow::MainWindow()
     connect(ui.passwordLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));	
     //connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-	connect(ui.actionChangeStyleSheet, SIGNAL(triggered()), SLOT(loadStyleSheet()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
     connect(ui.actionSendDirectMessage, SIGNAL(triggered()), this, SLOT(showDirectMessageEdit()));
 	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
@@ -760,22 +759,6 @@ void MainWindow::closeTab(int i)
     //delete statusView;
 
 	//ui.tabWidget->removeTab(i);
-}
-
-void MainWindow::loadStyleSheet()
-{
-	QString fnStyleSheet = QFileDialog::getOpenFileName(this);
-
-	if(!fnStyleSheet.isNull()){
-		QFile file(fnStyleSheet);
-		if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-			return;
-
-		QTextStream in(&file);
-		QString styleSheet = in.readAll();
-		
-		qApp->setStyleSheet(styleSheet);
-	}
 }
 
 void MainWindow::createDefaultTabs()

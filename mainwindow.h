@@ -65,7 +65,6 @@ private slots:
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void createGrouping();
-	void loadStyleSheet();
 	void closeTab(int i);
 	void nextStatuses();
     void markAllStatusesRead();

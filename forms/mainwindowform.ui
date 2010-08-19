@@ -299,7 +299,6 @@
      <string>&amp;Options</string>
     </property>
     <addaction name="actionCreateGroup"/>
-    <addaction name="actionChangeStyleSheet"/>
     <addaction name="actionSettings"/>
     <addaction name="actionChangeLanguage"/>
    </widget>
