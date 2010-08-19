@@ -82,13 +82,6 @@ MainWindow::MainWindow()
 	ui.setupUi(this);
 	ui.updateEdit->setLimit(140);
 	
-    //tab close button
-    QPushButton *tabCloseButton = new QPushButton(ui.tabWidget);
-    tabCloseButton->setIcon(QIcon(QPixmap(":images/button_closetab.png")));
-    tabCloseButton->setMinimumSize(24, 20);
-    tabCloseButton->setMaximumSize(24, 20);
-    ui.tabWidget->setCornerWidget(tabCloseButton);
-
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
@@ -118,8 +111,7 @@ MainWindow::MainWindow()
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
     connect(ui.actionSendDirectMessage, SIGNAL(triggered()), this, SLOT(showDirectMessageEdit()));
 	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
-    connect(tabCloseButton, SIGNAL(clicked()), this, SLOT(tabCloseButtonClicked()));
-    
+
     //timer is single shot, avoid conflict with HomeTimeline
     m_timer->setSingleShot(true);
     m_timer->setInterval(60000);
@@ -768,25 +760,6 @@ void MainWindow::closeTab(int i)
     //delete statusView;
 
 	//ui.tabWidget->removeTab(i);
-}
-
-void MainWindow::tabCloseButtonClicked()
-{
-    int index = ui.tabWidget->currentIndex();
-
-    // ### TODO: FIX IT!
-    switch (index) {
-    case 0:
-        return;
-    case 1:
-        return;
-    case 2:
-        return;
-    case 3:
-        return;
-    default:
-        closeTab(index);
-    }
 }
 
 void MainWindow::loadStyleSheet()

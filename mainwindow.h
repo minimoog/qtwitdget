@@ -75,7 +75,6 @@ private slots:
     void cancelUserPassDirectMessage();
     void showDirectMessageEdit();
     void sendDirectMessage();
-    void tabCloseButtonClicked();
 
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
