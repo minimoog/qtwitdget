@@ -167,9 +167,6 @@ void MainWindow::authorize()
 
         statusBar()->showMessage("Credentials ok.", 2000);
 
-        while (ui.tabWidget->count())
-            closeTab(0);
-
         startUp();
     } else {
         qDebug() << "Verify credentials timeout";
@@ -747,18 +744,6 @@ void MainWindow::updateTab(int i)
     listModel->update();
 
     //setTabTextUnreadStatuses(i);
-}
-
-void MainWindow::closeTab(int i)
-{
-    //QGraphicsView* statusView = qobject_cast<QGraphicsView *>(ui.tabWidget->widget(i));
-    //QGraphicsScene* scene = statusView->scene();
-
-    //delete scene/view
-    //delete scene;
-    //delete statusView;
-
-	//ui.tabWidget->removeTab(i);
 }
 
 void MainWindow::createDefaultTabs()
