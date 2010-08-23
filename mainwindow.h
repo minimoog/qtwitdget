@@ -39,7 +39,6 @@ class HomeTimeline;
 class QTwitUpdate;
 class QTwitDestroy;
 class QTwitFavorites;
-class QTwitRetweet;
 class Mentions;
 class QDeclarativeComponent;
 class TweetQmlListModel;
@@ -66,7 +65,6 @@ private slots:
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void createGrouping();
 	void nextStatuses();
-    void markAllStatusesRead();
     void languageChanged();
     void authorize();
     void changeUserPass();
@@ -77,7 +75,6 @@ private slots:
 	void favorited(qint64 statusId);
     void reqDelete(qint64 statusId);
     void retweet(qint64 statusId);
-    void retweetFinished();
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -89,7 +86,7 @@ private:
 	void updateCurrentPage();
     void createDefaultTabs();
     QString createUserQueryString(const QList<int>& usersId);
-    void updateTab(int i);
+    void updateDeclarativeView();
     void addTimelineTab(const QString& query, const QString& tabName, bool unread = false, bool closable = false);
 	bool isDatabaseEmpty();
     void readSettings();
@@ -110,10 +107,9 @@ private:
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
-    QTwitRetweet *m_twitRetweet;
 	QTimer *m_timer;
 
-    QHash<QDeclarativeView*, TweetQmlListModel*> m_viewModelHash;
+    TweetQmlListModel* m_tweetListModel;
 
 	bool m_firstRun;
 

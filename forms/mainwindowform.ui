@@ -14,27 +14,24 @@
    <string>QTwitdget</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="currentIndex">
-       <number>-1</number>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QDeclarativeView" name="declarativeView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="elideMode">
-       <enum>Qt::ElideMiddle</enum>
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
       </property>
-      <property name="documentMode">
-       <bool>true</bool>
-      </property>
-      <property name="tabsClosable">
-       <bool>false</bool>
-      </property>
-      <property name="movable">
-       <bool>true</bool>
+      <property name="resizeMode">
+       <enum>QDeclarativeView::SizeRootObjectToView</enum>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="maximumSize">
        <size>
@@ -306,7 +303,6 @@
     <property name="title">
      <string>&amp;Tweets</string>
     </property>
-    <addaction name="actionMarkAllRead"/>
     <addaction name="actionGotoToNextUnread"/>
     <addaction name="actionSendDirectMessage"/>
    </widget>
@@ -395,6 +391,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QDeclarativeView</class>
+   <extends>QGraphicsView</extends>
+   <header>QtDeclarative/QDeclarativeView</header>
+  </customwidget>
   <customwidget>
    <class>TwitStatusEdit</class>
    <extends>QPlainTextEdit</extends>
