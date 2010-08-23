@@ -30,9 +30,7 @@ HEADERS += twitstatusedit.h \
     qtwit/qtwitdestroy.h \
     qtwit/qtwitfavorites.h \
     qtwit/qtwithometimeline.h \
-    qtwit/qtwitmentions.h \
     qtwit/hometimeline.h \
-    qtwit/mentions.h \
     oauth/oauth.h \
     oauth/oauthtwitter.h \
     signalwaiter.h \
@@ -76,9 +74,7 @@ SOURCES += main.cpp \
     qtwit/qtwitdestroy.cpp \
     qtwit/qtwitfavorites.cpp \
     qtwit/qtwithometimeline.cpp \
-    qtwit/qtwitmentions.cpp \
     qtwit/hometimeline.cpp \
-    qtwit/mentions.cpp \
     oauth/oauth.cpp \
     oauth/oauthtwitter.cpp \
     signalwaiter.cpp \

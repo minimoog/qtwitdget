@@ -38,7 +38,6 @@
 #include "qtwit/qtwitdestroy.h"
 #include "qtwit/qtwitfavorites.h"
 #include "qtwit/qtwitfriends.h"
-#include "qtwit/mentions.h"
 #include "qtwit/qtwitdirectmessages.h"
 #include "qtwit/qtwitnewdirectmessage.h"
 #include "langchangedialog.h"
@@ -52,25 +51,21 @@ MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
 	m_homeTimeline(new HomeTimeline(this)),
-    m_mentions(new Mentions(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
 	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
 	m_timer(new QTimer(this)),
     m_lastStatusId(0),
-    m_lastMentionId(0),
     m_lastDirectMessageId(0),
     m_lastMarkedReadStatus(0)
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_homeTimeline->setNetworkAccessManager(m_netManager);
-    m_mentions->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
 	m_twitDestroy->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
 
 	m_homeTimeline->setOAuthTwitter(m_oauthTwitter);
-    m_mentions->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
 	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
@@ -86,7 +81,6 @@ MainWindow::MainWindow()
     connect(m_homeTimeline, SIGNAL(finishedTimeline()), m_timer, SLOT(start()));
     //on error just start again the timer
     connect(m_homeTimeline, SIGNAL(networkError(QString)), m_timer, SLOT(start()));
-    connect(m_mentions, SIGNAL(finishedTimeline()), SLOT(finishedMentions()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
@@ -243,7 +237,6 @@ void MainWindow::startUp()
 			m_firstRun = true;
 		} else {
             m_lastStatusId = getLastStatusId();
-            m_lastMentionId = getLastMentionId();
             m_lastDirectMessageId = getLastDirectMessageId();
 		}
 
@@ -267,18 +260,6 @@ qint64 MainWindow::getLastStatusId()
 {
     QSqlQuery query;
     query.exec("SELECT id FROM status ORDER BY id DESC LIMIT 1");
-
-    if (query.next()) {
-        return query.value(0).toLongLong();
-    }
-
-    return 0;
-}
-
-qint64 MainWindow::getLastMentionId()
-{
-    QSqlQuery query;
-    query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY id DESC LIMIT 1");
 
     if (query.next()) {
         return query.value(0).toLongLong();
@@ -312,11 +293,9 @@ void MainWindow::updateTimeline()
 	if(m_firstRun){
 		m_firstRun = false;
         m_homeTimeline->timeline(0);
-        m_mentions->timeline(0);
         dm->directMessages(0);
 	} else {
         m_homeTimeline->timeline(m_lastStatusId);
-        m_mentions->timeline(m_lastMentionId);
         dm->directMessages(m_lastDirectMessageId);
 	}
 }
@@ -494,89 +473,6 @@ void MainWindow::finishedFriends(const QList<QTwitUser> &friends)
         query.exec("COMMIT;");
     }
     friendsReply->deleteLater();
-}
-
-void MainWindow::finishedMentions()
-{
-    QList<QTwitStatus> mentions = m_mentions->statuses();
-
-	if(!mentions.isEmpty()){
-		//get last status id
-		m_lastMentionId = mentions.at(0).id();
-
-		QSqlQuery query;
-
-        query.exec("BEGIN;");
-
-        //replace strategy
-		query.prepare("INSERT OR REPLACE INTO status "
-			"(created, "
-			"id, "
-			"text, "
-			"replyToStatusId, "
-			"replyToUserId, "
-			"favorited, "
-			"replyToScreenName, "
-			"userId, "
-			"name, "
-			"screenName, "
-			"location, "
-			"description, "
-			"profileImageUrl, "
-			"url, "
-            "mention, "
-            "isRead) "
-			"VALUES "
-			"(:created, "
-			":id, "
-			":text, "
-			":replyToStatusId, "
-			":replyToUserId, "
-			":favorited, "
-			":replyToScreenName, "
-			":userId, "
-			":name, "
-			":screenName, "
-			":location, "
-			":description, "
-			":profileImageUrl, "
-			":url, "
-            ":mention, "
-            ":isRead);");
-
-		//it doesn't have to be backwards, I like it this way
-		QListIterator<QTwitStatus> i(mentions);
-		i.toBack();
-		while(i.hasPrevious()){
-			QTwitStatus s = i.previous();
-			query.bindValue(":created", s.created().toString(Qt::ISODate));
-			query.bindValue(":id", s.id());
-			query.bindValue(":text", s.text());
-			query.bindValue(":replyToStatusId", s.replyToStatusId());
-			query.bindValue(":replyToUserId", s.replyToUserId());
-			query.bindValue(":favorited", static_cast<int>(s.favorited()));
-			query.bindValue(":replyToScreenName", s.replyToScreenName());
-			query.bindValue(":userId", s.userId());
-			query.bindValue(":name", s.name());
-			query.bindValue(":screenName", s.screenName());
-			query.bindValue(":location", s.location());
-			query.bindValue(":description", s.description());
-			query.bindValue(":profileImageUrl", s.profileImageUrl());
-			query.bindValue(":url", s.url());
-            query.bindValue(":mention", 1); //a mention
-            query.bindValue(":isRead", 0); //not read
-			
-			query.exec();
-		}
-
-        query.exec("COMMIT;");
-
-        // ### TODO: Refresh
-	}
-
-    // ### WHAT TO DO WITH TIMER???
-    //start 60 seconds timer
-    //m_timer->start(60000);
 }
 
 void MainWindow::statusDestroyed(qint64 id)

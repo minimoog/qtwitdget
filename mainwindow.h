@@ -39,7 +39,6 @@ class HomeTimeline;
 class QTwitUpdate;
 class QTwitDestroy;
 class QTwitFavorites;
-class Mentions;
 class QDeclarativeComponent;
 class TweetQmlListModel;
 
@@ -60,7 +59,6 @@ private slots:
     void finishedSendingDirectMessage();
 	void updateTimeline();
 	void statusDestroyed(qint64 id);
-    void finishedMentions();
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
 	void createGrouping();
@@ -94,7 +92,6 @@ private:
     void createUserDefinedTabs();
     void setTweetIdReadDatabase(qint64 id);
     qint64 getLastStatusId();
-    qint64 getLastMentionId();
     qint64 getLastDirectMessageId();
 
 	Ui::MainWindowForm ui;
@@ -103,7 +100,6 @@ private:
     static QNetworkAccessManager *m_s_netManager;
 	OAuthTwitter *m_oauthTwitter;
 	HomeTimeline *m_homeTimeline;
-    Mentions *m_mentions;
 	QTwitUpdate *m_twitUpdate;
 	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
@@ -114,7 +110,6 @@ private:
 	bool m_firstRun;
 
 	qint64 m_lastStatusId;
-    qint64 m_lastMentionId;
     qint64 m_lastDirectMessageId;
     qint64 m_lastMarkedReadStatus;
 	int m_userId;
