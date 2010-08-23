@@ -20,7 +20,6 @@ Rectangle {
             position: 0
             color: "#ddf0f5"
         }
-
         GradientStop {
             position: 1
             color: "#e5faff"

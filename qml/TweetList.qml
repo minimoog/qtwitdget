@@ -9,9 +9,19 @@ Item {
         width: parent.width
         height: parent.height
 		delegate: Tweet {
+            id: tweetDelegate
             tweetScreenName: screenNameRole
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
+            tweetid:  statusIdRole
+
+            Connections {
+                target: tweetDelegate
+                onReplyDeleteButtonClicked: {
+                    statusEdit.setReply(tweetDelegate.tweetid, tweetDelegate.tweetScreenName);
+                    statusEdit.setFocus();
+                }
+            }
 		}
 	}
 }

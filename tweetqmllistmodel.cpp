@@ -28,6 +28,7 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[ScreenNameRole] = "screenNameRole";
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
+    roles[StatusIdRole] = "statusIdRole";
     setRoleNames(roles);
 
     QSqlQuery query;
@@ -112,6 +113,8 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
         return st.text();
     else if (role == AvatarUrlRole)
         return st.profileImageUrl();
+    else if (role == StatusIdRole)
+        return QString::number(st.id());
 
     return QVariant();
 }

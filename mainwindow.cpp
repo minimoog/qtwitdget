@@ -408,7 +408,7 @@ void MainWindow::finishedFriendsTimeline()
 
         query.exec("COMMIT;");
 
-        // ### TODO: Refresh?
+        updateDeclarativeView();
 	}
 }
 
@@ -471,8 +471,9 @@ void MainWindow::finishedFriends(const QList<QTwitUser> &friends)
         }
 
         query.exec("COMMIT;");
+
+        friendsReply->deleteLater();
     }
-    friendsReply->deleteLater();
 }
 
 void MainWindow::statusDestroyed(qint64 id)
@@ -639,6 +640,7 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
     m_tweetListModel = new TweetQmlListModel();
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
+    ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
 
     ui.declarativeView->setSource(QUrl::fromLocalFile("qml/TweetList.qml"));
 }

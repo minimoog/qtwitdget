@@ -31,7 +31,8 @@ public:
     enum TweetRoles {
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
-        AvatarUrlRole
+        AvatarUrlRole,
+        StatusIdRole
     };
 
     TweetQmlListModel(QObject *parent = 0);
