@@ -24,6 +24,10 @@
 #include <QAbstractListModel>
 #include "qtwit/qtwitstatus.h"
 
+class QTwitDestroy;
+class QNetworkAccessManager;
+class OAuthTwitter;
+
 class TweetQmlListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -32,16 +36,27 @@ public:
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
         AvatarUrlRole,
-        StatusIdRole
+        StatusIdRole,
+        OwnTweetRole
     };
 
     TweetQmlListModel(QObject *parent = 0);
+    void setNetworkAccessManager(QNetworkAccessManager* netManager); // ### TODO: FIX
+    void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     void update();
+    void setUserID(int userid);
+    Q_INVOKABLE void destroyTweet(const QString& tweetid);
+
+private slots:
+    void finishedDestroyTweet(qint64 id);
 
 private:
+    QNetworkAccessManager* m_netManager;
+    OAuthTwitter* m_oauthTwitter;
     QList<QTwitStatus> m_statuses;
+    int m_userid;
 };
 
 #endif // TWEETQMLLISTMODEL_H

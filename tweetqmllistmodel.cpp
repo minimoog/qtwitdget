@@ -18,7 +18,11 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include <QSqlQuery>
+#include <QNetworkAccessManager>
+#include <oauth/oauthtwitter.h>
+#include <qtwit/qtwitdestroy.h>
 #include "tweetqmllistmodel.h"
 
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
@@ -29,10 +33,11 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
+    roles[OwnTweetRole] = "ownTweetRole";
     setRoleNames(roles);
 
     QSqlQuery query;
-    query.exec("SELECT id, text, screenName, profileImageUrl FROM status ORDER BY id DESC LIMIT 20");
+    query.exec("SELECT id, text, screenName, profileImageUrl, userId FROM status ORDER BY id DESC LIMIT 20");
 
     while (query.next()) {
         QTwitStatus st;
@@ -40,8 +45,19 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
         st.setText(query.value(1).toString());
         st.setScreenName(query.value(2).toString());
         st.setProfileImageUrl(query.value(3).toString());
+        st.setUserId(query.value(4).toInt());
         m_statuses.append(st);
     }
+}
+
+void TweetQmlListModel::setNetworkAccessManager(QNetworkAccessManager *netManager)
+{
+    m_netManager = netManager;
+}
+
+void TweetQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
+{
+    m_oauthTwitter = oauthTwitter;
 }
 
 void TweetQmlListModel::update()
@@ -52,7 +68,7 @@ void TweetQmlListModel::update()
         topStatusId = m_statuses.at(0).id();
 
     QSqlQuery query;
-    query.prepare("SELECT id, text, screenName, profileImageUrl "
+    query.prepare("SELECT id, text, screenName, profileImageUrl, userId "
                   "FROM status "
                   "WHERE id > :id "
                   "ORDER BY id DESC "
@@ -68,6 +84,7 @@ void TweetQmlListModel::update()
         st.setText(query.value(1).toString());
         st.setScreenName(query.value(2).toString());
         st.setProfileImageUrl(query.value(3).toString());
+        st.setUserId(query.value(4).toInt());
         newStatuses.prepend(st);
     }
 
@@ -115,6 +132,41 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
         return st.profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
+    else if (role == OwnTweetRole)
+        if (m_userid != st.userId())
+            return false;
+        else
+            return true;
 
     return QVariant();
+}
+
+void TweetQmlListModel::setUserID(int userid)
+{
+    m_userid = userid;
+}
+
+void TweetQmlListModel::destroyTweet(const QString &tweetid)
+{
+    bool ok;
+
+    qint64 id = tweetid.toLongLong(&ok);
+
+    if (ok) {
+        QTwitDestroy *twitDestroy = new QTwitDestroy;
+        twitDestroy->setNetworkAccessManager(m_netManager);
+        twitDestroy->setOAuthTwitter(m_oauthTwitter);
+        twitDestroy->deleteStatus(id);
+        connect(twitDestroy, SIGNAL(destroyed(qint64)), this, SLOT(finishedDestroyTweet(qint64)));
+    }
+}
+
+void TweetQmlListModel::finishedDestroyTweet(qint64 id)
+{
+    QTwitDestroy *twitDestroy = qobject_cast<QTwitDestroy*>(sender());
+
+    if (twitDestroy) {
+        // ### TODO: remove from model
+        twitDestroy->deleteLater();
+    }
 }
