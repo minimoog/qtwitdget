@@ -1,5 +1,7 @@
 import Qt 4.7
 
+//statusEdit - external
+
 Item {
     id: tweetListViewItem
 
@@ -20,6 +22,10 @@ Item {
                 target: tweetDelegate
                 onReplyDeleteButtonClicked: {
                     statusEdit.setReply(tweetDelegate.tweetid, tweetDelegate.tweetScreenName);
+                    statusEdit.setFocus();
+                }
+                onRetweetButtonClicked: {
+                    statusEdit.setRetweet(tweetDelegate.tweetText, tweetDelegate.tweetScreenName);
                     statusEdit.setFocus();
                 }
             }

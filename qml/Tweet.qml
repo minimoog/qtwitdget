@@ -10,7 +10,7 @@ Rectangle {
     property bool isOwnTweet: false
 
     signal replyDeleteButtonClicked(string id, string screenname)
-    signal retweetButtonClicked(string id)
+    signal retweetButtonClicked
     //signal favoriteButtonClicked(string id) // ### TODO
 
     function addTags(str) {
@@ -18,12 +18,10 @@ Rectangle {
     }
 
     function handleLink(link) {
-        console.log(link);
         if (link.slice(0, 3) == 'app') {
             console.log('tag clicked');
         } else if (link.slice(0, 4) == 'http') {
             Qt.openUrlExternally(link);
-            console.log('link clicked');
         }
     }
 
@@ -120,7 +118,7 @@ Rectangle {
         hoverButtonImageUrl: "../images/button_retweet_hover.png"
         clickedButtonImageUrl: "../images/button_retweet_click.png"
 
-        onClicked: gradRect.retweetButtonClicked(gradRect.tweetid)
+        onClicked: gradRect.retweetButtonClicked(gradRect.tweetText, gradRect.tweetScreenName)
     }
 
     Button {
