@@ -1,5 +1,6 @@
 import Qt 4.7
 
+//tweetListModel - external
 //statusEdit - external
 
 Item {
@@ -17,16 +18,20 @@ Item {
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
             tweetid:  statusIdRole
+            isOwnTweet: ownTweetRole
 
             Connections {
                 target: tweetDelegate
-                onReplyDeleteButtonClicked: {
+                onReplyButtonClicked: {
                     statusEdit.setReply(tweetDelegate.tweetid, tweetDelegate.tweetScreenName);
                     statusEdit.setFocus();
                 }
                 onRetweetButtonClicked: {
                     statusEdit.setRetweet(tweetDelegate.tweetText, tweetDelegate.tweetScreenName);
                     statusEdit.setFocus();
+                }
+                onDeleteButtonClicked: {
+                    tweetListModel.destroyTweet(tweetDelegate.tweetid);
                 }
             }
 		}

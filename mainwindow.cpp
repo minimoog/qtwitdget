@@ -35,7 +35,6 @@
 #include "oauth/oauthtwitter.h"
 #include "qtwit/hometimeline.h"
 #include "qtwit/qtwitupdate.h"
-#include "qtwit/qtwitdestroy.h"
 #include "qtwit/qtwitfavorites.h"
 #include "qtwit/qtwitfriends.h"
 #include "qtwit/qtwitdirectmessages.h"
@@ -52,7 +51,6 @@ MainWindow::MainWindow()
 	m_oauthTwitter(new OAuthTwitter(this)),
 	m_homeTimeline(new HomeTimeline(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
-	m_twitDestroy(new QTwitDestroy(this)),
     m_twitFavorite(new QTwitFavorites(this)),
 	m_timer(new QTimer(this)),
     m_lastStatusId(0),
@@ -62,12 +60,10 @@ MainWindow::MainWindow()
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_homeTimeline->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
-	m_twitDestroy->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
 
 	m_homeTimeline->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
-	m_twitDestroy->setOAuthTwitter(m_oauthTwitter);
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
@@ -83,7 +79,6 @@ MainWindow::MainWindow()
     connect(m_homeTimeline, SIGNAL(networkError(QString)), m_timer, SLOT(start()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
-	connect(m_twitDestroy, SIGNAL(destroyed(qint64)), SLOT(statusDestroyed(qint64)));
     connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
     connect(ui.shortUrlsDMPushButton, SIGNAL(clicked()), ui.directMessageEdit, SLOT(shortUrls()));
 	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
@@ -638,9 +633,14 @@ QString MainWindow::createUserQueryString(const QList<int>& usersId)
 void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bool unread, bool closable)
 {
     m_tweetListModel = new TweetQmlListModel();
+    m_tweetListModel->setUserID(m_userId);
+    m_tweetListModel->setNetworkAccessManager(m_netManager);
+    m_tweetListModel->setOAuthTwitter(m_oauthTwitter);
+
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
     ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
+    ui.declarativeView->rootContext()->setContextProperty("mainWindow", this);
 
     ui.declarativeView->setSource(QUrl::fromLocalFile("qml/TweetList.qml"));
 }
@@ -679,28 +679,6 @@ void MainWindow::favorited(qint64 statusId)
                 //m_twitScenes.at(i)->setFavorited(statusId, true);
         }
     }
-}
-
-void MainWindow::reqDelete(qint64 statusId)
-{
-    m_twitDestroy->deleteStatus(statusId);
-
-    // ### TODO: refresh tabs?
-}
-
-void MainWindow::retweet(qint64 statusId)
-{
-    //m_twitRetweet->retweet(statusId);
-
-    // ### TODO: Temp solution?
-
-    QSqlQuery query;
-    query.prepare("SELECT text, screenName FROM status WHERE id = :id");
-    query.bindValue(":id", statusId);
-    query.exec();
-
-    if (query.next())
-        ui.updateEdit->setRetweet(query.value(0).toString(), query.value(1).toString());
 }
 
 void MainWindow::readSettings()

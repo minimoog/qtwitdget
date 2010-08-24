@@ -6,11 +6,11 @@ Rectangle {
     property string tweetScreenName: "Screen Name"
     property string tweetText: "Lorem ipsum dolor sit amet."
     property string tweetAvatar: "../images/default_avatar.png"
-
     property bool isOwnTweet: false
 
-    signal replyDeleteButtonClicked(string id, string screenname)
+    signal replyButtonClicked
     signal retweetButtonClicked
+    signal deleteButtonClicked
     //signal favoriteButtonClicked(string id) // ### TODO
 
     function addTags(str) {
@@ -108,7 +108,12 @@ Rectangle {
                 return "../images/button_reply_click.png"
         }
 
-        onClicked: gradRect.replyDeleteButtonClicked(gradRect.tweetid, gradRect.tweetScreenName)
+        onClicked: {
+            if (isOwnTweet)
+                gradRect.deleteButtonClicked()
+            else
+                gradRect.replyButtonClicked()
+        }
     }
 
     Button {
@@ -118,7 +123,7 @@ Rectangle {
         hoverButtonImageUrl: "../images/button_retweet_hover.png"
         clickedButtonImageUrl: "../images/button_retweet_click.png"
 
-        onClicked: gradRect.retweetButtonClicked(gradRect.tweetText, gradRect.tweetScreenName)
+        onClicked: gradRect.retweetButtonClicked()
     }
 
     Button {

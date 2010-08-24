@@ -37,7 +37,6 @@ class QTimer;
 class OAuthTwitter;
 class HomeTimeline;
 class QTwitUpdate;
-class QTwitDestroy;
 class QTwitFavorites;
 class QDeclarativeComponent;
 class TweetQmlListModel;
@@ -71,8 +70,6 @@ private slots:
     void sendDirectMessage();
 
 	void favorited(qint64 statusId);
-    void reqDelete(qint64 statusId);
-    void retweet(qint64 statusId);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -101,7 +98,6 @@ private:
 	OAuthTwitter *m_oauthTwitter;
 	HomeTimeline *m_homeTimeline;
 	QTwitUpdate *m_twitUpdate;
-	QTwitDestroy *m_twitDestroy;
     QTwitFavorites *m_twitFavorite;
 	QTimer *m_timer;
 
@@ -112,7 +108,7 @@ private:
 	qint64 m_lastStatusId;
     qint64 m_lastDirectMessageId;
     qint64 m_lastMarkedReadStatus;
-	int m_userId;
+    int m_userId;   // ### TODO: Change to 64 bits
 
 	QSqlDatabase m_database;
 
