@@ -22,3 +22,4 @@ lib/tmp/*
 ipch/*
 qtwitdget.pro.user.*
 *.opensdf
+*.exe

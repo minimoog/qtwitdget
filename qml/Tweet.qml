@@ -13,6 +13,10 @@ Rectangle {
     signal retweetButtonClicked(string id)
     //signal favoriteButtonClicked(string id) // ### TODO
 
+    function addTags(str) {
+        return str.replace(/http:\/\/[^ \n\t]+/g, '<a href="$&">$&</a>');//surrounds http links with html link tags
+    }
+
     width: gradRect.ListView.view.width;
     height: 100
     gradient: Gradient {
@@ -64,7 +68,7 @@ Rectangle {
         x: 84; y: 27
         width: gradRect.width - statusText.x
         color: "#222222"
-        text: gradRect.tweetText
+        text: addTags(gradRect.tweetText)
         wrapMode: "WordWrap"
         smooth: true
         font.pointSize: 9

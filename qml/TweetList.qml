@@ -8,6 +8,7 @@ Item {
         model: tweetListModel
         width: parent.width
         height: parent.height
+        clip: true
 		delegate: Tweet {
             id: tweetDelegate
             tweetScreenName: screenNameRole
