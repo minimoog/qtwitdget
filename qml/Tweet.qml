@@ -17,6 +17,16 @@ Rectangle {
         return str.replace(/http:\/\/[^ \n\t]+/g, '<a href="$&">$&</a>');//surrounds http links with html link tags
     }
 
+    function handleLink(link) {
+        console.log(link);
+        if (link.slice(0, 3) == 'app') {
+            console.log('tag clicked');
+        } else if (link.slice(0, 4) == 'http') {
+            Qt.openUrlExternally(link);
+            console.log('link clicked');
+        }
+    }
+
     width: gradRect.ListView.view.width;
     height: 100
     gradient: Gradient {
@@ -73,6 +83,7 @@ Rectangle {
         smooth: true
         font.pointSize: 9
         font.family: "Segoe UI"
+        onLinkActivated: gradRect.handleLink(link)
     }
 
     Button {
