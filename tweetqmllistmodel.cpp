@@ -177,6 +177,11 @@ void TweetQmlListModel::finishedDestroyTweet(qint64 id)
 
         m_statuses.removeAt(i);
 
+        QSqlQuery query;
+        query.prepare("DELETE FROM status WHERE id = :id");
+        query.bindValue(":id", id);
+        query.exec();
+
         endRemoveRows();
 
         twitDestroy->deleteLater();
