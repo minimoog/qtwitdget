@@ -22,5 +22,8 @@
         <file>translations/qtwitdget_en.qm</file>
         <file>translations/qtwitdget_mk.qm</file>
         <file>images/default_avatar.png</file>
+        <file>qml/Button.qml</file>
+        <file>qml/Tweet.qml</file>
+        <file>qml/TweetList.qml</file>
     </qresource>
 </RCC>

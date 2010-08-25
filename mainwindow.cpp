@@ -642,7 +642,7 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
     ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
     ui.declarativeView->rootContext()->setContextProperty("mainWindow", this);
 
-    ui.declarativeView->setSource(QUrl::fromLocalFile("qml/TweetList.qml"));
+    ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));
 }
 
 void MainWindow::nextStatuses()
