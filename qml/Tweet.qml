@@ -94,13 +94,6 @@ Rectangle {
                 return "../images/button_reply.png"
         }
 
-        hoverButtonImageUrl: {
-            if (isOwnTweet)
-                return "../images/button_delete_hover.png"
-            else
-                return "../images/button_reply_hover.png"
-        }
-
         clickedButtonImageUrl: {
             if (isOwnTweet)
                 return "../images/button_delete_click.png"
@@ -120,7 +113,6 @@ Rectangle {
         id: retweetButton
         x: 43; y: 80
         buttonImageUrl: "../images/button_retweet.png"
-        hoverButtonImageUrl: "../images/button_retweet_hover.png"
         clickedButtonImageUrl: "../images/button_retweet_click.png"
 
         onClicked: gradRect.retweetButtonClicked()
@@ -130,7 +122,6 @@ Rectangle {
         id: favoriteButton
         x: gradRect.width - 50; y: 80
         buttonImageUrl: "../images/button_favorited.png"
-        hoverButtonImageUrl: "../images/button_favorited_hover.png"
         clickedButtonImageUrl: "../images/button_favorited_click.png"
     }
 }
