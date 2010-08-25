@@ -167,6 +167,18 @@ void TweetQmlListModel::finishedDestroyTweet(qint64 id)
 
     if (twitDestroy) {
         // ### TODO: remove from model
+        int i;
+        for (i = 0; i < m_statuses.count(); ++i) {
+            if (m_statuses.at(i).id() == id)
+                break;
+        }
+
+        beginRemoveRows(QModelIndex(), i, i);
+
+        m_statuses.removeAt(i);
+
+        endRemoveRows();
+
         twitDestroy->deleteLater();
     }
 }
