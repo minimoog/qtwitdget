@@ -101,4 +101,7 @@ win32:RC_FILE = qtwitdget.rc
 OTHER_FILES += \
     qml/Button.qml \
     qml/Tweet.qml \
-    qml/TweetList.qml
+    qml/TweetList.qml \
+    qml/TestButton.qml \
+    qml/AuthPage.qml \
+    qml/MainScreen.qml
