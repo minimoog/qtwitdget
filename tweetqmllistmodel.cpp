@@ -35,19 +35,6 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
     setRoleNames(roles);
-
-    QSqlQuery query;
-    query.exec("SELECT id, text, screenName, profileImageUrl, userId FROM status ORDER BY id DESC LIMIT 20");
-
-    while (query.next()) {
-        QTwitStatus st;
-        st.setId(query.value(0).toLongLong());
-        st.setText(query.value(1).toString());
-        st.setScreenName(query.value(2).toString());
-        st.setProfileImageUrl(query.value(3).toString());
-        st.setUserId(query.value(4).toInt());
-        m_statuses.append(st);
-    }
 }
 
 void TweetQmlListModel::setNetworkAccessManager(QNetworkAccessManager *netManager)
