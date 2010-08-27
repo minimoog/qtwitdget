@@ -81,17 +81,11 @@ MainWindow::MainWindow()
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
     connect(ui.shortUrlsButton, SIGNAL(clicked()), ui.updateEdit, SLOT(shortUrls()));
     connect(ui.shortUrlsDMPushButton, SIGNAL(clicked()), ui.directMessageEdit, SLOT(shortUrls()));
-	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(nextStatuses()));
-    connect(ui.userpassButtonBox, SIGNAL(accepted()), this, SLOT(authorize()));
-    connect(ui.userpassButtonBox, SIGNAL(rejected()), this, SLOT(cancelUserPassDirectMessage()));
     connect(ui.cancelDMPushButton, SIGNAL(clicked()), this, SLOT(cancelUserPassDirectMessage()));
     connect(ui.sendDMPushButton, SIGNAL(clicked()), this, SLOT(sendDirectMessage()));
-    connect(ui.usernameLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));
-    connect(ui.passwordLineEdit, SIGNAL(returnPressed()), this, SLOT(authorize()));	
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
     connect(ui.actionSendDirectMessage, SIGNAL(triggered()), this, SLOT(showDirectMessageEdit()));
-	connect(ui.actionCreateGroup, SIGNAL(triggered()), SLOT(createGrouping()));
 
     //timer is single shot, avoid conflict with HomeTimeline
     m_timer->setSingleShot(true);
@@ -104,6 +98,8 @@ MainWindow::MainWindow()
 
 	setupTrayIcon();
 
+    createDeclarativeView();
+
     readSettings();
 }
 
@@ -115,29 +111,19 @@ QNetworkAccessManager* MainWindow::networkAccessManager()
     return m_s_netManager;
 }
 
-/*!
-    Start authorization process
- */
-void MainWindow::authorize()
+void MainWindow::authorize(const QString &username, const QString &password)
 {
-    //disconnect timer (fetching tweets)
-    // ### TODO: Disconnect other signals ???
     disconnect(m_timer, SIGNAL(timeout()), 0, 0);
 
-    //xAuth flow
     m_oauthTwitter->clearTokens();
-    m_oauthTwitter->authorizeXAuth(ui.usernameLineEdit->text(), ui.passwordLineEdit->text());
-    ui.usernameLineEdit->clear();
-    ui.passwordLineEdit->clear();
+    m_oauthTwitter->authorizeXAuth(username, password);
 
-	//verify credentials
-	QTwitVerifyCredentials vc;
-	vc.setNetworkAccessManager(m_netManager);
-	vc.setOAuthTwitter(m_oauthTwitter);
+    QTwitVerifyCredentials vc;
+    vc.setNetworkAccessManager(m_netManager);
+    vc.setOAuthTwitter(m_oauthTwitter);
 
     SignalWaiter sigWait(&vc, SIGNAL(finished(bool)));
     vc.verify();
-    statusBar()->showMessage(tr("Verifying Twitter credentials."), 2000);
 
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     if (sigWait.wait(60000)) {
@@ -146,8 +132,6 @@ void MainWindow::authorize()
         settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
         settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
         settings.setValue("user_id", extUserInfo.id());
-
-        statusBar()->showMessage("Credentials ok.", 2000);
 
         startUp();
     } else {
@@ -160,8 +144,8 @@ void MainWindow::authorize()
 
 void MainWindow::changeUserPass()
 {
-    ui.stackedWidget->setCurrentIndex(1);
-    ui.usernameLineEdit->setFocus();
+    QGraphicsObject *obj = ui.declarativeView->rootObject();
+    obj->setProperty("authed", false);
 }
 
 void MainWindow::showDirectMessageEdit()
@@ -184,8 +168,6 @@ void MainWindow::showDirectMessageEdit()
 
 void MainWindow::cancelUserPassDirectMessage()
 {
-    ui.usernameLineEdit->clear();
-    ui.passwordLineEdit->clear();
     ui.directMessageEdit->clear();
     ui.stackedWidget->setCurrentIndex(0);
 }
@@ -235,9 +217,6 @@ void MainWindow::startUp()
             m_lastDirectMessageId = getLastDirectMessageId();
 		}
 
-        createDefaultTabs();
-        createUserDefinedTabs();
-
         //get friends
         QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
         connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
@@ -246,6 +225,12 @@ void MainWindow::startUp()
         //start fetching tweets
         connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 		updateTimeline();
+        updateDeclarativeView();
+
+        //show/animate tweets list page
+        QGraphicsObject *obj = ui.declarativeView->rootObject();
+        obj->setProperty("authed", true);
+
     } else {
         changeUserPass();
     }
@@ -303,29 +288,6 @@ void MainWindow::updateButtonClicked()
 		m_twitUpdate->setUpdate(updateText, ui.updateEdit->statusId());
 		ui.updateEdit->clear();
 	}
-}
-
-void MainWindow::createGrouping()
-{
-	GroupDialog groupDialog;
-	groupDialog.exec();
-
-    QString query = createUserQueryString(groupDialog.getGroupList());
-    addTimelineTab(query, groupDialog.getGroupName());
-
-    //if save is checked, save group to settings
-    if (groupDialog.isSaveGroupingChecked()) {
-        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-        int size = settings.beginReadArray("groups");
-        settings.endArray();
-
-        settings.beginWriteArray("groups");
-        settings.setArrayIndex(size);
-        settings.setValue("tabName", groupDialog.getGroupName());
-        settings.setValue("query", query);
-
-        settings.endArray();
-    }
 }
 
 void MainWindow::finishedFriendsTimeline()
@@ -613,24 +575,7 @@ void MainWindow::updateDeclarativeView()
     m_tweetListModel->update();
 }
 
-void MainWindow::createDefaultTabs()
-{
-    addTimelineTab(" 1 == 1 ", tr("Friends"));
-}
-
-QString MainWindow::createUserQueryString(const QList<int>& usersId)
-{
-	//build up query
-	QString query;
-	foreach(const int& id, usersId){
-		query += QString(" userId == %1 OR").arg(id);
-	}
-	query.chop(2); //remove last OR
-
-    return query;
-}
-
-void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bool unread, bool closable)
+void MainWindow::createDeclarativeView()
 {
     m_tweetListModel = new TweetQmlListModel();
     m_tweetListModel->setUserID(m_userId);
@@ -640,17 +585,10 @@ void MainWindow::addTimelineTab(const QString& query, const QString& tabName, bo
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
     ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
-    ui.declarativeView->rootContext()->setContextProperty("mainWindow", this);
+    ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
 
-    ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));
-}
-
-void MainWindow::nextStatuses()
-{
-    //QTwitView* statusView = qobject_cast<QTwitView *>(ui.tabWidget->currentWidget());
-
-    //if (!statusView)
-    //	return;
+    //ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));
+    ui.declarativeView->setSource(QUrl::fromLocalFile("qml/MainScreen.qml"));
 }
 
 void MainWindow::favorited(qint64 statusId)
@@ -695,29 +633,6 @@ void MainWindow::writeSettings()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
-}
-
-void MainWindow::createUserDefinedTabs()
-{
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-    int size = settings.beginReadArray("groups");
-    for (int i = 0; i < size; ++i) {
-        settings.setArrayIndex(i);
-
-        addTimelineTab(settings.value("query").toString(), settings.value("tabName").toString());
-    }
-
-    settings.endArray();
-}
-
-void MainWindow::setTweetIdReadDatabase(qint64 id)
-{
-    QSqlQuery query;
-    query.prepare("UPDATE status SET isRead = 1 WHERE id = :id");
-    query.bindValue(":id", id);
-    query.exec();
-
-    //should return true or false
 }
 
 MainWindow::~MainWindow()

@@ -51,6 +51,8 @@ public:
 	void startUp();
     static QNetworkAccessManager* networkAccessManager();
 
+Q_INVOKABLE void authorize(const QString& username, const QString& password);
+
 private slots:
 	void finishedFriendsTimeline();
     void finishedDM(const QList<QTwitDMStatus>& messages);
@@ -60,10 +62,7 @@ private slots:
 	void statusDestroyed(qint64 id);
 	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
-	void createGrouping();
-	void nextStatuses();
     void languageChanged();
-    void authorize();
     void changeUserPass();
     void cancelUserPassDirectMessage();
     void showDirectMessageEdit();
@@ -79,15 +78,11 @@ private:
 	void setupTrayIcon();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
-    void createDefaultTabs();
-    QString createUserQueryString(const QList<int>& usersId);
     void updateDeclarativeView();
-    void addTimelineTab(const QString& query, const QString& tabName, bool unread = false, bool closable = false);
+    void createDeclarativeView();
 	bool isDatabaseEmpty();
     void readSettings();
     void writeSettings();
-    void createUserDefinedTabs();
-    void setTweetIdReadDatabase(qint64 id);
     qint64 getLastStatusId();
     qint64 getLastDirectMessageId();
 
