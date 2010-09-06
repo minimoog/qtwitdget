@@ -43,26 +43,13 @@
        <enum>QFrame::NoFrame</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="update">
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="margin">
          <number>0</number>
         </property>
-        <item>
-         <widget class="QPushButton" name="moreButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>Shows more tweets.</string>
-          </property>
-          <property name="text">
-           <string>...More...</string>
-          </property>
-         </widget>
-        </item>
         <item>
          <widget class="TwitStatusEdit" name="updateEdit">
           <property name="sizePolicy">
@@ -94,16 +81,6 @@
             </property>
             <property name="text">
              <string>Update</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="shortUrlsButton">
-            <property name="toolTip">
-             <string>Shortens longs url links in the update text.</string>
-            </property>
-            <property name="text">
-             <string>Short Urls</string>
             </property>
            </widget>
           </item>
