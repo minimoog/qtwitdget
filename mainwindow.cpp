@@ -31,6 +31,7 @@
 #include <QGraphicsObject>
 #include <QDeclarativeProperty>
 #include <QDeclarativeView>
+#include <QCloseEvent>
 #include "mainwindow.h"
 #include "oauth/oauthtwitter.h"
 #include "qtwit/hometimeline.h"
@@ -67,18 +68,14 @@ MainWindow::MainWindow()
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
-	ui.updateEdit->setLimit(140);
-	
+
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
-	connect(ui.updateButton, SIGNAL(clicked()), SLOT(updateButtonClicked()));
 	connect(m_homeTimeline, SIGNAL(finishedTimeline()), SLOT(finishedFriendsTimeline()));
     connect(m_homeTimeline, SIGNAL(finishedTimeline()), m_timer, SLOT(start()));
     //on error just start again the timer
     connect(m_homeTimeline, SIGNAL(networkError(QString)), m_timer, SLOT(start()));
-	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
-	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
@@ -189,8 +186,6 @@ void MainWindow::startUp()
 		m_oauthTwitter->setOAuthToken(oauthToken.toUtf8());
 		m_oauthTwitter->setOAuthTokenSecret(oauthTokenSecret.toUtf8());
 
-        ui.stackedWidget->setCurrentIndex(0);
-
 		//create or change database according to user id
 		createDatabase(QString::number(m_userId));
 
@@ -266,12 +261,7 @@ void MainWindow::updateTimeline()
 
 void MainWindow::updateButtonClicked()
 {
-	if(!ui.updateEdit->toPlainText().isEmpty()){
-		//trim to 140 characters
-		QString updateText = ui.updateEdit->toPlainText().left(140);
-		m_twitUpdate->setUpdate(updateText, ui.updateEdit->statusId());
-		ui.updateEdit->clear();
-	}
+
 }
 
 void MainWindow::finishedFriendsTimeline()
@@ -568,7 +558,7 @@ void MainWindow::createDeclarativeView()
 
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
-    ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
+    //ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
     ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
 
     //ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));

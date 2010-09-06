@@ -8,7 +8,7 @@ QT += network \
 
 # win32:LIBS += libeay32.lib
 # unix:LIBS += -lcrypto
-HEADERS += twitstatusedit.h \
+HEADERS += \
     shortenedurl.h \
     mainwindow.h \
     langchangedialog.h \
@@ -57,7 +57,6 @@ HEADERS += qjson/json_parser.hh \
     qjson/serializerrunnable.h \
     qjson/qjson_export.h
 SOURCES += main.cpp \
-    twitstatusedit.cpp \
     shortenedurl.cpp \
     mainwindow.cpp \
     langchangedialog.cpp \
