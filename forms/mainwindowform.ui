@@ -224,7 +224,6 @@
     <property name="title">
      <string>&amp;Tweets</string>
     </property>
-    <addaction name="actionGotoToNextUnread"/>
     <addaction name="actionSendDirectMessage"/>
    </widget>
    <addaction name="menuFile"/>
@@ -287,14 +286,6 @@
    </property>
    <property name="toolTip">
     <string>Mark All Tweets Read</string>
-   </property>
-  </action>
-  <action name="actionGotoToNextUnread">
-   <property name="text">
-    <string>&amp;Goto to Next Unread</string>
-   </property>
-   <property name="shortcut">
-    <string>Space</string>
    </property>
   </action>
   <action name="actionSendDirectMessage">
