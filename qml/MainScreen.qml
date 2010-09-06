@@ -7,12 +7,24 @@ Item {
     objectName: "screen"
     property bool authed: true
 
-    TweetList {
-        id: tweetsPage
-        x: 0
-        y: 0
+    Item {
+        id: containerTweetList
         height: parent.height
         width: parent.width
+
+        TweetList {
+            id: tweetsPage
+            x: 0
+            y: 0
+            height: parent.height
+            width: parent.width
+        }
+
+        TweetUpdate {
+            x: 0
+            y: containerTweetList.height - height
+            width: parent.width
+        }
     }
 
     AuthPage {
@@ -32,7 +44,7 @@ Item {
         State {
             name: "unauthed"
             when: !screen.authed
-            PropertyChanges { target: tweetsPage; x: parent.width }
+            PropertyChanges { target: containerTweetList; x: parent.width }
             PropertyChanges { target: authPage; x: 0 }
         }
     ]
