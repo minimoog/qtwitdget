@@ -104,4 +104,5 @@ OTHER_FILES += \
     qml/TweetList.qml \
     qml/TestButton.qml \
     qml/AuthPage.qml \
-    qml/MainScreen.qml
+    qml/MainScreen.qml \
+    qml/TweetUpdate.qml
