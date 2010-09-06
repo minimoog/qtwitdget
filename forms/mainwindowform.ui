@@ -43,7 +43,7 @@
        <enum>QFrame::NoFrame</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="update">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -224,7 +224,6 @@
     <property name="title">
      <string>&amp;Tweets</string>
     </property>
-    <addaction name="actionSendDirectMessage"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTweets"/>
@@ -286,11 +285,6 @@
    </property>
    <property name="toolTip">
     <string>Mark All Tweets Read</string>
-   </property>
-  </action>
-  <action name="actionSendDirectMessage">
-   <property name="text">
-    <string>Send &amp;Direct Message</string>
    </property>
   </action>
  </widget>

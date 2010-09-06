@@ -84,7 +84,6 @@ MainWindow::MainWindow()
     connect(ui.sendDMPushButton, SIGNAL(clicked()), this, SLOT(sendDirectMessage()));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
-    connect(ui.actionSendDirectMessage, SIGNAL(triggered()), this, SLOT(showDirectMessageEdit()));
 
     //timer is single shot, avoid conflict with HomeTimeline
     m_timer->setSingleShot(true);
