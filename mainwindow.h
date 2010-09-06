@@ -64,7 +64,6 @@ private slots:
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void languageChanged();
     void changeUserPass();
-    void cancelUserPassDirectMessage();
     void showDirectMessageEdit();
     void sendDirectMessage();
 

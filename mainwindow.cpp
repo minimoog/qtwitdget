@@ -79,9 +79,6 @@ MainWindow::MainWindow()
     connect(m_homeTimeline, SIGNAL(networkError(QString)), m_timer, SLOT(start()));
 	connect(ui.updateEdit, SIGNAL(overLimit(bool)), ui.updateButton, SLOT(setDisabled(bool)));
 	connect(ui.updateEdit, SIGNAL(returnPressed()), ui.updateButton, SLOT(click()));
-    connect(ui.shortUrlsDMPushButton, SIGNAL(clicked()), ui.directMessageEdit, SLOT(shortUrls()));
-    connect(ui.cancelDMPushButton, SIGNAL(clicked()), this, SLOT(cancelUserPassDirectMessage()));
-    connect(ui.sendDMPushButton, SIGNAL(clicked()), this, SLOT(sendDirectMessage()));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
@@ -148,47 +145,36 @@ void MainWindow::changeUserPass()
 
 void MainWindow::showDirectMessageEdit()
 {
-    ui.stackedWidget->setCurrentIndex(2);
-    ui.directMessageEdit->setFocus();
-
     // ### TODO: Icons/Avatars
 
     //fill combo box if it isn't filled
-    if (!ui.friendsComboBox->count()) {
-        QSqlQuery query;
-        query.exec("SELECT screenName FROM friends");
+//    if (!ui.friendsComboBox->count()) {
+//        QSqlQuery query;
+//        query.exec("SELECT screenName FROM friends");
 
-        while (query.next()) {
-            ui.friendsComboBox->addItem(query.value(0).toString());
-        }
-    }
-}
-
-void MainWindow::cancelUserPassDirectMessage()
-{
-    ui.directMessageEdit->clear();
-    ui.stackedWidget->setCurrentIndex(0);
+//        while (query.next()) {
+//            ui.friendsComboBox->addItem(query.value(0).toString());
+//        }
+//    }
 }
 
 void MainWindow::sendDirectMessage()
 {
-    if (!ui.directMessageEdit->toPlainText().isEmpty()) {
-        QTwitNewDirectMessage *dm = new QTwitNewDirectMessage(m_netManager, m_oauthTwitter);
-        connect(dm, SIGNAL(finished()), this, SLOT(finishedSendingDirectMessage()));
+//    if (!ui.directMessageEdit->toPlainText().isEmpty()) {
+//        QTwitNewDirectMessage *dm = new QTwitNewDirectMessage(m_netManager, m_oauthTwitter);
+//        connect(dm, SIGNAL(finished()), this, SLOT(finishedSendingDirectMessage()));
 
-        dm->sendMessage(ui.friendsComboBox->currentText(), ui.directMessageEdit->toPlainText());
-    }
+//        dm->sendMessage(ui.friendsComboBox->currentText(), ui.directMessageEdit->toPlainText());
+//    }
 }
 
 void MainWindow::finishedSendingDirectMessage()
 {
-    QTwitNewDirectMessage *dm = qobject_cast<QTwitNewDirectMessage*>(sender());
-    if (dm) {
-        ui.statusbar->showMessage(tr("Direct message sent."));
-        dm->deleteLater();
-    }
-
-    cancelUserPassDirectMessage();
+//    QTwitNewDirectMessage *dm = qobject_cast<QTwitNewDirectMessage*>(sender());
+//    if (dm) {
+//        ui.statusbar->showMessage(tr("Direct message sent."));
+//        dm->deleteLater();
+//    }
 }
 
 void MainWindow::startUp()
