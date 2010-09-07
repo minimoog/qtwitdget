@@ -52,6 +52,7 @@ public:
     static QNetworkAccessManager* networkAccessManager();
 
 Q_INVOKABLE void authorize(const QString& username, const QString& password);
+Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text);
 
 private slots:
 	void finishedFriendsTimeline();
@@ -60,7 +61,6 @@ private slots:
     void finishedSendingDirectMessage();
 	void updateTimeline();
 	void statusDestroyed(qint64 id);
-	void updateButtonClicked();
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void languageChanged();
     void changeUserPass();
