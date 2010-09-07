@@ -9,21 +9,28 @@ Item {
 
     Item {
         id: containerTweetList
-        height: parent.height
-        width: parent.width
+        height: parent.height; width: parent.width
 
         TweetList {
             id: tweetsPage
-            x: 0
-            y: 0
-            height: parent.height
-            width: parent.width
+            x: 0; y: 0
+            height: parent.height; width: parent.width
+
+            onReplyClicked: tweetUpdateElement.setReply(id, screenname)
+            onRetweetClicked: tweetUpdateElement.setRetweet(text, screenname)
         }
 
         TweetUpdate {
+            id: tweetUpdateElement
             x: 0
             y: containerTweetList.height - height
             width: parent.width
+
+            onUpdateButtonClicked: {
+                rootWindow.updateButtonClicked(tweetUpdateElement.tweetid, tweetUpdateElement.updateText);
+                tweetUpdateElement.updateText = "";
+                tweetUpdateElement.tweetid = "";
+            }
         }
     }
 

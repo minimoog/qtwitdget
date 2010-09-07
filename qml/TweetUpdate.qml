@@ -1,6 +1,19 @@
 import Qt 4.7
 
 Rectangle {
+    property string tweetid
+    property alias updateText: updateTweetInput.text
+    signal updateButtonClicked
+
+    function setReply(id, screenname) {
+        tweetid = id;
+        updateTweetInput.text = '@' + screenname + ' ';
+    }
+
+    function setRetweet(text, screenname) {
+        updateTweetInput.text = "RT @" + screenname + ": " + text;
+    }
+
     height: updateTweetInput.height + rowButtons.height + 5
     radius: 0
     border.width: 2
@@ -28,6 +41,7 @@ Rectangle {
             width: 60
             height: 20
             text: "Update"
+            onClicked: updateButtonClicked();
         }
 
         TestButton {
