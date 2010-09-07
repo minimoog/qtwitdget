@@ -259,9 +259,23 @@ void MainWindow::updateTimeline()
 	}
 }
 
-void MainWindow::updateButtonClicked()
+void MainWindow::updateButtonClicked(const QString &id, const QString &text)
 {
+    bool ok;
 
+    qint64 tweetid = id.toLongLong(&ok);
+
+    if (!ok)
+        qDebug() << "MainWindow::updateButtonClicked : bad string id";
+        
+    QString updateText = text.left(140);
+
+    if (updateText.isEmpty()) {
+        qDebug() << "MainWindow::updateButtonClicked: empty update text";
+        return;
+    }
+
+    m_twitUpdate->setUpdate(updateText, tweetid);
 }
 
 void MainWindow::finishedFriendsTimeline()
