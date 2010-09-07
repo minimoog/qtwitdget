@@ -21,15 +21,38 @@ Item {
         }
 
         TweetUpdate {
+            property bool moved: false
+
             id: tweetUpdateElement
-            x: 0
-            y: containerTweetList.height - height
+            x: 0; y: containerTweetList.height //containerTweetList.height - height
             width: parent.width
 
             onUpdateButtonClicked: {
                 rootWindow.updateButtonClicked(tweetUpdateElement.tweetid, tweetUpdateElement.updateText);
                 tweetUpdateElement.updateText = "";
                 tweetUpdateElement.tweetid = "";
+            }
+
+            // ### TODO: Toggle button
+            TestButton {
+                id: showUpdateElement
+                height: 10; width: 50
+                x: 0; y: -height
+                text: "U"
+
+                onClicked: parent.moved = !parent.moved;
+            }
+
+            states: [
+                State {
+                    name: "moved"
+                    when: tweetUpdateElement.moved
+                    PropertyChanges { target: tweetUpdateElement; y: containerTweetList.height - tweetUpdateElement.height}
+                }
+            ]
+
+            transitions: Transition {
+                PropertyAnimation { easing.type: "InOutQuad"; properties: "y"; duration: 400 }
             }
         }
     }
