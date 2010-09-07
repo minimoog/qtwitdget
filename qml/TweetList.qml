@@ -1,16 +1,17 @@
 import Qt 4.7
 
 //tweetListModel - external
-//statusEdit - external
 
 Item {
     id: tweetListViewItem
 
+    signal replyClicked(string id, string screenname)
+    signal retweetClicked(string text, string screenname)
+
 	ListView {
         id: tweetListView
         model: tweetListModel
-        width: parent.width
-        height: parent.height
+        width: parent.width; height: parent.height
         clip: true
 		delegate: Tweet {
             id: tweetDelegate
@@ -20,20 +21,11 @@ Item {
             tweetid:  statusIdRole
             isOwnTweet: ownTweetRole
 
-            Connections {
-                target: tweetDelegate
-                onReplyButtonClicked: {
-                    statusEdit.setReply(tweetDelegate.tweetid, tweetDelegate.tweetScreenName);
-                    statusEdit.setFocus();
-                }
-                onRetweetButtonClicked: {
-                    statusEdit.setRetweet(tweetDelegate.tweetText, tweetDelegate.tweetScreenName);
-                    statusEdit.setFocus();
-                }
-                onDeleteButtonClicked: {
-                    tweetListModel.destroyTweet(tweetDelegate.tweetid);
-                }
-            }
+            onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
+            onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
+
+            //move/refactor to MainScreen.qml
+            onDeleteButtonClicked: tweetListModel.destroyTweet(tweetDelegate.tweetid)
 		}
 	}
 }
