@@ -572,7 +572,6 @@ void MainWindow::createDeclarativeView()
 
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
-    //ui.declarativeView->rootContext()->setContextProperty("statusEdit", ui.updateEdit);
     ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
 
     //ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));

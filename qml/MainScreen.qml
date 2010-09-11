@@ -16,8 +16,15 @@ Item {
             x: 0; y: 0
             height: parent.height; width: parent.width
 
-            onReplyClicked: tweetUpdateElement.setReply(id, screenname)
-            onRetweetClicked: tweetUpdateElement.setRetweet(text, screenname)
+            onReplyClicked: {
+                tweetUpdateElement.setReply(id, screenname);
+                tweetUpdateElement.moved = true;
+            }
+
+            onRetweetClicked: {
+                tweetUpdateElement.setRetweet(text, screenname);
+                tweetUpdateElement.moved = true;
+            }
         }
 
         TweetUpdate {
@@ -31,6 +38,7 @@ Item {
                 rootWindow.updateButtonClicked(tweetUpdateElement.tweetid, tweetUpdateElement.updateText);
                 tweetUpdateElement.updateText = "";
                 tweetUpdateElement.tweetid = "";
+                moved = false;
             }
 
             // ### TODO: Toggle button
