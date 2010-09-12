@@ -28,5 +28,15 @@ Item {
             onDeleteButtonClicked: tweetListModel.destroyTweet(tweetDelegate.tweetid)
 		}
 	}
+
+    // taken from Flickable documentation
+    Rectangle {
+        id: scrollbar
+        anchors.right: tweetListView.right
+        y: tweetListView.visibleArea.yPosition * tweetListView.height
+        width: 2
+        height: tweetListView.visibleArea.heightRatio * tweetListView.height
+        color: "black"
+    }
 }
 
