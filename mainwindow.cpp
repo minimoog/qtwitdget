@@ -50,7 +50,6 @@
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
-	m_homeTimeline(new HomeTimeline(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
     m_twitFavorite(new QTwitFavorites(this)),
 	m_timer(new QTimer(this)),
@@ -59,11 +58,9 @@ MainWindow::MainWindow()
     m_lastMarkedReadStatus(0)
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
-	m_homeTimeline->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
     m_twitFavorite->setNetworkAccessManager(m_netManager);
 
-	m_homeTimeline->setOAuthTwitter(m_oauthTwitter);
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
     m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
 
@@ -72,10 +69,6 @@ MainWindow::MainWindow()
 	qApp->setOrganizationName("QTwitdget");
 
 	//connect signals
-	connect(m_homeTimeline, SIGNAL(finishedTimeline()), SLOT(finishedFriendsTimeline()));
-    connect(m_homeTimeline, SIGNAL(finishedTimeline()), m_timer, SLOT(start()));
-    //on error just start again the timer
-    connect(m_homeTimeline, SIGNAL(networkError(QString)), m_timer, SLOT(start()));
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
@@ -90,9 +83,9 @@ MainWindow::MainWindow()
 
 	setupTrayIcon();
 
-    createDeclarativeView();
-
     readSettings();
+
+    createDeclarativeView();
 }
 
 /*!
@@ -210,6 +203,11 @@ void MainWindow::startUp()
         QGraphicsObject *obj = ui.declarativeView->rootObject();
         obj->setProperty("authed", true);
 
+        //show last tweets from database
+        m_tweetListModel->loadTweetsFromDatabase();
+        //start fetching
+        m_tweetListModel->startUpdateTimelines();
+
     } else {
         changeUserPass();
     }
@@ -251,10 +249,8 @@ void MainWindow::updateTimeline()
 
 	if(m_firstRun){
 		m_firstRun = false;
-        m_homeTimeline->timeline(0);
         dm->directMessages(0);
 	} else {
-        m_homeTimeline->timeline(m_lastStatusId);
         dm->directMessages(m_lastDirectMessageId);
 	}
 }
@@ -276,85 +272,6 @@ void MainWindow::updateButtonClicked(const QString &id, const QString &text)
     }
 
     m_twitUpdate->setUpdate(updateText, tweetid);
-}
-
-void MainWindow::finishedFriendsTimeline()
-{
-	QList<QTwitStatus> lastStatuses = m_homeTimeline->statuses();
-
-	if(!lastStatuses.isEmpty()){
-        statusBar()->showMessage(QString(tr("New %1 tweets")).arg(lastStatuses.count()));
-		//get last status id
-		m_lastStatusId = lastStatuses.at(0).id();
-
-		QSqlQuery query;
-
-        query.exec("BEGIN;");
-
-		query.prepare("INSERT OR ABORT INTO status "
-			"(created, "
-			"id, "
-			"text, "
-			"replyToStatusId, "
-			"replyToUserId, "
-			"favorited, "
-			"replyToScreenName, "
-			"userId, "
-			"name, "
-			"screenName, "
-			"location, "
-			"description, "
-			"profileImageUrl, "
-			"url, "
-            "mention, " 
-            "isRead) "
-			"VALUES "
-			"(:created, "
-			":id, "
-			":text, "
-			":replyToStatusId, "
-			":replyToUserId, "
-			":favorited, "
-			":replyToScreenName, "
-			":userId, "
-			":name, "
-			":screenName, "
-			":location, "
-			":description, "
-			":profileImageUrl, "
-			":url, "
-            ":mention, "
-            ":isRead);");
-
-		//it doesn't have to be backwards, I like it this way
-		QListIterator<QTwitStatus> i(lastStatuses);
-		i.toBack();
-		while(i.hasPrevious()){
-			QTwitStatus s = i.previous();
-			query.bindValue(":created", s.created().toString(Qt::ISODate));
-			query.bindValue(":id", s.id());
-			query.bindValue(":text", s.text());
-			query.bindValue(":replyToStatusId", s.replyToStatusId());
-			query.bindValue(":replyToUserId", s.replyToUserId());
-			query.bindValue(":favorited", static_cast<int>(s.favorited()));
-			query.bindValue(":replyToScreenName", s.replyToScreenName());
-			query.bindValue(":userId", s.userId());
-			query.bindValue(":name", s.name());
-			query.bindValue(":screenName", s.screenName());
-			query.bindValue(":location", s.location());
-			query.bindValue(":description", s.description());
-			query.bindValue(":profileImageUrl", s.profileImageUrl());
-			query.bindValue(":url", s.url());
-            query.bindValue(":mention", 0); //not a mention
-            query.bindValue(":isRead", 0); //not readed
-			
-			query.exec();
-		}
-
-        query.exec("COMMIT;");
-
-        updateDeclarativeView();
-	}
 }
 
 void MainWindow::finishedDM(const QList<QTwitDMStatus> &messages)

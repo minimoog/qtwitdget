@@ -35,7 +35,6 @@ class QNetworkAccessManager;
 class QDeclarativeView;
 class QTimer;
 class OAuthTwitter;
-class HomeTimeline;
 class QTwitUpdate;
 class QTwitFavorites;
 class QDeclarativeComponent;
@@ -55,7 +54,6 @@ Q_INVOKABLE void authorize(const QString& username, const QString& password);
 Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text);
 
 private slots:
-	void finishedFriendsTimeline();
     void finishedDM(const QList<QTwitDMStatus>& messages);
     void finishedFriends(const QList<QTwitUser>& friends);
     void finishedSendingDirectMessage();
@@ -90,7 +88,6 @@ private:
 	QNetworkAccessManager *m_netManager;
     static QNetworkAccessManager *m_s_netManager;
 	OAuthTwitter *m_oauthTwitter;
-	HomeTimeline *m_homeTimeline;
 	QTwitUpdate *m_twitUpdate;
     QTwitFavorites *m_twitFavorite;
 	QTimer *m_timer;

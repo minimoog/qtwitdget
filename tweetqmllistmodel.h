@@ -27,10 +27,12 @@
 class QTwitDestroy;
 class QNetworkAccessManager;
 class OAuthTwitter;
+class QTimer;
 
 class TweetQmlListModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int numNewTweets READ numNewTweets RESET resetNumNewTweets NOTIFY numNewTweetsChanged)
 public:
     enum TweetRoles {
         ScreenNameRole = Qt::UserRole + 1,
@@ -49,14 +51,31 @@ public:
     void setUserID(int userid);
     Q_INVOKABLE void destroyTweet(const QString& tweetid);
 
+    int numNewTweets() const;
+    void resetNumNewTweets();
+
+    void showNewTweets();
+    void loadTweetsFromDatabase();
+
+    void startUpdateTimelines();
+
+signals:
+    void numNewTweetsChanged();
+
 private slots:
+    void updateHomeTimeline();
     void finishedDestroyTweet(qint64 id);
+    void finishedHomeTimeline(const QList<QTwitStatus>& statuses);
 
 private:
     QNetworkAccessManager* m_netManager;
     OAuthTwitter* m_oauthTwitter;
+    QTimer* m_timer;
     QList<QTwitStatus> m_statuses;
+    QList<QTwitStatus> m_newStatuses; //doesn't show in the model
     int m_userid;
+    int m_numNewTweets;
+    int m_numOldTweets;
 };
 
 #endif // TWEETQMLLISTMODEL_H
