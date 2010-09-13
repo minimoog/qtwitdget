@@ -239,8 +239,6 @@ qint64 MainWindow::getLastDirectMessageId()
 
 void MainWindow::updateTimeline()
 {
-    statusBar()->showMessage(tr("Updating timelines."), 1000);
-
     QTwitDirectMessages *dm = new QTwitDirectMessages(this);
     dm->setNetworkAccessManager(m_netManager);
     dm->setOAuthTwitter(m_oauthTwitter);

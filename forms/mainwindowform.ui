@@ -74,7 +74,6 @@
    <addaction name="menuOptions"/>
    <addaction name="menuAbout"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionMinimize">
    <property name="text">
     <string>Minimize</string>
