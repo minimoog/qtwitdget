@@ -120,7 +120,6 @@ void TweetQmlListModel::finishedDestroyTweet(qint64 id)
     QTwitDestroy *twitDestroy = qobject_cast<QTwitDestroy*>(sender());
 
     if (twitDestroy) {
-        // ### TODO: remove from model
         int i;
         for (i = 0; i < m_statuses.count(); ++i) {
             if (m_statuses.at(i).id() == id)
@@ -245,9 +244,11 @@ void TweetQmlListModel::showNewTweets()
                 m_statuses.removeLast();
 
             endRemoveRows();
-
-            m_numOldTweets = m_statuses.count() - m_numNewTweets;
         }
+
+        m_numOldTweets = m_statuses.count() - m_numNewTweets;
+
+        qDebug() << "Num old tweets: " << m_numOldTweets;
 
         m_numNewTweets = 0;
         emit numNewTweetsChanged();
