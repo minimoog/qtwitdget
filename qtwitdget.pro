@@ -13,7 +13,6 @@ HEADERS += \
     mainwindow.h \
     langchangedialog.h \
     groupdialog.h \
-    sceneitems/pixmapbuttonitem.h \
     sceneitems/statustextitem.h \
     qtwit/qtwitupdate.h \
     qtwit/qtwitstatusdata.h \
@@ -59,7 +58,6 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     langchangedialog.cpp \
     groupdialog.cpp \
-    sceneitems/pixmapbuttonitem.cpp \
     sceneitems/statustextitem.cpp \
     qtwit/qtwitbase.cpp \
     qtwit/qtwitupdate.cpp \
