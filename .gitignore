@@ -23,3 +23,7 @@ ipch/*
 qtwitdget.pro.user.*
 *.opensdf
 *.exe
+*.o
+moc_*.cpp
+qrc_qtwitdget.cpp
+qtwitdget
