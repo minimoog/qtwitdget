@@ -1,16 +1,17 @@
 import Qt 4.7
 
-//tweetListModel - external
-
 Item {
     id: tweetListViewItem
 
+    property alias model: tweetListView.model
+
     signal replyClicked(string id, string screenname)
     signal retweetClicked(string text, string screenname)
+    signal deleteClicked(string id)
 
 	ListView {
         id: tweetListView
-        model: tweetListModel
+        //model: tweetListModel
         width: parent.width; height: parent.height
         clip: true
 		delegate: Tweet {
@@ -23,9 +24,7 @@ Item {
 
             onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
             onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
-
-            //move/refactor to MainScreen.qml
-            onDeleteButtonClicked: tweetListModel.destroyTweet(tweetDelegate.tweetid)
+            onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
 		}
 	}
 

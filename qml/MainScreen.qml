@@ -1,6 +1,7 @@
 import Qt 4.7
 
 //rootWindow - external
+//tweetListModel - external
 
 Item {
     id: screen
@@ -15,6 +16,7 @@ Item {
             id: tweetsPage
             x: 0; y: 0
             height: parent.height; width: parent.width
+            model: tweetListModel
 
             onReplyClicked: {
                 tweetUpdateElement.setReply(id, screenname);
@@ -24,6 +26,10 @@ Item {
             onRetweetClicked: {
                 tweetUpdateElement.setRetweet(text, screenname);
                 tweetUpdateElement.moved = true;
+            }
+
+            onDeleteClicked: {
+                tweetListModel.destroyTweet(id);
             }
         }
 
