@@ -12,10 +12,25 @@ Item {
         id: containerTweetList
         height: parent.height; width: parent.width
 
+        Item {
+            id: toolbar //or menubar
+
+            width: parent.width; height: 30
+
+            Row {
+                TestButton {
+                    id: showHomeTimelineButton
+                    width: 40; height: toolbar.height - 2
+                    text: "H" + ' ' + tweetListModel.numNewTweets
+                    onClicked: tweetListModel.showNewTweets()
+                }
+            }
+        }
+
         TweetList {
             id: tweetsPage
-            x: 0; y: 0
-            height: parent.height; width: parent.width
+            x: 0; y: toolbar.height
+            width: parent.width; height: parent.height - toolbar.height
             model: tweetListModel
 
             onReplyClicked: {

@@ -54,7 +54,7 @@ public:
     int numNewTweets() const;
     void resetNumNewTweets();
 
-    void showNewTweets();
+    Q_INVOKABLE void showNewTweets();
     void loadTweetsFromDatabase();
 
     void startUpdateTimelines();

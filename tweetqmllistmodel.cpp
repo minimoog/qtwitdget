@@ -159,7 +159,14 @@ void TweetQmlListModel::updateHomeTimeline()
     QTwitHomeTimeline *twitHomeTimeline = new QTwitHomeTimeline;
     twitHomeTimeline->setNetworkAccessManager(m_netManager);
     twitHomeTimeline->setOAuthTwitter(m_oauthTwitter);
-    twitHomeTimeline->update(m_statuses.at(0).id(), 0, 200);
+
+    if (m_statuses.isEmpty() && m_newStatuses.isEmpty())
+        twitHomeTimeline->update(0, 0, 200, 0);
+    else if (m_newStatuses.isEmpty())
+        twitHomeTimeline->update(m_statuses.at(0).id(), 0, 200, 0);
+    else
+        twitHomeTimeline->update(m_newStatuses.at(0).id(), 0, 200, 0);
+
     connect(twitHomeTimeline, SIGNAL(finishedHomeTimeline(QList<QTwitStatus>)),
             this, SLOT(finishedHomeTimeline(QList<QTwitStatus>)));
 }
@@ -231,14 +238,16 @@ void TweetQmlListModel::showNewTweets()
         endInsertRows();
 
         //remove old statutes
-        beginRemoveRows(QModelIndex(), numTweets + m_numNewTweets - m_numOldTweets, numTweets + m_numNewTweets - 1);
+        if (m_numOldTweets) {
+            beginRemoveRows(QModelIndex(), numTweets + m_numNewTweets - m_numOldTweets, numTweets + m_numNewTweets - 1);
 
-        for (int i = 0; i < m_numOldTweets; ++i)
-            m_statuses.removeLast();
+            for (int i = 0; i < m_numOldTweets; ++i)
+                m_statuses.removeLast();
 
-        endRemoveRows();
+            endRemoveRows();
 
-        m_numOldTweets = m_statuses.count() - m_numNewTweets;
+            m_numOldTweets = m_statuses.count() - m_numNewTweets;
+        }
 
         m_numNewTweets = 0;
         emit numNewTweetsChanged();
