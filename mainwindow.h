@@ -75,7 +75,6 @@ private:
 	void setupTrayIcon();
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
-    void updateDeclarativeView();
     void createDeclarativeView();
 	bool isDatabaseEmpty();
     void readSettings();
@@ -90,7 +89,6 @@ private:
 	OAuthTwitter *m_oauthTwitter;
 	QTwitUpdate *m_twitUpdate;
     QTwitFavorites *m_twitFavorite;
-	QTimer *m_timer;
 
     TweetQmlListModel* m_tweetListModel;
 

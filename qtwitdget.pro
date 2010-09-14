@@ -36,7 +36,9 @@ HEADERS += \
     qtwit/qtwitdmstatus.h \
     qtwit/qtwitdirectmessages.h \
     qtwit/qtwitnewdirectmessage.h \
-    tweetqmllistmodel.h
+    tweetqmllistmodel.h \
+    qtwit/qtwitmentions.h \
+    mentionsqmllistmodel.h
 
 # QJSON
 HEADERS += qjson/json_parser.hh \
@@ -71,7 +73,9 @@ SOURCES += main.cpp \
     signalwaiter.cpp \
     qtwit/qtwitdirectmessages.cpp \
     qtwit/qtwitnewdirectmessage.cpp \
-    tweetqmllistmodel.cpp
+    tweetqmllistmodel.cpp \
+    qtwit/qtwitmentions.cpp \
+    mentionsqmllistmodel.cpp
 
 # QJSON
 SOURCES += qjson/json_parser.cc \

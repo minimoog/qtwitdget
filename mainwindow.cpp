@@ -52,7 +52,6 @@ MainWindow::MainWindow()
 	m_oauthTwitter(new OAuthTwitter(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
     m_twitFavorite(new QTwitFavorites(this)),
-	m_timer(new QTimer(this)),
     m_lastStatusId(0),
     m_lastDirectMessageId(0),
     m_lastMarkedReadStatus(0)
@@ -71,10 +70,6 @@ MainWindow::MainWindow()
 	//connect signals
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
-
-    //timer is single shot, avoid conflict with HomeTimeline
-    m_timer->setSingleShot(true);
-    m_timer->setInterval(60000);
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
 	m_firstRun = false;
@@ -98,8 +93,6 @@ QNetworkAccessManager* MainWindow::networkAccessManager()
 
 void MainWindow::authorize(const QString &username, const QString &password)
 {
-    disconnect(m_timer, SIGNAL(timeout()), 0, 0);
-
     m_oauthTwitter->clearTokens();
     m_oauthTwitter->authorizeXAuth(username, password);
 
@@ -193,11 +186,6 @@ void MainWindow::startUp()
         QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
         connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
         friends->updateFriends(0, 0, QString(), QString("-1"));
-
-        //start fetching tweets
-        connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
-		updateTimeline();
-        updateDeclarativeView();
 
         //show/animate tweets list page
         QGraphicsObject *obj = ui.declarativeView->rootObject();
@@ -471,11 +459,6 @@ bool MainWindow::isDatabaseEmpty()
 	}
 
 	return true;
-}
-
-void MainWindow::updateDeclarativeView()
-{
-    m_tweetListModel->update();
 }
 
 void MainWindow::createDeclarativeView()
