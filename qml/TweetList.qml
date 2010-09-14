@@ -11,7 +11,6 @@ Item {
 
 	ListView {
         id: tweetListView
-        //model: tweetListModel
         width: parent.width; height: parent.height
         clip: true
 		delegate: Tweet {

@@ -88,6 +88,7 @@ Item {
             }
 
             Behavior on x {
+                // ### BUG: Mentions selected, user clicks authorize, happen overlap
                 NumberAnimation { easing.type: "InOutBack"; duration: 500 }
             }
         }
