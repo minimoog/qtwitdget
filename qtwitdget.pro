@@ -38,7 +38,8 @@ HEADERS += \
     qtwit/qtwitnewdirectmessage.h \
     tweetqmllistmodel.h \
     qtwit/qtwitmentions.h \
-    mentionsqmllistmodel.h
+    mentionsqmllistmodel.h \
+    directmessagesqmllistmodel.h
 
 # QJSON
 HEADERS += qjson/json_parser.hh \
@@ -75,7 +76,8 @@ SOURCES += main.cpp \
     qtwit/qtwitnewdirectmessage.cpp \
     tweetqmllistmodel.cpp \
     qtwit/qtwitmentions.cpp \
-    mentionsqmllistmodel.cpp
+    mentionsqmllistmodel.cpp \
+    directmessagesqmllistmodel.cpp
 
 # QJSON
 SOURCES += qjson/json_parser.cc \
@@ -100,4 +102,5 @@ OTHER_FILES += \
     qml/TestButton.qml \
     qml/AuthPage.qml \
     qml/MainScreen.qml \
-    qml/TweetUpdate.qml
+    qml/TweetUpdate.qml \
+    qml/DirectMessageTweet.qml
