@@ -2,6 +2,7 @@ import Qt 4.7
 
 //rootWindow - external
 //tweetListModel - external
+//mentionsListModel - external
 
 Item {
     id: screen
@@ -9,7 +10,7 @@ Item {
     property bool authed: true
 
     Item {
-        id: containerTweetList
+        id: container
         height: parent.height; width: parent.width
 
         Item {
@@ -22,29 +23,72 @@ Item {
                     id: showHomeTimelineButton
                     width: 40; height: toolbar.height - 2
                     text: "H" + ' ' + tweetListModel.numNewTweets
-                    onClicked: tweetListModel.showNewTweets()
+                    onClicked: {
+                        containerLists.x = 0;
+                        tweetListModel.showNewTweets();
+                    }
+                }
+
+                TestButton {
+                    id: showMentionsButton
+                    width:  40; height: toolbar.height - 2
+                    text: "M" + ' ' + mentionsListModel.numNewTweets
+                    onClicked: {
+                        containerLists.x = - container.width;
+                        mentionsListModel.showNewTweets();
+                    }
                 }
             }
         }
 
-        TweetList {
-            id: tweetsPage
+        Item {
+            id: containerLists
             x: 0; y: toolbar.height
-            width: parent.width; height: parent.height - toolbar.height
-            model: tweetListModel
 
-            onReplyClicked: {
-                tweetUpdateElement.setReply(id, screenname);
-                tweetUpdateElement.moved = true;
+            Row {
+                TweetList {
+                    id: homeTimelineList
+                    width: container.width; height: container.height - toolbar.height
+                    model:  tweetListModel
+
+                    onReplyClicked: {
+                        tweetUpdateElement.setReply(id, screenname);
+                        tweetUpdateElement.moved = true;
+                    }
+
+                    onRetweetClicked: {
+                        tweetUpdateElement.setRetweet(text, screenname);
+                        tweetUpdateElement.moved = true;
+                    }
+
+                    onDeleteClicked: {
+                        tweetListModel.destroyTweet(id);
+                    }
+                }
+
+                TweetList {
+                    id: mentionList
+                    width: container.width; height: container.height - toolbar.height
+                    model: mentionsListModel
+
+                    onReplyClicked: {
+                        tweetUpdateElement.setReply(id, screenname);
+                        tweetUpdateElement.moved = true;
+                    }
+
+                    onRetweetClicked: {
+                        tweetUpdateElement.setRetweet(text, screenname);
+                        tweetUpdateElement.moved = true;
+                    }
+
+                    onDeleteClicked: {
+                        mentionsListModel.destroyTweet(id);
+                    }
+                }
             }
 
-            onRetweetClicked: {
-                tweetUpdateElement.setRetweet(text, screenname);
-                tweetUpdateElement.moved = true;
-            }
-
-            onDeleteClicked: {
-                tweetListModel.destroyTweet(id);
+            Behavior on x {
+                NumberAnimation { easing.type: "InOutBack"; duration: 500 }
             }
         }
 
@@ -52,7 +96,7 @@ Item {
             property bool moved: false
 
             id: tweetUpdateElement
-            x: 0; y: containerTweetList.height //containerTweetList.height - height
+            x: 0; y: container.height //containerTweetList.height - height
             width: parent.width
 
             onUpdateButtonClicked: {
@@ -76,7 +120,7 @@ Item {
                 State {
                     name: "moved"
                     when: tweetUpdateElement.moved
-                    PropertyChanges { target: tweetUpdateElement; y: containerTweetList.height - tweetUpdateElement.height}
+                    PropertyChanges { target: tweetUpdateElement; y: container.height - tweetUpdateElement.height}
                 }
             ]
 
@@ -103,7 +147,7 @@ Item {
         State {
             name: "unauthed"
             when: !screen.authed
-            PropertyChanges { target: containerTweetList; x: parent.width }
+            PropertyChanges { target: container; x: parent.width }
             PropertyChanges { target: authPage; x: 0 }
         }
     ]

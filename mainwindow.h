@@ -39,6 +39,7 @@ class QTwitUpdate;
 class QTwitFavorites;
 class QDeclarativeComponent;
 class TweetQmlListModel;
+class MentionsQmlListModel;
 
 class MainWindow : public QMainWindow
 {
@@ -91,6 +92,7 @@ private:
     QTwitFavorites *m_twitFavorite;
 
     TweetQmlListModel* m_tweetListModel;
+    MentionsQmlListModel* m_mentionsListModel;
 
 	bool m_firstRun;
 

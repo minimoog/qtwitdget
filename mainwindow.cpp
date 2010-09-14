@@ -46,6 +46,7 @@
 #include "groupdialog.h"
 #include "signalwaiter.h"
 #include "tweetqmllistmodel.h"
+#include "mentionsqmllistmodel.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
@@ -193,8 +194,10 @@ void MainWindow::startUp()
 
         //show last tweets from database
         m_tweetListModel->loadTweetsFromDatabase();
+        m_mentionsListModel->loadTweetsFromDatabase();
         //start fetching
         m_tweetListModel->startUpdateTimelines();
+        m_mentionsListModel->startUpdateTimelines();
 
     } else {
         changeUserPass();
@@ -468,7 +471,13 @@ void MainWindow::createDeclarativeView()
     m_tweetListModel->setNetworkAccessManager(m_netManager);
     m_tweetListModel->setOAuthTwitter(m_oauthTwitter);
 
+    m_mentionsListModel = new MentionsQmlListModel();
+    m_mentionsListModel->setUserID(m_userId);
+    m_mentionsListModel->setNetworkAccessManager(m_netManager);
+    m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
+
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
+    ui.declarativeView->rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
     ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
 

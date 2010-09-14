@@ -127,11 +127,11 @@ Rectangle {
 
     ListView.onRemove: SequentialAnimation {
         PropertyAction { target: gradRect; property: "ListView.delayRemove"; value: true }
-       NumberAnimation { target: gradRect; property: "scale"; to: 0; duration: 500 }
+        NumberAnimation { target: gradRect; property: "scale"; easing.type: "InOutBack"; to: 0; duration: 500 }
         PropertyAction { target: gradRect; property: "ListView.delayRemove"; value: false }
     }
 
     ListView.onAdd: SequentialAnimation {
-        NumberAnimation { target: gradRect; property: "scale"; from: 0; to: 1; duration: 500 }
+        NumberAnimation { target: gradRect; property: "scale"; easing.type: "InOutBack"; from: 0; to: 1; duration: 500 }
     }
 }
