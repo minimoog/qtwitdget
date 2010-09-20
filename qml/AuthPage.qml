@@ -1,6 +1,6 @@
 import Qt 4.7
 
-Item {
+Rectangle {
     id: wrapper
 
     signal loginClicked(string username, string password)
@@ -14,8 +14,8 @@ Item {
                 text: "Username:"
                 font.pixelSize: 16
                 font.bold: true
-                color: "white"
-                style: Text.Raised
+                color: "#000000"
+                style: "Normal"
                 styleColor:  "black"
                 horizontalAlignment: Qt.AlignRight
             }
@@ -45,7 +45,7 @@ Item {
              spacing: 4
              Text {
                  text: "Password:"
-                 font.pixelSize: 16; font.bold: true; color: "white"; style: Text.Raised; styleColor: "black"
+                 font.pixelSize: 16; font.bold: true; color: "#000000"; style: "Normal"; styleColor: "black"
                  horizontalAlignment: Qt.AlignRight
              }
              Item {
