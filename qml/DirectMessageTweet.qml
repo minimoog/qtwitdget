@@ -2,10 +2,10 @@ import Qt 4.7
 
 Rectangle {
     id: gradRect
-    property string tweetid     //no support for 64 integers
-    property string tweetScreenName: "Screen Name"
-    property string tweetText: "Lorem ipsum dolor sit amet."
-    property string tweetAvatar: "../images/default_avatar.png"
+    property string tweetid
+    property string senderScreenName: "Screen Name"
+    property string directMessageText: "Lorem ipsum dolor sit amet."
+    property string avatar: "../images/default_avatar.png"
 
     signal replyButtonClicked
 
