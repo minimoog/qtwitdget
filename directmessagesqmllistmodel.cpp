@@ -38,11 +38,10 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
     setRoleNames(roles);
 
     m_timer->setSingleShot(true);
-    m_timer->setInterval(60000);
+    m_timer->setInterval(300000);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 }
 
@@ -78,11 +77,6 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
     //    return st.profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
-    else if (role == OwnTweetRole)
-        if (m_userid != st.senderId())
-            return false;
-        else
-            return true;
 
     return QVariant();
 }

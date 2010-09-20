@@ -43,8 +43,7 @@ public:
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
         AvatarUrlRole,
-        StatusIdRole,
-        OwnTweetRole
+        StatusIdRole
     };
 
     DirectMessagesQmlListModel(QObject *parent = 0);
