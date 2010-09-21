@@ -51,7 +51,7 @@ Rectangle {
                 width: 48; height: 48
                 fillMode: Image.Stretch
                 smooth: true
-                source: tweetAvatar
+                source: avatar
             }
         }
     }
@@ -61,7 +61,7 @@ Rectangle {
         x: 84; y: avatarBox.y
         width: gradRect.width - 84
         color: "#018ad9"
-        text: gradRect.tweetScreenName
+        text: gradRect.senderScreenName
         smooth: true
         font.pointSize: 11
         font.family: "Segoe UI"
@@ -72,7 +72,7 @@ Rectangle {
         x: 84; y: 27
         width: gradRect.width - statusText.x
         color: "#222222"
-        text: addTags(gradRect.tweetText)
+        text: addTags(gradRect.directMessageText)
         wrapMode: "WordWrap"
         smooth: true
         font.pointSize: 9

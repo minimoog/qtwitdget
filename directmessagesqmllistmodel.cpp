@@ -73,8 +73,8 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
     else if (role == StatusTextRole)
         return st.text();
     // ### TODO: Setting proper avatar role, after integration with QTweetLib
-    //else if (role == AvatarUrlRole)
-    //    return st.profileImageUrl();
+    else if (role == AvatarUrlRole)
+        return QString();
     else if (role == StatusIdRole)
         return QString::number(st.id());
 

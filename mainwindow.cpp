@@ -38,7 +38,6 @@
 #include "qtwit/qtwitupdate.h"
 #include "qtwit/qtwitfavorites.h"
 #include "qtwit/qtwitfriends.h"
-#include "qtwit/qtwitdirectmessages.h"
 #include "qtwit/qtwitnewdirectmessage.h"
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
@@ -47,15 +46,13 @@
 #include "signalwaiter.h"
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"
+#include "directmessagesqmllistmodel.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
 	m_twitUpdate(new QTwitUpdate(this)),
-    m_twitFavorite(new QTwitFavorites(this)),
-    m_lastStatusId(0),
-    m_lastDirectMessageId(0),
-    m_lastMarkedReadStatus(0)
+    m_twitFavorite(new QTwitFavorites(this))
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
@@ -73,8 +70,7 @@ MainWindow::MainWindow()
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
 	m_database = QSqlDatabase::addDatabase("QSQLITE");
-	m_firstRun = false;
-	
+
     MainWindow::m_s_netManager = m_netManager;
 
 	setupTrayIcon();
@@ -127,38 +123,13 @@ void MainWindow::changeUserPass()
     obj->setProperty("authed", false);
 }
 
-void MainWindow::showDirectMessageEdit()
-{
-    // ### TODO: Icons/Avatars
-
-    //fill combo box if it isn't filled
-//    if (!ui.friendsComboBox->count()) {
-//        QSqlQuery query;
-//        query.exec("SELECT screenName FROM friends");
-
-//        while (query.next()) {
-//            ui.friendsComboBox->addItem(query.value(0).toString());
-//        }
-//    }
-}
-
-void MainWindow::sendDirectMessage()
-{
-//    if (!ui.directMessageEdit->toPlainText().isEmpty()) {
-//        QTwitNewDirectMessage *dm = new QTwitNewDirectMessage(m_netManager, m_oauthTwitter);
-//        connect(dm, SIGNAL(finished()), this, SLOT(finishedSendingDirectMessage()));
-
-//        dm->sendMessage(ui.friendsComboBox->currentText(), ui.directMessageEdit->toPlainText());
-//    }
-}
-
 void MainWindow::finishedSendingDirectMessage()
 {
-//    QTwitNewDirectMessage *dm = qobject_cast<QTwitNewDirectMessage*>(sender());
-//    if (dm) {
-//        ui.statusbar->showMessage(tr("Direct message sent."));
-//        dm->deleteLater();
-//    }
+    QTwitNewDirectMessage *dm = qobject_cast<QTwitNewDirectMessage*>(sender());
+    if (dm) {
+        qDebug() << "Direct Message sent";
+        dm->deleteLater();
+    }
 }
 
 void MainWindow::startUp()
@@ -176,13 +147,6 @@ void MainWindow::startUp()
 		//create or change database according to user id
 		createDatabase(QString::number(m_userId));
 
-		if(isDatabaseEmpty()){
-			m_firstRun = true;
-		} else {
-            m_lastStatusId = getLastStatusId();
-            m_lastDirectMessageId = getLastDirectMessageId();
-		}
-
         //get friends
         QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
         connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
@@ -195,58 +159,33 @@ void MainWindow::startUp()
         //show last tweets from database
         m_tweetListModel->loadTweetsFromDatabase();
         m_mentionsListModel->loadTweetsFromDatabase();
+        m_directMessagesListModel->loadTweetsFromDatabase();
+
         //start fetching
         m_tweetListModel->startUpdateTimelines();
         m_mentionsListModel->startUpdateTimelines();
+        m_directMessagesListModel->startUpdateTimelines();
 
     } else {
         changeUserPass();
     }
 }
 
-qint64 MainWindow::getLastStatusId()
-{
-    QSqlQuery query;
-    query.exec("SELECT id FROM status ORDER BY id DESC LIMIT 1");
-
-    if (query.next()) {
-        return query.value(0).toLongLong();
-    }
-
-    return 0;
-}
-
-qint64 MainWindow::getLastDirectMessageId()
-{
-    QSqlQuery query;
-    query.exec("SELECT id FROM directmessages ORDER BY id DESC LIMIT 1");
-
-    if (query.next()) {
-        return query.value(0).toLongLong();
-    }
-
-    return 0;
-}
-
-void MainWindow::updateTimeline()
-{
-    QTwitDirectMessages *dm = new QTwitDirectMessages(this);
-    dm->setNetworkAccessManager(m_netManager);
-    dm->setOAuthTwitter(m_oauthTwitter);
-    connect(dm, SIGNAL(finishedDirectMessages(QList<QTwitDMStatus>)),
-            this, SLOT(finishedDM(QList<QTwitDMStatus>)));
-
-	if(m_firstRun){
-		m_firstRun = false;
-        dm->directMessages(0);
-	} else {
-        dm->directMessages(m_lastDirectMessageId);
-	}
-}
-
-void MainWindow::updateButtonClicked(const QString &id, const QString &text)
+void MainWindow::updateButtonClicked(const QString &id, const QString &text, const QString& screenName)
 {
     bool ok;
+
+    //if screenName is not empty, then it's direct message
+    if (!screenName.isEmpty()) {
+        QTwitNewDirectMessage *dm = new QTwitNewDirectMessage(m_netManager, m_oauthTwitter);
+        dm->sendMessage(screenName, text);
+
+        qDebug() << "Sending DM to " << screenName;
+
+        connect(dm, SIGNAL(finished()), this, SLOT(finishedSendingDirectMessage()));
+
+        return;
+    }
 
     qint64 tweetid = id.toLongLong(&ok);
 
@@ -261,39 +200,6 @@ void MainWindow::updateButtonClicked(const QString &id, const QString &text)
     }
 
     m_twitUpdate->setUpdate(updateText, tweetid);
-}
-
-void MainWindow::finishedDM(const QList<QTwitDMStatus> &messages)
-{
-    QTwitDirectMessages *dm = qobject_cast<QTwitDirectMessages*>(sender());
-    if (dm) {
-        if (!messages.isEmpty()) {
-            m_lastDirectMessageId = messages.at(0).id();
-
-            QSqlQuery query;
-            query.exec("BEGIN;");
-
-            query.prepare("INSERT OR REPLACE INTO directmessages "
-                          "(id, senderId, text, recipientId, created, "
-                          "senderScreenName, recipientScreenName) "
-                          "VALUES (:id, :senderId, :text, :recipientId, "
-                          ":created, :senderScreenName, :recipientScreenName);");
-
-            foreach (const QTwitDMStatus& msg, messages) {
-                query.bindValue(":id", msg.id());
-                query.bindValue(":senderId", msg.senderId());
-                query.bindValue(":text", msg.text());
-                query.bindValue(":recipientId", msg.recipientId());
-                query.bindValue(":created", msg.createdAt());
-                query.bindValue(":senderScreenName", msg.senderScreenName());
-                query.bindValue(":recipientScreenName", msg.recipientScreenName());
-
-                query.exec();
-            }
-            query.exec("COMMIT;");
-        }
-        dm->deleteLater();
-    }
 }
 
 void MainWindow::finishedFriends(const QList<QTwitUser> &friends)
@@ -452,18 +358,6 @@ void MainWindow::createDatabase(const QString& databaseName)
     //qmlRegisterType<TweetQmlListModel>("TweetLib", 1, 0, "TweetListModel");
 }
 
-bool MainWindow::isDatabaseEmpty()
-{
-	QSqlQuery query;
-	query.exec("SELECT key FROM status LIMIT 1");
-	while(query.next()){
-		query.value(0).toInt();
-		return false;
-	}
-
-	return true;
-}
-
 void MainWindow::createDeclarativeView()
 {
     m_tweetListModel = new TweetQmlListModel();
@@ -476,8 +370,13 @@ void MainWindow::createDeclarativeView()
     m_mentionsListModel->setNetworkAccessManager(m_netManager);
     m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
 
+    m_directMessagesListModel = new DirectMessagesQmlListModel();
+    m_directMessagesListModel->setNetworkAccessManager(m_netManager);
+    m_directMessagesListModel->setOAuthTwitter(m_oauthTwitter);
+
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
+    ui.declarativeView->rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
     ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
 

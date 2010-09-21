@@ -103,4 +103,5 @@ OTHER_FILES += \
     qml/AuthPage.qml \
     qml/MainScreen.qml \
     qml/TweetUpdate.qml \
-    qml/DirectMessageTweet.qml
+    qml/DirectMessageTweet.qml \
+    qml/DirectMessageList.qml

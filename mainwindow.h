@@ -40,6 +40,7 @@ class QTwitFavorites;
 class QDeclarativeComponent;
 class TweetQmlListModel;
 class MentionsQmlListModel;
+class DirectMessagesQmlListModel;
 
 class MainWindow : public QMainWindow
 {
@@ -52,20 +53,15 @@ public:
     static QNetworkAccessManager* networkAccessManager();
 
 Q_INVOKABLE void authorize(const QString& username, const QString& password);
-Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text);
+Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
 
 private slots:
-    void finishedDM(const QList<QTwitDMStatus>& messages);
     void finishedFriends(const QList<QTwitUser>& friends);
     void finishedSendingDirectMessage();
-	void updateTimeline();
 	void statusDestroyed(qint64 id);
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void languageChanged();
     void changeUserPass();
-    void showDirectMessageEdit();
-    void sendDirectMessage();
-
 	void favorited(qint64 statusId);
 
 protected:
@@ -77,11 +73,8 @@ private:
 	void createDatabase(const QString& databaseName);
 	void updateCurrentPage();
     void createDeclarativeView();
-	bool isDatabaseEmpty();
     void readSettings();
     void writeSettings();
-    qint64 getLastStatusId();
-    qint64 getLastDirectMessageId();
 
 	Ui::MainWindowForm ui;
 
@@ -93,12 +86,8 @@ private:
 
     TweetQmlListModel* m_tweetListModel;
     MentionsQmlListModel* m_mentionsListModel;
+    DirectMessagesQmlListModel *m_directMessagesListModel;
 
-	bool m_firstRun;
-
-	qint64 m_lastStatusId;
-    qint64 m_lastDirectMessageId;
-    qint64 m_lastMarkedReadStatus;
     int m_userId;   // ### TODO: Change to 64 bits
 
 	QSqlDatabase m_database;

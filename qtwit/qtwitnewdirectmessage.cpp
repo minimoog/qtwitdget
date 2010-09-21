@@ -35,7 +35,7 @@ void QTwitNewDirectMessage::sendMessage(qint64 userId, const QString &text)
 {
     Q_ASSERT(networkAccessManager() != 0);
 
-    QUrl url("http://api.twitter.com/version/direct_messages/new.json");
+    QUrl url("http://api.twitter.com/1/direct_messages/new.json");
 
     url.addQueryItem("user_id", QString::number(userId));
     url.addQueryItem("text", text);
@@ -54,7 +54,7 @@ void QTwitNewDirectMessage::sendMessage(const QString &screenName, const QString
 {
     Q_ASSERT(networkAccessManager() != 0);
 
-    QUrl url("http://api.twitter.com/version/direct_messages/new.json");
+    QUrl url("http://api.twitter.com/1/direct_messages/new.json");
 
     url.addQueryItem("screen_name", screenName);
     url.addQueryItem("text", text);

@@ -3,6 +3,7 @@ import Qt 4.7
 //rootWindow - external
 //tweetListModel - external
 //mentionsListModel - external
+//directMessagesListModel - external
 
 Item {
     id: screen
@@ -36,6 +37,16 @@ Item {
                     onClicked: {
                         containerLists.x = - container.width;
                         mentionsListModel.showNewTweets();
+                    }
+                }
+
+                TestButton {
+                    id: showDirectMessagesButton
+                    width: 40; height:  toolbar.height - 2
+                    text: "D" + ' ' + directMessagesListModel.numNewDirectMessages
+                    onClicked:  {
+                        containerLists.x = - 2 * container.width;
+                        directMessagesListModel.showNewTweets();
                     }
                 }
             }
@@ -85,6 +96,18 @@ Item {
                         mentionsListModel.destroyTweet(id);
                     }
                 }
+
+                DirectMessageList {
+                    id: directMessageList
+                    width: container.width; height: container.height - toolbar.height
+                    model: directMessagesListModel
+
+                    // TODO: Replying direct message
+                    onReplyClicked: {
+                        tweetUpdateElement.screenName = screenname;
+                        tweetUpdateElement.moved = true;
+                    }
+                }
             }
 
             Behavior on x {
@@ -100,9 +123,12 @@ Item {
             width: parent.width
 
             onUpdateButtonClicked: {
-                rootWindow.updateButtonClicked(tweetUpdateElement.tweetid, tweetUpdateElement.updateText);
+                rootWindow.updateButtonClicked(tweetUpdateElement.tweetid,
+                                               tweetUpdateElement.updateText,
+                                               tweetUpdateElement.screenName);
                 tweetUpdateElement.updateText = "";
                 tweetUpdateElement.tweetid = "";
+                tweetUpdateElement.screenName = "";
                 moved = false;
             }
 

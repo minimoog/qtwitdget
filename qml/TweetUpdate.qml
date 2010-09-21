@@ -2,16 +2,20 @@ import Qt 4.7
 
 Rectangle {
     property string tweetid
+    // ### TODO rename it
+    property string screenName //empty if it's update, reply, retweet, non empty if it's direct message to screenName
     property alias updateText: updateTweetInput.text
     signal updateButtonClicked
 
     function setReply(id, screenname) {
         tweetid = id;
         updateTweetInput.text = '@' + screenname + ' ';
+        screenName = "";
     }
 
     function setRetweet(text, screenname) {
         updateTweetInput.text = "RT @" + screenname + ": " + text;
+        screenName = "";
     }
 
     height: updateTweetInput.height + rowButtons.height + 5
