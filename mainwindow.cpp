@@ -42,7 +42,6 @@
 #include "langchangedialog.h"
 #include "qtwit/qtwitverifycredentials.h"
 #include "shortenedurl.h"
-#include "groupdialog.h"
 #include "signalwaiter.h"
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"

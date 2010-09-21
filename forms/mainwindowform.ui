@@ -64,13 +64,7 @@
     <addaction name="actionSettings"/>
     <addaction name="actionChangeLanguage"/>
    </widget>
-   <widget class="QMenu" name="menuTweets">
-    <property name="title">
-     <string>&amp;Tweets</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuTweets"/>
    <addaction name="menuOptions"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -112,22 +106,6 @@
   <action name="actionChangeLanguage">
    <property name="text">
     <string>Change &amp;Language</string>
-   </property>
-  </action>
-  <action name="actionChangeStyleSheet">
-   <property name="text">
-    <string>Change &amp;Style Sheet</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+C</string>
-   </property>
-  </action>
-  <action name="actionMarkAllRead">
-   <property name="text">
-    <string>&amp;Mark All Read</string>
-   </property>
-   <property name="toolTip">
-    <string>Mark All Tweets Read</string>
    </property>
   </action>
  </widget>

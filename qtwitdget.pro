@@ -12,7 +12,6 @@ HEADERS += \
     shortenedurl.h \
     mainwindow.h \
     langchangedialog.h \
-    groupdialog.h \
     qtwit/qtwitupdate.h \
     qtwit/qtwitstatusdata.h \
     qtwit/qtwitstatus.h \
@@ -59,7 +58,6 @@ SOURCES += main.cpp \
     shortenedurl.cpp \
     mainwindow.cpp \
     langchangedialog.cpp \
-    groupdialog.cpp \
     qtwit/qtwitbase.cpp \
     qtwit/qtwitupdate.cpp \
     qtwit/qtwitstatus.cpp \
@@ -88,8 +86,7 @@ SOURCES += qjson/json_parser.cc \
     qjson/serializer.cpp \
     qjson/serializerrunnable.cpp
 FORMS += forms/mainwindowform.ui \
-    forms/langchangedialogform.ui \
-    forms/groupdialogform.ui
+    forms/langchangedialogform.ui
 TRANSLATIONS += translations/qtwitdget_en.ts \
     translations/qtwitdget_mk.ts
 RESOURCES = qtwitdget.qrc
