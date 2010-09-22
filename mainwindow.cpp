@@ -269,7 +269,12 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 	switch(reason){
 		case QSystemTrayIcon::Trigger:
 		case QSystemTrayIcon::DoubleClick:
-			showNormal();
+            if (isHidden() || isMinimized()) {
+                showNormal();
+                activateWindow();
+            }
+            else
+                showMinimized();
 			break;
 		default:
 			;
