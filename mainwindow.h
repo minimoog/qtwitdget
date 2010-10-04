@@ -62,7 +62,6 @@ private slots:
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void languageChanged();
     void changeUserPass();
-	void favorited(qint64 statusId);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -82,7 +81,6 @@ private:
     static QNetworkAccessManager *m_s_netManager;
 	OAuthTwitter *m_oauthTwitter;
 	QTwitUpdate *m_twitUpdate;
-    QTwitFavorites *m_twitFavorite;
 
     TweetQmlListModel* m_tweetListModel;
     MentionsQmlListModel* m_mentionsListModel;

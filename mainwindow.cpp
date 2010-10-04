@@ -19,9 +19,7 @@
  */
 
 #include <QtDebug>
-#include <QMessageBox>
 #include <QDesktopServices>
-#include <QFileDialog>
 #include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QTimer>
@@ -50,15 +48,12 @@
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
 	m_oauthTwitter(new OAuthTwitter(this)),
-	m_twitUpdate(new QTwitUpdate(this)),
-    m_twitFavorite(new QTwitFavorites(this))
+    m_twitUpdate(new QTwitUpdate(this))
 {
 	m_oauthTwitter->setNetworkAccessManager(m_netManager);
 	m_twitUpdate->setNetworkAccessManager(m_netManager);
-    m_twitFavorite->setNetworkAccessManager(m_netManager);
 
 	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
-    m_twitFavorite->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
 
@@ -357,9 +352,6 @@ void MainWindow::createDatabase(const QString& databaseName)
                "UNIQUE (id));");
 
 	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
-
-    // ### right place????
-    //qmlRegisterType<TweetQmlListModel>("TweetLib", 1, 0, "TweetListModel");
 }
 
 void MainWindow::createDeclarativeView()
@@ -386,34 +378,6 @@ void MainWindow::createDeclarativeView()
 
     //ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));
     ui.declarativeView->setSource(QUrl::fromLocalFile("qml/MainScreen.qml"));
-}
-
-void MainWindow::favorited(qint64 statusId)
-{
-    //first check if status is already favorited
-    QSqlQuery query;
-    QString sq = QString("SELECT favorited FROM status WHERE id = %1;").arg(statusId);
-    query.exec(sq);
-
-    //hopefully returns one record
-    if (query.next()) {
-        if (query.value(0).toBool()) { //already favorited
-            m_twitFavorite->destroy(statusId);
-            QString sqf = QString("UPDATE status SET favorited = 0 WHERE id = %1;").arg(statusId);
-            query.exec(sqf);
-
-            //for (int i = 0; i < ui.tabWidget->count(); ++i) 
-                //m_twitScenes.at(i)->setFavorited(statusId, false);
-
-        } else {            //set favorited
-            m_twitFavorite->create(statusId);
-            QString sqf = QString("UPDATE status SET favorited = 1 WHERE id = %1;").arg(statusId);
-            query.exec(sqf);
-
-            //for (int i = 0; i < ui.tabWidget->count(); ++i) 
-                //m_twitScenes.at(i)->setFavorited(statusId, true);
-        }
-    }
 }
 
 void MainWindow::readSettings()

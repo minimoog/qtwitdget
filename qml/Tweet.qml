@@ -11,7 +11,6 @@ Rectangle {
     signal replyButtonClicked
     signal retweetButtonClicked
     signal deleteButtonClicked
-    //signal favoriteButtonClicked(string id) // ### TODO
 
     function addTags(str) {
         return str.replace(/http:\/\/[^ \n\t]+/g, '<a href="$&">$&</a>');//surrounds http links with html link tags
@@ -116,13 +115,6 @@ Rectangle {
         clickedButtonImageUrl: "../images/button_retweet_click.png"
 
         onClicked: gradRect.retweetButtonClicked()
-    }
-
-    Button {
-        id: favoriteButton
-        x: gradRect.width - 50; y: 80
-        buttonImageUrl: "../images/button_favorited.png"
-        clickedButtonImageUrl: "../images/button_favorited_click.png"
     }
 
     ListView.onRemove: SequentialAnimation {
