@@ -20,40 +20,30 @@
 
 #include <QtDebug>
 #include <QDesktopServices>
-#include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QTimer>
-#include <QDeclarativeEngine>
-#include <QDeclarativeComponent>
+#include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
-#include <QDeclarativeProperty>
-#include <QDeclarativeView>
 #include <QCloseEvent>
 #include "mainwindow.h"
-#include "oauth/oauthtwitter.h"
-#include "qtwit/hometimeline.h"
-#include "qtwit/qtwitupdate.h"
-#include "qtwit/qtwitfavorites.h"
-#include "qtwit/qtwitfriends.h"
-#include "qtwit/qtwitnewdirectmessage.h"
 #include "langchangedialog.h"
-#include "qtwit/qtwitverifycredentials.h"
 #include "shortenedurl.h"
-#include "signalwaiter.h"
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"
 #include "directmessagesqmllistmodel.h"
+#include "qtweetstatusupdate.h"
+#include "qtweetuser.h"
+#include "qtweetstatus.h"
+#include "qtweetdmstatus.h"
+#include "qtweetaccountverifycredentials.h"
+#include "qtweetdirectmessagenew.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
-	m_oauthTwitter(new OAuthTwitter(this)),
-    m_twitUpdate(new QTwitUpdate(this))
+    m_oauthTwitter(new OAuthTwitter(this))
 {
-	m_oauthTwitter->setNetworkAccessManager(m_netManager);
-	m_twitUpdate->setNetworkAccessManager(m_netManager);
-
-	m_twitUpdate->setOAuthTwitter(m_oauthTwitter);
+    m_oauthTwitter->setNetworkAccessManager(m_netManager);
 
 	ui.setupUi(this);
 
@@ -63,9 +53,10 @@ MainWindow::MainWindow()
 	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
-	m_database = QSqlDatabase::addDatabase("QSQLITE");
+    connect(m_oauthTwitter, SIGNAL(authorizeXAuthFinished()), this, SLOT(authorizationFinished()));
+    connect(m_oauthTwitter, SIGNAL(authorizeXAuthError()), this, SLOT(authorizationFailed()));
 
-    MainWindow::m_s_netManager = m_netManager;
+	m_database = QSqlDatabase::addDatabase("QSQLITE");
 
 	setupTrayIcon();
 
@@ -74,40 +65,49 @@ MainWindow::MainWindow()
     createDeclarativeView();
 }
 
-/*!
-    Returns network access manager
- */
-QNetworkAccessManager* MainWindow::networkAccessManager()
-{
-    return m_s_netManager;
-}
-
 void MainWindow::authorize(const QString &username, const QString &password)
 {
     m_oauthTwitter->clearTokens();
     m_oauthTwitter->authorizeXAuth(username, password);
+}
 
-    QTwitVerifyCredentials vc;
-    vc.setNetworkAccessManager(m_netManager);
-    vc.setOAuthTwitter(m_oauthTwitter);
+void MainWindow::authorizationFinished()
+{
+    qDebug() << "Authorization succesfull";
 
-    SignalWaiter sigWait(&vc, SIGNAL(finished(bool)));
-    vc.verify();
+    QTweetAccountVerifyCredentials *tweetVerifyCredentials = new QTweetAccountVerifyCredentials;
+    tweetVerifyCredentials->setOAuthTwitter(m_oauthTwitter);
+    tweetVerifyCredentials->verify();
+    connect(tweetVerifyCredentials, SIGNAL(parsedUser(QTweetUser)),
+            this, SLOT(verifyCredentialsFinished(QTweetUser)));
+}
+
+void MainWindow::authorizationFailed()
+{
+    qDebug() << "Authorization failed";
 
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-    if (sigWait.wait(60000)) {
-        QTwitExtUserInfo extUserInfo = vc.userInfo();
-        //store settings
+    settings.remove("oauth_token");
+    settings.remove("oauth_token_secret");
+    settings.remove("user_id");
+}
+
+void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
+{
+    qDebug() << "Verify Credential succesfull";
+
+    QTweetAccountVerifyCredentials *tweetVerifyCredentials = qobject_cast<QTweetAccountVerifyCredentials*>(sender());
+    if (tweetVerifyCredentials) {
+        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
         settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
         settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
-        settings.setValue("user_id", extUserInfo.id());
+        settings.setValue("user_id", userinfo.id());
+
+        m_userId = userinfo.id();
+
+        tweetVerifyCredentials->deleteLater();
 
         startUp();
-    } else {
-        qDebug() << "Verify credentials timeout";
-        settings.remove("oauth_token");
-        settings.remove("oauth_token_secret");
-        settings.remove("user_id");
     }
 }
 
@@ -115,15 +115,6 @@ void MainWindow::changeUserPass()
 {
     QGraphicsObject *obj = ui.declarativeView->rootObject();
     obj->setProperty("authed", false);
-}
-
-void MainWindow::finishedSendingDirectMessage()
-{
-    QTwitNewDirectMessage *dm = qobject_cast<QTwitNewDirectMessage*>(sender());
-    if (dm) {
-        qDebug() << "Direct Message sent";
-        dm->deleteLater();
-    }
 }
 
 void MainWindow::startUp()
@@ -142,9 +133,9 @@ void MainWindow::startUp()
 		createDatabase(QString::number(m_userId));
 
         //get friends
-        QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
-        connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
-        friends->updateFriends(0, 0, QString(), QString("-1"));
+//        QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
+//        connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
+//        friends->updateFriends(0, 0, QString(), QString("-1"));
 
         //show/animate tweets list page
         QGraphicsObject *obj = ui.declarativeView->rootObject();
@@ -171,21 +162,20 @@ void MainWindow::updateButtonClicked(const QString &id, const QString &text, con
 
     //if screenName is not empty, then it's direct message
     if (!screenName.isEmpty()) {
-        QTwitNewDirectMessage *dm = new QTwitNewDirectMessage(m_netManager, m_oauthTwitter);
-        dm->sendMessage(screenName, text);
-
         qDebug() << "Sending DM to " << screenName;
 
-        connect(dm, SIGNAL(finished()), this, SLOT(finishedSendingDirectMessage()));
+        QTweetDirectMessageNew *dm = new QTweetDirectMessageNew;
+        dm->setOAuthTwitter(m_oauthTwitter);
+        dm->post(0, text, screenName);
+
+        connect(dm, SIGNAL(parsedDirectMessage(QTweetDMStatus)),
+                this, SLOT(directMessageNewFinished(QTweetDMStatus)));
 
         return;
     }
 
     qint64 tweetid = id.toLongLong(&ok);
 
-    if (!ok)
-        qDebug() << "MainWindow::updateButtonClicked : bad string id";
-        
     QString updateText = text.left(140);
 
     if (updateText.isEmpty()) {
@@ -193,45 +183,30 @@ void MainWindow::updateButtonClicked(const QString &id, const QString &text, con
         return;
     }
 
-    m_twitUpdate->setUpdate(updateText, tweetid);
+    QTweetStatusUpdate *statusUpdate = new QTweetStatusUpdate;
+    statusUpdate->setOAuthTwitter(m_oauthTwitter);
+    statusUpdate->post(text, tweetid);
+    connect(statusUpdate, SIGNAL(postedStatus(QTweetStatus)),
+            this, SLOT(statusUpdateFinished(QTweetStatus)));
 }
 
-void MainWindow::finishedFriends(const QList<QTwitUser> &friends)
+void MainWindow::directMessageNewFinished(const QTweetDMStatus& directMessage)
 {
-    QTwitFriends *friendsReply = qobject_cast<QTwitFriends*>(sender());
-    if (friendsReply) {
-        QSqlQuery query;
-        query.exec("BEGIN;");
-
-        query.prepare("INSERT OR REPLACE INTO friends "
-                      "(id, name, screenName, location, description, "
-                      "profileImageUrl, url) "
-                      "VALUES (:id, :name, :screenName, :location, :description, "
-                      ":profileImageUrl, :url);");
-
-        foreach (const QTwitUser& user, friends) {
-            query.bindValue(":id", user.id());
-            query.bindValue(":name", user.name());
-            query.bindValue(":screenName", user.screenName());
-            query.bindValue(":location", user.location());
-            query.bindValue(":description", user.description());
-            query.bindValue(":profileImageUrl", user.profileImageUrl());
-            query.bindValue(":url", user.url());
-
-            query.exec();
-        }
-
-        query.exec("COMMIT;");
-
-        friendsReply->deleteLater();
+    QTweetDirectMessageNew *dm = qobject_cast<QTweetDirectMessageNew*>(sender());
+    if (dm) {
+        qDebug() << "Direct Message sent, id: " << directMessage.id();
+        dm->deleteLater();
     }
 }
 
-void MainWindow::statusDestroyed(qint64 id)
+void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 {
-	QSqlQuery query;
-	QString qs = QString("DELETE FROM status WHERE id = %1").arg(id);
-	query.exec(qs);
+    QTweetStatusUpdate *statusUpdate = qobject_cast<QTweetStatusUpdate*>(sender());
+    if (statusUpdate) {
+        qDebug() << "Sended status with id: " << status.id();
+
+        statusUpdate->deleteLater();
+    }
 }
 
 void MainWindow::languageChanged()
@@ -358,16 +333,13 @@ void MainWindow::createDeclarativeView()
 {
     m_tweetListModel = new TweetQmlListModel();
     m_tweetListModel->setUserID(m_userId);
-    m_tweetListModel->setNetworkAccessManager(m_netManager);
     m_tweetListModel->setOAuthTwitter(m_oauthTwitter);
 
     m_mentionsListModel = new MentionsQmlListModel();
     m_mentionsListModel->setUserID(m_userId);
-    m_mentionsListModel->setNetworkAccessManager(m_netManager);
     m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
 
     m_directMessagesListModel = new DirectMessagesQmlListModel();
-    m_directMessagesListModel->setNetworkAccessManager(m_netManager);
     m_directMessagesListModel->setOAuthTwitter(m_oauthTwitter);
 
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);

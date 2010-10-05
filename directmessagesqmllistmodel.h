@@ -22,11 +22,10 @@
 #define DIRECTMESSAGESQMLLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <qtwit/qtwitdmstatus.h>
 
-class QNetworkAccessManager;
 class OAuthTwitter;
 class QTimer;
+class QTweetDMStatus;
 
 //Copy pasted from MentionsQmlListModel, maybe needs abstraction
 //### TODO: Abstraction? But this is a very special case
@@ -47,7 +46,6 @@ public:
     };
 
     DirectMessagesQmlListModel(QObject *parent = 0);
-    void setNetworkAccessManager(QNetworkAccessManager* netManager); // ### TODO: FIX
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -66,14 +64,13 @@ signals:
 
 private slots:
     void updateTimeline();
-    void finishedTimeline(const QList<QTwitDMStatus>& statuses);
+    void finishedTimeline(const QList<QTweetDMStatus>& statuses);
 
 private:
-    QNetworkAccessManager* m_netManager;
     OAuthTwitter* m_oauthTwitter;
     QTimer* m_timer;
-    QList<QTwitDMStatus> m_directMessages;
-    QList<QTwitDMStatus> m_newDirectMessages; //doesn't show in the model
+    QList<QTweetDMStatus> m_directMessages;
+    QList<QTweetDMStatus> m_newDirectMessages; //doesn't show in the model
     int m_userid;
     int m_numNewDirectMessages;
     int m_numOldDirectMessages;

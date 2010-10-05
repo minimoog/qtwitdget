@@ -59,6 +59,8 @@ namespace yy
   #include <QtCore/QString>
   #include <QtCore/QVariant>
 
+  #include <limits>
+
   class JSonScanner;
 
   namespace QJson {
@@ -69,7 +71,7 @@ namespace yy
 
 
 /* Line 303 of lalr1.cc.  */
-#line 73 "json_parser.hh"
+#line 75 "json_parser.hh"
 
 #include "location.hh"
 
@@ -146,7 +148,9 @@ namespace yy
      NULL_VAL = 13,
      QUOTMARKOPEN = 14,
      QUOTMARKCLOSE = 15,
-     STRING = 16
+     STRING = 16,
+     INFINITY = 17,
+     NAN = 18
    };
 
     };
@@ -241,7 +245,7 @@ namespace yy
     static const unsigned char yytable_[];
     static const signed char yytable_ninf_;
 
-    static const unsigned char yycheck_[];
+    static const signed char yycheck_[];
 
     /// For a state, its accessing symbol.
     static const unsigned char yystos_[];

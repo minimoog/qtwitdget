@@ -1,5 +1,5 @@
-/* Copyright (c) 2008, Antonie Jovanoski
- *	
+/* Copyright (c) 2010, Antonie Jovanoski
+ *
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,28 +18,27 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
-#include <QApplication>
-#include <QTranslator>
-#include <QNetworkAccessManager>
-#include "qdeclarative.h"
-#include "mainwindow.h"
+#ifndef QTWEETACCOUNTVERIFYCREDENTIALS_H
+#define QTWEETACCOUNTVERIFYCREDENTIALS_H
 
-QTranslator *appTranslator;		//global translator object
+#include "qtweetnetbase.h"
 
-int main(int argc, char* argv[])
+class QTWEETLIBSHARED_EXPORT QTweetAccountVerifyCredentials : public QTweetNetBase
 {
-	QApplication app(argc, argv);
+    Q_OBJECT
+public:
+    QTweetAccountVerifyCredentials(QObject *parent = 0);
+    QTweetAccountVerifyCredentials(OAuthTwitter *oauthTwitter, QObject *parent = 0);
+    void verify(bool includeEntities = false);
 
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-	QString lang = settings.value("Language").toString();
+signals:
+    void parsedUser(const QTweetUser& user);
 
-	appTranslator = new QTranslator;
-	appTranslator->load(":/translations/qtwitdget_" + lang);
-	app.installTranslator(appTranslator);
+protected slots:
+    void parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg);
 
-	MainWindow t;
-	t.show();
-	t.startUp();
+private slots:
+    void error();
+};
 
-	return app.exec();
-}
+#endif // QTWEETACCOUNTVERIFYCREDENTIALS_H

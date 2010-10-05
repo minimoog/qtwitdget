@@ -22,12 +22,10 @@
 #define TWEETQMLLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "qtwit/qtwitstatus.h"
 
-class QTwitDestroy;
-class QNetworkAccessManager;
 class OAuthTwitter;
 class QTimer;
+class QTweetStatus;
 
 class TweetQmlListModel : public QAbstractListModel
 {
@@ -43,7 +41,6 @@ public:
     };
 
     TweetQmlListModel(QObject *parent = 0);
-    void setNetworkAccessManager(QNetworkAccessManager* netManager); // ### TODO: FIX
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -64,15 +61,14 @@ signals:
 
 private slots:
     void updateHomeTimeline();
-    void finishedDestroyTweet(qint64 id);
-    void finishedHomeTimeline(const QList<QTwitStatus>& statuses);
+    void finishedDestroyTweet(const QTweetStatus& status);
+    void finishedHomeTimeline(const QList<QTweetStatus>& statuses);
 
 private:
-    QNetworkAccessManager* m_netManager;
     OAuthTwitter* m_oauthTwitter;
     QTimer* m_timer;
-    QList<QTwitStatus> m_statuses;
-    QList<QTwitStatus> m_newStatuses; //doesn't show in the model
+    QList<QTweetStatus> m_statuses;
+    QList<QTweetStatus> m_newStatuses; //doesn't show in the model
     int m_userid;
     int m_numNewTweets;
     int m_numOldTweets;

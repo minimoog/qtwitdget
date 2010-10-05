@@ -25,10 +25,14 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
+#include <cmath>
+
 using namespace QJson;
 
 class Serializer::SerializerPrivate {
   public:
+    SerializerPrivate() : specialNumbersAllowed(false) {}
+    bool specialNumbersAllowed;
     QString sanitizeString( QString str );
 };
 
@@ -121,7 +125,7 @@ QByteArray Serializer::serialize( const QVariant &v )
 
   if ( ! v.isValid() ) { // invalid or null?
     str = "null";
-  } else if ( v.type() == QVariant::List ) { // variant is a list?
+  } else if (( v.type() == QVariant::List ) || ( v.type() == QVariant::StringList )){ // an array or a stringlist?
     const QVariantList list = v.toList();
     QList<QByteArray> values;
     Q_FOREACH( const QVariant& v, list )
@@ -152,10 +156,36 @@ QByteArray Serializer::serialize( const QVariant &v )
     str += " }";
   } else if (( v.type() == QVariant::String ) ||  ( v.type() == QVariant::ByteArray )) { // a string or a byte array?
     str = d->sanitizeString( v.toString() ).toUtf8();
-  } else if ( v.type() == QVariant::Double ) { // a double?
-    str = QByteArray::number( v.toDouble() );
-    if( ! str.contains( "." ) && ! str.contains( "e" ) ) {
-      str += ".0";
+  } else if (( v.type() == QVariant::Double) || (v.type() == QMetaType::Float)) { // a double or a float?
+    const double value = v.toDouble();
+#ifdef _WIN32
+    const bool special = _isnan(value) || !_finite(value);
+#else
+    const bool special = std::isnan(value) || std::isinf(value);
+#endif
+    if (special) {
+      if (specialNumbersAllowed()) {
+#ifdef _WIN32
+        if (_isnan(value)) {
+#else
+        if (std::isnan(value)) {
+#endif
+          str += "NaN";
+        } else {
+          if (value<0) {
+            str += "-";
+          }
+          str += "Infinity";
+        }
+      } else {
+        qCritical("Attempt to write NaN or infinity, which is not supported by json");
+        error = true;
+    }
+    } else {
+      str = QByteArray::number( value );
+      if( ! str.contains( "." ) && ! str.contains( "e" ) ) {
+        str += ".0";
+      }
     }
   } else if ( v.type() == QVariant::Bool ) { // boolean value?
     str = ( v.toBool() ? "true" : "false" );
@@ -174,4 +204,12 @@ QByteArray Serializer::serialize( const QVariant &v )
     return str;
   else
     return QByteArray();
+}
+
+void QJson::Serializer::allowSpecialNumbers(bool allow) {
+  d->specialNumbersAllowed = allow;
+}
+
+bool QJson::Serializer::specialNumbersAllowed() const {
+  return d->specialNumbersAllowed;
 }

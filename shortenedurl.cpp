@@ -26,7 +26,6 @@
 #include <QNetworkAccessManager>
 #include "shortenedurl.h"
 #include "mainwindow.h"
-#include "signalwaiter.h"
 
 /*!
     Constructor
@@ -36,7 +35,7 @@
 ShortenedUrl::ShortenedUrl(QObject *parent)
     : QObject(parent)
 {
-    m_netManager = MainWindow::networkAccessManager();
+    //m_netManager = MainWindow::networkAccessManager();
 }
 
 /*!
@@ -64,22 +63,24 @@ QString ShortenedUrl::shortUrl(const QString &url)
     urlService.addQueryItem("longUrl", url);
     urlService.addQueryItem("format", "txt");
 
-	QNetworkRequest req(urlService);
-    QNetworkReply *reply = m_netManager->get(req);
+    //QNetworkRequest req(urlService);
+    //QNetworkReply *reply = m_netManager->get(req);
 
-    SignalWaiter signalWaiter(reply, SIGNAL(finished()));
+//    SignalWaiter signalWaiter(reply, SIGNAL(finished()));
 
-    if (signalWaiter.wait(2000)) {
-        if (reply->error() != QNetworkReply::NoError) {
-            qDebug() << "Error shortening url";
-            qDebug() << reply->readAll();
+//    if (signalWaiter.wait(2000)) {
+//        if (reply->error() != QNetworkReply::NoError) {
+//            qDebug() << "Error shortening url";
+//            qDebug() << reply->readAll();
 
-            return QString();
-        }
+//            return QString();
+//        }
 
-        return reply->readAll();
-    } else {
-        qDebug() << "Timeout";
-        return QString();
-    }
+//        return reply->readAll();
+//    } else {
+//        qDebug() << "Timeout";
+//        return QString();
+//    }
+
+    return url;
 }

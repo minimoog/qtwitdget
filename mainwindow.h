@@ -24,20 +24,15 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QtSql>
-#include <QHash>
-#include "qtwit/qtwitdmstatus.h"
-#include "qtwit/qtwituser.h"
 #include "ui_mainwindowform.h"
 
-class QTwitStatus;
 class TweetListModel;
 class QNetworkAccessManager;
-class QDeclarativeView;
 class QTimer;
 class OAuthTwitter;
-class QTwitUpdate;
-class QTwitFavorites;
-class QDeclarativeComponent;
+class QTweetUser;
+class QTweetStatus;
+class QTweetDMStatus;
 class TweetQmlListModel;
 class MentionsQmlListModel;
 class DirectMessagesQmlListModel;
@@ -50,15 +45,16 @@ public:
 	MainWindow();
     ~MainWindow();
 	void startUp();
-    static QNetworkAccessManager* networkAccessManager();
 
 Q_INVOKABLE void authorize(const QString& username, const QString& password);
 Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
 
 private slots:
-    void finishedFriends(const QList<QTwitUser>& friends);
-    void finishedSendingDirectMessage();
-	void statusDestroyed(qint64 id);
+    void authorizationFinished();
+    void authorizationFailed();
+    void verifyCredentialsFinished(const QTweetUser& userinfo);
+    void directMessageNewFinished(const QTweetDMStatus& dm);
+    void statusUpdateFinished(const QTweetStatus& status);
 	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void languageChanged();
     void changeUserPass();
@@ -78,15 +74,13 @@ private:
 	Ui::MainWindowForm ui;
 
 	QNetworkAccessManager *m_netManager;
-    static QNetworkAccessManager *m_s_netManager;
 	OAuthTwitter *m_oauthTwitter;
-	QTwitUpdate *m_twitUpdate;
 
     TweetQmlListModel* m_tweetListModel;
     MentionsQmlListModel* m_mentionsListModel;
     DirectMessagesQmlListModel *m_directMessagesListModel;
 
-    int m_userId;   // ### TODO: Change to 64 bits
+    qint64 m_userId;
 
 	QSqlDatabase m_database;
 

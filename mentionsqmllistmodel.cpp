@@ -20,11 +20,12 @@
 
 #include <QtDebug>
 #include <QSqlQuery>
-#include <QNetworkAccessManager>
 #include <QTimer>
-#include <oauth/oauthtwitter.h>
-#include <qtwit/qtwitdestroy.h>
-#include <qtwit/qtwitmentions.h>
+#include "oauthtwitter.h"
+#include "qtweetstatusdestroy.h"
+#include "qtweetmentions.h"
+#include "qtweetstatus.h"
+#include "qtweetuser.h"
 #include "mentionsqmllistmodel.h"
 
 
@@ -47,11 +48,6 @@ MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 }
 
-void MentionsQmlListModel::setNetworkAccessManager(QNetworkAccessManager *netManager)
-{
-    m_netManager = netManager;
-}
-
 void MentionsQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 {
     m_oauthTwitter = oauthTwitter;
@@ -68,18 +64,18 @@ QVariant MentionsQmlListModel::data(const QModelIndex &index, int role) const
     if (index.row() < 0 || index.row() > m_statuses.count())
         return QVariant();
 
-    const QTwitStatus &st = m_statuses.at(index.row());
+    const QTweetStatus &st = m_statuses.at(index.row());
 
     if (role == ScreenNameRole)
-        return st.screenName();
+        return st.user().screenName();
     else if (role == StatusTextRole)
         return st.text();
     else if (role == AvatarUrlRole)
-        return st.profileImageUrl();
+        return st.user().profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
     else if (role == OwnTweetRole)
-        if (m_userid != st.userId())
+        if (m_userid != st.user().id())
             return false;
         else
             return true;
@@ -101,23 +97,23 @@ void MentionsQmlListModel::destroyTweet(const QString &tweetid)
     qint64 id = tweetid.toLongLong(&ok);
 
     if (ok) {
-        QTwitDestroy *twitDestroy = new QTwitDestroy;
-        twitDestroy->setNetworkAccessManager(m_netManager);
-        twitDestroy->setOAuthTwitter(m_oauthTwitter);
-        twitDestroy->deleteStatus(id);
-        connect(twitDestroy, SIGNAL(destroyed(qint64)), this, SLOT(finishedDestroyTweet(qint64)));
+        QTweetStatusDestroy *tweetDestroy = new QTweetStatusDestroy;
+        tweetDestroy->setOAuthTwitter(m_oauthTwitter);
+        tweetDestroy->destroy(id);
+        connect(tweetDestroy, SIGNAL(deletedStatus(QTweetStatus)),
+                this, SLOT(finishedDestroyTweet(QTweetStatus)));
     }
 }
 
-void MentionsQmlListModel::finishedDestroyTweet(qint64 id)
+void MentionsQmlListModel::finishedDestroyTweet(const QTweetStatus& status)
 {
-    qDebug() << "Finished destroying: " << id;
-    QTwitDestroy *twitDestroy = qobject_cast<QTwitDestroy*>(sender());
+    qDebug() << "Finished destroying: " << status.id();
 
-    if (twitDestroy) {
+    QTweetStatusDestroy *tweetDestroy = qobject_cast<QTweetStatusDestroy*>(sender());
+    if (tweetDestroy) {
         int i;
         for (i = 0; i < m_statuses.count(); ++i) {
-            if (m_statuses.at(i).id() == id)
+            if (m_statuses.at(i).id() == status.id())
                 break;
         }
 
@@ -127,12 +123,12 @@ void MentionsQmlListModel::finishedDestroyTweet(qint64 id)
 
         QSqlQuery query;
         query.prepare("DELETE FROM status WHERE id = :id");
-        query.bindValue(":id", id);
+        query.bindValue(":id", status.id());
         query.exec();
 
         endRemoveRows();
 
-        twitDestroy->deleteLater();
+        tweetDestroy->deleteLater();
     }
 }
 
@@ -150,28 +146,26 @@ void MentionsQmlListModel::updateTimeline()
 {
     qDebug() << "Update mentions timeline";
 
-    QTwitMentions *twitMentions = new QTwitMentions;
-    twitMentions->setNetworkAccessManager(m_netManager);
-    twitMentions->setOAuthTwitter(m_oauthTwitter);
+    QTweetMentions *tweetMentions = new QTweetMentions;
+    tweetMentions->setOAuthTwitter(m_oauthTwitter);
 
     if (m_statuses.isEmpty() && m_newStatuses.isEmpty())
-        twitMentions->update(0, 0, 200, 0);
+        tweetMentions->fetch(0, 0, 200);
     else if (m_newStatuses.isEmpty())
-        twitMentions->update(m_statuses.at(0).id(), 0, 200, 0);
+        tweetMentions->fetch(m_statuses.at(0).id(), 0, 200);
     else
-        twitMentions->update(m_newStatuses.at(0).id(), 0, 200, 0);
+        tweetMentions->fetch(m_newStatuses.at(0).id(), 0, 200);
 
-    connect(twitMentions, SIGNAL(finishedMentions(QList<QTwitStatus>)),
-             this, SLOT(finishedTimeline(QList<QTwitStatus>)));
+    connect(tweetMentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
+             this, SLOT(finishedTimeline(QList<QTweetStatus>)));
 }
 
-void MentionsQmlListModel::finishedTimeline(const QList<QTwitStatus> &statuses)
+void MentionsQmlListModel::finishedTimeline(const QList<QTweetStatus> &statuses)
 {
     qDebug() << "Finished update mentions";
 
-    QTwitMentions *twitMentions = qobject_cast<QTwitMentions*>(sender());
-
-    if (twitMentions) {
+    QTweetMentions *tweetMentions = qobject_cast<QTweetMentions*>(sender());
+    if (tweetMentions) {
         if (!statuses.isEmpty()) {
 
             qDebug() << "New mentions: " << statuses.count();
@@ -186,18 +180,18 @@ void MentionsQmlListModel::finishedTimeline(const QList<QTwitStatus> &statuses)
                           "VALUES "
                           "(:id, :text, :screenName, :profileImageUrl, :userId, :mention);");
 
-            QListIterator<QTwitStatus> i(statuses);
+            QListIterator<QTweetStatus> i(statuses);
             i.toBack();
             while(i.hasPrevious()){
-                QTwitStatus s = i.previous();
+                QTweetStatus s = i.previous();
                 query.bindValue(":id", s.id());
                 query.bindValue(":text", s.text());
                 //query.bindValue(":replyToStatusId", s.replyToStatusId());
                 //query.bindValue(":replyToUserId", s.replyToUserId());
                 //query.bindValue(":replyToScreenName", s.replyToScreenName());
-                query.bindValue(":userId", s.userId());
-                query.bindValue(":screenName", s.screenName());
-                query.bindValue(":profileImageUrl", s.profileImageUrl());
+                query.bindValue(":userId", s.user().id());
+                query.bindValue(":screenName", s.user().screenName());
+                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
                 query.bindValue(":mention", 1);
 
                 query.exec();
@@ -211,7 +205,7 @@ void MentionsQmlListModel::finishedTimeline(const QList<QTwitStatus> &statuses)
             query.exec("COMMIT;");
         }
 
-        twitMentions->deleteLater();
+        tweetMentions->deleteLater();
     }
 
     m_timer->start();
@@ -225,7 +219,7 @@ void MentionsQmlListModel::showNewTweets()
         //prepend new statuses
         beginInsertRows(QModelIndex(), 0, m_newStatuses.count() - 1);
 
-        QListIterator<QTwitStatus> iter(m_newStatuses);
+        QListIterator<QTweetStatus> iter(m_newStatuses);
         iter.toBack();
         while (iter.hasPrevious())
             m_statuses.prepend(iter.previous());
@@ -271,15 +265,20 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
 
     endResetModel();
 
-    QList<QTwitStatus> newStatuses;
+    QList<QTweetStatus> newStatuses;
 
     while (query.next()) {
-        QTwitStatus st;
+        QTweetStatus st;
         st.setId(query.value(0).toLongLong());
         st.setText(query.value(1).toString());
-        st.setScreenName(query.value(2).toString());
-        st.setProfileImageUrl(query.value(3).toString());
-        st.setUserId(query.value(4).toInt());
+
+        QTweetUser userinfo;
+        userinfo.setScreenName(query.value(2).toString());
+        userinfo.setScreenName(query.value(3).toString());
+        userinfo.setId(query.value(4).toInt());
+
+        st.setUser(userinfo);
+
         newStatuses.append(st);
     }
 

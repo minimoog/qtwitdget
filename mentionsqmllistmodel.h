@@ -22,12 +22,10 @@
 #define MENTIONSQMLLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "qtwit/qtwitstatus.h"
 
-class QTwitDestroy;
-class QNetworkAccessManager;
 class OAuthTwitter;
 class QTimer;
+class QTweetStatus;
 
 //Copy pasted from TweetQmlListModel, maybe needs abstraction
 //### TODO: Abstraction?
@@ -46,7 +44,6 @@ public:
     };
 
     MentionsQmlListModel(QObject *parent = 0);
-    void setNetworkAccessManager(QNetworkAccessManager* netManager); // ### TODO: FIX
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -66,15 +63,14 @@ signals:
 
 private slots:
     void updateTimeline();
-    void finishedDestroyTweet(qint64 id);
-    void finishedTimeline(const QList<QTwitStatus>& statuses);
+    void finishedDestroyTweet(const QTweetStatus& status);
+    void finishedTimeline(const QList<QTweetStatus>& statuses);
 
 private:
-    QNetworkAccessManager* m_netManager;
     OAuthTwitter* m_oauthTwitter;
     QTimer* m_timer;
-    QList<QTwitStatus> m_statuses;
-    QList<QTwitStatus> m_newStatuses; //doesn't show in the model
+    QList<QTweetStatus> m_statuses;
+    QList<QTweetStatus> m_newStatuses; //doesn't show in the model
     int m_userid;
     int m_numNewTweets;
     int m_numOldTweets;

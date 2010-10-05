@@ -20,11 +20,13 @@
 
 #include <QtDebug>
 #include <QSqlQuery>
-#include <QNetworkAccessManager>
 #include <QTimer>
-#include <oauth/oauthtwitter.h>
-#include <qtwit/qtwitdirectmessages.h>
+#include <QDateTime>
+#include "oauthtwitter.h"
+#include "qtweetdirectmessages.h"
 #include "directmessagesqmllistmodel.h"
+#include "qtweetdmstatus.h"
+#include "qtweetuser.h"
 
 
 DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
@@ -45,11 +47,6 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 }
 
-void DirectMessagesQmlListModel::setNetworkAccessManager(QNetworkAccessManager *netManager)
-{
-    m_netManager = netManager;
-}
-
 void DirectMessagesQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 {
     m_oauthTwitter = oauthTwitter;
@@ -66,15 +63,14 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
     if (index.row() < 0 || index.row() > m_directMessages.count())
         return QVariant();
 
-    const QTwitDMStatus &st = m_directMessages.at(index.row());
+    const QTweetDMStatus &st = m_directMessages.at(index.row());
 
     if (role == ScreenNameRole)
         return st.senderScreenName();
     else if (role == StatusTextRole)
         return st.text();
-    // ### TODO: Setting proper avatar role, after integration with QTweetLib
     else if (role == AvatarUrlRole)
-        return QString();
+        return st.sender().profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
 
@@ -100,27 +96,26 @@ void DirectMessagesQmlListModel::updateTimeline()
 {
     qDebug() << "Update direct messages";
 
-    QTwitDirectMessages *directMessages = new QTwitDirectMessages;
-    directMessages->setNetworkAccessManager(m_netManager);
+    QTweetDirectMessages *directMessages = new QTweetDirectMessages;
     directMessages->setOAuthTwitter(m_oauthTwitter);
 
     if (m_directMessages.isEmpty() && m_newDirectMessages.isEmpty())
-        directMessages->directMessages(0, 0, 200, 0);
+        directMessages->fetch(0, 0, 200);
     else if (m_newDirectMessages.isEmpty())
-        directMessages->directMessages(m_directMessages.at(0).id(), 0, 200, 0);
+        directMessages->fetch(m_directMessages.at(0).id(), 0, 200);
     else
-        directMessages->directMessages(m_newDirectMessages.at(0).id(), 0, 200, 0);
+        directMessages->fetch(m_newDirectMessages.at(0).id(), 0, 200);
 
-    connect(directMessages, SIGNAL(finishedDirectMessages(QList<QTwitDMStatus>)),
-            this, SLOT(finishedTimeline(QList<QTwitDMStatus>)));
+    connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
+            this, SLOT(finishedTimeline(QList<QTweetDMStatus>)));
+
 }
 
-void DirectMessagesQmlListModel::finishedTimeline(const QList<QTwitDMStatus> &statuses)
+void DirectMessagesQmlListModel::finishedTimeline(const QList<QTweetDMStatus> &statuses)
 {
     qDebug() << "Finished update direct messages";
 
-    QTwitDirectMessages *directMessages = qobject_cast<QTwitDirectMessages*>(sender());
-
+    QTweetDirectMessages *directMessages = qobject_cast<QTweetDirectMessages*>(sender());
     if (directMessages) {
         if (!statuses.isEmpty()) {
 
@@ -137,10 +132,10 @@ void DirectMessagesQmlListModel::finishedTimeline(const QList<QTwitDMStatus> &st
                           "VALUES (:id, :senderId, :text, :recipientId, "
                           ":created, :senderScreenName, :recipientScreenName);");
 
-            QListIterator<QTwitDMStatus> i(statuses);
+            QListIterator<QTweetDMStatus> i(statuses);
             i.toBack();
             while(i.hasPrevious()){
-                QTwitDMStatus s = i.previous();
+                QTweetDMStatus s = i.previous();
                 query.bindValue(":id", s.id());
                 query.bindValue(":senderId", s.senderId());
                 query.bindValue(":text", s.text());
@@ -174,7 +169,7 @@ void DirectMessagesQmlListModel::showNewTweets()
         //prepend new statuses
         beginInsertRows(QModelIndex(), 0, m_newDirectMessages.count() - 1);
 
-        QListIterator<QTwitDMStatus> iter(m_newDirectMessages);
+        QListIterator<QTweetDMStatus> iter(m_newDirectMessages);
         iter.toBack();
         while (iter.hasPrevious())
             m_directMessages.prepend(iter.previous());
@@ -219,10 +214,10 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
 
     endResetModel();
 
-    QList<QTwitDMStatus> newStatuses;
+    QList<QTweetDMStatus> newStatuses;
 
     while (query.next()) {
-        QTwitDMStatus st;
+        QTweetDMStatus st;
         st.setId(query.value(0).toLongLong());
         st.setText(query.value(1).toString());
         st.setSenderId(query.value(2).toLongLong());

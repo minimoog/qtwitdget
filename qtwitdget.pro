@@ -1,90 +1,90 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
-INCLUDEPATH += .
+INCLUDEPATH += .\
+    ./qtweetlib
+
 QT += network \
     sql \
     declarative
 
-# win32:LIBS += libeay32.lib
-# unix:LIBS += -lcrypto
 HEADERS += \
     shortenedurl.h \
     mainwindow.h \
     langchangedialog.h \
-    qtwit/qtwitupdate.h \
-    qtwit/qtwitstatusdata.h \
-    qtwit/qtwitstatus.h \
-    qtwit/qtwitrtstatus.h \
-    qtwit/qtwitrtstatusdata.h \
-    qtwit/qtwitverifycredentials.h \
-    qtwit/qtwitfriends.h \
-    qtwit/qtwitextuserinfodata.h \
-    qtwit/qtwitextuserinfo.h \
-    qtwit/qtwitbase.h \
-    qtwit/qtwitdestroy.h \
-    qtwit/qtwitfavorites.h \
-    qtwit/qtwithometimeline.h \
-    qtwit/hometimeline.h \
-    oauth/oauth.h \
-    oauth/oauthtwitter.h \
-    signalwaiter.h \
-    qtwit/qtwituserdata.h \
-    qtwit/qtwituser.h \
-    qtwit/qtwitdmstatusdata.h \
-    qtwit/qtwitdmstatus.h \
-    qtwit/qtwitdirectmessages.h \
-    qtwit/qtwitnewdirectmessage.h \
     tweetqmllistmodel.h \
-    qtwit/qtwitmentions.h \
     mentionsqmllistmodel.h \
     directmessagesqmllistmodel.h
 
 # QJSON
-HEADERS += qjson/json_parser.hh \
-    qjson/json_scanner.h \
-    qjson/location.hh \
-    qjson/parser_p.h \
-    qjson/position.hh \
-    qjson/qjson_debug.h \
+HEADERS += \
     qjson/stack.hh \
-    qjson/parser.h \
-    qjson/parserrunnable.h \
-    qjson/qobjecthelper.h \
-    qjson/serializer.h \
     qjson/serializerrunnable.h \
-    qjson/qjson_export.h
+    qjson/serializer.h \
+    qjson/qobjecthelper.h \
+    qjson/qjson_export.h \
+    qjson/qjson_debug.h \
+    qjson/position.hh \
+    qjson/parserrunnable.h \
+    qjson/parser_p.h \
+    qjson/parser.h \
+    qjson/location.hh \
+    qjson/json_scanner.h \
+    qjson/json_parser.hh
+
+# QTweetLib
+HEADERS += \
+    qtweetlib/oauth.h \
+    qtweetlib/oauthtwitter.h \
+    qtweetlib/qtweetlib_global.h \
+    qtweetlib/qtweetnetbase.h \
+    qtweetlib/qtweetstatus.h \
+    qtweetlib/qtweetuser.h \
+    qtweetlib/qtweetdmstatus.h \
+    qtweetlib/qtweetlist.h \
+    qtweetlib/qtweethometimeline.h \
+    qtweetlib/qtweetstatusdestroy.h \
+    qtweetlib/qtweetmentions.h \
+    qtweetlib/qtweetdirectmessages.h \
+    qtweetlib/qtweetstatusupdate.h \
+    qtweetlib/qtweetaccountverifycredentials.h \
+    qtweetlib/qtweetdirectmessagenew.h
+
 SOURCES += main.cpp \
     shortenedurl.cpp \
     mainwindow.cpp \
     langchangedialog.cpp \
-    qtwit/qtwitbase.cpp \
-    qtwit/qtwitupdate.cpp \
-    qtwit/qtwitstatus.cpp \
-    qtwit/qtwitverifycredentials.cpp \
-    qtwit/qtwitfriends.cpp \
-    qtwit/qtwitdestroy.cpp \
-    qtwit/qtwitfavorites.cpp \
-    qtwit/qtwithometimeline.cpp \
-    qtwit/hometimeline.cpp \
-    oauth/oauth.cpp \
-    oauth/oauthtwitter.cpp \
-    signalwaiter.cpp \
-    qtwit/qtwitdirectmessages.cpp \
-    qtwit/qtwitnewdirectmessage.cpp \
     tweetqmllistmodel.cpp \
-    qtwit/qtwitmentions.cpp \
     mentionsqmllistmodel.cpp \
     directmessagesqmllistmodel.cpp
 
 # QJSON
-SOURCES += qjson/json_parser.cc \
-    qjson/json_scanner.cpp \
-    qjson/parser.cpp \
-    qjson/parserrunnable.cpp \
-    qjson/qobjecthelper.cpp \
+SOURCES += \
+    qjson/serializerrunnable.cpp \
     qjson/serializer.cpp \
-    qjson/serializerrunnable.cpp
+    qjson/qobjecthelper.cpp \
+    qjson/parserrunnable.cpp \
+    qjson/parser.cpp \
+    qjson/json_scanner.cpp \
+    qjson/json_parser.cc
+
+# QTweetLib
+SOURCES += \
+    qtweetlib/oauth.cpp \
+    qtweetlib/oauthtwitter.cpp \
+    qtweetlib/qtweetnetbase.cpp \
+    qtweetlib/qtweetstatus.cpp \
+    qtweetlib/qtweetuser.cpp \
+    qtweetlib/qtweetdmstatus.cpp \
+    qtweetlib/qtweetlist.cpp \
+    qtweetlib/qtweethometimeline.cpp \
+    qtweetlib/qtweetstatusdestroy.cpp \
+    qtweetlib/qtweetmentions.cpp \
+    qtweetlib/qtweetdirectmessages.cpp \
+    qtweetlib/qtweetstatusupdate.cpp \
+    qtweetlib/qtweetaccountverifycredentials.cpp \
+    qtweetlib/qtweetdirectmessagenew.cpp
+
 FORMS += forms/mainwindowform.ui \
     forms/langchangedialogform.ui
 TRANSLATIONS += translations/qtwitdget_en.ts \
