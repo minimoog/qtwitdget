@@ -128,9 +128,9 @@ void DirectMessagesQmlListModel::finishedTimeline(const QList<QTweetDMStatus> &s
 
             query.prepare("INSERT OR REPLACE INTO directmessages "
                           "(id, senderId, text, recipientId, created, "
-                          "senderScreenName, recipientScreenName) "
+                          "senderScreenName, recipientScreenName, senderProfileImageUrl) "
                           "VALUES (:id, :senderId, :text, :recipientId, "
-                          ":created, :senderScreenName, :recipientScreenName);");
+                          ":created, :senderScreenName, :recipientScreenName, :senderProfileImageUrl);");
 
             QListIterator<QTweetDMStatus> i(statuses);
             i.toBack();
@@ -143,6 +143,7 @@ void DirectMessagesQmlListModel::finishedTimeline(const QList<QTweetDMStatus> &s
                 query.bindValue(":created", s.createdAt());
                 query.bindValue(":senderScreenName", s.senderScreenName());
                 query.bindValue(":recipientScreenName", s.recipientScreenName());
+                query.bindValue(":senderProfileImageUrl", s.sender().profileImageUrl());
 
                 query.exec();
 
@@ -200,7 +201,7 @@ void DirectMessagesQmlListModel::showNewTweets()
 void DirectMessagesQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;
-    query.prepare("SELECT id, text, senderId, senderScreenName "
+    query.prepare("SELECT id, text, senderId, senderScreenName, senderProfileImageUrl "
                   "FROM directmessages "
                   "ORDER BY id DESC "
                   "LIMIT 20 ");
@@ -222,6 +223,12 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
         st.setText(query.value(1).toString());
         st.setSenderId(query.value(2).toLongLong());
         st.setSenderScreenName(query.value(3).toString());
+
+        //quick fix
+        QTweetUser user;
+        user.setprofileImageUrl(query.value(4).toString());
+        st.setSender(user);
+
         newStatuses.append(st);
     }
 

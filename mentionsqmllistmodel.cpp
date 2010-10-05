@@ -274,7 +274,7 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
 
         QTweetUser userinfo;
         userinfo.setScreenName(query.value(2).toString());
-        userinfo.setScreenName(query.value(3).toString());
+        userinfo.setprofileImageUrl(query.value(3).toString());
         userinfo.setId(query.value(4).toInt());
 
         st.setUser(userinfo);

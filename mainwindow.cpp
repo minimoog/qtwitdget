@@ -312,6 +312,7 @@ void MainWindow::createDatabase(const QString& databaseName)
                "created DATETIME, "
                "senderScreenName TEXT, "
                "recipientScreenName TEXT, "
+               "senderProfileImageUrl TEXT, "
                "UNIQUE (id));");
 
     //temp table for friends

@@ -13,7 +13,7 @@ Rectangle {
     signal deleteButtonClicked
 
     function addTags(str) {
-        return str.replace(/http:\/\/[^ \n\t]+/g, '<a href="$&">$&</a>');//surrounds http links with html link tags
+        return str.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");//surrounds http links with html link tags
     }
 
     function handleLink(link) {
