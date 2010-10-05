@@ -24,8 +24,8 @@
 #include <QtDebug>
 #include "oauth.h"
 
-#define CONSUMER_KEY "wkSFmqWRwBreCjgzLJFEew"
-#define CONSUMER_SECRET "gYMpnMFb24igIv9LwSxfQUgpjb9PvoK9qT9chRJnQ0"
+#define CONSUMER_KEY ""
+#define CONSUMER_SECRET ""
 
 static QByteArray hmacSha1(const QByteArray& message, const QByteArray& key)
 {
