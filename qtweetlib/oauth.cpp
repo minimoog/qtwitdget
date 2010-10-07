@@ -233,13 +233,21 @@ QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, cons
 	qSort(normParameters);
 
 	//OAuth spec. 9.1.1.2
-	QByteArray normString;
-	QListIterator<QByteArray> j(normParameters);
-	while(j.hasNext()){
-		normString += j.next();
-		normString += '&';
-	}
-	normString.chop(1);
+	//QByteArray normString;
+	//QListIterator<QByteArray> j(normParameters);
+	//while(j.hasNext()){
+	//	normString += j.next();
+	//	normString += '&';
+	//}
+	//normString.chop(1);
+
+    QByteArray normString;
+    QListIterator<QByteArray> j(normParameters);
+    while (j.hasNext()) {
+        normString += j.next().toPercentEncoding();
+        normString += "%26";
+    }
+    normString.chop(3);
 
 	//OAuth spec. 9.1.2
 	QString urlScheme = url.scheme();
@@ -266,7 +274,7 @@ QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, cons
 	}
 
 	//OAuth spec. 9.1.3
-	return httpm + '&' + normUrl.toPercentEncoding() + '&' + normString.toPercentEncoding();
+	return httpm + '&' + normUrl.toPercentEncoding() + '&' + normString;
 }
 
 /*!

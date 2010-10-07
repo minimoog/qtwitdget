@@ -56,9 +56,10 @@ void QTweetStatusUpdate::post(const QString &status,
 
     QUrl url("http://api.twitter.com/1/statuses/update.json");
 
-    QUrl urlQuery;
+    QUrl urlQuery("http://api.twitter.com/1/statuses/update.json");
 
-    urlQuery.addQueryItem("status", status);
+    //urlQuery.addQueryItem("status", status);
+    urlQuery.addEncodedQueryItem("status", QUrl::toPercentEncoding(status));
 
     if (inReplyToStatus != 0)
         urlQuery.addQueryItem("in_reply_to_status_id", QString::number(inReplyToStatus));
