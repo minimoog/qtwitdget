@@ -25,13 +25,16 @@
 #include "qtweetdmstatus.h"
 #include "qtweetuser.h"
 #include "qtweetlist.h"
+#include "qtweetsearchresult.h"
+#include "qtweetsearchpageresults.h"
 #include "qjson/parserrunnable.h"
+#include "qjson/parser.h"
 
 /*!
     Constructor
  */
 QTweetNetBase::QTweetNetBase(QObject *parent) :
-    QObject(parent), m_oauthTwitter(0)
+    QObject(parent), m_oauthTwitter(0), m_jsonParsingEnabled(true), m_authentication(true)
 {
 }
 
@@ -41,7 +44,7 @@ QTweetNetBase::QTweetNetBase(QObject *parent) :
     \param parent QObject parent
  */
 QTweetNetBase::QTweetNetBase(OAuthTwitter *oauthTwitter, QObject *parent) :
-        QObject(parent), m_oauthTwitter(oauthTwitter)
+        QObject(parent), m_oauthTwitter(oauthTwitter), m_jsonParsingEnabled(true), m_authentication(true)
 {
 
 }
@@ -73,6 +76,11 @@ QByteArray QTweetNetBase::response() const
     return m_response;
 }
 
+QString QTweetNetBase::lastErrorMessage() const
+{
+    return m_lastErrorMessage;
+}
+
 void QTweetNetBase::setJsonParsingEnabled(bool enable)
 {
     m_jsonParsingEnabled = enable;
@@ -81,6 +89,16 @@ void QTweetNetBase::setJsonParsingEnabled(bool enable)
 bool QTweetNetBase::isJsonParsingEnabled() const
 {
     return m_jsonParsingEnabled;
+}
+
+void QTweetNetBase::setAuthenticationEnabled(bool enable)
+{
+    m_authentication = enable;
+}
+
+bool QTweetNetBase::isAuthenticationEnabled() const
+{
+    return m_authentication;
 }
 
 void QTweetNetBase::parseJson(const QByteArray &jsonData)
@@ -99,14 +117,59 @@ void QTweetNetBase::reply()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
     if (reply) {
-         m_response = reply->readAll();
-        emit finished(m_response);
+        if (reply->error() == QNetworkReply::NoError) {
+            m_response = reply->readAll();
+            emit finished(m_response);
 
-        if (isJsonParsingEnabled())
-            parseJson(m_response);
+            if (isJsonParsingEnabled())
+                parseJson(m_response);
+        } else {
+            m_response = reply->readAll();
 
+            //dump error
+            qDebug() << "Network error: " << reply->error();
+            qDebug() << "Error string: " << reply->errorString();
+            qDebug() << "Error response: " << m_response;
+
+            //HTTP status code
+            int httpStatus = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+            //try to json parse the error response
+            QJson::Parser parser;
+            bool ok;
+
+            QVariantMap errMsgMap = parser.parse(m_response, &ok).toMap();
+            if (!ok) {
+                m_lastErrorMessage.clear();
+            } else {
+                //QString request = errMsgMap["request"].toString();
+                m_lastErrorMessage = errMsgMap["error"].toString();
+            }
+
+            switch (httpStatus) {
+            case NotModified:   /*!< There was no new data to return. */
+            case BadRequest:    /*!< The request was invalid. This is the status code will be returned during rate limiting. */
+            case Unauthorized:  /*!< Authentication credentials were missing or incorrect. */
+            case Forbidden:     /*!< The request is understood, but it has been refused, due to update limits. */
+            case NotFound:      /*!< The URI requested is invalid or the resource requested, such as a user, does not exists. */
+            case NotAcceptable: /*!< Returned by the Search API when an invalid format is specified in the request. */
+            case EnhanceYourCalm:   /*!< Returned by the Search and Trends API when you are being rate limited. */
+            case InternalServerError:   /*!< Something is broken in Twitter */
+            case BadGateway:    /*!< Twitter is down or being upgraded. */
+            case ServiceUnavailable:    /*! The Twitter servers are up, but overloaded with requests. Try again later. */
+                emit error(static_cast<ErrorCode>(httpStatus), m_lastErrorMessage);
+                break;
+            default:
+                emit error(UnknownError, m_lastErrorMessage);
+            }
+        }
         reply->deleteLater();
     }
+}
+
+void QTweetNetBase::setLastErrorMessage(const QString &errMsg)
+{
+    m_lastErrorMessage = errMsg;
 }
 
 QList<QTweetStatus> QTweetNetBase::variantToStatusList(const QVariant &fromParser)
@@ -290,4 +353,48 @@ QList<QTweetList> QTweetNetBase::variantToTweetLists(const QVariant &var)
     }
 
     return lists;
+}
+
+QTweetSearchResult QTweetNetBase::variantMapToSearchResult(const QVariantMap &var)
+{
+    QTweetSearchResult result;
+
+    result.setCreatedAt(var["created_at"].toString());
+    result.setFromUser(var["from_user"].toString());
+    result.setId(var["id"].toLongLong());
+    result.setLang(var["iso_language_code"].toString());
+    result.setProfileImageUrl(var["profile_image_url"].toString());
+    result.setSource(var["source"].toString());
+    result.setText(var["text"].toString());
+    result.setToUser(var["to_user"].toString());
+
+    return result;
+}
+
+QTweetSearchPageResults QTweetNetBase::variantToSearchPageResults(const QVariant &var)
+{
+    QTweetSearchPageResults page;
+
+    QVariantMap varMap = var.toMap();
+
+    page.setMaxId(varMap["max_id"].toLongLong());
+    page.setNextPage(varMap["next_page"].toByteArray());
+    page.setPage(varMap["page"].toInt());
+    page.setQuery(varMap["query"].toByteArray());
+    page.setRefreshUrl(varMap["refresh_url"].toByteArray());
+    page.setResultsPerPage(varMap["results_per_page"].toInt());
+    page.setSinceId(varMap["since_id"].toLongLong());
+    page.setTotal(varMap["total"].toInt());
+
+    QList<QTweetSearchResult> resultList;
+    QList<QVariant> resultVarList = varMap["results"].toList();
+
+    foreach (const QVariant& resultVar, resultVarList) {
+        QTweetSearchResult result = variantMapToSearchResult(resultVar.toMap());
+        resultList.append(result);
+    }
+
+    page.setResults(resultList);
+
+    return page;
 }

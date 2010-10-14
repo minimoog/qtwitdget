@@ -14,7 +14,9 @@ HEADERS += \
     langchangedialog.h \
     tweetqmllistmodel.h \
     mentionsqmllistmodel.h \
-    directmessagesqmllistmodel.h
+    directmessagesqmllistmodel.h \
+    qtweetlib/qtweetsearchresult.h \
+    qtweetlib/qtweetsearchpageresults.h
 
 # QJSON
 HEADERS += \
@@ -56,7 +58,9 @@ SOURCES += main.cpp \
     langchangedialog.cpp \
     tweetqmllistmodel.cpp \
     mentionsqmllistmodel.cpp \
-    directmessagesqmllistmodel.cpp
+    directmessagesqmllistmodel.cpp \
+    qtweetlib/qtweetsearchresult.cpp \
+    qtweetlib/qtweetsearchpageresults.cpp
 
 # QJSON
 SOURCES += \

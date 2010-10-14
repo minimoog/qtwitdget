@@ -43,26 +43,33 @@ void QTweetStatusDestroy::destroy(qint64 id,
                                   bool trimUser,
                                   bool includeEntities)
 {
-    Q_ASSERT(oauthTwitter() != 0);
+    if (!isAuthenticationEnabled()) {
+        qCritical("Needs authentication to be enabled");
+        return;
+    }
 
     QUrl url("http://api.twitter.com/1/statuses/destroy.json");
 
-    url.addQueryItem("id", QString::number(id));
+    QUrl urlQuery(url);
+
+    urlQuery.addQueryItem("id", QString::number(id));
 
     if (trimUser)
-        url.addQueryItem("trim_user", "true");
+        urlQuery.addQueryItem("trim_user", "true");
 
     if (includeEntities)
-        url.addQueryItem("include_entities", "true");
+        urlQuery.addQueryItem("include_entities", "true");
 
     QNetworkRequest req(url);
 
-    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::POST);
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
 
-    QNetworkReply *reply = oauthTwitter()->networkAccessManager()->post(req, QByteArray());
+    QByteArray postBody = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
+    postBody.remove(0, 1);
+
+    QNetworkReply *reply = oauthTwitter()->networkAccessManager()->post(req, postBody);
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
 
 void QTweetStatusDestroy::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
@@ -73,10 +80,8 @@ void QTweetStatusDestroy::parsingJsonFinished(const QVariant &json, bool ok, con
         emit deletedStatus(status);
     } else {
         qDebug() << "QTweetStatusDestroy parse error: " << errorMsg;
+        setLastErrorMessage(errorMsg);
+        emit error(JsonParsingError, errorMsg);
     }
 }
 
-void QTweetStatusDestroy::error()
-{
-    // ### TODO:
-}

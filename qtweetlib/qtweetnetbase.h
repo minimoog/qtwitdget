@@ -32,6 +32,8 @@ class QTweetStatus;
 class QTweetUser;
 class QTweetDMStatus;
 class QTweetList;
+class QTweetSearchResult;
+class QTweetSearchPageResults;
 
 /*!
     Base class for Twitter API classes
@@ -41,10 +43,26 @@ class QTWEETLIBSHARED_EXPORT QTweetNetBase : public QObject
     Q_OBJECT
     Q_PROPERTY(OAuthTwitter* oauthTwitter READ oauthTwitter WRITE setOAuthTwitter)
     Q_PROPERTY(bool jsonParsing READ isJsonParsingEnabled WRITE setJsonParsingEnabled)
-public:
+    Q_PROPERTY(bool authenticaion READ isAuthenticationEnabled WRITE setAuthenticationEnabled)
+public: 
     QTweetNetBase(QObject *parent = 0);
     QTweetNetBase(OAuthTwitter *oauthTwitter, QObject *parent = 0);
-    virtual QTweetNetBase::~QTweetNetBase();
+    virtual ~QTweetNetBase();
+
+    enum ErrorCode {
+        JsonParsingError = 1,
+        UnknownError = 2,
+        NotModified = 304,
+        BadRequest = 400,
+        Unauthorized = 401,
+        Forbidden = 403,
+        NotFound = 404,
+        NotAcceptable = 406,
+        EnhanceYourCalm = 420,
+        InternalServerError = 500,
+        BadGateway = 502,
+        ServiceUnavailable = 503
+    };
 
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     OAuthTwitter* oauthTwitter() const;
@@ -52,7 +70,11 @@ public:
     void setJsonParsingEnabled(bool enable);
     bool isJsonParsingEnabled() const;
 
+    void setAuthenticationEnabled(bool enable);
+    bool isAuthenticationEnabled() const;
+
     QByteArray response() const;
+    QString lastErrorMessage() const;
 
 signals:
     /*!
@@ -60,11 +82,13 @@ signals:
         \param response Contains the response
      */
     void finished(const QByteArray& response);
-
-    /*!
-        Emited when there is a network error
+    /*! Emited when there is error. You can check error message with lastErrorMessage().
+        \param code Error code
+        \param errorMsg Error message. If it's empty then error was not standard json twitter api message.
+                        In that case check response.
+        \remarks DOESN'T emit finished signal
      */
-    void networkError(const QString& errorString);
+    void error(ErrorCode code, const QString& errorMsg);
 
 protected slots:
     virtual void parsingJsonFinished(const QVariant& json, bool ok, const QString& errorMsg) = 0;
@@ -79,14 +103,18 @@ protected:
     QTweetList variantMapToTweetList(const QVariantMap& var);
     QList<QTweetUser> variantToUserInfoList(const QVariant& fromParser);
     QList<QTweetList> variantToTweetLists(const QVariant& var);
+    QTweetSearchResult variantMapToSearchResult(const QVariantMap& var);
+    QTweetSearchPageResults variantToSearchPageResults(const QVariant& var);
 
     void parseJson(const QByteArray& jsonData);
-
-    QByteArray m_response;
+    void setLastErrorMessage(const QString& errMsg);
 
 private:
     OAuthTwitter *m_oauthTwitter;
+    QByteArray m_response;
+    QString m_lastErrorMessage;
     bool m_jsonParsingEnabled;
+    bool m_authentication;
 };
 
 #endif // QTWEETNETBASE_H

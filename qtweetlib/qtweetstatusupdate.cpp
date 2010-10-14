@@ -52,7 +52,10 @@ void QTweetStatusUpdate::post(const QString &status,
                               bool trimUser,
                               bool includeEntities)
 {
-    Q_ASSERT(oauthTwitter() != 0);
+    if (!isAuthenticationEnabled()) {
+        qCritical("Needs authentication to be enabled");
+        return;
+    }
 
     QUrl url("http://api.twitter.com/1/statuses/update.json");
 
@@ -94,7 +97,6 @@ void QTweetStatusUpdate::post(const QString &status,
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->post(req, statusPost);
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
 
 void QTweetStatusUpdate::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
@@ -105,10 +107,8 @@ void QTweetStatusUpdate::parsingJsonFinished(const QVariant &json, bool ok, cons
         emit postedStatus(status);
     } else {
         qDebug() << "QTweetStatusUpdate JSON parser error: " << errorMsg;
+        setLastErrorMessage(errorMsg);
+        emit error(JsonParsingError, errorMsg);
     }
 }
 
-void QTweetStatusUpdate::error()
-{
-    // ### TODO:
-}

@@ -51,7 +51,10 @@ void QTweetMentions::fetch(qint64 sinceid,
                            bool includeRts,
                            bool includeEntities)
 {
-    Q_ASSERT(oauthTwitter() != 0);
+    if (!isAuthenticationEnabled()) {
+        qCritical("Needs authentication to be enabled");
+        return;
+    }
 
     QUrl url("http://api.twitter.com/1/statuses/mentions.json");
 
@@ -83,7 +86,6 @@ void QTweetMentions::fetch(qint64 sinceid,
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->get(req);
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
 }
 
 void QTweetMentions::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
@@ -94,10 +96,8 @@ void QTweetMentions::parsingJsonFinished(const QVariant &json, bool ok, const QS
         emit parsedStatuses(statuses);
     } else {
         qDebug() << "QTweetMentions JSON parser error: " << errorMsg;
+        setLastErrorMessage(errorMsg);
+        emit error(JsonParsingError, errorMsg);
     }
 }
 
-void QTweetMentions::error()
-{
-    // ### TODO:
-}
