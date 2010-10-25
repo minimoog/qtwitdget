@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/twitter_32.ico</file>
-        <file>images/twitter_blabla.png</file>
         <file>images/button_reply.png</file>
         <file>images/button_reply_hover.png</file>
         <file>images/button_reply_click.png</file>
@@ -25,5 +23,6 @@
         <file>qml/Button.qml</file>
         <file>qml/Tweet.qml</file>
         <file>qml/TweetList.qml</file>
+        <file>images/qtwidget_icon.ico</file>
     </qresource>
 </RCC>

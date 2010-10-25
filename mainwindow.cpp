@@ -226,7 +226,7 @@ void MainWindow::setupTrayIcon()
 	m_trayIconMenu->addAction(ui.actionQuit);
 
 	m_trayIcon = new QSystemTrayIcon(this);
-	m_trayIcon->setIcon(QIcon(":/images/twitter_32.ico"));
+    m_trayIcon->setIcon(QIcon(":/images/qtwidget_icon.ico"));
 	m_trayIcon->setContextMenu(m_trayIconMenu);
 	m_trayIcon->show();
 
