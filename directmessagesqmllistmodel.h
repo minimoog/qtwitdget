@@ -65,6 +65,7 @@ signals:
 private slots:
     void updateTimeline();
     void finishedTimeline(const QList<QTweetDMStatus>& statuses);
+    void error();
 
 private:
     OAuthTwitter* m_oauthTwitter;

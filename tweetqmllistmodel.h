@@ -26,6 +26,7 @@
 class OAuthTwitter;
 class QTimer;
 class QTweetStatus;
+class QTweetNetBase;
 
 class TweetQmlListModel : public QAbstractListModel
 {
@@ -63,6 +64,7 @@ private slots:
     void updateHomeTimeline();
     void finishedDestroyTweet(const QTweetStatus& status);
     void finishedHomeTimeline(const QList<QTweetStatus>& statuses);
+    void error();
 
 private:
     OAuthTwitter* m_oauthTwitter;

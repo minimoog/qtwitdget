@@ -158,6 +158,8 @@ void MentionsQmlListModel::updateTimeline()
 
     connect(tweetMentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
              this, SLOT(finishedTimeline(QList<QTweetStatus>)));
+    connect(tweetMentions, SIGNAL(error(ErrorCode,QString)),
+            this, SLOT(error()));
 }
 
 void MentionsQmlListModel::finishedTimeline(const QList<QTweetStatus> &statuses)
@@ -208,6 +210,11 @@ void MentionsQmlListModel::finishedTimeline(const QList<QTweetStatus> &statuses)
         tweetMentions->deleteLater();
     }
 
+    m_timer->start();
+}
+
+void MentionsQmlListModel::error()
+{
     m_timer->start();
 }
 

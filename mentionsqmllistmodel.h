@@ -65,6 +65,7 @@ private slots:
     void updateTimeline();
     void finishedDestroyTweet(const QTweetStatus& status);
     void finishedTimeline(const QList<QTweetStatus>& statuses);
+    void error();
 
 private:
     OAuthTwitter* m_oauthTwitter;

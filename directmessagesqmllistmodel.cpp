@@ -108,7 +108,8 @@ void DirectMessagesQmlListModel::updateTimeline()
 
     connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
             this, SLOT(finishedTimeline(QList<QTweetDMStatus>)));
-
+    connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
+            this, SLOT(error()));
 }
 
 void DirectMessagesQmlListModel::finishedTimeline(const QList<QTweetDMStatus> &statuses)
@@ -159,6 +160,11 @@ void DirectMessagesQmlListModel::finishedTimeline(const QList<QTweetDMStatus> &s
         directMessages->deleteLater();
     }
 
+    m_timer->start();
+}
+
+void DirectMessagesQmlListModel::error()
+{
     m_timer->start();
 }
 

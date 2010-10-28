@@ -162,6 +162,8 @@ void TweetQmlListModel::updateHomeTimeline()
 
     connect(tweetHomeTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
             this, SLOT(finishedHomeTimeline(QList<QTweetStatus>)));
+    connect(tweetHomeTimeline, SIGNAL(error(ErrorCode,QString)),
+            this, SLOT(error()));
 }
 
 void TweetQmlListModel::finishedHomeTimeline(const QList<QTweetStatus> &statuses)
@@ -213,6 +215,11 @@ void TweetQmlListModel::finishedHomeTimeline(const QList<QTweetStatus> &statuses
     }
 
     m_timer->start();   //u
+}
+
+void TweetQmlListModel::error()
+{
+    m_timer->start();   //just restart the timer
 }
 
 void TweetQmlListModel::showNewTweets()
