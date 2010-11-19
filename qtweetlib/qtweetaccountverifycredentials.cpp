@@ -18,21 +18,35 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include "qtweetaccountverifycredentials.h"
 #include "qtweetuser.h"
+#include "qtweetconvert.h"
 
+/**
+ *  Constructor
+ */
 QTweetAccountVerifyCredentials::QTweetAccountVerifyCredentials(QObject *parent) :
     QTweetNetBase(parent)
 {
 }
 
+/**
+ *  Constructor
+ *  @param oauthTwitter OAuthTwitter object
+ *  @param parent parent QObject
+ */
 QTweetAccountVerifyCredentials::QTweetAccountVerifyCredentials(OAuthTwitter *oauthTwitter, QObject *parent) :
         QTweetNetBase(oauthTwitter, parent)
 {
 }
 
+/**
+ *  Verifies credentials
+ *  @param includeEntities when set to either true, t or 1, each tweet will include a node called "entities,".
+ */
 void QTweetAccountVerifyCredentials::verify(bool includeEntities)
 {
     if (!isAuthenticationEnabled()) {
@@ -57,7 +71,7 @@ void QTweetAccountVerifyCredentials::verify(bool includeEntities)
 void QTweetAccountVerifyCredentials::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
 {
     if (ok) {
-        QTweetUser user = variantMapToUserInfo(json.toMap());
+        QTweetUser user = QTweetConvert::variantMapToUserInfo(json.toMap());
 
         emit parsedUser(user);
     } else {

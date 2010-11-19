@@ -28,8 +28,8 @@
 class QTweetUser;
 class QTweetDMStatusData;
 
-/*!
-    Stores direct message info
+/**
+ *   Stores direct message info
  */
 class QTWEETLIBSHARED_EXPORT QTweetDMStatus
 {
@@ -40,6 +40,7 @@ public:
     ~QTweetDMStatus();
 
     void setCreatedAt(const QString& twitterDate);
+    void setCreatedAt(const QDateTime& datetime);
     QDateTime createdAt() const;
     void setSenderScreenName(const QString& screenName);
     QString senderScreenName() const;

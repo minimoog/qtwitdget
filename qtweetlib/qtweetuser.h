@@ -28,8 +28,8 @@
 class QTweetStatus;
 class QTweetUserData;
 
-/*!
-    Class for storing user info
+/**
+ *   Class for storing user info
  */
 class QTWEETLIBSHARED_EXPORT QTweetUser
 {
@@ -66,6 +66,7 @@ public:
     void setFriendsCount(int count);
     int friendsCount() const;
     void setCreatedAt(const QString& twitterDate);
+    void setCreatedAt(const QDateTime& datetime);
     QDateTime createdAt() const;
     void setFavouritesCount(int count);
     int favouritesCount() const;

@@ -22,9 +22,10 @@
 #define QTWEETSTATUSUPDATE_H
 
 #include "qtweetnetbase.h"
+#include "qtweetgeocoord.h"
 
-/*!
-    Class for updating user status (posting tweet)
+/**
+ *   Class for updating user status (posting tweet)
  */
 class QTWEETLIBSHARED_EXPORT QTweetStatusUpdate : public QTweetNetBase
 {
@@ -34,14 +35,14 @@ public:
     QTweetStatusUpdate(OAuthTwitter *oauthTwitter, QObject *parent = 0);
     void post(const QString& status,
               qint64 inReplyToStatus = 0,
-              qreal latitude = 0,
-              qreal longitude = 0,
+              const QTweetGeoCoord& latLong = QTweetGeoCoord(),
               const QString& placeid = QString(),
               bool displayCoordinates = false,
               bool trimUser = false,
               bool includeEntities = false);
 
 signals:
+    /** Emits posted status */
     void postedStatus(const QTweetStatus& status);
 
 protected slots:

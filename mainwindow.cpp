@@ -166,7 +166,7 @@ void MainWindow::updateButtonClicked(const QString &id, const QString &text, con
 
         QTweetDirectMessageNew *dm = new QTweetDirectMessageNew;
         dm->setOAuthTwitter(m_oauthTwitter);
-        dm->post(0, text, screenName);
+        dm->post(screenName, text);
 
         connect(dm, SIGNAL(parsedDirectMessage(QTweetDMStatus)),
                 this, SLOT(directMessageNewFinished(QTweetDMStatus)));

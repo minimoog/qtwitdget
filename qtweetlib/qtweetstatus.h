@@ -28,11 +28,13 @@
 class QDateTime;
 class QTweetUser;
 class QTweetStatusData;
+class QTweetPlace;
+class QTweetEntityUrl;
+class QTweetEntityHashtag;
+class QTweetEntityUserMentions;
 
-// ### TODO: Places and coordinates
-
-/*!
-    Stores tweet info
+/**
+ *   Stores tweet info
  */
 class QTWEETLIBSHARED_EXPORT QTweetStatus
 {
@@ -47,6 +49,7 @@ public:
     void setText(const QString& text);
     QString text() const;
     void setCreatedAt(const QString& twitterDate);
+    void setCreatedAt(const QDateTime& dateTime);
     QDateTime createdAt() const;
     void setInReplyToUserId(qint64 id);
     qint64 inReplyToUserId() const;
@@ -60,9 +63,18 @@ public:
     QString source() const;
     void setUser(const QTweetUser& user);
     QTweetUser user() const;
+    qint64 userid() const;  //usefull for getting quick userid when userinfo is trimmed
     void setRetweetedStatus(const QTweetStatus& status);
     QTweetStatus retweetedStatus() const;
+    void setPlace(const QTweetPlace& place);
+    QTweetPlace place() const;
     bool isRetweet() const;
+    QList<QTweetEntityUrl> urlEntities() const;
+    QList<QTweetEntityHashtag> hashtagEntities() const;
+    QList<QTweetEntityUserMentions> userMentionsEntities() const;
+    void addUrlEntity(const QTweetEntityUrl& urlEntity);
+    void addHashtagEntity(const QTweetEntityHashtag& hashtagEntity);
+    void addUserMentionsEntity(const QTweetEntityUserMentions& userMentionsEntity);
 
 private:
     QSharedDataPointer<QTweetStatusData> d;

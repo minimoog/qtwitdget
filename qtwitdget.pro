@@ -16,7 +16,14 @@ HEADERS += \
     mentionsqmllistmodel.h \
     directmessagesqmllistmodel.h \
     qtweetlib/qtweetsearchresult.h \
-    qtweetlib/qtweetsearchpageresults.h
+    qtweetlib/qtweetsearchpageresults.h \
+    qtweetlib/qtweetconvert.h \
+    qtweetlib/qtweetplace.h \
+    qtweetlib/qtweetgeocoord.h \
+    qtweetlib/qtweetgeoboundingbox.h \
+    qtweetlib/qtweetentityurl.h \
+    qtweetlib/qtweetentityusermentions.h \
+    qtweetlib/qtweetentityhashtag.h
 
 # QJSON
 HEADERS += \
@@ -60,7 +67,14 @@ SOURCES += main.cpp \
     mentionsqmllistmodel.cpp \
     directmessagesqmllistmodel.cpp \
     qtweetlib/qtweetsearchresult.cpp \
-    qtweetlib/qtweetsearchpageresults.cpp
+    qtweetlib/qtweetsearchpageresults.cpp \
+    qtweetlib/qtweetconvert.cpp \
+    qtweetlib/qtweetplace.cpp \
+    qtweetlib/qtweetgeocoord.cpp \
+    qtweetlib/qtweetgeoboundingbox.cpp \
+    qtweetlib/qtweetentityurl.cpp \
+    qtweetlib/qtweetentityusermentions.cpp \
+    qtweetlib/qtweetentityhashtag.cpp
 
 # QJSON
 SOURCES += \

@@ -18,10 +18,12 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include "qtweetstatusdestroy.h"
 #include "qtweetstatus.h"
+#include "qtweetconvert.h"
 
 QTweetStatusDestroy::QTweetStatusDestroy(QObject *parent) :
     QTweetNetBase(parent)
@@ -33,11 +35,11 @@ QTweetStatusDestroy::QTweetStatusDestroy(OAuthTwitter *oauthTwitter, QObject *pa
 {
 }
 
-/*!
-    Destroys tweet with id
-    \param id Tweet ID
-    \param respType Response type
-    \remarks Async
+/**
+ *   Destroys tweet with id
+ *   @param id tweet ID
+ *   @param trimUser trims users info
+ *   @param includeEntities true to include node entities in response
  */
 void QTweetStatusDestroy::destroy(qint64 id,
                                   bool trimUser,
@@ -75,7 +77,7 @@ void QTweetStatusDestroy::destroy(qint64 id,
 void QTweetStatusDestroy::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
 {
     if (ok) {
-        QTweetStatus status = variantMapToStatus(json.toMap());
+        QTweetStatus status = QTweetConvert::variantMapToStatus(json.toMap());
 
         emit deletedStatus(status);
     } else {

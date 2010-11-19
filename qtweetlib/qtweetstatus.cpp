@@ -22,11 +22,40 @@
 #include <QDateTime>
 #include "qtweetstatus.h"
 #include "qtweetuser.h"
+#include "qtweetplace.h"
+#include "qtweetentityurl.h"
+#include "qtweetentityhashtag.h"
+#include "qtweetentityusermentions.h"
 
 class QTweetStatusData : public QSharedData
 {
 public:
-    QTweetStatusData() : id(0), inReplyToStatusId(0), containsRetweetStatus(false) {}
+    QTweetStatusData() : id(0), inReplyToStatusId(0), retweetedStatus(0) {}
+
+    QTweetStatusData::QTweetStatusData(const QTweetStatusData& other) : QSharedData(other)
+    {
+        id = other.id;
+        text = other.text;
+        createdAt = other.createdAt;
+        inReplyToUserId = other.inReplyToUserId;
+        inReplyToScreenName = other.inReplyToScreenName;
+        inReplyToStatusId = other.inReplyToStatusId;
+        favorited = other.favorited;
+        source = other.source;
+        user = other.user;
+        place = other.place;
+
+        if (other.retweetedStatus) {
+            retweetedStatus = new QTweetStatus(*other.retweetedStatus);
+        } else {
+            retweetedStatus = 0;
+        }
+    }
+
+    QTweetStatusData::~QTweetStatusData()
+    {
+        delete retweetedStatus;
+    }
 
     qint64 id;
     QString text;
@@ -37,18 +66,11 @@ public:
     bool favorited;
     QString source;
     QTweetUser user;
-    //avoid recursion
-    //QTweetStatus retweetedStatus;
-    qint64 rtsId;
-    QString rtsText;
-    QDateTime rtsCreatedAt;
-    qint64 rtsInReplyToUserId;
-    QString rtsInReplyToScreenName;
-    qint64 rtsInReplyToStatusId;
-    bool rtsFavorited;
-    QString rtsSource;
-    QTweetUser rtsUser;
-    bool containsRetweetStatus;
+    QTweetStatus *retweetedStatus;
+    QTweetPlace place;
+    QList<QTweetEntityUrl> urlEntities;
+    QList<QTweetEntityHashtag> hashtagEntities;
+    QList<QTweetEntityUserMentions> userMentionEntities;
 };
 
 QTweetStatus::QTweetStatus() :
@@ -95,6 +117,11 @@ QString QTweetStatus::text() const
 void QTweetStatus::setCreatedAt(const QString &twitterDate)
 {
     d->createdAt = QTweetUser::twitterDateToQDateTime(twitterDate);
+}
+
+void QTweetStatus::setCreatedAt(const QDateTime &dateTime)
+{
+    d->createdAt = dateTime;
 }
 
 QDateTime QTweetStatus::createdAt() const
@@ -162,37 +189,71 @@ QTweetUser QTweetStatus::user() const
     return d->user;
 }
 
+qint64 QTweetStatus::userid() const
+{
+    return d->user.id();
+}
+
 void QTweetStatus::setRetweetedStatus(const QTweetStatus &status)
 {
-    //recursion? circural reference?
-    d->rtsId = status.id();
-    d->rtsText = status.text();
-    d->rtsCreatedAt = status.createdAt();
-    d->rtsInReplyToUserId = status.inReplyToUserId();
-    d->rtsInReplyToStatusId = status.inReplyToUserId();
-    d->rtsFavorited = status.favorited();
-    d->rtsSource = status.source();
-    d->rtsUser = status.user();
-    d->containsRetweetStatus = true;
+    if (!d->retweetedStatus)
+        d->retweetedStatus = new QTweetStatus;
+
+    *d->retweetedStatus = status;
 }
 
 QTweetStatus QTweetStatus::retweetedStatus() const
 {
-    QTweetStatus status;
-    status.setId(d->rtsId);
-    status.setText(d->rtsText);
-    //status.setCreatedAt(d->rtsCreatedAt); // ### TODO FIX
-    status.setInReplyToUserId(d->rtsInReplyToUserId);
-    status.setInReplyToScreenName(d->rtsInReplyToScreenName);
-    status.setInReplyToStatusId(d->rtsInReplyToStatusId);
-    status.setFavorited(d->rtsFavorited);
-    status.setSource(d->rtsSource);
-    status.setUser(d->rtsUser);
+    if (!d->retweetedStatus)
+        return QTweetStatus();
 
-    return status;
+    return *d->retweetedStatus;
+}
+
+void QTweetStatus::setPlace(const QTweetPlace &place)
+{
+    d->place = place;
+}
+
+QTweetPlace QTweetStatus::place() const
+{
+    return d->place;
 }
 
 bool QTweetStatus::isRetweet() const
 {
-    return d->containsRetweetStatus;
+    if (d->retweetedStatus)
+        return true;
+
+    return false;
+}
+
+QList<QTweetEntityUrl> QTweetStatus::urlEntities() const
+{
+    return d->urlEntities;
+}
+
+QList<QTweetEntityHashtag> QTweetStatus::hashtagEntities() const
+{
+    return d->hashtagEntities;
+}
+
+QList<QTweetEntityUserMentions> QTweetStatus::userMentionsEntities() const
+{
+    return d->userMentionEntities;
+}
+
+void QTweetStatus::addUrlEntity(const QTweetEntityUrl &urlEntity)
+{
+    d->urlEntities.append(urlEntity);
+}
+
+void QTweetStatus::addHashtagEntity(const QTweetEntityHashtag &hashtagEntity)
+{
+    d->hashtagEntities.append(hashtagEntity);
+}
+
+void QTweetStatus::addUserMentionsEntity(const QTweetEntityUserMentions &userMentionsEntity)
+{
+    d->userMentionEntities.append(userMentionsEntity);
 }

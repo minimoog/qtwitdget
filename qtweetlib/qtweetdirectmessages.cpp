@@ -18,29 +18,39 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include "qtweetdirectmessages.h"
 #include "qtweetdmstatus.h"
+#include "qtweetconvert.h"
 
+/**
+ *  Constructor
+ */
 QTweetDirectMessages::QTweetDirectMessages(QObject *parent) :
     QTweetNetBase(parent)
 {
 }
 
+/**
+ *  Constructor
+ *  @param oauthTwitter OAuthTwitter object
+ *  @param parent parent QObject
+ */
 QTweetDirectMessages::QTweetDirectMessages(OAuthTwitter *oauthTwitter, QObject *parent) :
     QTweetNetBase(oauthTwitter, parent)
 {
 }
 
-/*!
-    Start fetching direct messages
-    \param sinceid Fetch DM newer then sinceid
-    \param maxid Fetch DM older then maxid
-    \param count Number of DM to fetch (up to 200)
-    \param page Page number
-    \param includeEntities When true each tweet will include a node called "entities"
-    \remarks Asynhronous
+/**
+ *   Start fetching direct messages
+ *   @param sinceid Fetch DM newer then sinceid
+ *   @param maxid Fetch DM older then maxid
+ *   @param count Number of DM to fetch (up to 200)
+ *   @param page Page number
+ *   @param includeEntities When true each tweet will include a node called "entities"
+ *   @remarks Setting parameter to default value will not be put in query
  */
 void QTweetDirectMessages::fetch(qint64 sinceid,
                                  qint64 maxid,
@@ -82,7 +92,7 @@ void QTweetDirectMessages::fetch(qint64 sinceid,
 void QTweetDirectMessages::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
 {
     if (ok) {
-        QList<QTweetDMStatus> directMessages = variantToDirectMessagesList(json);
+        QList<QTweetDMStatus> directMessages = QTweetConvert::variantToDirectMessagesList(json);
 
         emit parsedDirectMessages(directMessages);
     } else {

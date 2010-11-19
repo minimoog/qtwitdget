@@ -18,10 +18,13 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include "qtweetstatusupdate.h"
 #include "qtweetstatus.h"
+#include "qtweetgeocoord.h"
+#include "qtweetconvert.h"
 
 QTweetStatusUpdate::QTweetStatusUpdate(QObject *parent) :
     QTweetNetBase(parent)
@@ -33,20 +36,17 @@ QTweetStatusUpdate::QTweetStatusUpdate(OAuthTwitter *oauthTwitter, QObject *pare
 {
 }
 
-/*!
-    Posts a tweet
-    \param status Text of the status update
-    \param inReplyToStatus ID of a existing tweet is in reply to
-    \param latitude Latitude
-    \param longitude Longitude
-    \param placeid A place in the world (use reverse geocoding)
-    \param displayCoordinates Whether or not to put a exact coordinates a tweet has been sent from
-    \remarks Async
+/**
+ *   Posts a tweet
+ *   @param status text of the status update
+ *   @param inReplyToStatus ID of a existing tweet is in reply to
+ *   @param latLong latitude and longitude
+ *   @param placeid a place in the world (use reverse geocoding)
+ *   @param displayCoordinates whether or not to put a exact coordinates a tweet has been sent from
  */
 void QTweetStatusUpdate::post(const QString &status,
                               qint64 inReplyToStatus,
-                              qreal latitude,
-                              qreal longitude,
+                              const QTweetGeoCoord& latLong,
                               const QString &placeid,
                               bool displayCoordinates,
                               bool trimUser,
@@ -61,17 +61,15 @@ void QTweetStatusUpdate::post(const QString &status,
 
     QUrl urlQuery("http://api.twitter.com/1/statuses/update.json");
 
-    //urlQuery.addQueryItem("status", status);
     urlQuery.addEncodedQueryItem("status", QUrl::toPercentEncoding(status));
 
     if (inReplyToStatus != 0)
         urlQuery.addQueryItem("in_reply_to_status_id", QString::number(inReplyToStatus));
 
-    if (latitude != 0)
-        urlQuery.addQueryItem("lat", QString::number(latitude));
-
-    if (longitude != 0)
-        urlQuery.addQueryItem("long", QString::number(longitude));
+    if (latLong.isValid()) {
+        urlQuery.addQueryItem("lat", QString::number(latLong.latitude()));
+        urlQuery.addQueryItem("long", QString::number(latLong.longitude()));
+    }
 
     if (!placeid.isEmpty())
         urlQuery.addQueryItem("place_id", placeid);
@@ -102,7 +100,7 @@ void QTweetStatusUpdate::post(const QString &status,
 void QTweetStatusUpdate::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
 {
     if (ok) {
-        QTweetStatus status = variantMapToStatus(json.toMap());
+        QTweetStatus status = QTweetConvert::variantMapToStatus(json.toMap());
 
         emit postedStatus(status);
     } else {
