@@ -23,7 +23,8 @@ HEADERS += \
     qtweetlib/qtweetgeoboundingbox.h \
     qtweetlib/qtweetentityurl.h \
     qtweetlib/qtweetentityusermentions.h \
-    qtweetlib/qtweetentityhashtag.h
+    qtweetlib/qtweetentityhashtag.h \
+    qtweetlib/qtweetuserstream.h
 
 # QJSON
 HEADERS += \
@@ -74,7 +75,8 @@ SOURCES += main.cpp \
     qtweetlib/qtweetgeoboundingbox.cpp \
     qtweetlib/qtweetentityurl.cpp \
     qtweetlib/qtweetentityusermentions.cpp \
-    qtweetlib/qtweetentityhashtag.cpp
+    qtweetlib/qtweetentityhashtag.cpp \
+    qtweetlib/qtweetuserstream.cpp
 
 # QJSON
 SOURCES += \
