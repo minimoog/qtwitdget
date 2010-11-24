@@ -20,20 +20,17 @@
 
 #include <QtDebug>
 #include <QSqlQuery>
-#include <QTimer>
 #include "oauthtwitter.h"
 #include "qtweetstatus.h"
 #include "qtweetuser.h"
 #include "qtweetstatusdestroy.h"
-#include "qtweethometimeline.h"
 #include "tweetqmllistmodel.h"
 
 
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewTweets(0),
-    m_numOldTweets(0),
-    m_timer(new QTimer(this))
+    m_numOldTweets(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
@@ -42,20 +39,6 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
     setRoleNames(roles);
-
-    m_timer->setSingleShot(true);
-    m_timer->setInterval(60000);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateHomeTimeline()));
-}
-
-void TweetQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
-{
-    m_oauthTwitter = oauthTwitter;
-}
-
-void TweetQmlListModel::update()
-{
-
 }
 
 int TweetQmlListModel::rowCount(const QModelIndex &parent) const
@@ -88,7 +71,7 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void TweetQmlListModel::setUserID(int userid)
+void TweetQmlListModel::setUserID(qint64 userid)
 {
     m_userid = userid;
 }
@@ -103,7 +86,7 @@ void TweetQmlListModel::destroyTweet(const QString &tweetid)
 
     if (ok) {
         QTweetStatusDestroy *tweetDestroy = new QTweetStatusDestroy;
-        tweetDestroy->setOAuthTwitter(m_oauthTwitter);
+        //tweetDestroy->setOAuthTwitter(m_oauthTwitter);
         tweetDestroy->destroy(id);
         connect(tweetDestroy, SIGNAL(deletedStatus(QTweetStatus)), this, SLOT(finishedDestroyTweet(QTweetStatus)));
     }
@@ -146,82 +129,6 @@ void TweetQmlListModel::resetNumNewTweets()
     m_numNewTweets = 0;
 }
 
-void TweetQmlListModel::updateHomeTimeline()
-{
-    qDebug() << "Update home timeline";
-
-    QTweetHomeTimeline *tweetHomeTimeline = new QTweetHomeTimeline;
-    tweetHomeTimeline->setOAuthTwitter(m_oauthTwitter);
-
-    if (m_statuses.isEmpty() && m_newStatuses.isEmpty())
-        tweetHomeTimeline->fetch(0, 0, 200);
-    else if (m_newStatuses.isEmpty())
-        tweetHomeTimeline->fetch(m_statuses.at(0).id(), 0, 200);
-    else
-        tweetHomeTimeline->fetch(m_newStatuses.at(0).id(), 0, 200);
-
-    connect(tweetHomeTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
-            this, SLOT(finishedHomeTimeline(QList<QTweetStatus>)));
-    connect(tweetHomeTimeline, SIGNAL(error(ErrorCode,QString)),
-            this, SLOT(error()));
-}
-
-void TweetQmlListModel::finishedHomeTimeline(const QList<QTweetStatus> &statuses)
-{
-    qDebug() << "Finished update hometimeline";
-
-    QTweetHomeTimeline *tweetHomeTimeline = qobject_cast<QTweetHomeTimeline*>(sender());
-
-    if (tweetHomeTimeline) {
-        if (!statuses.isEmpty()) {
-
-            qDebug() << "New statuses: " << statuses.count();
-
-            //store to database
-            QSqlQuery query;
-
-            query.exec("BEGIN;");
-
-            query.prepare("INSERT OR ABORT INTO status "
-                          "(id, text, screenName, profileImageUrl, userId) "
-                          "VALUES "
-                          "(:id, :text, :screenName, :profileImageUrl, :userId);");
-
-            QListIterator<QTweetStatus> i(statuses);
-            i.toBack();
-            while(i.hasPrevious()){
-                QTweetStatus s = i.previous();
-                query.bindValue(":id", s.id());
-                query.bindValue(":text", s.text());
-                //query.bindValue(":replyToStatusId", s.replyToStatusId());
-                //query.bindValue(":replyToUserId", s.replyToUserId());
-                //query.bindValue(":replyToScreenName", s.replyToScreenName());
-                query.bindValue(":userId", s.user().id());
-                query.bindValue(":screenName", s.user().screenName());
-                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
-
-                query.exec();
-
-                m_newStatuses.prepend(s);
-
-                m_numNewTweets = m_newStatuses.count();
-                emit numNewTweetsChanged();
-            }
-
-            query.exec("COMMIT;");
-        }
-
-        tweetHomeTimeline->deleteLater();
-    }
-
-    m_timer->start();   //u
-}
-
-void TweetQmlListModel::error()
-{
-    m_timer->start();   //just restart the timer
-}
-
 void TweetQmlListModel::showNewTweets()
 {
     if (m_newStatuses.count()) {
@@ -256,6 +163,27 @@ void TweetQmlListModel::showNewTweets()
 
         m_newStatuses.clear();
     }
+}
+
+void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
+{
+    QSqlQuery query;
+
+    query.prepare("INSERT OR ABORT INTO status "
+                  "(id, text, screenName, profileImageUrl, userId) "
+                  "VALUES "
+                  "(:id, :text, :screenName, :profileImageUrl, :userId);");
+    query.bindValue(":id", status.id());
+    query.bindValue(":text", status.text());
+    query.bindValue(":userId", status.userid());
+    query.bindValue(":screenName", status.user().screenName());
+    query.bindValue(":profileImageUrl", status.user().profileImageUrl());
+    query.exec();
+
+    m_newStatuses.prepend(status);
+
+    m_numNewTweets = m_newStatuses.count();
+    emit numNewTweetsChanged();
 }
 
 void TweetQmlListModel::loadTweetsFromDatabase()
@@ -303,7 +231,3 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     }
 }
 
-void TweetQmlListModel::startUpdateTimelines()
-{
-    updateHomeTimeline();
-}

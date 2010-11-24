@@ -23,8 +23,6 @@
 
 #include <QAbstractListModel>
 
-class OAuthTwitter;
-class QTimer;
 class QTweetStatus;
 class QTweetNetBase;
 
@@ -42,11 +40,9 @@ public:
     };
 
     TweetQmlListModel(QObject *parent = 0);
-    void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void update();
-    void setUserID(int userid);
+    void setUserID(qint64 userid);
     Q_INVOKABLE void destroyTweet(const QString& tweetid);
 
     int numNewTweets() const;
@@ -60,18 +56,16 @@ public:
 signals:
     void numNewTweetsChanged();
 
+public slots:
+    void onStatusesStream(const QTweetStatus& status);
+
 private slots:
-    void updateHomeTimeline();
     void finishedDestroyTweet(const QTweetStatus& status);
-    void finishedHomeTimeline(const QList<QTweetStatus>& statuses);
-    void error();
 
 private:
-    OAuthTwitter* m_oauthTwitter;
-    QTimer* m_timer;
     QList<QTweetStatus> m_statuses;
     QList<QTweetStatus> m_newStatuses; //doesn't show in the model
-    int m_userid;
+    qint64 m_userid;
     int m_numNewTweets;
     int m_numOldTweets;
 };

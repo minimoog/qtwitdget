@@ -38,12 +38,16 @@
 #include "qtweetdmstatus.h"
 #include "qtweetaccountverifycredentials.h"
 #include "qtweetdirectmessagenew.h"
+#include "qtweetuserstream.h"
 
 MainWindow::MainWindow()
 :	m_netManager(new QNetworkAccessManager(this)),
-    m_oauthTwitter(new OAuthTwitter(this))
+    m_oauthTwitter(new OAuthTwitter(this)),
+    m_userStream(new QTweetUserStream(this))
 {
     m_oauthTwitter->setNetworkAccessManager(m_netManager);
+
+    m_userStream->setOAuthTwitter(m_oauthTwitter);
 
 	ui.setupUi(this);
 
@@ -147,9 +151,11 @@ void MainWindow::startUp()
         m_directMessagesListModel->loadTweetsFromDatabase();
 
         //start fetching
-        m_tweetListModel->startUpdateTimelines();
-        m_mentionsListModel->startUpdateTimelines();
-        m_directMessagesListModel->startUpdateTimelines();
+        //m_tweetListModel->startUpdateTimelines();
+        //m_mentionsListModel->startUpdateTimelines();
+        //m_directMessagesListModel->startUpdateTimelines();
+
+        m_userStream->startFetching();
 
     } else {
         changeUserPass();
@@ -334,7 +340,9 @@ void MainWindow::createDeclarativeView()
 {
     m_tweetListModel = new TweetQmlListModel();
     m_tweetListModel->setUserID(m_userId);
-    m_tweetListModel->setOAuthTwitter(m_oauthTwitter);
+    //connect user stream to tweet home timeline
+    connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
+            m_tweetListModel, SLOT(onStatusesStream(QTweetStatus)));
 
     m_mentionsListModel = new MentionsQmlListModel();
     m_mentionsListModel->setUserID(m_userId);

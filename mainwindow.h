@@ -30,6 +30,7 @@ class TweetListModel;
 class QNetworkAccessManager;
 class QTimer;
 class OAuthTwitter;
+class QTweetUserStream;
 class QTweetUser;
 class QTweetStatus;
 class QTweetDMStatus;
@@ -75,6 +76,7 @@ private:
 
 	QNetworkAccessManager *m_netManager;
 	OAuthTwitter *m_oauthTwitter;
+    QTweetUserStream *m_userStream;
 
     TweetQmlListModel* m_tweetListModel;
     MentionsQmlListModel* m_mentionsListModel;
