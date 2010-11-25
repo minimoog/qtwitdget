@@ -6,8 +6,10 @@ Rectangle {
     property string senderScreenName: "Screen Name"
     property string directMessageText: "Lorem ipsum dolor sit amet."
     property string avatar: "../images/default_avatar.png"
+    property bool isOwnTweet: false
 
     signal replyButtonClicked
+    signal deleteButtonClicked
 
     function addTags(str) {
         return str.replace(/http:\/\/[^ \n\t]+/g, '<a href="$&">$&</a>');//surrounds http links with html link tags
@@ -83,10 +85,26 @@ Rectangle {
     Button {
         id: replyButton
         x: 10; y: 80
-        buttonImageUrl: "../images/button_reply.png"
-        clickedButtonImageUrl: "../images/button_reply_click.png"
+        buttonImageUrl: {
+            if (isOwnTweet)
+                return "../images/button_delete.png"
+            else
+                return "../images/button_reply.png"
+        }
 
-        onClicked: gradRect.replyButtonClicked()
+        clickedButtonImageUrl: {
+            if (isOwnTweet)
+                return "../images/button_delete_click.png"
+            else
+                return "../images/button_reply_click.png"
+        }
+
+        onClicked: {
+           if (isOwnTweet)
+               gradRect.deleteButtonClicked()
+           else
+               gradRect.replyButtonClicked()
+        }
     }
 
     ListView.onRemove: SequentialAnimation {
