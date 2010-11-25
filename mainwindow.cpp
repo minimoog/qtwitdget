@@ -136,11 +136,6 @@ void MainWindow::startUp()
 		//create or change database according to user id
 		createDatabase(QString::number(m_userId));
 
-        //get friends
-//        QTwitFriends *friends = new QTwitFriends(m_netManager, m_oauthTwitter);
-//        connect(friends, SIGNAL(finishedFriends(QList<QTwitUser>)), this, SLOT(finishedFriends(QList<QTwitUser>)));
-//        friends->updateFriends(0, 0, QString(), QString("-1"));
-
         //show/animate tweets list page
         QGraphicsObject *obj = ui.declarativeView->rootObject();
         obj->setProperty("authed", true);
@@ -150,10 +145,9 @@ void MainWindow::startUp()
         m_mentionsListModel->loadTweetsFromDatabase();
         m_directMessagesListModel->loadTweetsFromDatabase();
 
-        //start fetching
-        //m_tweetListModel->startUpdateTimelines();
-        //m_mentionsListModel->startUpdateTimelines();
-        //m_directMessagesListModel->startUpdateTimelines();
+        //set user id in the models
+        m_tweetListModel->setUserID(m_userId);
+        m_mentionsListModel->setUserID(m_userId);
 
         m_userStream->startFetching();
 
@@ -339,14 +333,14 @@ void MainWindow::createDatabase(const QString& databaseName)
 void MainWindow::createDeclarativeView()
 {
     m_tweetListModel = new TweetQmlListModel();
-    m_tweetListModel->setUserID(m_userId);
     //connect user stream to tweet home timeline
     connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
             m_tweetListModel, SLOT(onStatusesStream(QTweetStatus)));
 
     m_mentionsListModel = new MentionsQmlListModel();
-    m_mentionsListModel->setUserID(m_userId);
-    m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
+    //m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
+    connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
+            m_mentionsListModel, SLOT(onStatusesStream(QTweetStatus)));
 
     m_directMessagesListModel = new DirectMessagesQmlListModel();
     m_directMessagesListModel->setOAuthTwitter(m_oauthTwitter);

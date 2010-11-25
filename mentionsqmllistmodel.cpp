@@ -20,20 +20,18 @@
 
 #include <QtDebug>
 #include <QSqlQuery>
-#include <QTimer>
 #include "oauthtwitter.h"
 #include "qtweetstatusdestroy.h"
-#include "qtweetmentions.h"
 #include "qtweetstatus.h"
 #include "qtweetuser.h"
+#include "qtweetentityusermentions.h"
 #include "mentionsqmllistmodel.h"
 
 
 MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewTweets(0),
-    m_numOldTweets(0),
-    m_timer(new QTimer(this))
+    m_numOldTweets(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
@@ -42,16 +40,12 @@ MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
     setRoleNames(roles);
-
-    m_timer->setSingleShot(true);
-    m_timer->setInterval(60000);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
 }
 
-void MentionsQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
-{
-    m_oauthTwitter = oauthTwitter;
-}
+//void MentionsQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
+//{
+//    m_oauthTwitter = oauthTwitter;
+//}
 
 int MentionsQmlListModel::rowCount(const QModelIndex &parent) const
 {
@@ -83,9 +77,38 @@ QVariant MentionsQmlListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void MentionsQmlListModel::setUserID(int userid)
+void MentionsQmlListModel::setUserID(qint64 userid)
 {
     m_userid = userid;
+}
+
+void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
+{
+    QList<QTweetEntityUserMentions> entityUserMentions = status.userMentionsEntities();
+
+    for (int i = 0; i < entityUserMentions.count(); ++i) {
+        if (entityUserMentions.at(i).userid() == m_userid) {
+            QSqlQuery query;
+
+            query.prepare("INSERT OR REPLACE INTO status "
+                          "(id, text, screenName, profileImageUrl, userId, mention) "
+                          "VALUES "
+                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention);");
+            query.bindValue(":id", status.id());
+            query.bindValue(":text", status.text());
+            query.bindValue(":userId", status.user().id());
+            query.bindValue(":screenName", status.user().screenName());
+            query.bindValue(":profileImageUrl", status.user().profileImageUrl());
+            query.bindValue(":mention", 1);
+            query.exec();
+
+            m_newStatuses.prepend(status);
+
+            m_numNewTweets = m_newStatuses.count();
+            emit numNewTweetsChanged();
+            break;
+        }
+    }
 }
 
 void MentionsQmlListModel::destroyTweet(const QString &tweetid)
@@ -98,7 +121,7 @@ void MentionsQmlListModel::destroyTweet(const QString &tweetid)
 
     if (ok) {
         QTweetStatusDestroy *tweetDestroy = new QTweetStatusDestroy;
-        tweetDestroy->setOAuthTwitter(m_oauthTwitter);
+        //tweetDestroy->setOAuthTwitter(m_oauthTwitter);
         tweetDestroy->destroy(id);
         connect(tweetDestroy, SIGNAL(deletedStatus(QTweetStatus)),
                 this, SLOT(finishedDestroyTweet(QTweetStatus)));
@@ -140,82 +163,6 @@ int MentionsQmlListModel::numNewTweets() const
 void MentionsQmlListModel::resetNumNewTweets()
 {
     m_numNewTweets = 0;
-}
-
-void MentionsQmlListModel::updateTimeline()
-{
-    qDebug() << "Update mentions timeline";
-
-    QTweetMentions *tweetMentions = new QTweetMentions;
-    tweetMentions->setOAuthTwitter(m_oauthTwitter);
-
-    if (m_statuses.isEmpty() && m_newStatuses.isEmpty())
-        tweetMentions->fetch(0, 0, 200);
-    else if (m_newStatuses.isEmpty())
-        tweetMentions->fetch(m_statuses.at(0).id(), 0, 200);
-    else
-        tweetMentions->fetch(m_newStatuses.at(0).id(), 0, 200);
-
-    connect(tweetMentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
-             this, SLOT(finishedTimeline(QList<QTweetStatus>)));
-    connect(tweetMentions, SIGNAL(error(ErrorCode,QString)),
-            this, SLOT(error()));
-}
-
-void MentionsQmlListModel::finishedTimeline(const QList<QTweetStatus> &statuses)
-{
-    qDebug() << "Finished update mentions";
-
-    QTweetMentions *tweetMentions = qobject_cast<QTweetMentions*>(sender());
-    if (tweetMentions) {
-        if (!statuses.isEmpty()) {
-
-            qDebug() << "New mentions: " << statuses.count();
-
-            //store to database
-            QSqlQuery query;
-
-            query.exec("BEGIN;");
-
-            query.prepare("INSERT OR REPLACE INTO status "
-                          "(id, text, screenName, profileImageUrl, userId, mention) "
-                          "VALUES "
-                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention);");
-
-            QListIterator<QTweetStatus> i(statuses);
-            i.toBack();
-            while(i.hasPrevious()){
-                QTweetStatus s = i.previous();
-                query.bindValue(":id", s.id());
-                query.bindValue(":text", s.text());
-                //query.bindValue(":replyToStatusId", s.replyToStatusId());
-                //query.bindValue(":replyToUserId", s.replyToUserId());
-                //query.bindValue(":replyToScreenName", s.replyToScreenName());
-                query.bindValue(":userId", s.user().id());
-                query.bindValue(":screenName", s.user().screenName());
-                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
-                query.bindValue(":mention", 1);
-
-                query.exec();
-
-                m_newStatuses.prepend(s);
-
-                m_numNewTweets = m_newStatuses.count();
-                emit numNewTweetsChanged();
-            }
-
-            query.exec("COMMIT;");
-        }
-
-        tweetMentions->deleteLater();
-    }
-
-    m_timer->start();
-}
-
-void MentionsQmlListModel::error()
-{
-    m_timer->start();
 }
 
 void MentionsQmlListModel::showNewTweets()
@@ -297,10 +244,5 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
 
         endInsertRows();
     }
-}
-
-void MentionsQmlListModel::startUpdateTimelines()
-{
-    updateTimeline();
 }
 
