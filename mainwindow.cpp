@@ -140,15 +140,15 @@ void MainWindow::startUp()
         QGraphicsObject *obj = ui.declarativeView->rootObject();
         obj->setProperty("authed", true);
 
-        //show last tweets from database
-        m_tweetListModel->loadTweetsFromDatabase();
-        m_mentionsListModel->loadTweetsFromDatabase();
-        m_directMessagesListModel->loadTweetsFromDatabase();
-
         //set user id in the models
         m_tweetListModel->setUserID(m_userId);
         m_mentionsListModel->setUserID(m_userId);
         m_directMessagesListModel->setUserID(m_userId);
+
+        //show last tweets from database
+        m_tweetListModel->loadTweetsFromDatabase();
+        m_mentionsListModel->loadTweetsFromDatabase();
+        m_directMessagesListModel->loadTweetsFromDatabase();
 
         m_userStream->startFetching();
 
