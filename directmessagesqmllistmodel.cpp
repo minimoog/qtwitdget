@@ -20,9 +20,7 @@
 
 #include <QtDebug>
 #include <QSqlQuery>
-#include <QTimer>
 #include <QDateTime>
-#include "oauthtwitter.h"
 #include "qtweetdirectmessages.h"
 #include "directmessagesqmllistmodel.h"
 #include "qtweetdmstatus.h"
@@ -32,24 +30,15 @@
 DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewDirectMessages(0),
-    m_numOldDirectMessages(0),
-    m_timer(new QTimer(this))
+    m_numOldDirectMessages(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
+    roles[OwnTweetRole] = "ownTweetRole";
     setRoleNames(roles);
-
-    m_timer->setSingleShot(true);
-    m_timer->setInterval(300000);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateTimeline()));
-}
-
-void DirectMessagesQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
-{
-    m_oauthTwitter = oauthTwitter;
 }
 
 int DirectMessagesQmlListModel::rowCount(const QModelIndex &parent) const
@@ -73,13 +62,18 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
         return st.sender().profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
+    else if (role == OwnTweetRole)
+        if (m_userid != st.senderId())
+            return false;
+        else
+            return true;
 
     return QVariant();
 }
 
-void DirectMessagesQmlListModel::setUserID(int userid)
+void DirectMessagesQmlListModel::setUserID(qint64 id)
 {
-    m_userid = userid;
+    m_userid = id;
 }
 
 int DirectMessagesQmlListModel::numNewDirectMessages() const
@@ -92,80 +86,28 @@ void DirectMessagesQmlListModel::resetNumNewDirectMessages()
     m_numNewDirectMessages = 0;
 }
 
-void DirectMessagesQmlListModel::updateTimeline()
+void DirectMessagesQmlListModel::onDirectMessageStream(const QTweetDMStatus &directMessage)
 {
-    qDebug() << "Update direct messages";
+    QSqlQuery query;
+    query.prepare("INSERT OR REPLACE INTO directmessages "
+                  "(id, senderId, text, recipientId, created, "
+                  "senderScreenName, recipientScreenName, senderProfileImageUrl) "
+                  "VALUES (:id, :senderId, :text, :recipientId, "
+                  ":created, :senderScreenName, :recipientScreenName, :senderProfileImageUrl);");
+    query.bindValue(":id", directMessage.id());
+    query.bindValue(":senderId", directMessage.senderId());
+    query.bindValue(":text", directMessage.text());
+    query.bindValue(":recipientId", directMessage.recipientId());
+    query.bindValue(":created", directMessage.createdAt());
+    query.bindValue(":senderScreenName", directMessage.senderScreenName());
+    query.bindValue(":recipientScreenName", directMessage.recipientScreenName());
+    query.bindValue(":senderProfileImageUrl", directMessage.sender().profileImageUrl());
+    query.exec();
 
-    QTweetDirectMessages *directMessages = new QTweetDirectMessages;
-    directMessages->setOAuthTwitter(m_oauthTwitter);
+    m_newDirectMessages.prepend(directMessage);
 
-    if (m_directMessages.isEmpty() && m_newDirectMessages.isEmpty())
-        directMessages->fetch(0, 0, 200);
-    else if (m_newDirectMessages.isEmpty())
-        directMessages->fetch(m_directMessages.at(0).id(), 0, 200);
-    else
-        directMessages->fetch(m_newDirectMessages.at(0).id(), 0, 200);
-
-    connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
-            this, SLOT(finishedTimeline(QList<QTweetDMStatus>)));
-    connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
-            this, SLOT(error()));
-}
-
-void DirectMessagesQmlListModel::finishedTimeline(const QList<QTweetDMStatus> &statuses)
-{
-    qDebug() << "Finished update direct messages";
-
-    QTweetDirectMessages *directMessages = qobject_cast<QTweetDirectMessages*>(sender());
-    if (directMessages) {
-        if (!statuses.isEmpty()) {
-
-            qDebug() << "New direct messages: " << statuses.count();
-
-            //store to database
-            QSqlQuery query;
-
-            query.exec("BEGIN;");
-
-            query.prepare("INSERT OR REPLACE INTO directmessages "
-                          "(id, senderId, text, recipientId, created, "
-                          "senderScreenName, recipientScreenName, senderProfileImageUrl) "
-                          "VALUES (:id, :senderId, :text, :recipientId, "
-                          ":created, :senderScreenName, :recipientScreenName, :senderProfileImageUrl);");
-
-            QListIterator<QTweetDMStatus> i(statuses);
-            i.toBack();
-            while(i.hasPrevious()){
-                QTweetDMStatus s = i.previous();
-                query.bindValue(":id", s.id());
-                query.bindValue(":senderId", s.senderId());
-                query.bindValue(":text", s.text());
-                query.bindValue(":recipientId", s.recipientId());
-                query.bindValue(":created", s.createdAt());
-                query.bindValue(":senderScreenName", s.senderScreenName());
-                query.bindValue(":recipientScreenName", s.recipientScreenName());
-                query.bindValue(":senderProfileImageUrl", s.sender().profileImageUrl());
-
-                query.exec();
-
-                m_newDirectMessages.prepend(s);
-
-                m_numNewDirectMessages = m_newDirectMessages.count();
-                emit numNewDirectMessagesChanged();
-            }
-
-            query.exec("COMMIT;");
-        }
-
-        directMessages->deleteLater();
-    }
-
-    m_timer->start();
-}
-
-void DirectMessagesQmlListModel::error()
-{
-    m_timer->start();
+    m_numNewDirectMessages = m_newDirectMessages.count();
+    emit numNewDirectMessagesChanged();
 }
 
 void DirectMessagesQmlListModel::showNewTweets()
@@ -246,10 +188,5 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
 
         endInsertRows();
     }
-}
-
-void DirectMessagesQmlListModel::startUpdateTimelines()
-{
-    updateTimeline();
 }
 

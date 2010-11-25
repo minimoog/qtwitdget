@@ -148,6 +148,7 @@ void MainWindow::startUp()
         //set user id in the models
         m_tweetListModel->setUserID(m_userId);
         m_mentionsListModel->setUserID(m_userId);
+        m_directMessagesListModel->setUserID(m_userId);
 
         m_userStream->startFetching();
 
@@ -343,7 +344,8 @@ void MainWindow::createDeclarativeView()
             m_mentionsListModel, SLOT(onStatusesStream(QTweetStatus)));
 
     m_directMessagesListModel = new DirectMessagesQmlListModel();
-    m_directMessagesListModel->setOAuthTwitter(m_oauthTwitter);
+    connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
+            m_directMessagesListModel, SLOT(onDirectMessageStream(QTweetDMStatus)));
 
     ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);

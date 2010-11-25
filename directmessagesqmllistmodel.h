@@ -23,8 +23,6 @@
 
 #include <QAbstractListModel>
 
-class OAuthTwitter;
-class QTimer;
 class QTweetDMStatus;
 
 //Copy pasted from MentionsQmlListModel, maybe needs abstraction
@@ -42,14 +40,14 @@ public:
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
         AvatarUrlRole,
-        StatusIdRole
+        StatusIdRole,
+        OwnTweetRole
     };
 
     DirectMessagesQmlListModel(QObject *parent = 0);
-    void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void setUserID(int userid);
+    void setUserID(qint64 id);
 
     int numNewDirectMessages() const;
     void resetNumNewDirectMessages();
@@ -57,22 +55,16 @@ public:
     Q_INVOKABLE void showNewTweets();
     void loadTweetsFromDatabase();
 
-    void startUpdateTimelines();
+public slots:
+    void onDirectMessageStream(const QTweetDMStatus& directMessage);
 
 signals:
     void numNewDirectMessagesChanged();
 
-private slots:
-    void updateTimeline();
-    void finishedTimeline(const QList<QTweetDMStatus>& statuses);
-    void error();
-
 private:
-    OAuthTwitter* m_oauthTwitter;
-    QTimer* m_timer;
     QList<QTweetDMStatus> m_directMessages;
     QList<QTweetDMStatus> m_newDirectMessages; //doesn't show in the model
-    int m_userid;
+    qint64 m_userid;
     int m_numNewDirectMessages;
     int m_numOldDirectMessages;
 };
