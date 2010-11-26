@@ -12,15 +12,13 @@ Rectangle {
     signal retweetButtonClicked
     signal deleteButtonClicked
 
-    function addTags(str) {
-        return str.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");//surrounds http links with html link tags
-    }
-
     function handleLink(link) {
-        if (link.slice(0, 3) == 'app') {
+        if (link.slice(0, 3) == 'tag') {
             console.log('tag clicked');
         } else if (link.slice(0, 4) == 'http') {
             Qt.openUrlExternally(link);
+        } else if (link.slice(0, 7) == 'mention') {
+            console.log('mention clicked');
         }
     }
 
@@ -75,7 +73,7 @@ Rectangle {
         x: 84; y: 27
         width: gradRect.width - statusText.x
         color: "#222222"
-        text: addTags(gradRect.tweetText)
+        text: gradRect.tweetText
         wrapMode: "WordWrap"
         smooth: true
         font.pointSize: 9

@@ -25,6 +25,7 @@
 #include "qtweetuser.h"
 #include "qtweetstatusdestroy.h"
 #include "tweetqmllistmodel.h"
+#include "qtweetentityurl.h"
 
 
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
@@ -167,20 +168,32 @@ void TweetQmlListModel::showNewTweets()
 
 void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
+    //format href url's
+    QTweetStatus statusCopy(status);
+    QList<QTweetEntityUrl> entityUrlList = status.urlEntities();
+
+    foreach (const QTweetEntityUrl& entityUrl, entityUrlList) {
+        QString origText = status.text();
+        QString afterText = QString("<a href=\"%1\">%1</a>").arg(entityUrl.url());
+
+        origText.replace(entityUrl.url(), afterText, Qt::CaseSensitive);
+        statusCopy.setText(origText);
+    }
+
     QSqlQuery query;
 
     query.prepare("INSERT OR ABORT INTO status "
                   "(id, text, screenName, profileImageUrl, userId) "
                   "VALUES "
                   "(:id, :text, :screenName, :profileImageUrl, :userId);");
-    query.bindValue(":id", status.id());
-    query.bindValue(":text", status.text());
-    query.bindValue(":userId", status.userid());
-    query.bindValue(":screenName", status.user().screenName());
-    query.bindValue(":profileImageUrl", status.user().profileImageUrl());
+    query.bindValue(":id", statusCopy.id());
+    query.bindValue(":text", statusCopy.text());
+    query.bindValue(":userId", statusCopy.userid());
+    query.bindValue(":screenName", statusCopy.user().screenName());
+    query.bindValue(":profileImageUrl", statusCopy.user().profileImageUrl());
     query.exec();
 
-    m_newStatuses.prepend(status);
+    m_newStatuses.prepend(statusCopy);
 
     m_numNewTweets = m_newStatuses.count();
     emit numNewTweetsChanged();

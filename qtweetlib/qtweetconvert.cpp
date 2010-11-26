@@ -490,14 +490,10 @@ QList<QTweetPlace> QTweetConvert::variantToPlaceList(const QVariant& fromParser)
 
 QTweetEntityUrl QTweetConvert::variantMapToEntityUrl(const QVariantMap &var)
 {
-    QString url = var["url"].toString();
-    QString displayUrl = var["display_url"].toString();
-    QString expandedUrl = var["expanded_url"].toString();
-
     QTweetEntityUrl urlEntity;
-    urlEntity.setUrl(url);
-    urlEntity.setDisplayUrl(displayUrl);
-    urlEntity.setExpandedUrl(expandedUrl);
+    urlEntity.setUrl(var["url"].toString());
+    urlEntity.setDisplayUrl(var["display_url"].toString());
+    urlEntity.setExpandedUrl(var["expanded_url"].toString());
 
     return urlEntity;
 }
