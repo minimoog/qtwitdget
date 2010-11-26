@@ -173,7 +173,7 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     QList<QTweetEntityUrl> entityUrlList = status.urlEntities();
 
     foreach (const QTweetEntityUrl& entityUrl, entityUrlList) {
-        QString origText = status.text();
+        QString origText = statusCopy.text();
         QString afterText = QString("<a href=\"%1\">%1</a>").arg(entityUrl.url());
 
         origText.replace(entityUrl.url(), afterText, Qt::CaseSensitive);
