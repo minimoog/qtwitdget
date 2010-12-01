@@ -54,7 +54,7 @@ Item {
         anchors.right: parent.right; anchors.rightMargin: 10
         anchors.top: screenNameText.bottom; anchors.topMargin: 4
         anchors.left: avatarImage.right; anchors.leftMargin: 3
-        source: "../images/oblace.png"
+        source: isOwnTweet ? "../images/own_oblace.png" : "../images/oblace.png"
 
         Text {
             id: statusText
