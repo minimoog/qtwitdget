@@ -26,7 +26,8 @@
 #include "qtweetstatusdestroy.h"
 #include "tweetqmllistmodel.h"
 #include "qtweetentityurl.h"
-
+#include "qtweetentityusermentions.h"
+#include "qtweetentityhashtag.h"
 
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
@@ -168,6 +169,7 @@ void TweetQmlListModel::showNewTweets()
 
 void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
+    //not proper formating and replacing but it's working in most of the cases
     //format href url's
     QTweetStatus statusCopy(status);
     QList<QTweetEntityUrl> entityUrlList = status.urlEntities();
@@ -177,6 +179,28 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
         QString afterText = QString("<a href=\"%1\">%1</a>").arg(entityUrl.url());
 
         origText.replace(entityUrl.url(), afterText, Qt::CaseSensitive);
+        statusCopy.setText(origText);
+    }
+
+    //format user mentions
+    QList<QTweetEntityUserMentions> entityUserMentionsList = status.userMentionsEntities();
+
+    foreach (const QTweetEntityUserMentions& entityUserMention, entityUserMentionsList) {
+        QString origText = statusCopy.text();
+        QString afterText = QString("<a href=\"mention://%1\">@%1</a>").arg(entityUserMention.screenName());
+
+        origText.replace("@" + entityUserMention.screenName(), afterText, Qt::CaseSensitive);
+        statusCopy.setText(origText);
+    }
+
+    //format hashtags
+    QList<QTweetEntityHashtag> entityHashtagList = status.hashtagEntities();
+
+    foreach (const QTweetEntityHashtag& entityHashtag, entityHashtagList) {
+        QString origText = statusCopy.text();
+        QString afterText = QString("<a href=\"tag://%1\">#%1</a>").arg(entityHashtag.text());
+
+        origText.replace("#" + entityHashtag.text(), afterText, Qt::CaseSensitive);
         statusCopy.setText(origText);
     }
 

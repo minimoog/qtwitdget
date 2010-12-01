@@ -1,22 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/button_reply.png</file>
-        <file>images/button_reply_hover.png</file>
-        <file>images/button_reply_click.png</file>
-        <file>images/button_retweet.png</file>
-        <file>images/button_retweet_hover.png</file>
-        <file>images/button_retweet_click.png</file>
-        <file>images/button_favorited.png</file>
-        <file>images/button_favorited_hover.png</file>
-        <file>images/button_favorited_click.png</file>
-        <file>images/button_unfavorited.png</file>
-        <file>images/button_unfavorited_hover.png</file>
-        <file>images/button_unfavorited_click.png</file>
-        <file>images/button_delete.png</file>
-        <file>images/button_delete_hover.png</file>
-        <file>images/button_delete_click.png</file>
-        <file>images/avatar_box.png</file>
-        <file>images/button_closetab.png</file>
         <file>translations/qtwitdget_en.qm</file>
         <file>translations/qtwitdget_mk.qm</file>
         <file>images/default_avatar.png</file>
@@ -24,5 +7,16 @@
         <file>qml/Tweet.qml</file>
         <file>qml/TweetList.qml</file>
         <file>images/qtwidget_icon.ico</file>
+        <file>images/delete.png</file>
+        <file>images/delete_pressed.png</file>
+        <file>images/mention.png</file>
+        <file>images/mention_pressed.png</file>
+        <file>images/oblace.png</file>
+        <file>images/poraka.png</file>
+        <file>images/poraka_pressed.png</file>
+        <file>images/retweet.png</file>
+        <file>images/retweet_pressed.png</file>
+        <file>images/test_lineedit.png</file>
+        <file>images/test_toolbutton.png</file>
     </qresource>
 </RCC>

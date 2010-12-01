@@ -1,7 +1,12 @@
 import Qt 4.7
 
-Rectangle {
+Item {
     id: gradRect
+
+    x: 5; y: 0
+    width: ListView.view.width;
+    height: 80
+
     property string tweetid     //no support for 64 integers
     property string tweetScreenName: "Screen Name"
     property string tweetText: "Lorem ipsum dolor sit amet."
@@ -22,97 +27,91 @@ Rectangle {
         }
     }
 
-    width: ListView.view.width;
-    height: 100
-    gradient: Gradient {
-        GradientStop {
-            position: 0
-            color: "#ddf0f5"
-        }
-        GradientStop {
-            position: 1
-            color: "#e5faff"
-        }
-    }
-
     Image {
-        id: avatarBox
-        x: 7; y: 7
-        source: "../images/avatar_box.png"
+        id: avatarImage
 
-        Rectangle {
-            id: whiteBorder
-            x: 10; y: 10
-            width: 49; height: 49
-            color: "#ffffff"
-
-            Image {
-                id: avatarImage
-                x: 1; y: 1
-                width: 48; height: 48
-                fillMode: Image.Stretch
-                smooth: true
-                source: tweetAvatar
-            }
-        }
+        width: 45; height: 45
+        anchors.top: screenNameText.bottom
+        anchors.topMargin: 4
+        fillMode: Image.Stretch
+        smooth: true
+        source: tweetAvatar
     }
 
     Text {
         id: screenNameText
-        x: 84; y: avatarBox.y
-        width: gradRect.width - 84
-        color: "#018ad9"
+        color: "#49c8f5"
         text: gradRect.tweetScreenName
         smooth: true
-        font.pointSize: 11
-        font.family: "Segoe UI"
+        font.pointSize: 10
+        font.bold: true
+        font.family: "Arial"
     }
 
-    Text {
-        id: statusText
-        x: 84; y: 27
-        width: gradRect.width - statusText.x
-        color: "#222222"
-        text: gradRect.tweetText
-        wrapMode: "WordWrap"
-        smooth: true
-        font.pointSize: 9
-        font.family: "Segoe UI"
-        onLinkActivated: gradRect.handleLink(link)
-    }
+    BorderImage {
+        id: oblace
+        border.left: 10; border.top: 2; border.bottom: 2; border.right: 2
+        anchors.right: parent.right; anchors.rightMargin: 10
+        anchors.top: screenNameText.bottom; anchors.topMargin: 4
+        anchors.left: avatarImage.right; anchors.leftMargin: 3
+        source: "../images/oblace.png"
 
-    Button {
-        id: replyButton
-        x: 10; y: 80
-        buttonImageUrl: {
-            if (isOwnTweet)
-                return "../images/button_delete.png"
-            else
-                return "../images/button_reply.png"
-        }
-
-        clickedButtonImageUrl: {
-            if (isOwnTweet)
-                return "../images/button_delete_click.png"
-            else
-                return "../images/button_reply_click.png"
-        }
-
-        onClicked: {
-            if (isOwnTweet)
-                gradRect.deleteButtonClicked()
-            else
-                gradRect.replyButtonClicked()
+        Text {
+            id: statusText
+            x: 13; y: 3
+            width: parent.width - 16
+            color: "#333333"
+            text: gradRect.tweetText
+            textFormat: Text.RichText
+            wrapMode: "WordWrap"
+            smooth: true
+            font.pointSize: 9
+            font.family: "Segoe UI"
+            onLinkActivated: gradRect.handleLink(link)
         }
     }
 
-    Button {
-        id: retweetButton
-        x: 43; y: 80
-        buttonImageUrl: "../images/button_retweet.png"
-        clickedButtonImageUrl: "../images/button_retweet_click.png"
+    Row {
+        anchors.top: oblace.bottom
+        anchors.right: oblace.right
 
-        onClicked: gradRect.retweetButtonClicked()
+        Button {
+            id: replyButton
+            width: 12; height: 12
+            buttonImageUrl: {
+                if (isOwnTweet)
+                    return "../images/delete.png"
+                else
+                    return "../images/mention.png"
+            }
+            clickedButtonImageUrl: {
+                if (isOwnTweet)
+                    return "../images/delete_pressed.png"
+                else
+                    return "../images/mention_pressed.png"
+            }
+            onClicked: {
+                if (isOwnTweet)
+                    gradRect.deleteButtonClicked()
+                else
+                    gradRect.replyButtonClicked()
+            }
+        }
+
+        Button {
+            id: retweetButton
+            width:  12; height: 12
+            buttonImageUrl: "../images/retweet.png"
+            clickedButtonImageUrl: "../images/retweet_pressed.png"
+            onClicked: gradRect.retweetButtonClicked()
+        }
+
+        Button {
+            id: extraButton
+            width: 12; height: 12
+            buttonImageUrl: "../images/poraka.png"
+            clickedButtonImageUrl: "../images/poraka_pressed.png"
+        }
     }
 
     ListView.onRemove: SequentialAnimation {

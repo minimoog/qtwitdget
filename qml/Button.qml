@@ -14,12 +14,12 @@ Item {
         id: buttonImage
         source: buttonImageUrl
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.Linear
-            }
-        }
+//        Behavior on opacity {
+//            NumberAnimation {
+//                duration: 300
+//                easing.type: Easing.Linear
+//            }
+//        }
     }
 
     Image {
@@ -27,18 +27,17 @@ Item {
         opacity: 0
         source: clickedButtonImageUrl
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.Linear
-            }
-        }
+//        Behavior on opacity {
+//            NumberAnimation {
+//                duration: 300
+//                easing.type: Easing.Linear
+//            }
+//        }
     }
 
     MouseArea {
         id: mouseRegion
         anchors.fill: buttonImage
-        hoverEnabled: true
         onClicked: { container.clicked(); }
     }
 

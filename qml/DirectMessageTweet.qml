@@ -82,30 +82,30 @@ Rectangle {
         onLinkActivated: gradRect.handleLink(link)
     }
 
-    Button {
-        id: replyButton
-        x: 10; y: 80
-        buttonImageUrl: {
-            if (isOwnTweet)
-                return "../images/button_delete.png"
-            else
-                return "../images/button_reply.png"
-        }
+//    Button {
+//        id: replyButton
+//        x: 10; y: 80
+//        buttonImageUrl: {
+//            if (isOwnTweet)
+//                return "../images/button_delete.png"
+//            else
+//                return "../images/button_reply.png"
+//        }
 
-        clickedButtonImageUrl: {
-            if (isOwnTweet)
-                return "../images/button_delete_click.png"
-            else
-                return "../images/button_reply_click.png"
-        }
+//        clickedButtonImageUrl: {
+//            if (isOwnTweet)
+//                return "../images/button_delete_click.png"
+//            else
+//                return "../images/button_reply_click.png"
+//        }
 
-        onClicked: {
-           if (isOwnTweet)
-               gradRect.deleteButtonClicked()
-           else
-               gradRect.replyButtonClicked()
-        }
-    }
+//        onClicked: {
+//           if (isOwnTweet)
+//               gradRect.deleteButtonClicked()
+//           else
+//               gradRect.replyButtonClicked()
+//        }
+//    }
 
     ListView.onRemove: SequentialAnimation {
         PropertyAction { target: gradRect; property: "ListView.delayRemove"; value: true }
