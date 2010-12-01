@@ -29,10 +29,11 @@
 #include "qtweetentityusermentions.h"
 #include "qtweetentityhashtag.h"
 
+const int maxTweetsPerView = 200;
+
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_numNewTweets(0),
-    m_numOldTweets(0)
+    m_numNewTweets(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
@@ -134,7 +135,6 @@ void TweetQmlListModel::resetNumNewTweets()
 void TweetQmlListModel::showNewTweets()
 {
     if (m_newStatuses.count()) {
-        int numTweets = m_statuses.count();
 
         //prepend new statuses
         beginInsertRows(QModelIndex(), 0, m_newStatuses.count() - 1);
@@ -147,18 +147,14 @@ void TweetQmlListModel::showNewTweets()
         endInsertRows();
 
         //remove old statutes
-        if (m_numOldTweets) {
-            beginRemoveRows(QModelIndex(), numTweets + m_numNewTweets - m_numOldTweets, numTweets + m_numNewTweets - 1);
+        if (m_statuses.count() > maxTweetsPerView) {
+            beginRemoveRows(QModelIndex(), maxTweetsPerView, m_statuses.count());
 
-            for (int i = 0; i < m_numOldTweets; ++i)
+            for (int i = 0; i < m_statuses.count() - maxTweetsPerView; ++i)
                 m_statuses.removeLast();
 
             endRemoveRows();
         }
-
-        m_numOldTweets = m_statuses.count() - m_numNewTweets;
-
-        qDebug() << "Num old tweets: " << m_numOldTweets;
 
         m_numNewTweets = 0;
         emit numNewTweetsChanged();
@@ -229,7 +225,7 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     query.prepare("SELECT id, text, screenName, profileImageUrl, userId "
                   "FROM status "
                   "ORDER BY id DESC "
-                  "LIMIT 20 ");
+                  "LIMIT 100 ");
     //query.bindValue(":id", topStatusId);
     query.exec();
 
@@ -237,7 +233,6 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     beginResetModel();
 
     m_statuses.clear();
-    m_numOldTweets = 0;
 
     endResetModel();
 
