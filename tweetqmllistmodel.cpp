@@ -33,7 +33,8 @@ const int maxTweetsPerView = 200;
 
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_numNewTweets(0)
+    m_numNewTweets(0),
+    m_numUnreadTweets(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
@@ -41,6 +42,7 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
+    roles[NewTweetRole] = "newTweetRole";
     setRoleNames(roles);
 }
 
@@ -70,6 +72,11 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
             return false;
         else
             return true;
+    else if (role == NewTweetRole)
+        if (index.row() < m_numUnreadTweets)
+            return true;
+        else
+            return false;
 
     return QVariant();
 }
@@ -136,6 +143,9 @@ void TweetQmlListModel::showNewTweets()
 {
     if (m_newStatuses.count()) {
 
+        int numReadTweets = m_numUnreadTweets;
+        m_numUnreadTweets = m_newStatuses.count();
+
         //prepend new statuses
         beginInsertRows(QModelIndex(), 0, m_newStatuses.count() - 1);
 
@@ -160,60 +170,30 @@ void TweetQmlListModel::showNewTweets()
         emit numNewTweetsChanged();
 
         m_newStatuses.clear();
+
+        //exp
+        QModelIndex first = index(0);
+        QModelIndex last = index(m_numUnreadTweets + numReadTweets);
+        emit dataChanged(first, last);
     }
 }
 
 void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
-    //not proper formating and replacing but it's working in most of the cases
-    //format href url's
-    QTweetStatus statusCopy(status);
-    QList<QTweetEntityUrl> entityUrlList = status.urlEntities();
-
-    foreach (const QTweetEntityUrl& entityUrl, entityUrlList) {
-        QString origText = statusCopy.text();
-        QString afterText = QString("<a href=\"%1\">%1</a>").arg(entityUrl.url());
-
-        origText.replace(entityUrl.url(), afterText, Qt::CaseSensitive);
-        statusCopy.setText(origText);
-    }
-
-    //format user mentions
-    QList<QTweetEntityUserMentions> entityUserMentionsList = status.userMentionsEntities();
-
-    foreach (const QTweetEntityUserMentions& entityUserMention, entityUserMentionsList) {
-        QString origText = statusCopy.text();
-        QString afterText = QString("<a href=\"mention://%1\">@%1</a>").arg(entityUserMention.screenName());
-
-        origText.replace("@" + entityUserMention.screenName(), afterText, Qt::CaseSensitive);
-        statusCopy.setText(origText);
-    }
-
-    //format hashtags
-    QList<QTweetEntityHashtag> entityHashtagList = status.hashtagEntities();
-
-    foreach (const QTweetEntityHashtag& entityHashtag, entityHashtagList) {
-        QString origText = statusCopy.text();
-        QString afterText = QString("<a href=\"tag://%1\">#%1</a>").arg(entityHashtag.text());
-
-        origText.replace("#" + entityHashtag.text(), afterText, Qt::CaseSensitive);
-        statusCopy.setText(origText);
-    }
-
     QSqlQuery query;
 
     query.prepare("INSERT OR ABORT INTO status "
                   "(id, text, screenName, profileImageUrl, userId) "
                   "VALUES "
                   "(:id, :text, :screenName, :profileImageUrl, :userId);");
-    query.bindValue(":id", statusCopy.id());
-    query.bindValue(":text", statusCopy.text());
-    query.bindValue(":userId", statusCopy.userid());
-    query.bindValue(":screenName", statusCopy.user().screenName());
-    query.bindValue(":profileImageUrl", statusCopy.user().profileImageUrl());
+    query.bindValue(":id", status.id());
+    query.bindValue(":text", status.text());
+    query.bindValue(":userId", status.userid());
+    query.bindValue(":screenName", status.user().screenName());
+    query.bindValue(":profileImageUrl", status.user().profileImageUrl());
     query.exec();
 
-    m_newStatuses.prepend(statusCopy);
+    m_newStatuses.prepend(status);
 
     m_numNewTweets = m_newStatuses.count();
     emit numNewTweetsChanged();
@@ -233,6 +213,7 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     beginResetModel();
 
     m_statuses.clear();
+    m_numUnreadTweets = 0;
 
     endResetModel();
 

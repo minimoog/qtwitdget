@@ -36,7 +36,8 @@ public:
         StatusTextRole,
         AvatarUrlRole,
         StatusIdRole,
-        OwnTweetRole
+        OwnTweetRole,
+        NewTweetRole
     };
 
     TweetQmlListModel(QObject *parent = 0);
@@ -67,6 +68,7 @@ private:
     QList<QTweetStatus> m_newStatuses; //doesn't show in the model
     qint64 m_userid;
     int m_numNewTweets;
+    int m_numUnreadTweets;
 };
 
 #endif // TWEETQMLLISTMODEL_H
