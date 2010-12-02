@@ -20,6 +20,7 @@ Item {
             tweetAvatar: avatarUrlRole
             tweetid:  statusIdRole
             isOwnTweet: ownTweetRole
+            isNewTweet: newTweetRole
 
             onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
             onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
