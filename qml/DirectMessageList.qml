@@ -17,6 +17,7 @@ Item {
             avatar: avatarUrlRole
             tweetid: statusIdRole
             isOwnTweet: ownTweetRole
+            isNewTweet: newTweetRole
 
             onReplyButtonClicked: replyClicked(directMessageDelegate.tweetid, directMessageDelegate.senderScreenName)
         }

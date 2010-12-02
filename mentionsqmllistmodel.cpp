@@ -218,7 +218,7 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
                   "FROM status "
                   "WHERE mention = 1 "
                   "ORDER BY id DESC "
-                  "LIMIT 20 ");
+                  "LIMIT 100 ");
     query.exec();
 
     //remove/clear all statuses

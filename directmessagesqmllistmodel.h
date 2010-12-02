@@ -41,7 +41,8 @@ public:
         StatusTextRole,
         AvatarUrlRole,
         StatusIdRole,
-        OwnTweetRole
+        OwnTweetRole,
+        NewTweetRole
     };
 
     DirectMessagesQmlListModel(QObject *parent = 0);
@@ -66,7 +67,7 @@ private:
     QList<QTweetDMStatus> m_newDirectMessages; //doesn't show in the model
     qint64 m_userid;
     int m_numNewDirectMessages;
-    int m_numOldDirectMessages;
+    int m_numUnreadDirectMessages;
 };
 
 #endif // DIRECTMESSAGESQMLLISTMODEL_H

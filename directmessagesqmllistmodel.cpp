@@ -26,11 +26,12 @@
 #include "qtweetdmstatus.h"
 #include "qtweetuser.h"
 
+const int maxTweetsPerView = 200;
 
 DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewDirectMessages(0),
-    m_numOldDirectMessages(0)
+    m_numUnreadDirectMessages(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
@@ -38,6 +39,7 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
+    roles[NewTweetRole] = "newTweetRole";
     setRoleNames(roles);
 }
 
@@ -67,6 +69,11 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
             return false;
         else
             return true;
+    else if (role == NewTweetRole)
+        if (index.row() < m_numUnreadDirectMessages)
+            return true;
+        else
+            return false;
 
     return QVariant();
 }
@@ -113,7 +120,9 @@ void DirectMessagesQmlListModel::onDirectMessageStream(const QTweetDMStatus &dir
 void DirectMessagesQmlListModel::showNewTweets()
 {
     if (m_newDirectMessages.count()) {
-        int numTweets = m_directMessages.count();
+
+        int numReadDirectMessages = m_numUnreadDirectMessages;
+        m_numUnreadDirectMessages = m_newDirectMessages.count();
 
         //prepend new statuses
         beginInsertRows(QModelIndex(), 0, m_newDirectMessages.count() - 1);
@@ -125,24 +134,23 @@ void DirectMessagesQmlListModel::showNewTweets()
 
         endInsertRows();
 
-        //remove old statutes
-        if (m_numOldDirectMessages) {
-            beginRemoveRows(QModelIndex(), numTweets + m_numNewDirectMessages - m_numOldDirectMessages, numTweets + m_numNewDirectMessages - 1);
+        if (m_directMessages.count() > maxTweetsPerView) {
+            beginRemoveRows(QModelIndex(), maxTweetsPerView, m_directMessages.count());
 
-            for (int i = 0; i < m_numOldDirectMessages; ++i)
+            for (int i = 0; i < m_directMessages.count() - maxTweetsPerView; ++i)
                 m_directMessages.removeLast();
 
             endRemoveRows();
         }
 
-        m_numOldDirectMessages = m_directMessages.count() - m_numNewDirectMessages;
-
-        qDebug() << "Num old direct messages: " << m_numOldDirectMessages;
-
         m_numNewDirectMessages = 0;
         emit numNewDirectMessagesChanged();
 
         m_newDirectMessages.clear();
+
+        QModelIndex first = index(0);
+        QModelIndex last = index(m_numUnreadDirectMessages + numReadDirectMessages);
+        emit dataChanged(first, last);
     }
 }
 
@@ -152,14 +160,14 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
     query.prepare("SELECT id, text, senderId, senderScreenName, senderProfileImageUrl "
                   "FROM directmessages "
                   "ORDER BY id DESC "
-                  "LIMIT 20 ");
+                  "LIMIT 100 ");
     query.exec();
 
     //remove/clear all statuses
     beginResetModel();
 
     m_directMessages.clear();
-    m_numOldDirectMessages = 0;
+    m_numUnreadDirectMessages = 0;
 
     endResetModel();
 
