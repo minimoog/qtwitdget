@@ -27,11 +27,12 @@
 #include "qtweetentityusermentions.h"
 #include "mentionsqmllistmodel.h"
 
+const int maxTweetsPerView = 200;
 
 MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewTweets(0),
-    m_numOldTweets(0)
+    m_numUnreadTweets(0)
 {
     QHash<int, QByteArray> roles;
     roles[ScreenNameRole] = "screenNameRole";
@@ -39,6 +40,7 @@ MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
+    roles[NewTweetRole] = "newTweetRole";
     setRoleNames(roles);
 }
 
@@ -73,6 +75,11 @@ QVariant MentionsQmlListModel::data(const QModelIndex &index, int role) const
             return false;
         else
             return true;
+    else if (role == NewTweetRole)
+        if (index.row() < m_numUnreadTweets)
+            return true;
+        else
+            return false;
 
     return QVariant();
 }
@@ -168,7 +175,9 @@ void MentionsQmlListModel::resetNumNewTweets()
 void MentionsQmlListModel::showNewTweets()
 {
     if (m_newStatuses.count()) {
-        int numTweets = m_statuses.count();
+
+        int numReadTweets = m_numUnreadTweets;
+        m_numUnreadTweets = m_newStatuses.count();
 
         //prepend new statuses
         beginInsertRows(QModelIndex(), 0, m_newStatuses.count() - 1);
@@ -181,23 +190,24 @@ void MentionsQmlListModel::showNewTweets()
         endInsertRows();
 
         //remove old statutes
-        if (m_numOldTweets) {
-            beginRemoveRows(QModelIndex(), numTweets + m_numNewTweets - m_numOldTweets, numTweets + m_numNewTweets - 1);
+        if (m_statuses.count() > maxTweetsPerView) {
+            beginRemoveRows(QModelIndex(), maxTweetsPerView, m_statuses.count());
 
-            for (int i = 0; i < m_numOldTweets; ++i)
+            for (int i = 0; i < m_statuses.count() - maxTweetsPerView; ++i)
                 m_statuses.removeLast();
 
             endRemoveRows();
         }
 
-        m_numOldTweets = m_statuses.count() - m_numNewTweets;
-
-        qDebug() << "Num old tweets: " << m_numOldTweets;
-
         m_numNewTweets = 0;
         emit numNewTweetsChanged();
 
         m_newStatuses.clear();
+
+        //exp
+        QModelIndex first = index(0);
+        QModelIndex last = index(m_numUnreadTweets + numReadTweets);
+        emit dataChanged(first, last);
     }
 }
 
@@ -215,7 +225,7 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
     beginResetModel();
 
     m_statuses.clear();
-    m_numOldTweets = 0;
+    m_numUnreadTweets = 0;
 
     endResetModel();
 
