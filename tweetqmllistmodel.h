@@ -37,7 +37,8 @@ public:
         AvatarUrlRole,
         StatusIdRole,
         OwnTweetRole,
-        NewTweetRole
+        NewTweetRole,
+        SinceTimeRole
     };
 
     TweetQmlListModel(QObject *parent = 0);

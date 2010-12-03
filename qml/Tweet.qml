@@ -11,6 +11,7 @@ Item {
     property string tweetScreenName: "Screen Name"
     property string tweetText: "Lorem ipsum dolor sit amet."
     property string tweetAvatar: "../images/default_avatar.png"
+    property string tweetSinceTime: "sometimes ago"
     property bool isOwnTweet: false
     property bool isNewTweet: false
 
@@ -118,6 +119,17 @@ Item {
             buttonImageUrl: "../images/poraka.png"
             clickedButtonImageUrl: "../images/poraka_pressed.png"
         }
+    }
+
+    Text {
+        id: sinceTimeText
+        x: 0
+        color: "#b4b4b4"
+        text: gradRect.tweetSinceTime
+        smooth: true
+        anchors.top: avatarImage.bottom
+        font.family: "Segoe UI"
+        font.pixelSize: 10
     }
 
     ListView.onRemove: SequentialAnimation {

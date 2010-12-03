@@ -21,6 +21,7 @@ Item {
             tweetid:  statusIdRole
             isOwnTweet: ownTweetRole
             isNewTweet: newTweetRole
+            tweetSinceTime: sinceTimeRole
 
             onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
             onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)

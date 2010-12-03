@@ -20,6 +20,7 @@
 
 #include <QtDebug>
 #include <QSqlQuery>
+#include <QDateTime>
 #include "oauthtwitter.h"
 #include "qtweetstatus.h"
 #include "qtweetuser.h"
@@ -30,6 +31,25 @@
 #include "qtweetentityhashtag.h"
 
 const int maxTweetsPerView = 200;
+
+static QString SinceTimeString(const QDateTime& from)
+{
+    int passedSeconds = from.secsTo(QDateTime::currentDateTimeUtc());
+
+    if (passedSeconds < 0)
+        return QString("Time travel!");
+
+    if (passedSeconds < 60)
+        return QString("%1 seconds ago").arg(passedSeconds);
+
+    if (passedSeconds < 3600)
+        return QString("%1 minutes ago").arg(passedSeconds / 60);
+
+    if (passedSeconds < 86400)
+        return QString("%1 hours ago").arg(passedSeconds / 3600);
+
+    return QString("%1 days ago").arg(passedSeconds / 86400);
+}
 
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
@@ -43,6 +63,7 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
     roles[NewTweetRole] = "newTweetRole";
+    roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 }
 
@@ -77,6 +98,8 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
             return true;
         else
             return false;
+    else if (role == SinceTimeRole)
+        return SinceTimeString(st.createdAt());
 
     return QVariant();
 }
@@ -183,14 +206,15 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     QSqlQuery query;
 
     query.prepare("INSERT OR ABORT INTO status "
-                  "(id, text, screenName, profileImageUrl, userId) "
+                  "(id, text, screenName, profileImageUrl, userId, created) "
                   "VALUES "
-                  "(:id, :text, :screenName, :profileImageUrl, :userId);");
+                  "(:id, :text, :screenName, :profileImageUrl, :userId, :created);");
     query.bindValue(":id", status.id());
     query.bindValue(":text", status.text());
     query.bindValue(":userId", status.userid());
     query.bindValue(":screenName", status.user().screenName());
     query.bindValue(":profileImageUrl", status.user().profileImageUrl());
+    query.bindValue(":created", status.createdAt());
     query.exec();
 
     m_newStatuses.prepend(status);
@@ -202,11 +226,10 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 void TweetQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;
-    query.prepare("SELECT id, text, screenName, profileImageUrl, userId "
+    query.prepare("SELECT id, text, screenName, profileImageUrl, userId, created "
                   "FROM status "
                   "ORDER BY id DESC "
                   "LIMIT 100 ");
-    //query.bindValue(":id", topStatusId);
     query.exec();
 
     //remove/clear all statuses
@@ -223,6 +246,11 @@ void TweetQmlListModel::loadTweetsFromDatabase()
         QTweetStatus st;
         st.setId(query.value(0).toLongLong());
         st.setText(query.value(1).toString());
+
+        //Datetime is stored in UTC
+        QDateTime tempTime = query.value(5).toDateTime();
+        QDateTime utcTime(tempTime.date(), tempTime.time(), Qt::UTC);
+        st.setCreatedAt(utcTime);
 
         QTweetUser userinfo;
         userinfo.setScreenName(query.value(2).toString());
