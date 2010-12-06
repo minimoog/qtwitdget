@@ -1,6 +1,6 @@
 import Qt 4.7
 
-Item {
+Rectangle {
     id: tweetListViewItem
 
     property alias model: tweetListView.model
@@ -8,6 +8,18 @@ Item {
     signal replyClicked(string id, string screenname)
     signal retweetClicked(string text, string screenname)
     signal deleteClicked(string id)
+
+    gradient: Gradient {
+        GradientStop {
+            position: 0
+            color: "#ffffff"
+        }
+
+        GradientStop {
+            position: 1
+            color: "#d5ecfc"
+        }
+    }
 
 	ListView {
         id: tweetListView

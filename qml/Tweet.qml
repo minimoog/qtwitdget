@@ -94,7 +94,7 @@ Item {
 
         Button {
             id: replyButton
-            width: 12; height: 12
+            width: 20; height: 20
             buttonImageUrl: isOwnTweet ? "../images/delete.png" : "../images/mention.png"
             clickedButtonImageUrl: isOwnTweet? "../images/delete_pressed.png" : "../images/mention_pressed.png"
             onClicked: {
@@ -107,7 +107,7 @@ Item {
 
         Button {
             id: retweetButton
-            width:  12; height: 12
+            width:  20; height: 20
             buttonImageUrl: "../images/retweet.png"
             clickedButtonImageUrl: "../images/retweet_pressed.png"
             onClicked: gradRect.retweetButtonClicked()
@@ -115,7 +115,7 @@ Item {
 
         Button {
             id: extraButton
-            width: 12; height: 12
+            width: 20; height: 20
             buttonImageUrl: "../images/poraka.png"
             clickedButtonImageUrl: "../images/poraka_pressed.png"
         }
@@ -128,7 +128,7 @@ Item {
         text: gradRect.tweetSinceTime
         smooth: true
         anchors.top: avatarImage.bottom
-        font.family: "Segoe UI"
+        font.family: "Arial"
         font.pixelSize: 10
     }
 
