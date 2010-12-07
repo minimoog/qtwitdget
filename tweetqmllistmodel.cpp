@@ -109,6 +109,11 @@ void TweetQmlListModel::setUserID(qint64 userid)
     m_userid = userid;
 }
 
+qint64 TweetQmlListModel::userID() const
+{
+    return m_userid;
+}
+
 void TweetQmlListModel::destroyTweet(const QString &tweetid)
 {
     qDebug() << "Destroing tweet: " << tweetid;
@@ -272,3 +277,6 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     }
 }
 
+TweetQmlListModel::~TweetQmlListModel()
+{
+}

@@ -42,34 +42,35 @@ public:
     };
 
     TweetQmlListModel(QObject *parent = 0);
+    virtual ~TweetQmlListModel();
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     void setUserID(qint64 userid);
+    qint64 userID() const;
     Q_INVOKABLE void destroyTweet(const QString& tweetid);
 
     int numNewTweets() const;
     void resetNumNewTweets();
 
     Q_INVOKABLE void showNewTweets();
-    void loadTweetsFromDatabase();
-
-    void startUpdateTimelines();
-
+    virtual void loadTweetsFromDatabase();
 signals:
     void numNewTweetsChanged();
 
 public slots:
-    void onStatusesStream(const QTweetStatus& status);
+    virtual void onStatusesStream(const QTweetStatus& status);
 
 private slots:
     void finishedDestroyTweet(const QTweetStatus& status);
 
-private:
+protected:
     QList<QTweetStatus> m_statuses;
     QList<QTweetStatus> m_newStatuses; //doesn't show in the model
-    qint64 m_userid;
     int m_numNewTweets;
     int m_numUnreadTweets;
+
+private:
+    qint64 m_userid;
 };
 
 #endif // TWEETQMLLISTMODEL_H
