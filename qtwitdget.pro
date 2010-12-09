@@ -121,4 +121,5 @@ OTHER_FILES += \
     qml/MainScreen.qml \
     qml/TweetUpdate.qml \
     qml/DirectMessageTweet.qml \
-    qml/DirectMessageList.qml
+    qml/DirectMessageList.qml \
+    qml/ToggleButton.qml
