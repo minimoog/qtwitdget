@@ -28,6 +28,25 @@
 
 const int maxTweetsPerView = 200;
 
+static QString SinceTimeString(const QDateTime& from)
+{
+    int passedSeconds = from.secsTo(QDateTime::currentDateTimeUtc());
+
+    if (passedSeconds < 0)
+        return QString("Time travel!");
+
+    if (passedSeconds < 60)
+        return QString("%1 seconds ago").arg(passedSeconds);
+
+    if (passedSeconds < 3600)
+        return QString("%1 minutes ago").arg(passedSeconds / 60);
+
+    if (passedSeconds < 86400)
+        return QString("%1 hours ago").arg(passedSeconds / 3600);
+
+    return QString("%1 days ago").arg(passedSeconds / 86400);
+}
+
 DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewDirectMessages(0),
@@ -40,6 +59,7 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     roles[StatusIdRole] = "statusIdRole";
     roles[OwnTweetRole] = "ownTweetRole";
     roles[NewTweetRole] = "newTweetRole";
+    roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 }
 
@@ -74,6 +94,8 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
             return true;
         else
             return false;
+    else if (role == SinceTimeRole)
+        return SinceTimeString(st.createdAt());
 
     return QVariant();
 }
@@ -157,7 +179,7 @@ void DirectMessagesQmlListModel::showNewTweets()
 void DirectMessagesQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;
-    query.prepare("SELECT id, text, senderId, senderScreenName, senderProfileImageUrl "
+    query.prepare("SELECT id, text, senderId, senderScreenName, senderProfileImageUrl, created "
                   "FROM directmessages "
                   "ORDER BY id DESC "
                   "LIMIT 100 ");
@@ -179,6 +201,11 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
         st.setText(query.value(1).toString());
         st.setSenderId(query.value(2).toLongLong());
         st.setSenderScreenName(query.value(3).toString());
+
+        //Datetime is stored in UTC
+        QDateTime tempTime = query.value(5).toDateTime();
+        QDateTime utcTime(tempTime.date(), tempTime.time(), Qt::UTC);
+        st.setCreatedAt(utcTime);
 
         //quick fix
         QTweetUser user;

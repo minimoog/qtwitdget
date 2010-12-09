@@ -6,6 +6,7 @@ Item {
     property string senderScreenName: "Screen Name"
     property string directMessageText: "Lorem ipsum dolor sit amet."
     property string avatar: "../images/default_avatar.png"
+    property string sinceTime: "sometimes ago"
     property bool isOwnTweet: false
     property bool isNewTweet: false
 
@@ -91,7 +92,7 @@ Item {
 
         Button {
             id: replyButton
-            width: 12; height: 12
+            width: 20; height: 20
             buttonImageUrl: isOwnTweet ? "../images/delete.png" : "../images/mention.png"
             clickedButtonImageUrl: isOwnTweet? "../images/delete_pressed.png" : "../images/mention_pressed.png"
             onClicked: {
@@ -104,10 +105,21 @@ Item {
 
         Button {
             id: extraButton
-            width: 12; height: 12
+            width: 20; height: 20
             buttonImageUrl: "../images/poraka.png"
             clickedButtonImageUrl: "../images/poraka_pressed.png"
         }
+    }
+
+    Text {
+        id: sinceTimeText
+        x: 0
+        color: "#b4b4b4"
+        text: gradRect.sinceTime
+        smooth: true
+        anchors.top: avatarImage.bottom
+        font.family: "Arial"
+        font.pixelSize: 10
     }
 
     ListView.onRemove: SequentialAnimation {

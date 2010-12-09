@@ -1,10 +1,22 @@
 import Qt 4.7
 
-Item {
+Rectangle {
 
     property alias model: directMessageListView.model
 
     signal replyClicked(string id, string screenname) //??? we don't need id, fix
+
+    gradient: Gradient {
+        GradientStop {
+            position: 0
+            color: "#ffffff"
+        }
+
+        GradientStop {
+            position: 1
+            color: "#d5ecfc"
+        }
+    }
 
     ListView {
         id: directMessageListView
@@ -18,6 +30,7 @@ Item {
             tweetid: statusIdRole
             isOwnTweet: ownTweetRole
             isNewTweet: newTweetRole
+            sinceTime: sinceTimeRole
 
             onReplyButtonClicked: replyClicked(directMessageDelegate.tweetid, directMessageDelegate.senderScreenName)
         }

@@ -42,7 +42,8 @@ public:
         AvatarUrlRole,
         StatusIdRole,
         OwnTweetRole,
-        NewTweetRole
+        NewTweetRole,
+        SinceTimeRole
     };
 
     DirectMessagesQmlListModel(QObject *parent = 0);
