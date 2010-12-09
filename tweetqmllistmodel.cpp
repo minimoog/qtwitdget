@@ -67,6 +67,29 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     setRoleNames(roles);
 }
 
+TweetQmlListModel::TweetQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
+    QAbstractListModel(parent),
+    m_numNewTweets(0),
+    m_numUnreadTweets(0)
+{
+    QHash<int, QByteArray> roles;
+    roles[ScreenNameRole] = "screenNameRole";
+    roles[StatusTextRole] = "statusTextRole";
+    roles[AvatarUrlRole] = "avatarUrlRole";
+    roles[StatusIdRole] = "statusIdRole";
+    roles[OwnTweetRole] = "ownTweetRole";
+    roles[NewTweetRole] = "newTweetRole";
+    roles[SinceTimeRole] = "sinceTimeRole";
+    setRoleNames(roles);
+
+    m_oauthTwitter = oauthTwitter;
+}
+
+void TweetQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
+{
+    m_oauthTwitter = oauthTwitter;
+}
+
 int TweetQmlListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -124,7 +147,7 @@ void TweetQmlListModel::destroyTweet(const QString &tweetid)
 
     if (ok) {
         QTweetStatusDestroy *tweetDestroy = new QTweetStatusDestroy;
-        //tweetDestroy->setOAuthTwitter(m_oauthTwitter);
+        tweetDestroy->setOAuthTwitter(m_oauthTwitter);
         tweetDestroy->destroy(id);
         connect(tweetDestroy, SIGNAL(deletedStatus(QTweetStatus)), this, SLOT(finishedDestroyTweet(QTweetStatus)));
     }

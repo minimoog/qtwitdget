@@ -333,13 +333,13 @@ void MainWindow::createDatabase(const QString& databaseName)
 
 void MainWindow::createDeclarativeView()
 {
-    m_tweetListModel = new TweetQmlListModel();
+    m_tweetListModel = new TweetQmlListModel(m_oauthTwitter);
     //connect user stream to tweet home timeline
     connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
             m_tweetListModel, SLOT(onStatusesStream(QTweetStatus)));
 
-    m_mentionsListModel = new MentionsQmlListModel();
-    //m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
+    m_mentionsListModel = new MentionsQmlListModel(m_oauthTwitter);
+    m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
     connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
             m_mentionsListModel, SLOT(onStatusesStream(QTweetStatus)));
 
