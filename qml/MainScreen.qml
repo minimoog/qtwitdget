@@ -15,38 +15,49 @@ Item {
         height: parent.height; width: parent.width
 
         Item {
-            id: toolbar //or menubar
+            id: toolbar
 
-            width: parent.width; height: 30
+            width: parent.width; height: 37
 
             Row {
-                TestButton {
+                ToggleButton {
                     id: showHomeTimelineButton
-                    width: 40; height: toolbar.height - 2
-                    text: "H" + ' ' + tweetListModel.numNewTweets
+                    buttonImageUrl: "../images/hometimeline.png"
+                    pressedButtonImageUrl: "../images/hometimeline_pressed.png"
+                    width: 35; height: toolbar.height - 2
+                    toggled: true
                     onClicked: {
                         containerLists.x = 0;
                         tweetListModel.showNewTweets();
+                        //other buttons untoggled
+                        showMentionsButton.toggled = false;
+                        showDirectMessagesButton.toggled = false;
                     }
                 }
 
-                TestButton {
+                ToggleButton {
                     id: showMentionsButton
-                    width:  40; height: toolbar.height - 2
-                    text: "M" + ' ' + mentionsListModel.numNewTweets
+                    buttonImageUrl: "../images/replies.png"
+                    pressedButtonImageUrl: "../images/replies_pressed.png"
+                    width: 35; height: toolbar.height - 2
                     onClicked: {
                         containerLists.x = - container.width;
                         mentionsListModel.showNewTweets();
+                        showHomeTimelineButton.toggled = false;
+                        showDirectMessagesButton.toggled = false;
                     }
                 }
 
-                TestButton {
+                ToggleButton {
                     id: showDirectMessagesButton
-                    width: 40; height:  toolbar.height - 2
-                    text: "D" + ' ' + directMessagesListModel.numNewDirectMessages
-                    onClicked:  {
+                    buttonImageUrl: "../images/messages.png"
+                    pressedButtonImageUrl: "../images/messages_pressed.png"
+                    width: 35; height: toolbar.height - 2
+                    onClicked: {
                         containerLists.x = - 2 * container.width;
                         directMessagesListModel.showNewTweets();
+                        showHomeTimelineButton.toggled = false;
+                        showMentionsButton.toggled = false;
                     }
                 }
             }
