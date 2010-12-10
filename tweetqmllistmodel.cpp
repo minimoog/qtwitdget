@@ -251,6 +251,28 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     emit numNewTweetsChanged();
 }
 
+void TweetQmlListModel::onDeleteStatusStream(qint64 id, qint64 userid)
+{
+    qDebug() << "Removing tweet id: " << id;
+    //search if the tweet is in the list
+    for (int i = 0; i < m_statuses.count(); ++i) {
+        if (m_statuses.at(i).id() == id) {
+            beginRemoveRows(QModelIndex(), i, i);
+
+            m_statuses.removeAt(i);
+
+            QSqlQuery query;
+            query.prepare("DELETE FROM status WHERE id = :id");
+            query.bindValue(":id", id);
+            query.exec();
+
+            endRemoveRows();
+
+            break;
+        }
+    }
+}
+
 void TweetQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;

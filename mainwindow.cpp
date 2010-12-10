@@ -337,11 +337,15 @@ void MainWindow::createDeclarativeView()
     //connect user stream to tweet home timeline
     connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
             m_tweetListModel, SLOT(onStatusesStream(QTweetStatus)));
+    connect(m_userStream, SIGNAL(deleteStatusStream(qint64,qint64)),
+            m_tweetListModel, SLOT(onDeleteStatusStream(qint64,qint64)));
 
     m_mentionsListModel = new MentionsQmlListModel(m_oauthTwitter);
     m_mentionsListModel->setOAuthTwitter(m_oauthTwitter);
     connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
             m_mentionsListModel, SLOT(onStatusesStream(QTweetStatus)));
+    connect(m_userStream, SIGNAL(deleteStatusStream(qint64,qint64)),
+            m_mentionsListModel, SLOT(onDeleteStatusStream(qint64,qint64)));
 
     m_directMessagesListModel = new DirectMessagesQmlListModel();
     connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),

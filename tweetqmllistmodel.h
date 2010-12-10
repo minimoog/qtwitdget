@@ -62,6 +62,7 @@ signals:
 
 public slots:
     virtual void onStatusesStream(const QTweetStatus& status);
+    void onDeleteStatusStream(qint64 id, qint64 userid);
 
 private slots:
     void finishedDestroyTweet(const QTweetStatus& status);
