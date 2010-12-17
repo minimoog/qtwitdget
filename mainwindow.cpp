@@ -26,8 +26,8 @@
 #include <QDeclarativeContext>
 #include <QGraphicsObject>
 #include <QCloseEvent>
+#include <QMenu>
 #include "mainwindow.h"
-#include "langchangedialog.h"
 #include "shortenedurl.h"
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"
@@ -53,9 +53,8 @@ MainWindow::MainWindow()
 
 	qApp->setOrganizationName("QTwitdget");
 
-	//connect signals
-	connect(ui.actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-    connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
+    //connect signal
+    //connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthFinished()), this, SLOT(authorizationFinished()));
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthError()), this, SLOT(authorizationFailed()));
@@ -208,12 +207,6 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 
         statusUpdate->deleteLater();
     }
-}
-
-void MainWindow::languageChanged()
-{
-	LangChangeDialog lcd(this);
-	lcd.exec();
 }
 
 void MainWindow::setupTrayIcon()

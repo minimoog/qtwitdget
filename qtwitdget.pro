@@ -11,7 +11,6 @@ QT += network \
 HEADERS += \
     shortenedurl.h \
     mainwindow.h \
-    langchangedialog.h \
     tweetqmllistmodel.h \
     mentionsqmllistmodel.h \
     directmessagesqmllistmodel.h \
@@ -63,7 +62,6 @@ HEADERS += \
 SOURCES += main.cpp \
     shortenedurl.cpp \
     mainwindow.cpp \
-    langchangedialog.cpp \
     tweetqmllistmodel.cpp \
     mentionsqmllistmodel.cpp \
     directmessagesqmllistmodel.cpp \
@@ -105,8 +103,7 @@ SOURCES += \
     qtweetlib/qtweetaccountverifycredentials.cpp \
     qtweetlib/qtweetdirectmessagenew.cpp
 
-FORMS += forms/mainwindowform.ui \
-    forms/langchangedialogform.ui
+FORMS += forms/mainwindowform.ui
 TRANSLATIONS += translations/qtwitdget_en.ts \
     translations/qtwitdget_mk.ts
 RESOURCES = qtwitdget.qrc
