@@ -6,6 +6,7 @@ Item {
     property string buttonImageUrl
     property string pressedButtonImageUrl
     property bool toggled: false
+    property bool showNotification: false
 
     signal clicked
 
@@ -13,6 +14,28 @@ Item {
         id: buttonImage
         source: buttonImageUrl
         anchors.fill: parent
+
+        Image {
+            id: notificationMarkerImage
+            opacity: 0
+            anchors.top: parent.top
+            anchors.right: parent.right
+            source: "../images/red_marker.png"
+
+            states: [
+                State {
+                    name: "showMarker"
+                    when: showNotification
+                    PropertyChanges { target: notificationMarkerImage; opacity: 1 }
+                }
+            ]
+
+            transitions: [
+                Transition {
+                    NumberAnimation { property: "opacity"; duration: 500 }
+                }
+            ]
+        }
     }
 
     MouseArea {

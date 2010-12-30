@@ -24,6 +24,7 @@ Item {
                     id: showHomeTimelineButton
                     buttonImageUrl: "../images/hometimeline.png"
                     pressedButtonImageUrl: "../images/hometimeline_pressed.png"
+                    showNotification: tweetListModel.numNewTweets
                     width: 35; height: toolbar.height - 2
                     toggled: true
                     onClicked: {
@@ -39,6 +40,7 @@ Item {
                     id: showMentionsButton
                     buttonImageUrl: "../images/replies.png"
                     pressedButtonImageUrl: "../images/replies_pressed.png"
+                    showNotification: mentionsListModel.numNewTweets
                     width: 35; height: toolbar.height - 2
                     onClicked: {
                         containerLists.x = - container.width;
@@ -52,6 +54,7 @@ Item {
                     id: showDirectMessagesButton
                     buttonImageUrl: "../images/messages.png"
                     pressedButtonImageUrl: "../images/messages_pressed.png"
+                    showNotification: directMessagesListModel.numNewDirectMessages
                     width: 35; height: toolbar.height - 2
                     onClicked: {
                         containerLists.x = - 2 * container.width;
