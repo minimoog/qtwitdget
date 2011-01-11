@@ -19,7 +19,19 @@ Item {
 
             width: parent.width; height: 37
 
+            Rectangle {
+                id: toolbarBackground
+
+                anchors.fill: parent
+                gradient: Gradient {
+                    GradientStop { position: 0; color: "#F2F2F2" }
+                    GradientStop { position: 1; color: "#BDBEC2" }
+                }
+            }
+
             Row {
+                spacing: 1
+
                 ToggleButton {
                     id: showHomeTimelineButton
                     buttonImageUrl: "../images/hometimeline.png"
@@ -63,6 +75,16 @@ Item {
                         showMentionsButton.toggled = false;
                     }
                 }
+            }
+
+            Button {
+                width: 33; height: toolbar.height - 4
+                anchors.right: parent.right
+                anchors.rightMargin: 4
+                buttonImageUrl: "../images/logout.png"
+                //clickedButtonImageUrl: "../images/messages_pressed.png"
+
+                onClicked: authed = false
             }
         }
 
@@ -133,8 +155,9 @@ Item {
             property bool moved: false
 
             id: tweetUpdateElement
-            x: 0; y: container.height //containerTweetList.height - height
-            width: parent.width
+            y: container.height //containerTweetList.height - height
+            anchors.right: parent.right; anchors.rightMargin: 4
+            anchors.left: parent.left; anchors.leftMargin: 4
 
             onUpdateButtonClicked: {
                 rootWindow.updateButtonClicked(tweetUpdateElement.tweetid,
@@ -146,14 +169,16 @@ Item {
                 moved = false;
             }
 
-            // ### TODO: Toggle button
-            TestButton {
+            ToggleButton {
                 id: showUpdateElement
-                height: 10; width: 50
+                height: 15; width: 53
                 x: 0; y: -height
-                text: "U"
+                anchors.horizontalCenter: parent.horizontalCenter
 
-                onClicked: parent.moved = !parent.moved;
+                buttonImageUrl: "../images/drawer_arrow_up.png"
+                pressedButtonImageUrl: "../images/drawer_arrow_down.png"
+
+                onClicked: parent.moved = !parent.moved
             }
 
             states: [
