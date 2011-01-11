@@ -13,6 +13,7 @@ Item {
     Image {
         id: buttonImage
         source: buttonImageUrl
+        smooth: true
         anchors.fill: parent
 
         Image {
@@ -43,8 +44,7 @@ Item {
         anchors.fill: parent
         onClicked: {
             toogleButton.clicked();
-            if (!toggled)
-                toggled = true;
+            toggled = !toggled;
         }
     }
 
