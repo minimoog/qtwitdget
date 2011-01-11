@@ -32,9 +32,6 @@ public:
     MentionsQmlListModel(QObject *parent = 0);
     void loadTweetsFromDatabase();
 
-signals:
-    void numNewTweetsChanged();
-
 public slots:
     void onStatusesStream(const QTweetStatus& status);
 };
