@@ -23,7 +23,8 @@ HEADERS += \
     qtweetlib/qtweetentityurl.h \
     qtweetlib/qtweetentityusermentions.h \
     qtweetlib/qtweetentityhashtag.h \
-    qtweetlib/qtweetuserstream.h
+    qtweetlib/qtweetuserstream.h \
+    networkaccessmanagerfactory.h
 
 # QJSON
 HEADERS += \
@@ -74,7 +75,8 @@ SOURCES += main.cpp \
     qtweetlib/qtweetentityurl.cpp \
     qtweetlib/qtweetentityusermentions.cpp \
     qtweetlib/qtweetentityhashtag.cpp \
-    qtweetlib/qtweetuserstream.cpp
+    qtweetlib/qtweetuserstream.cpp \
+    networkaccessmanagerfactory.cpp
 
 # QJSON
 SOURCES += \

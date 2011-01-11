@@ -37,15 +37,16 @@ class QTweetDMStatus;
 class TweetQmlListModel;
 class MentionsQmlListModel;
 class DirectMessagesQmlListModel;
+class NetworkAccessManagerFactory;
 
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	MainWindow();
+    MainWindow();
     ~MainWindow();
-	void startUp();
+    void startUp();
 
 Q_INVOKABLE void authorize(const QString& username, const QString& password);
 Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
@@ -56,25 +57,26 @@ private slots:
     void verifyCredentialsFinished(const QTweetUser& userinfo);
     void directMessageNewFinished(const QTweetDMStatus& dm);
     void statusUpdateFinished(const QTweetStatus& status);
-	void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void changeUserPass();
 
 protected:
-	void closeEvent(QCloseEvent *e);
-	void changeEvent(QEvent *e);
+    void closeEvent(QCloseEvent *e);
+    void changeEvent(QEvent *e);
 
 private:
-	void setupTrayIcon();
-	void createDatabase(const QString& databaseName);
-	void updateCurrentPage();
+    void setupTrayIcon();
+    void createDatabase(const QString& databaseName);
+    void updateCurrentPage();
     void createDeclarativeView();
     void readSettings();
     void writeSettings();
 
-	Ui::MainWindowForm ui;
+    Ui::MainWindowForm ui;
 
-	QNetworkAccessManager *m_netManager;
-	OAuthTwitter *m_oauthTwitter;
+    QNetworkAccessManager *m_netManager;
+    NetworkAccessManagerFactory *m_namFactory;
+    OAuthTwitter *m_oauthTwitter;
     QTweetUserStream *m_userStream;
 
     TweetQmlListModel* m_tweetListModel;
@@ -83,10 +85,10 @@ private:
 
     qint64 m_userId;
 
-	QSqlDatabase m_database;
+    QSqlDatabase m_database;
 
-	QSystemTrayIcon *m_trayIcon;
-	QMenu *m_trayIconMenu;
+    QSystemTrayIcon *m_trayIcon;
+    QMenu *m_trayIconMenu;
 };
 
 #endif //MAINWINDOW_H

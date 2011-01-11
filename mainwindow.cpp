@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 #include <QGraphicsObject>
 #include <QCloseEvent>
 #include <QMenu>
@@ -39,9 +40,11 @@
 #include "qtweetaccountverifycredentials.h"
 #include "qtweetdirectmessagenew.h"
 #include "qtweetuserstream.h"
+#include "networkaccessmanagerfactory.h"
 
 MainWindow::MainWindow()
-:	m_netManager(new QNetworkAccessManager(this)),
+:   m_netManager(new QNetworkAccessManager(this)),
+    m_namFactory(new NetworkAccessManagerFactory),
     m_oauthTwitter(new OAuthTwitter(this)),
     m_userStream(new QTweetUserStream(this))
 {
@@ -49,9 +52,9 @@ MainWindow::MainWindow()
 
     m_userStream->setOAuthTwitter(m_oauthTwitter);
 
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	qApp->setOrganizationName("QTwitdget");
+    qApp->setOrganizationName("QTwitdget");
 
     //connect signal
     //connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
@@ -59,9 +62,9 @@ MainWindow::MainWindow()
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthFinished()), this, SLOT(authorizationFinished()));
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthError()), this, SLOT(authorizationFailed()));
 
-	m_database = QSqlDatabase::addDatabase("QSQLITE");
+    m_database = QSqlDatabase::addDatabase("QSQLITE");
 
-	setupTrayIcon();
+    setupTrayIcon();
 
     readSettings();
 
@@ -122,18 +125,18 @@ void MainWindow::changeUserPass()
 
 void MainWindow::startUp()
 {
-	//read settings
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-	m_userId = settings.value("user_id", 0).toInt();
-	QString oauthToken = settings.value("oauth_token").toString();
-	QString oauthTokenSecret = settings.value("oauth_token_secret").toString();
+    //read settings
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    m_userId = settings.value("user_id", 0).toInt();
+    QString oauthToken = settings.value("oauth_token").toString();
+    QString oauthTokenSecret = settings.value("oauth_token_secret").toString();
 
-	if(m_userId != 0 && !oauthToken.isEmpty() && !oauthTokenSecret.isEmpty()){
-		m_oauthTwitter->setOAuthToken(oauthToken.toUtf8());
-		m_oauthTwitter->setOAuthTokenSecret(oauthTokenSecret.toUtf8());
+    if(m_userId != 0 && !oauthToken.isEmpty() && !oauthTokenSecret.isEmpty()){
+        m_oauthTwitter->setOAuthToken(oauthToken.toUtf8());
+        m_oauthTwitter->setOAuthTokenSecret(oauthTokenSecret.toUtf8());
 
-		//create or change database according to user id
-		createDatabase(QString::number(m_userId));
+        //create or change database according to user id
+        createDatabase(QString::number(m_userId));
 
         //show/animate tweets list page
         QGraphicsObject *obj = ui.declarativeView->rootObject();
@@ -211,88 +214,88 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 
 void MainWindow::setupTrayIcon()
 {
-	connect(ui.actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(ui.actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-	m_trayIconMenu = new QMenu(this);
-	m_trayIconMenu->addAction(ui.actionMinimize);
-	m_trayIconMenu->addAction(ui.actionRestore);
-	m_trayIconMenu->addSeparator();
-	m_trayIconMenu->addAction(ui.actionQuit);
+    m_trayIconMenu = new QMenu(this);
+    m_trayIconMenu->addAction(ui.actionMinimize);
+    m_trayIconMenu->addAction(ui.actionRestore);
+    m_trayIconMenu->addSeparator();
+    m_trayIconMenu->addAction(ui.actionQuit);
 
-	m_trayIcon = new QSystemTrayIcon(this);
+    m_trayIcon = new QSystemTrayIcon(this);
     m_trayIcon->setIcon(QIcon(":/images/qtwidget_icon.ico"));
-	m_trayIcon->setContextMenu(m_trayIconMenu);
-	m_trayIcon->show();
+    m_trayIcon->setContextMenu(m_trayIconMenu);
+    m_trayIcon->show();
 
-	connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-		SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-	switch(reason){
-		case QSystemTrayIcon::Trigger:
-		case QSystemTrayIcon::DoubleClick:
-            if (isHidden() || isMinimized()) {
-                showNormal();
-                activateWindow();
-            }
-            else
-                showMinimized();
-			break;
-		default:
-			;
-	}
+    switch(reason){
+            case QSystemTrayIcon::Trigger:
+            case QSystemTrayIcon::DoubleClick:
+                if (isHidden() || isMinimized()) {
+                    showNormal();
+                    activateWindow();
+                }
+                else
+                    showMinimized();
+                            break;
+                    default:
+                            ;
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     writeSettings();
-	hide();
-	e->ignore();
+    hide();
+    e->ignore();
 }
 
 void MainWindow::changeEvent(QEvent *e)
 {
-	if(e->type() == QEvent::LanguageChange)
-		ui.retranslateUi(this);
+    if(e->type() == QEvent::LanguageChange)
+            ui.retranslateUi(this);
 
-	QMainWindow::changeEvent(e);
+    QMainWindow::changeEvent(e);
 }
 
 void MainWindow::createDatabase(const QString& databaseName)
 {
-	QString workdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+    QString workdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
 
-	QDir dir;
-	dir.setPath(workdir);
-	if(!dir.exists())
-		dir.mkpath(".");
+    QDir dir;
+    dir.setPath(workdir);
+    if(!dir.exists())
+        dir.mkpath(".");
 
-	//close any previous open database
-	if(m_database.isOpen())
-		m_database.close();
-	
-	m_database.setDatabaseName(workdir + databaseName + ".sqlite");
-	m_database.open();
+    //close any previous open database
+    if(m_database.isOpen())
+        m_database.close();
 
-	QSqlQuery query;
-	query.exec("CREATE TABLE IF NOT EXISTS status " 
-				"(key INTEGER PRIMARY KEY, " 
-				"created DATETIME, "
-				"id INTEGER, "
-				"text TEXT, "
-				"replyToStatusId INTEGER, "
-				"replyToUserId INTEGER, "
-				"favorited INTEGER, "
-				"replyToScreenName TEXT, "
-				"userId INTEGER, "
-				"name TEXT, "
-				"screenName TEXT, "
-				"location TEXT, "
-				"description TEXT, "
-				"profileImageUrl TEXT, "
-				"url TEXT, "
+    m_database.setDatabaseName(workdir + databaseName + ".sqlite");
+    m_database.open();
+
+    QSqlQuery query;
+    query.exec("CREATE TABLE IF NOT EXISTS status "
+                "(key INTEGER PRIMARY KEY, "
+                "created DATETIME, "
+                "id INTEGER, "
+                "text TEXT, "
+                "replyToStatusId INTEGER, "
+                "replyToUserId INTEGER, "
+                "favorited INTEGER, "
+                "replyToScreenName TEXT, "
+                "userId INTEGER, "
+                "name TEXT, "
+                "screenName TEXT, "
+                "location TEXT, "
+                "description TEXT, "
+                "profileImageUrl TEXT, "
+                "url TEXT, "
                 "mention INTEGER, "
                 "isRead INTEGER, "
                 "UNIQUE (id));");
@@ -321,7 +324,7 @@ void MainWindow::createDatabase(const QString& databaseName)
                "url TEXT, "
                "UNIQUE (id));");
 
-	query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
+    query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
 }
 
 void MainWindow::createDeclarativeView()
@@ -352,6 +355,9 @@ void MainWindow::createDeclarativeView()
 
     //ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));
     ui.declarativeView->setSource(QUrl::fromLocalFile("qml/MainScreen.qml"));
+
+    //set NAM cacher
+    ui.declarativeView->engine()->setNetworkAccessManagerFactory(m_namFactory);
 }
 
 void MainWindow::readSettings()
