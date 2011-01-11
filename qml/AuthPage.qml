@@ -12,6 +12,7 @@ Rectangle {
             spacing: 4
             Text {
                 text: "Username:"
+                font.family: "Segoe UI"
                 font.pixelSize: 16
                 font.bold: true
                 color: "#000000"
@@ -22,12 +23,14 @@ Rectangle {
             Item {
                 width: 220
                 height: 28
-                BorderImage {
+
+                Rectangle {
+                    radius: 8
+                    border.width: 2
+                    border.color: "#6bccef"
                     anchors.fill: parent
-                    source: "../images/test_lineedit.png"
-                    border.left: 10; border.top: 10
-                    border.right: 10; border.bottom: 10
                 }
+
                 TextInput {
                     id: nameIn
                     width: parent.width - 8
@@ -45,18 +48,21 @@ Rectangle {
              spacing: 4
              Text {
                  text: "Password:"
+                 font.family: "Segoe UI"
                  font.pixelSize: 16; font.bold: true; color: "#000000"; style: "Normal"; styleColor: "black"
                  horizontalAlignment: Qt.AlignRight
              }
              Item {
                  width: 220
                  height: 28
-                 BorderImage {
-                     source: "../images/test_lineedit.png"
+
+                 Rectangle {
+                     radius: 8
+                     border.width: 2
+                     border.color: "#6bccef"
                      anchors.fill: parent
-                     border.left: 10; border.top: 10
-                     border.right: 10; border.bottom: 10
                  }
+
                  TextInput{
                      id: passIn
                      width: parent.width - 8
