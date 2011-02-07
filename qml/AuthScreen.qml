@@ -1,6 +1,6 @@
 import Qt 4.7
 
-Rectangle {
+Item {
     id: wrapper
 
     signal loginClicked(string username, string password)

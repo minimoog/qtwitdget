@@ -1,32 +1,19 @@
 import Qt 4.7
 
-Rectangle {
-    id: tweetListViewItem
+Item {
+    //id: tweetListView
 
     property alias model: tweetListView.model
 
-    signal replyClicked(string id, string screenname)
-    signal retweetClicked(string text, string screenname)
-    signal deleteClicked(string id)
+//    signal replyClicked(string id, string screenname)
+//    signal retweetClicked(string text, string screenname)
+//    signal deleteClicked(string id)
 
-    gradient: Gradient {
-        GradientStop {
-            position: 0
-            color: "#ffffff"
-        }
-
-        GradientStop {
-            position: 1
-            color: "#d5ecfc"
-        }
-    }
-
-	ListView {
+    ListView {
         id: tweetListView
-        width: parent.width; height: parent.height
+        anchors.fill: parent;
         clip: true
-                delegate: TweetDelegate {
-            id: tweetDelegate
+        delegate: TweetDelegate {
             tweetScreenName: screenNameRole
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
@@ -38,10 +25,9 @@ Rectangle {
             //onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
             //onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
             //onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
-		}
-	}
+        }
+    }
 
-    // taken from Flickable documentation
     Rectangle {
         id: scrollbar
         anchors.right: tweetListView.right
@@ -51,4 +37,3 @@ Rectangle {
         color: "black"
     }
 }
-

@@ -91,9 +91,4 @@ Rectangle  {
         font.family: "Segoe UI"
         font.pointSize: 7
     }
-
-//    ListView.onAdd: ParallelAnimation {
-//        NumberAnimation { target: container; property: "scale";from: 0; to: 1; duration: 500 }
-//        NumberAnimation { target: container; property: "height"; from: 0; to: 80; duration: 500 }
-//    }
 }

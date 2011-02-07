@@ -347,14 +347,13 @@ void MainWindow::createDeclarativeView()
     connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
             m_directMessagesListModel, SLOT(onDirectMessageStream(QTweetDMStatus)));
 
-    ui.declarativeView->rootContext()->setContextProperty("tweetListModel", m_tweetListModel);
+    ui.declarativeView->rootContext()->setContextProperty("hometimelineListModel", m_tweetListModel);
     ui.declarativeView->rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
     ui.declarativeView->rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
     ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
     ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
 
-    //ui.declarativeView->setSource(QUrl("qrc:/qml/TweetList.qml"));
-    ui.declarativeView->setSource(QUrl::fromLocalFile("qml/MainScreen.qml"));
+    ui.declarativeView->setSource(QUrl::fromLocalFile("qml/Main.qml"));
 
     //set NAM cacher
     ui.declarativeView->engine()->setNetworkAccessManagerFactory(m_namFactory);

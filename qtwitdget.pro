@@ -112,13 +112,13 @@ RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc
 
 OTHER_FILES += \
-    qml/Button.qml \
     qml/TweetList.qml \
     qml/TestButton.qml \
-    qml/AuthPage.qml \
     qml/MainScreen.qml \
     qml/TweetUpdate.qml \
     qml/DirectMessageTweet.qml \
     qml/DirectMessageList.qml \
-    qml/ToggleButton.qml \
-    qml/TweetDelegate.qml
+    qml/TweetDelegate.qml \
+    qml/Main.qml \
+    qml/AuthScreen.qml \
+    qml/TimelinesScreen.qml
