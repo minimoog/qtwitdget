@@ -113,7 +113,6 @@ win32:RC_FILE = qtwitdget.rc
 
 OTHER_FILES += \
     qml/Button.qml \
-    qml/Tweet.qml \
     qml/TweetList.qml \
     qml/TestButton.qml \
     qml/AuthPage.qml \
@@ -121,4 +120,5 @@ OTHER_FILES += \
     qml/TweetUpdate.qml \
     qml/DirectMessageTweet.qml \
     qml/DirectMessageList.qml \
-    qml/ToggleButton.qml
+    qml/ToggleButton.qml \
+    qml/TweetDelegate.qml

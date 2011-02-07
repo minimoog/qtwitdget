@@ -25,7 +25,7 @@ Rectangle {
         id: tweetListView
         width: parent.width; height: parent.height
         clip: true
-		delegate: Tweet {
+                delegate: TweetDelegate {
             id: tweetDelegate
             tweetScreenName: screenNameRole
             tweetText: statusTextRole
@@ -35,9 +35,9 @@ Rectangle {
             isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
-            onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
-            onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
-            onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
+            //onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
+            //onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
+            //onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
 		}
 	}
 
