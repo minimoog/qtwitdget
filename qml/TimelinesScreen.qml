@@ -6,45 +6,56 @@ Item {
 
     id: timelines
 
-    Item {
+    Rectangle {
         id: bottomToolbar
         height: 96
+        border.color: "#474747"
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: "#737477"
+            }
+            GradientStop {
+                position: 1
+                color: "#6D6E72"
+            }
+        }
 
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
-//        ButtonWithNotification {
-//            id: htButton
-//            width: 78
-//            height: 78
-//            anchors.left: parent.left; anchors.leftMargin: 12
-//            anchors.top: parent.top; anchors.topMargin: 12
-//            buttonImageUrl:  "./images/hometimeline.png"
-//            //pressedButtonImageUrl: "../images/hometimeline_pressed.png"
-//            showNotification: homeTimelineModel.numNewTweets
+        ButtonWithNotification {
+            id: htButton
+            width: 78
+            height: 78
+            anchors.left: parent.left; anchors.leftMargin: 12
+            anchors.top: parent.top; anchors.topMargin: 12
+            buttonImageUrl:  "../images/hometimeline.png"
+            //pressedButtonImageUrl: "../images/hometimeline_pressed.png"
+            showNotification: homeTimelineModel.numNewTweets
 
-//            onClicked: {
-//                homeTimelineModel.showNewTweets();
-//                timelines.state = "";   //default state
-//            }
-//        }
+            onClicked: {
+                homeTimelineModel.showNewTweets();
+                timelines.state = "";   //default state
+            }
+        }
 
-//        ButtonWithNotification {
-//            id: mentionsButton
-//            width: 78
-//            height: 78
-//            anchors.top: parent.top; anchors.topMargin: 12
-//            anchors.left: htButton.right; anchors.leftMargin: 12
-//            buttonImageUrl: "./images/replies.png"
-//            //pressedButtonImageUrl: "../images/hometimeline_pressed.png"
-//            showNotification: mentionsModel.numNewTweets
+        ButtonWithNotification {
+            id: mentionsButton
+            width: 78
+            height: 78
+            anchors.top: parent.top; anchors.topMargin: 12
+            anchors.left: htButton.right; anchors.leftMargin: 12
+            buttonImageUrl: "../images/replies.png"
+            //pressedButtonImageUrl: "../images/hometimeline_pressed.png"
+            showNotification: mentionsModel.numNewTweets
 
-//            onClicked: {
-//                mentionsModel.showNewTweets();
-//                timelines.state = "mentions"
-//            }
-//        }
+            onClicked: {
+                mentionsModel.showNewTweets();
+                timelines.state = "mentions"
+            }
+        }
     }
 
     TweetList {

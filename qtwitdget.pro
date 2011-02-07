@@ -121,4 +121,5 @@ OTHER_FILES += \
     qml/TweetDelegate.qml \
     qml/Main.qml \
     qml/AuthScreen.qml \
-    qml/TimelinesScreen.qml
+    qml/TimelinesScreen.qml \
+    qml/ButtonWithNotification.qml
