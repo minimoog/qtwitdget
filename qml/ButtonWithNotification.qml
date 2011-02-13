@@ -4,8 +4,8 @@ Item  {
     id: btnNotification
 
     property string buttonImageUrl
-    //property string pressedButtonImageUrl
-    //property bool toggled: false
+    property string pressedButtonImageUrl
+    property bool toggled: false
     property bool showNotification: false
 
     signal clicked
@@ -45,6 +45,16 @@ Item  {
 
         onClicked: {
             btnNotification.clicked();
+            if (!toggled)
+                toggled = true;   //stuckiness, not toggling button
         }
     }
+
+    states: [
+        State {
+            name: "toggled_on"
+            when: toggled
+            PropertyChanges { target: buttonImage; source: pressedButtonImageUrl }
+        }
+    ]
 }

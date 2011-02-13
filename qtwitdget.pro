@@ -122,4 +122,6 @@ OTHER_FILES += \
     qml/Main.qml \
     qml/AuthScreen.qml \
     qml/TimelinesScreen.qml \
-    qml/ButtonWithNotification.qml
+    qml/ButtonWithNotification.qml \
+    qml/ButtonImage.qml \
+    qml/ButtonText.qml

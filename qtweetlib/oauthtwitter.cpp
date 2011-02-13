@@ -74,8 +74,10 @@ void OAuthTwitter::authorizeXAuth(const QString &username, const QString &passwo
     Q_ASSERT(m_netManager != 0);
 
     QUrl url(TWITTER_ACCESS_TOKEN_XAUTH_URL);
-    url.addQueryItem("x_auth_username", username);
-    url.addQueryItem("x_auth_password", password);
+    //url.addQueryItem("x_auth_username", username);
+    url.addEncodedQueryItem("x_auth_username", QUrl::toPercentEncoding(username));
+    //url.addQueryItem("x_auth_password", password);
+    url.addEncodedQueryItem("x_auth_password", QUrl::toPercentEncoding(password));
     url.addQueryItem("x_auth_mode", "client_auth");
 
     QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);

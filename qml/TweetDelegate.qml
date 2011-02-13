@@ -18,12 +18,14 @@ Rectangle  {
 
     gradient: Gradient {
         GradientStop {
-            position: 0
-            color: "#FEFEFE"
+            id: firstGradientStop
+            position: 0     //0.3
+            color: "#FFFFFF"    //#FFD954
         }
         GradientStop {
+            id: secondGradientStop
             position: 1
-            color: "#DBDCDE"
+            color: "#D9D9D9"    //#FFB300
         }
     }
 
@@ -47,10 +49,11 @@ Rectangle  {
 
     Rectangle {
         id: avatarContainer
-        width: 61
+        width: 62
+        //width: 61
         height: 61
         color: "#b3b3b3"
-        radius: 6
+        radius: 5
         border.width: 2
         anchors.left: parent.left; anchors.leftMargin: 11
         anchors.top: parent.top; anchors.topMargin: 11
@@ -58,11 +61,35 @@ Rectangle  {
 
         Image {
             id: avatarImage
+            anchors.bottomMargin: 7
+            anchors.rightMargin: 7
+            anchors.leftMargin: 6
+            anchors.topMargin: 6
+            anchors.fill: parent
 
-            width: 48; height: 48
-            anchors.centerIn: parent
             fillMode: Image.Stretch
             source: tweetAvatar
+        }
+    }
+
+    MouseArea {
+        id: moreMouseArea
+        width: 30
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+
+        //onClicked: console.log('more clicked')
+
+        Image {
+            id: rightArrow
+
+            height: 16
+            anchors.top: parent.top; anchors.topMargin: 14
+            anchors.right: parent.right; anchors.rightMargin: 9
+            anchors.left: parent.left; anchors.leftMargin: 10
+
+            source: "../images/right_arrow.png"
         }
     }
 
@@ -71,9 +98,8 @@ Rectangle  {
         color: "#333333"
         //text: addTags(tweetText)
         text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
-        anchors.topMargin: 11
-        anchors.top: parent.top
-        anchors.right: parent.right
+        anchors.top: parent.top;
+        anchors.right: moreMouseArea.left
         anchors.left: avatarContainer.right; anchors.leftMargin: 10
         textFormat: Text.RichText
         wrapMode: "WordWrap"
