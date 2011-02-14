@@ -25,7 +25,7 @@
 #include <QTimer>
 #include <QNetworkAccessManager>
 #include "shortenedurl.h"
-#include "mainwindow.h"
+//#include "mainwindow.h"
 
 /*!
     Constructor

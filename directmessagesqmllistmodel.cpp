@@ -21,10 +21,10 @@
 #include <QtDebug>
 #include <QSqlQuery>
 #include <QDateTime>
-#include "qtweetdirectmessages.h"
+#include "qtweetlib/qtweetdirectmessages.h"
 #include "directmessagesqmllistmodel.h"
-#include "qtweetdmstatus.h"
-#include "qtweetuser.h"
+#include "qtweetlib/qtweetdmstatus.h"
+#include "qtweetlib/qtweetuser.h"
 
 const int maxTweetsPerView = 200;
 

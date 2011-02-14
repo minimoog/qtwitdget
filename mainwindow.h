@@ -1,5 +1,5 @@
-/* Copyright (c) 2009, Antonie Jovanoski
- *	
+/* Copyright (c) 2010, Antonie Jovanoski
+ *
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,39 +17,35 @@
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
- 
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QSqlDatabase>
 #include <QSystemTrayIcon>
-#include <QtSql>
-#include "ui_mainwindowform.h"
+#include "qmlapplicationviewer.h"
 
-class TweetListModel;
 class QNetworkAccessManager;
-class QTimer;
+class NetworkAccessManagerFactory;
 class OAuthTwitter;
 class QTweetUserStream;
 class QTweetUser;
-class QTweetStatus;
 class QTweetDMStatus;
+class QTweetStatus;
 class TweetQmlListModel;
 class MentionsQmlListModel;
 class DirectMessagesQmlListModel;
-class NetworkAccessManagerFactory;
+class QMenu;
 
-class MainWindow : public QMainWindow
+class MainWindow : public QmlApplicationViewer
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-    MainWindow();
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
     void startUp();
 
-Q_INVOKABLE void authorize(const QString& username, const QString& password);
-Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
+    Q_INVOKABLE void authorize(const QString& username, const QString& password);
+    Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
 
 private slots:
     void authorizationFinished();
@@ -72,8 +68,6 @@ private:
     void readSettings();
     void writeSettings();
 
-    Ui::MainWindowForm ui;
-
     QNetworkAccessManager *m_netManager;
     NetworkAccessManagerFactory *m_namFactory;
     OAuthTwitter *m_oauthTwitter;
@@ -91,4 +85,4 @@ private:
     QMenu *m_trayIconMenu;
 };
 
-#endif //MAINWINDOW_H
+#endif // MAINWINDOW_H

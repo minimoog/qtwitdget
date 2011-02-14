@@ -5,6 +5,9 @@
 import QtQuick 1.0
 
 Item {
+    width: 360
+    height: 640
+
     property bool authed: true
 
     id: mainview
@@ -55,3 +58,4 @@ Item {
         }
     ]
 }
+

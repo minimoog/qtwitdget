@@ -30,8 +30,8 @@ Item {
             width: 77; height: 77
             anchors.left: parent.left; anchors.leftMargin: 10
             anchors.top: parent.top; anchors.topMargin: 9
-            buttonImageUrl:  "../images/hometimeline.png"
-            pressedButtonImageUrl: "../images/hometimeline_pressed.png"
+            buttonImageUrl:  "images/hometimeline.png"
+            pressedButtonImageUrl: "images/hometimeline_pressed.png"
             showNotification: homeTimelineModel.numNewTweets
 
             onClicked: {
@@ -48,8 +48,8 @@ Item {
             width: 77; height: 77
             anchors.top: parent.top; anchors.topMargin: 9
             anchors.left: htButton.right; anchors.leftMargin: 11
-            buttonImageUrl: "../images/replies.png"
-            pressedButtonImageUrl: "../images/hometimeline_pressed.png"
+            buttonImageUrl: "images/replies.png"
+            pressedButtonImageUrl: "images/replies_pressed.png"
             showNotification: mentionsModel.numNewTweets
 
             onClicked: {
@@ -66,8 +66,8 @@ Item {
             width: 77; height: 77
             anchors.top: parent.top; anchors.topMargin: 9
             anchors.left: mentionsButton.right; anchors.leftMargin: 11
-            buttonImageUrl: "../images/directmessages.png"
-            pressedButtonImageUrl: "../images/directmessages_pressed.png"
+            buttonImageUrl: "images/directmessages.png"
+            pressedButtonImageUrl: "images/directmessages_pressed.png"
             //showNotification: mentionsModel.numNewTweets
 
             onClicked: {
@@ -84,8 +84,8 @@ Item {
             width: 77; height: 77
             anchors.top: parent.top; anchors.topMargin: 9
             anchors.left: directMessagesButton.right; anchors.leftMargin: 11
-            buttonImageUrl: "../images/search.png"
-            pressedButtonImageUrl: "../images/search_pressed.png"
+            buttonImageUrl: "images/search.png"
+            pressedButtonImageUrl: "images/search_pressed.png"
             //showNotification: mentionsModel.numNewTweets
 
             onClicked: {
@@ -124,8 +124,8 @@ Item {
             anchors.left: parent.left; anchors.leftMargin: 10
             width: 39; height: 39
 
-            buttonImageUrl: "../images/statusupdate.png"
-            pressedButtonImageUrl: "../images/statusupdate_pressed.png"
+            buttonImageUrl: "images/statusupdate.png"
+            pressedButtonImageUrl: "images/statusupdate_pressed.png"
         }
 
         ButtonImage {
@@ -135,8 +135,8 @@ Item {
             anchors.left: statusUpdateButton.right; anchors.leftMargin: 9
             width: 39; height: 39
 
-            buttonImageUrl: "../images/reload.png"
-            pressedButtonImageUrl: "../images/reload_pressed.png"
+            buttonImageUrl: "images/reload.png"
+            pressedButtonImageUrl: "images/reload_pressed.png"
         }
 
         ButtonText {
@@ -146,8 +146,8 @@ Item {
             anchors.left: reloadButton.right; anchors.leftMargin: 10
             width: 145; height: 39
 
-            buttonImageUrl: "../images/username.png"
-            pressedButtonImageUrl: "../images/username_pressed.png"
+            buttonImageUrl: "images/username.png"
+            pressedButtonImageUrl: "images/username_pressed.png"
             text: "@minimoog77" //test
         }
 
@@ -158,8 +158,8 @@ Item {
             anchors.left: usernameButton.right; anchors.leftMargin: 10
             width: 39; height: 39
 
-            buttonImageUrl: "../images/settings.png"
-            pressedButtonImageUrl: "../images/settings_pressed.png"
+            buttonImageUrl: "images/settings.png"
+            pressedButtonImageUrl: "images/settings_pressed.png"
         }
 
         ButtonImage {
@@ -169,8 +169,8 @@ Item {
             anchors.left: settingsButton.right; anchors.leftMargin: 10
             width: 39; height: 39
 
-            buttonImageUrl: "../images/close.png"
-            pressedButtonImageUrl: "../images/close_pressed.png"
+            buttonImageUrl: "images/close.png"
+            pressedButtonImageUrl: "images/close_pressed.png"
 
             onClicked: Qt.quit()
         }

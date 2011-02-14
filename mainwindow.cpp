@@ -1,5 +1,5 @@
-/* Copyright (c) 2009, Antonie Jovanoski
- *	
+/* Copyright (c) 2010, Antonie Jovanoski
+ *
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,41 +18,41 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include "mainwindow.h"
 #include <QtDebug>
-#include <QDesktopServices>
 #include <QNetworkAccessManager>
-#include <QTimer>
-#include <QDeclarativeView>
+#include <QSettings>
+#include <QGraphicsObject>
+#include <QMenu>
+#include <QCloseEvent>
+#include <QDesktopServices>
+#include <QDir>
+#include <QSqlQuery>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
-#include <QGraphicsObject>
-#include <QCloseEvent>
-#include <QMenu>
-#include "mainwindow.h"
-#include "shortenedurl.h"
+#include <QApplication>
+#include "networkaccessmanagerfactory.h"
+#include "qtweetlib/oauthtwitter.h"
+#include "qtweetlib/qtweetuserstream.h"
+#include "qtweetlib/qtweetaccountverifycredentials.h"
+#include "qtweetlib/qtweetdirectmessagenew.h"
+#include "qtweetlib/qtweetstatusupdate.h"
+#include "qtweetlib/qtweetuser.h"
+#include "qtweetlib/qtweetdmstatus.h"
+#include "qtweetlib/qtweetstatus.h"
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"
 #include "directmessagesqmllistmodel.h"
-#include "qtweetstatusupdate.h"
-#include "qtweetuser.h"
-#include "qtweetstatus.h"
-#include "qtweetdmstatus.h"
-#include "qtweetaccountverifycredentials.h"
-#include "qtweetdirectmessagenew.h"
-#include "qtweetuserstream.h"
-#include "networkaccessmanagerfactory.h"
 
-MainWindow::MainWindow()
-:   m_netManager(new QNetworkAccessManager(this)),
+MainWindow::MainWindow(QWidget *parent) :
+    QmlApplicationViewer(parent),
+    m_netManager(new QNetworkAccessManager(this)),
     m_namFactory(new NetworkAccessManagerFactory),
     m_oauthTwitter(new OAuthTwitter(this)),
     m_userStream(new QTweetUserStream(this))
 {
     m_oauthTwitter->setNetworkAccessManager(m_netManager);
-
     m_userStream->setOAuthTwitter(m_oauthTwitter);
-
-    ui.setupUi(this);
 
     qApp->setOrganizationName("QTwitdget");
 
@@ -119,7 +119,7 @@ void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
 
 void MainWindow::changeUserPass()
 {
-    QGraphicsObject *obj = ui.declarativeView->rootObject();
+    QGraphicsObject *obj = rootObject();
     obj->setProperty("authed", false);
 }
 
@@ -139,7 +139,7 @@ void MainWindow::startUp()
         createDatabase(QString::number(m_userId));
 
         //show/animate tweets list page
-        QGraphicsObject *obj = ui.declarativeView->rootObject();
+        QGraphicsObject *obj = rootObject();
         obj->setProperty("authed", true);
 
         //set user id in the models
@@ -214,37 +214,37 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 
 void MainWindow::setupTrayIcon()
 {
-    connect(ui.actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    //connect(ui.actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-    m_trayIconMenu = new QMenu(this);
-    m_trayIconMenu->addAction(ui.actionMinimize);
-    m_trayIconMenu->addAction(ui.actionRestore);
-    m_trayIconMenu->addSeparator();
-    m_trayIconMenu->addAction(ui.actionQuit);
+//    m_trayIconMenu = new QMenu(this);
+//    m_trayIconMenu->addAction(ui.actionMinimize);
+//    m_trayIconMenu->addAction(ui.actionRestore);
+//    m_trayIconMenu->addSeparator();
+//    m_trayIconMenu->addAction(ui.actionQuit);
 
-    m_trayIcon = new QSystemTrayIcon(this);
-    m_trayIcon->setIcon(QIcon(":/images/qtwidget_icon.ico"));
-    m_trayIcon->setContextMenu(m_trayIconMenu);
-    m_trayIcon->show();
+//    m_trayIcon = new QSystemTrayIcon(this);
+//    m_trayIcon->setIcon(QIcon(":/images/qtwidget_icon.ico"));
+//    m_trayIcon->setContextMenu(m_trayIconMenu);
+//    m_trayIcon->show();
 
-    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+//    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+//            SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch(reason){
-            case QSystemTrayIcon::Trigger:
-            case QSystemTrayIcon::DoubleClick:
-                if (isHidden() || isMinimized()) {
-                    showNormal();
-                    activateWindow();
-                }
-                else
-                    showMinimized();
-                            break;
-                    default:
-                            ;
+        case QSystemTrayIcon::Trigger:
+        case QSystemTrayIcon::DoubleClick:
+            if (isHidden() || isMinimized()) {
+                showNormal();
+                activateWindow();
+            }
+            else
+                showMinimized();
+                        break;
+                default:
+                        ;
     }
 }
 
@@ -257,10 +257,10 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::changeEvent(QEvent *e)
 {
-    if(e->type() == QEvent::LanguageChange)
-            ui.retranslateUi(this);
+//    if(e->type() == QEvent::LanguageChange)
+//           // ui.retranslateUi(this);
 
-    QMainWindow::changeEvent(e);
+//    QMainWindow::changeEvent(e);
 }
 
 void MainWindow::createDatabase(const QString& databaseName)
@@ -299,7 +299,7 @@ void MainWindow::createDatabase(const QString& databaseName)
                 "mention INTEGER, "
                 "isRead INTEGER, "
                 "UNIQUE (id));");
-				
+
     query.exec("CREATE TABLE IF NOT EXISTS directmessages "
                "(key INTEGER PRIMARY KEY, "
                "id INTEGER, "
@@ -347,16 +347,17 @@ void MainWindow::createDeclarativeView()
     connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
             m_directMessagesListModel, SLOT(onDirectMessageStream(QTweetDMStatus)));
 
-    ui.declarativeView->rootContext()->setContextProperty("hometimelineListModel", m_tweetListModel);
-    ui.declarativeView->rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
-    ui.declarativeView->rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
-    ui.declarativeView->rootContext()->setContextProperty("viewWidth", 500);
-    ui.declarativeView->rootContext()->setContextProperty("rootWindow", this);
+    rootContext()->setContextProperty("hometimelineListModel", m_tweetListModel);
+    rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
+    rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
+    rootContext()->setContextProperty("viewWidth", 500);
+    rootContext()->setContextProperty("rootWindow", this);
 
-    ui.declarativeView->setSource(QUrl::fromLocalFile("qml/Main.qml"));
+    //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));
+    setMainQmlFile(QLatin1String("qml/QTwitdget/Main.qml"));
 
     //set NAM cacher
-    ui.declarativeView->engine()->setNetworkAccessManagerFactory(m_namFactory);
+    engine()->setNetworkAccessManagerFactory(m_namFactory);
 }
 
 void MainWindow::readSettings()
@@ -373,9 +374,4 @@ void MainWindow::writeSettings()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
-}
-
-MainWindow::~MainWindow()
-{
-
 }

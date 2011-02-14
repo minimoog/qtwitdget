@@ -21,14 +21,14 @@
 #include <QtDebug>
 #include <QSqlQuery>
 #include <QDateTime>
-#include "oauthtwitter.h"
-#include "qtweetstatus.h"
-#include "qtweetuser.h"
-#include "qtweetstatusdestroy.h"
+#include "qtweetlib/oauthtwitter.h"
+#include "qtweetlib/qtweetstatus.h"
+#include "qtweetlib/qtweetuser.h"
+#include "qtweetlib/qtweetstatusdestroy.h"
 #include "tweetqmllistmodel.h"
-#include "qtweetentityurl.h"
-#include "qtweetentityusermentions.h"
-#include "qtweetentityhashtag.h"
+#include "qtweetlib/qtweetentityurl.h"
+#include "qtweetlib/qtweetentityusermentions.h"
+#include "qtweetlib/qtweetentityhashtag.h"
 
 const int maxTweetsPerView = 200;
 

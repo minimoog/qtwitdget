@@ -16,7 +16,7 @@ Item {
         border.top: 4
         border.bottom: 4
         border.right: 15
-        source: "../images/test_toolbutton.png"
+        source: "images/test_toolbutton.png"
     }
 
     BorderImage {
@@ -28,7 +28,7 @@ Item {
         border.bottom: 4
         border.right: 15
         opacity: 0
-        source: "../images/test_toolbutton.png"
+        source: "images/test_toolbutton.png"
     }
 
     MouseArea {

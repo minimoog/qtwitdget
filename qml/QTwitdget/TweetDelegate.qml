@@ -89,7 +89,7 @@ Rectangle  {
             anchors.right: parent.right; anchors.rightMargin: 9
             anchors.left: parent.left; anchors.leftMargin: 10
 
-            source: "../images/right_arrow.png"
+            source: "images/right_arrow.png"
         }
     }
 

@@ -21,10 +21,10 @@
 #include <QtDebug>
 #include <QSqlQuery>
 #include <QDateTime>
-#include "qtweetstatusdestroy.h"
-#include "qtweetstatus.h"
-#include "qtweetuser.h"
-#include "qtweetentityusermentions.h"
+#include "qtweetlib/qtweetstatusdestroy.h"
+#include "qtweetlib/qtweetstatus.h"
+#include "qtweetlib/qtweetuser.h"
+#include "qtweetlib/qtweetentityusermentions.h"
 #include "mentionsqmllistmodel.h"
 
 MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :

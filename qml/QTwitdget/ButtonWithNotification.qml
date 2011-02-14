@@ -21,7 +21,7 @@ Item  {
             opacity: 0
             anchors.top: parent.top
             anchors.right: parent.right
-            source:  "../images/red_marker.png"
+            source:  "images/red_marker.png"
 
             states: [
                 State {
