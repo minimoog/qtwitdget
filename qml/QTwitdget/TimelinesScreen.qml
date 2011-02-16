@@ -3,6 +3,7 @@ import QtQuick 1.0
 Item {
     property alias homeTimelineModel: homeTimelineList.model
     property alias mentionsModel: mentionsList.model
+    property alias directMessagesModel: dmList.model
 
     id: timelines
 
@@ -71,8 +72,9 @@ Item {
             //showNotification: mentionsModel.numNewTweets
 
             onClicked: {
-            //    mentionsModel.showNewTweets();
-            //    timelines.state = "mentions"
+                //mentionsModel.showNewTweets();
+                dmList.model.showNewTweets();
+                timelines.state = "directMessages"
                 htButton.toggled = false;
                 mentionsButton.toggled = false;
                 searchButton.toggled = false;
@@ -192,6 +194,17 @@ Item {
         opacity: 0
     }
 
+    TweetList {
+        id: dmList
+        x: 2 * parent.width
+        width:  parent.width
+        anchors.bottom: bottomToolbar.top
+        anchors.top: topToolbar.bottom
+        opacity: 0
+    }
+
+    //need some work
+
     states: [
         State {
             name: "mentions"
@@ -199,6 +212,18 @@ Item {
             PropertyChanges { target: mentionsList; x: 0 }
             PropertyChanges { target: homeTimelineList; opacity: 0 }
             PropertyChanges { target: homeTimelineList; x: - parent.width }
+            PropertyChanges { target: dmList; x: parent.width }
+            PropertyChanges { target: dmList; opacity: 0 }
+        },
+
+        State {
+            name: "directMessages"
+            PropertyChanges { target: dmList; opacity: 1 }
+            PropertyChanges { target: mentionsList; opacity: 0 }
+            PropertyChanges { target: homeTimelineList; opacity: 0 }
+            PropertyChanges { target: dmList; x: 0 }
+            PropertyChanges { target: mentionsList; x: - parent.width }
+            PropertyChanges { target: homeTimelineList; x: - 2 * parent.width }
         }
     ]
 

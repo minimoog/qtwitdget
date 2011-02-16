@@ -1,5 +1,6 @@
 //hometimelineListModel - external
 //mentionsListModel - external
+//directMessagesListModel - external
 //rootWindow - external
 
 import QtQuick 1.0
@@ -32,6 +33,7 @@ Item {
 
         homeTimelineModel: hometimelineListModel
         mentionsModel: mentionsListModel
+        directMessagesModel: directMessagesListModel
     }
 
     states: [
