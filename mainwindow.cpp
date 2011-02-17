@@ -148,9 +148,12 @@ void MainWindow::startUp()
         m_directMessagesListModel->setUserID(m_userId);
 
         //show last tweets from database
-        m_tweetListModel->loadTweetsFromDatabase();
-        m_mentionsListModel->loadTweetsFromDatabase();
-        m_directMessagesListModel->loadTweetsFromDatabase();
+        //m_tweetListModel->loadTweetsFromDatabase();
+        m_tweetListModel->fetchLastTweets();
+        //m_mentionsListModel->loadTweetsFromDatabase();
+        m_mentionsListModel->fetchLastTweets();
+        //m_directMessagesListModel->loadTweetsFromDatabase();
+        m_directMessagesListModel->fetchLastTweets();
 
         m_userStream->startFetching();
 
@@ -343,7 +346,7 @@ void MainWindow::createDeclarativeView()
     connect(m_userStream, SIGNAL(deleteStatusStream(qint64,qint64)),
             m_mentionsListModel, SLOT(onDeleteStatusStream(qint64,qint64)));
 
-    m_directMessagesListModel = new DirectMessagesQmlListModel();
+    m_directMessagesListModel = new DirectMessagesQmlListModel(m_oauthTwitter);
     connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
             m_directMessagesListModel, SLOT(onDirectMessageStream(QTweetDMStatus)));
 

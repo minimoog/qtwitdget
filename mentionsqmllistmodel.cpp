@@ -25,6 +25,7 @@
 #include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetuser.h"
 #include "qtweetlib/qtweetentityusermentions.h"
+#include "qtweetlib/qtweetmentions.h"
 #include "mentionsqmllistmodel.h"
 
 MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
@@ -112,3 +113,51 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
     }
 }
 
+void MentionsQmlListModel::fetchLastTweets()
+{
+    QTweetMentions *mentions = new QTweetMentions(m_oauthTwitter);
+
+    mentions->fetch(0, 0, 200);
+
+    connect(mentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
+            this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
+}
+
+void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
+{
+    QTweetMentions *mentions = qobject_cast<QTweetMentions*>(sender());
+
+    if (mentions) {
+        if (!statuses.isEmpty()) {
+            qDebug() << "Fetch mentions: " << statuses.count();
+
+            QSqlQuery query;
+
+            query.exec("BEGIN;");
+            query.prepare("INSERT OR REPLACE INTO status "
+                          "(id, text, screenName, profileImageUrl, userId, mention, created) "
+                          "VALUES "
+                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created);");
+
+            QListIterator<QTweetStatus> i(statuses);
+            i.toBack();
+            while (i.hasPrevious()) {
+                QTweetStatus s = i.previous();
+                query.bindValue(":id", s.id());
+                query.bindValue(":text", s.text());
+                //query.bindValue(":replyToStatusId", s.replyToStatusId());
+                //query.bindValue(":replyToUserId", s.replyToUserId());
+                //query.bindValue(":replyToScreenName", s.replyToScreenName());
+                query.bindValue(":userId", s.user().id());
+                query.bindValue(":screenName", s.user().screenName());
+                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
+                query.bindValue(":mention", 1);
+                query.bindValue(":created", s.createdAt());
+                query.exec();
+            }
+            query.exec("COMMIT;");
+        }
+        mentions->deleteLater();
+    }
+    loadTweetsFromDatabase();
+}

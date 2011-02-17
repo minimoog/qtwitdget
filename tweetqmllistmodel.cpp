@@ -29,6 +29,7 @@
 #include "qtweetlib/qtweetentityurl.h"
 #include "qtweetlib/qtweetentityusermentions.h"
 #include "qtweetlib/qtweetentityhashtag.h"
+#include "qtweetlib/qtweethometimeline.h"
 
 const int maxTweetsPerView = 200;
 
@@ -320,6 +321,58 @@ void TweetQmlListModel::loadTweetsFromDatabase()
 
         endInsertRows();
     }
+}
+
+void TweetQmlListModel::fetchLastTweets()
+{
+    QTweetHomeTimeline *homeTimeline = new QTweetHomeTimeline(m_oauthTwitter);
+
+    homeTimeline->fetch(0, 0, 200);
+    // ### TODO fetch from last sinceid
+
+    connect(homeTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
+            this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
+}
+
+void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
+{
+    QTweetHomeTimeline *homeTimeline = qobject_cast<QTweetHomeTimeline*>(sender());
+
+    if (homeTimeline) {
+        //just dump to database, database will be again read in loadTweetsFromDatabase()
+        //### TODO Reconsider fixing
+
+        if (!statuses.isEmpty()) {
+            qDebug() << "New statuses: " << statuses.count();
+            QSqlQuery query;
+
+            query.exec("BEGIN;");
+            query.prepare("INSERT OR ABORT INTO status "
+                          "(id, text, screenName, profileImageUrl, userId, created) "
+                          "VALUES "
+                          "(:id, :text, :screenName, :profileImageUrl, :userId, :created);");
+
+            QListIterator<QTweetStatus> i(statuses);
+            i.toBack();
+            while (i.hasPrevious()) {
+                QTweetStatus s = i.previous();
+                query.bindValue(":id", s.id());
+                query.bindValue(":text", s.text());
+                //query.bindValue(":replyToStatusId", s.replyToStatusId());
+                //query.bindValue(":replyToUserId", s.replyToUserId());
+                //query.bindValue(":replyToScreenName", s.replyToScreenName());
+                query.bindValue(":userId", s.user().id());
+                query.bindValue(":screenName", s.user().screenName());
+                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
+                query.bindValue(":created", s.createdAt());
+                query.exec();
+            }
+            query.exec("COMMIT;");
+        }
+        homeTimeline->deleteLater();
+    }
+    //now load them from database
+    loadTweetsFromDatabase();
 }
 
 TweetQmlListModel::~TweetQmlListModel()

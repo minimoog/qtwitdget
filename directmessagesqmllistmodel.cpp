@@ -63,10 +63,33 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     setRoleNames(roles);
 }
 
+DirectMessagesQmlListModel::DirectMessagesQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
+    QAbstractListModel(parent),
+    m_numNewDirectMessages(0),
+    m_numUnreadDirectMessages(0)
+{
+    QHash<int, QByteArray> roles;
+    roles[ScreenNameRole] = "screenNameRole";
+    roles[StatusTextRole] = "statusTextRole";
+    roles[AvatarUrlRole] = "avatarUrlRole";
+    roles[StatusIdRole] = "statusIdRole";
+    roles[OwnTweetRole] = "ownTweetRole";
+    roles[NewTweetRole] = "newTweetRole";
+    roles[SinceTimeRole] = "sinceTimeRole";
+    setRoleNames(roles);
+
+    m_oauthTwitter = oauthTwitter;
+}
+
 int DirectMessagesQmlListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_directMessages.count();
+}
+
+void DirectMessagesQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
+{
+    m_oauthTwitter = oauthTwitter;
 }
 
 QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) const
@@ -225,3 +248,43 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
     }
 }
 
+void DirectMessagesQmlListModel::fetchLastTweets()
+{
+    QTweetDirectMessages *directMessages = new QTweetDirectMessages(m_oauthTwitter);
+    directMessages->fetch(0, 0, 200);
+
+    connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
+            this, SLOT(finishedFetchDirectMessages(QList<QTweetDMStatus>)));
+}
+
+void DirectMessagesQmlListModel::finishedFetchDirectMessages(const QList<QTweetDMStatus> &dmStatuses)
+{
+    QTweetDirectMessages *directMessages = qobject_cast<QTweetDirectMessages*>(sender());
+    if (directMessages) {
+        if (!dmStatuses.isEmpty()) {
+            QSqlQuery query;
+
+            query.exec("BEGIN;");
+            query.prepare("INSERT OR REPLACE INTO directmessages "
+                          "(id, senderId, text, created, senderScreenName, senderProfileImageUrl) "
+                          "VALUES "
+                          "(:id, :senderId, :text, :created, :senderScreenName,:senderProfileImageUrl);");
+
+            QListIterator<QTweetDMStatus> i(dmStatuses);
+            i.toBack();
+            while(i.hasPrevious()){
+                QTweetDMStatus s = i.previous();
+                query.bindValue(":id", s.id());
+                query.bindValue(":senderId", s.senderId());
+                query.bindValue(":text", s.text());
+                query.bindValue(":created", s.createdAt());
+                query.bindValue(":senderScreenName", s.senderScreenName());
+                query.bindValue(":senderProfileImageUrl", s.sender().profileImageUrl());
+                query.exec();
+            }
+            query.exec("COMMIT;");
+        }
+        directMessages->deleteLater();
+    }
+    loadTweetsFromDatabase();
+}

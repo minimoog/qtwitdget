@@ -13,19 +13,19 @@ Rectangle  {
 
     width: ListView.view.width;
     //width: 360;
-    height: (statusText.paintedHeight < 96) ? 96 : statusText.paintedHeight
-    //height: 116;
+    //height: (statusText.paintedHeight < 96) ? 96 : statusText.paintedHeight
+    height: 116;
 
     gradient: Gradient {
         GradientStop {
             id: firstGradientStop
-            position: 0     //0.3
-            color: "#FFFFFF"    //#FFD954
+            position: isNewTweet ? 0.3 : 0
+            color: isNewTweet ? "#FFD954" : "#FFFFFF"
         }
         GradientStop {
             id: secondGradientStop
             position: 1
-            color: "#D9D9D9"    //#FFB300
+            color: isNewTweet? "#FFB300": "#D9D9D9"
         }
     }
 
@@ -79,17 +79,16 @@ Rectangle  {
         anchors.bottom: parent.bottom
         anchors.top: parent.top
 
-        //onClicked: console.log('more clicked')
-
-        Image {
+        ButtonImage {
             id: rightArrow
+
+            buttonImageUrl: "images/right_arrow.png"
+            pressedButtonImageUrl: "images/right_arrow_pressed.png"
 
             height: 16
             anchors.top: parent.top; anchors.topMargin: 14
             anchors.right: parent.right; anchors.rightMargin: 9
             anchors.left: parent.left; anchors.leftMargin: 10
-
-            source: "images/right_arrow.png"
         }
     }
 
@@ -116,5 +115,17 @@ Rectangle  {
         anchors.top: avatarContainer.bottom
         font.family: "Segoe UI"
         font.pointSize: 7
+    }
+
+    ListView.onAdd: SequentialAnimation {
+        ParallelAnimation {
+            PropertyAction { target: container; property: "height"; value:  0 }
+            PropertyAction { target: container; property: "x"; value: container.width }
+            PropertyAction { target: container; property: "opacity"; value: 0 }
+        }
+        NumberAnimation { target: container; property: "height"; from: 0; to: 116; duration: 500 }
+        PropertyAction { target: container; property: "opacity"; value: 1 }
+        //PauseAnimation { duration: ListView.view.currentIndex * 100 }
+        NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
     }
 }

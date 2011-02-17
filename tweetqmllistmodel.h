@@ -56,7 +56,8 @@ public:
     void resetNumNewTweets();
 
     Q_INVOKABLE void showNewTweets();
-    virtual void loadTweetsFromDatabase();
+    virtual void fetchLastTweets();
+
 signals:
     void numNewTweetsChanged();
 
@@ -66,15 +67,18 @@ public slots:
 
 private slots:
     void finishedDestroyTweet(const QTweetStatus& status);
+    void finishedFetchTweets(const QList<QTweetStatus>& statuses);
 
 protected:
+    virtual void loadTweetsFromDatabase();
+
+    OAuthTwitter* m_oauthTwitter;
     QList<QTweetStatus> m_statuses;
     QList<QTweetStatus> m_newStatuses; //doesn't show in the model
     int m_numNewTweets;
     int m_numUnreadTweets;
 
 private:
-    OAuthTwitter* m_oauthTwitter;
     qint64 m_userid;
 };
 
