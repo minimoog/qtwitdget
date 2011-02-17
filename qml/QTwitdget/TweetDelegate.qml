@@ -39,13 +39,13 @@ Rectangle  {
         }
     }
 
-//    function addTags(str) {
-//        //surrounds http links with html link tags
-//        var ret1 = str.replace(/@[a-zA-Z0-9_]+/g, '<a href="mention://$&">$&</a>');
-//        var ret2 = ret1.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");
-//        var ret3 = ret2.replace(/[#]+[A-Za-z0-9-_]+/g, '<a href="tag://$&">$&</a>')
-//        return ret3;
-//    }
+    function addTags(str) {
+        //surrounds http links with html link tags
+        var ret1 = str.replace(/@[a-zA-Z0-9_]+/g, '<a href="mention://$&">$&</a>');
+        var ret2 = ret1.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");
+        var ret3 = ret2.replace(/[#]+[A-Za-z0-9-_]+/g, '<a href="tag://$&">$&</a>')
+        return ret3;
+    }
 
     Rectangle {
         id: avatarContainer
@@ -96,7 +96,7 @@ Rectangle  {
         id: statusText
         color: "#333333"
         //text: addTags(tweetText)
-        text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
+        text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
         anchors.top: parent.top;
         anchors.right: moreMouseArea.left
         anchors.left: avatarContainer.right; anchors.leftMargin: 10
