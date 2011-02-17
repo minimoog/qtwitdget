@@ -28,17 +28,36 @@
 #include "qtweetlib/qtweetmentions.h"
 #include "mentionsqmllistmodel.h"
 
+/**
+ * Constructor
+ * @param parent parent QObject
+ */
 MentionsQmlListModel::MentionsQmlListModel(QObject *parent) :
     TweetQmlListModel(parent)
 {
 }
 
+/**
+ *  Constructor
+ *  @param oauthTwitter oauth twitter authorization object
+ *  @param parent parent QObject
+ */
+MentionsQmlListModel::MentionsQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
+    TweetQmlListModel(oauthTwitter, parent)
+{
+
+}
+
+/**
+ * This slot is connected to user stream object.
+ * Called when new tweet arrives in the user stream
+ */
 void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
     QList<QTweetEntityUserMentions> entityUserMentions = status.userMentionsEntities();
 
     for (int i = 0; i < entityUserMentions.count(); ++i) {
-        if (entityUserMentions.at(i).userid() == userID()) {
+        if (entityUserMentions.at(i).userid() == userID()) {    //check if is mention
             QSqlQuery query;
 
             query.prepare("INSERT OR REPLACE INTO status "
@@ -63,6 +82,10 @@ void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
     }
 }
 
+/**
+ *  Load last 100 tweets mentions from database
+ *  @reimp
+ */
 void MentionsQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;
@@ -113,6 +136,11 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
     }
 }
 
+/**
+ *  Fetches last 200 mentions.
+ *  Called at the startup of application
+ *  @reimp
+ */
 void MentionsQmlListModel::fetchLastTweets()
 {
     QTweetMentions *mentions = new QTweetMentions(m_oauthTwitter);
@@ -123,6 +151,9 @@ void MentionsQmlListModel::fetchLastTweets()
             this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
 }
 
+/**
+ *  This slot is called when fetching mentions is finished (see fetchLastTweets())
+ */
 void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
 {
     QTweetMentions *mentions = qobject_cast<QTweetMentions*>(sender());

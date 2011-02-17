@@ -25,11 +25,15 @@
 
 class QTweetStatus;
 
+/**
+ * List model for mentions timeline
+ */
 class MentionsQmlListModel : public TweetQmlListModel
 {
     Q_OBJECT
 public:
     MentionsQmlListModel(QObject *parent = 0);
+    MentionsQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent = 0);
     void fetchLastTweets();
 
 protected:
