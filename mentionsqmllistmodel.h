@@ -44,6 +44,7 @@ public slots:
 
 private slots:
     void finishedFetchTweets(const QList<QTweetStatus>& statuses);
+    void errorFetchingTweets();
 };
 
 #endif // MENTIONSQMLLISTMODEL_H

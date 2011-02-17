@@ -255,6 +255,8 @@ void DirectMessagesQmlListModel::fetchLastTweets()
 
     connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
             this, SLOT(finishedFetchDirectMessages(QList<QTweetDMStatus>)));
+    connect(directMessages, SIGNAL(error(ErrorCode,QString)),
+            this, SLOT(errorFetchingDirectMessages()));
 }
 
 void DirectMessagesQmlListModel::finishedFetchDirectMessages(const QList<QTweetDMStatus> &dmStatuses)
@@ -286,5 +288,15 @@ void DirectMessagesQmlListModel::finishedFetchDirectMessages(const QList<QTweetD
         }
         directMessages->deleteLater();
     }
+    loadTweetsFromDatabase();
+}
+
+void DirectMessagesQmlListModel::errorFetchingDirectMessages()
+{
+    QTweetDirectMessages *directMessages = qobject_cast<QTweetDirectMessages*>(sender());
+
+    if (directMessages)
+        directMessages->deleteLater();
+
     loadTweetsFromDatabase();
 }

@@ -73,6 +73,7 @@ public slots:
 private slots:
     void finishedDestroyTweet(const QTweetStatus& status);
     void finishedFetchTweets(const QList<QTweetStatus>& statuses);
+    void errorFetchingTweets();
 
 protected:
     virtual void loadTweetsFromDatabase();

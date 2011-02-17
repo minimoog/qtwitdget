@@ -65,6 +65,7 @@ public slots:
 
 private slots:
     void finishedFetchDirectMessages(const QList<QTweetDMStatus>& directMessages);
+    void errorFetchingDirectMessages();
 
 signals:
     void numNewDirectMessagesChanged();

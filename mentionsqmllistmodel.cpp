@@ -149,6 +149,8 @@ void MentionsQmlListModel::fetchLastTweets()
 
     connect(mentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
             this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
+    connect(mentions, SIGNAL(error(ErrorCode,QString)),
+            this, SLOT(errorFetchingTweets()));
 }
 
 /**
@@ -190,5 +192,18 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
         }
         mentions->deleteLater();
     }
+    loadTweetsFromDatabase();
+}
+
+/**
+ *  Called when there is error fetching tweets (see fetchLastTweets())
+ */
+void MentionsQmlListModel::errorFetchingTweets()
+{
+    QTweetMentions *mentions = qobject_cast<QTweetMentions*>(sender());
+
+    if (mentions)
+        mentions->deleteLater();
+
     loadTweetsFromDatabase();
 }

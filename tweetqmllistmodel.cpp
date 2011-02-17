@@ -388,6 +388,8 @@ void TweetQmlListModel::fetchLastTweets()
 
     connect(homeTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
             this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
+    connect(homeTimeline, SIGNAL(error(ErrorCode,QString)),
+            this, SLOT(errorFetchingTweets()));
 }
 
 /**
@@ -431,6 +433,20 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
         homeTimeline->deleteLater();
     }
     //now load them from database
+    loadTweetsFromDatabase();
+}
+
+/**
+ *  Called when there is error fetching tweets (see fetchLastTweets())
+ */
+void TweetQmlListModel::errorFetchingTweets()
+{
+    QTweetHomeTimeline *homeTimeline = qobject_cast<QTweetHomeTimeline*>(sender());
+
+    if (homeTimeline)
+        homeTimeline->deleteLater();
+
+    //on error just load tweets from database
     loadTweetsFromDatabase();
 }
 
