@@ -52,6 +52,10 @@ static QString SinceTimeString(const QDateTime& from)
     return QString("%1 days ago").arg(passedSeconds / 86400);
 }
 
+/**
+ *  Constructor
+ *  @param parent parent QObject
+ */
 TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewTweets(0),
@@ -68,6 +72,11 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     setRoleNames(roles);
 }
 
+/**
+ *  Constructor
+ *  @param oauthTwitter oauth twitter authorization object
+ *  @param parent parent QObject
+ */
 TweetQmlListModel::TweetQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
     QAbstractListModel(parent),
     m_numNewTweets(0),
@@ -86,17 +95,26 @@ TweetQmlListModel::TweetQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  Sets oauth twitter authorization object
+ */
 void TweetQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 {
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  @reimp
+ */
 int TweetQmlListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_statuses.count();
 }
 
+/**
+ *  @reimp
+ */
 QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() > m_statuses.count())
@@ -128,16 +146,26 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/**
+ *  Sets userid. Used to determine if tweet is user written
+ */
 void TweetQmlListModel::setUserID(qint64 userid)
 {
     m_userid = userid;
 }
 
+/**
+ *  Returns userid
+ */
 qint64 TweetQmlListModel::userID() const
 {
     return m_userid;
 }
 
+/**
+ *  Destroys tweet
+ *  @param tweetid id number in string of what tweet to be destroyed
+ */
 void TweetQmlListModel::destroyTweet(const QString &tweetid)
 {
     qDebug() << "Destroing tweet: " << tweetid;
@@ -154,6 +182,9 @@ void TweetQmlListModel::destroyTweet(const QString &tweetid)
     }
 }
 
+/**
+ *  Called when Twitter API destroys the tweet
+ */
 void TweetQmlListModel::finishedDestroyTweet(const QTweetStatus& status)
 {
     qDebug() << "Finished destroying: " << status.id();
@@ -181,16 +212,26 @@ void TweetQmlListModel::finishedDestroyTweet(const QTweetStatus& status)
     }
 }
 
+/**
+ *  Return number of new tweets
+ */
 int TweetQmlListModel::numNewTweets() const
 {
     return m_numNewTweets;
 }
 
+/**
+ *  Resets the number of new tweets (0)
+ */
 void TweetQmlListModel::resetNumNewTweets()
 {
     m_numNewTweets = 0;
 }
 
+/**
+ *  Puts (shows) the new tweets in the model.
+ *  This is called when user clicks on hometimeline button to see the new arrived tweets
+ */
 void TweetQmlListModel::showNewTweets()
 {
     if (m_newStatuses.count()) {
@@ -230,6 +271,10 @@ void TweetQmlListModel::showNewTweets()
     }
 }
 
+/**
+ *  This slot is called from user stream object when new tweet arrives
+ *  New tweets are not put to the model, only after user wants to see them
+ */
 void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
     QSqlQuery query;
@@ -252,6 +297,9 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     emit numNewTweetsChanged();
 }
 
+/**
+ * This slot is called from user stream object when tweet is deleted
+ */
 void TweetQmlListModel::onDeleteStatusStream(qint64 id, qint64 userid)
 {
     qDebug() << "Removing tweet id: " << id;
@@ -274,6 +322,10 @@ void TweetQmlListModel::onDeleteStatusStream(qint64 id, qint64 userid)
     }
 }
 
+/**
+ *  Loads 100 last tweets from database
+ *  Called at start of application
+ */
 void TweetQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;
@@ -323,6 +375,10 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     }
 }
 
+/**
+ *  Fetches last 200 tweets
+ *  Called at the start of application
+ */
 void TweetQmlListModel::fetchLastTweets()
 {
     QTweetHomeTimeline *homeTimeline = new QTweetHomeTimeline(m_oauthTwitter);
@@ -334,6 +390,9 @@ void TweetQmlListModel::fetchLastTweets()
             this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
 }
 
+/**
+ *  This slot is called when fetching tweets is finished (see fetchLastTweets())
+ */
 void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
 {
     QTweetHomeTimeline *homeTimeline = qobject_cast<QTweetHomeTimeline*>(sender());
@@ -375,6 +434,9 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
     loadTweetsFromDatabase();
 }
 
+/**
+ * Destructor
+ */
 TweetQmlListModel::~TweetQmlListModel()
 {
 }

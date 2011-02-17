@@ -27,11 +27,15 @@ class QTweetStatus;
 class QTweetNetBase;
 class OAuthTwitter;
 
+/**
+ *  List model for hometimeline tweets
+ */
 class TweetQmlListModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int numNewTweets READ numNewTweets RESET resetNumNewTweets NOTIFY numNewTweetsChanged)
 public:
+    /** Delegate roles */
     enum TweetRoles {
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
@@ -59,6 +63,7 @@ public:
     virtual void fetchLastTweets();
 
 signals:
+    /** Emited when new tweets arived */
     void numNewTweetsChanged();
 
 public slots:
