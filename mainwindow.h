@@ -58,7 +58,7 @@ private slots:
 
 protected:
     void closeEvent(QCloseEvent *e);
-    void changeEvent(QEvent *e);
+    //void changeEvent(QEvent *e);
 
 private:
     void setupTrayIcon();

@@ -148,11 +148,8 @@ void MainWindow::startUp()
         m_directMessagesListModel->setUserID(m_userId);
 
         //show last tweets from database
-        //m_tweetListModel->loadTweetsFromDatabase();
         m_tweetListModel->fetchLastTweets();
-        //m_mentionsListModel->loadTweetsFromDatabase();
         m_mentionsListModel->fetchLastTweets();
-        //m_directMessagesListModel->loadTweetsFromDatabase();
         m_directMessagesListModel->fetchLastTweets();
 
         m_userStream->startFetching();
@@ -217,21 +214,29 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 
 void MainWindow::setupTrayIcon()
 {
-    //connect(ui.actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    QAction *actionMinimize = new QAction(this);
+    actionMinimize->setText(tr("Minimize"));
 
-//    m_trayIconMenu = new QMenu(this);
-//    m_trayIconMenu->addAction(ui.actionMinimize);
-//    m_trayIconMenu->addAction(ui.actionRestore);
-//    m_trayIconMenu->addSeparator();
-//    m_trayIconMenu->addAction(ui.actionQuit);
+    QAction *actionRestore = new QAction(this);
+    actionRestore->setText(tr("Restore"));
 
-//    m_trayIcon = new QSystemTrayIcon(this);
-//    m_trayIcon->setIcon(QIcon(":/images/qtwidget_icon.ico"));
-//    m_trayIcon->setContextMenu(m_trayIconMenu);
-//    m_trayIcon->show();
+    QAction *actionQuit = new QAction(this);
+    actionQuit->setText("Quit");
 
-//    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-//            SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    m_trayIconMenu = new QMenu(this);
+    m_trayIconMenu->addAction(actionMinimize);
+    m_trayIconMenu->addAction(actionRestore);
+    m_trayIconMenu->addSeparator();
+    m_trayIconMenu->addAction(actionQuit);
+
+    m_trayIcon = new QSystemTrayIcon(this);
+    m_trayIcon->setIcon(QIcon(":/qtwidget_icon.ico"));
+    m_trayIcon->setContextMenu(m_trayIconMenu);
+    m_trayIcon->show();
+
+    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -258,13 +263,13 @@ void MainWindow::closeEvent(QCloseEvent *e)
     e->ignore();
 }
 
-void MainWindow::changeEvent(QEvent *e)
-{
+//void MainWindow::changeEvent(QEvent *e)
+//{
 //    if(e->type() == QEvent::LanguageChange)
 //           // ui.retranslateUi(this);
 
 //    QMainWindow::changeEvent(e);
-}
+//}
 
 void MainWindow::createDatabase(const QString& databaseName)
 {

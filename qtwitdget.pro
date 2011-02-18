@@ -1,5 +1,8 @@
 QT += network sql
 
+RESOURCES = qtwitdget.qrc
+win32:RC_FILE = qtwitdget.rc
+
 # Add more folders to ship with the application, here
 folder_01.source = qml/QTwitdget
 folder_01.target = qml
