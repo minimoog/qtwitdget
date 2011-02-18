@@ -381,10 +381,16 @@ void TweetQmlListModel::loadTweetsFromDatabase()
  */
 void TweetQmlListModel::fetchLastTweets()
 {
-    QTweetHomeTimeline *homeTimeline = new QTweetHomeTimeline(m_oauthTwitter);
+    qint64 lastTweetID = 0;
 
-    homeTimeline->fetch(0, 0, 200);
-    // ### TODO fetch from last sinceid
+    QSqlQuery query;
+    query.exec("SELECT id FROM status ORDER BY id DESC LIMIT 1");
+
+    if (query.next())
+        lastTweetID = query.value(0).toLongLong();
+
+    QTweetHomeTimeline *homeTimeline = new QTweetHomeTimeline(m_oauthTwitter);
+    homeTimeline->fetch(lastTweetID, 0, 200);
 
     connect(homeTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
             this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));

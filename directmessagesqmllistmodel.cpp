@@ -250,8 +250,16 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
 
 void DirectMessagesQmlListModel::fetchLastTweets()
 {
+    qint64 lastDirectMessageID = 0;
+
+    QSqlQuery query;
+    query.exec("SELECT id FROM directmessages ORDER BY id DESC LIMIT 1");
+
+    if (query.next())
+        lastDirectMessageID = query.value(0).toLongLong();
+
     QTweetDirectMessages *directMessages = new QTweetDirectMessages(m_oauthTwitter);
-    directMessages->fetch(0, 0, 200);
+    directMessages->fetch(lastDirectMessageID, 0, 200);
 
     connect(directMessages, SIGNAL(parsedDirectMessages(QList<QTweetDMStatus>)),
             this, SLOT(finishedFetchDirectMessages(QList<QTweetDMStatus>)));

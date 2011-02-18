@@ -143,9 +143,17 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
  */
 void MentionsQmlListModel::fetchLastTweets()
 {
+    qint64 lastMentionID = 0;
+
+    QSqlQuery query;
+    query.exec("SELECT id FROM status WHERE mention == 1 ORDER BY id DESC LIMIT 1");
+
+    if (query.next())
+        lastMentionID = query.value(0).toLongLong();
+
     QTweetMentions *mentions = new QTweetMentions(m_oauthTwitter);
 
-    mentions->fetch(0, 0, 200);
+    mentions->fetch(lastMentionID, 0, 200);
 
     connect(mentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
             this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
