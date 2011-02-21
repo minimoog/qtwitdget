@@ -4,6 +4,7 @@ Item {
     property alias homeTimelineModel: homeTimelineList.model
     property alias mentionsModel: mentionsList.model
     property alias directMessagesModel: dmList.model
+    property alias searchModel: searchResultList.model
 
     id: timelines
 
@@ -91,8 +92,7 @@ Item {
             //showNotification: mentionsModel.numNewTweets
 
             onClicked: {
-            //    mentionsModel.showNewTweets();
-            //    timelines.state = "mentions"
+                timelines.state = "search"
                 htButton.toggled = false;
                 mentionsButton.toggled = false;
                 directMessagesButton.toggled = false;
@@ -203,6 +203,15 @@ Item {
         opacity: 0
     }
 
+    SearchList {
+        id: searchResultList
+        x: 3 * parent.width
+        width: parent.width
+        anchors.bottom: bottomToolbar.top
+        anchors.top: topToolbar.bottom
+        opacity: 0
+    }
+
     //need some work
 
     states: [
@@ -214,6 +223,8 @@ Item {
             PropertyChanges { target: homeTimelineList; x: - parent.width }
             PropertyChanges { target: dmList; x: parent.width }
             PropertyChanges { target: dmList; opacity: 0 }
+            PropertyChanges { target: searchResultList; x: 2 * parent.width }
+            PropertyChanges { target: searchResultList; opacity: 0 }
         },
 
         State {
@@ -221,9 +232,23 @@ Item {
             PropertyChanges { target: dmList; opacity: 1 }
             PropertyChanges { target: mentionsList; opacity: 0 }
             PropertyChanges { target: homeTimelineList; opacity: 0 }
+            PropertyChanges { target: searchResultList; opacity: 0 }
             PropertyChanges { target: dmList; x: 0 }
+            PropertyChanges { target: searchResultList; x: parent.width }
             PropertyChanges { target: mentionsList; x: - parent.width }
             PropertyChanges { target: homeTimelineList; x: - 2 * parent.width }
+        },
+
+        State {
+            name: "search"
+            PropertyChanges { target: searchResultList; opacity: 1 }
+            PropertyChanges { target: dmList; opacity: 0 }
+            PropertyChanges { target: mentionsList; opacity: 0 }
+            PropertyChanges { target: homeTimelineList; opacity: 0 }
+            PropertyChanges { target: homeTimelineList; x: - 3 * parent.width }
+            PropertyChanges { target: mentionsList; x: - 2 * parent.width }
+            PropertyChanges { target: dmList; x: - parent.width }
+            PropertyChanges { target: searchResultList; x: 0 }
         }
     ]
 

@@ -35,6 +35,7 @@ class QTweetStatus;
 class TweetQmlListModel;
 class MentionsQmlListModel;
 class DirectMessagesQmlListModel;
+class SearchQmlListModel;
 class QMenu;
 
 class MainWindow : public QmlApplicationViewer
@@ -76,6 +77,7 @@ private:
     TweetQmlListModel* m_tweetListModel;
     MentionsQmlListModel* m_mentionsListModel;
     DirectMessagesQmlListModel *m_directMessagesListModel;
+    SearchQmlListModel *m_searchListModel;
 
     qint64 m_userId;
 

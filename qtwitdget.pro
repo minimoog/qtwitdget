@@ -67,7 +67,9 @@ SOURCES += main.cpp \
     networkaccessmanagerfactory.cpp \
     mentionsqmllistmodel.cpp \
     directmessagesqmllistmodel.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qtweetlib/qtweetsearch.cpp \
+    searchqmllistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -120,4 +122,6 @@ HEADERS += \
     networkaccessmanagerfactory.h \
     mentionsqmllistmodel.h \
     directmessagesqmllistmodel.h \
-    mainwindow.h
+    mainwindow.h \
+    qtweetlib/qtweetsearch.h \
+    searchqmllistmodel.h

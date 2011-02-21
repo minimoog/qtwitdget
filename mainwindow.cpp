@@ -43,6 +43,7 @@
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"
 #include "directmessagesqmllistmodel.h"
+#include "searchqmllistmodel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
@@ -354,9 +355,12 @@ void MainWindow::createDeclarativeView()
     connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
             m_directMessagesListModel, SLOT(onDirectMessageStream(QTweetDMStatus)));
 
+    m_searchListModel = new SearchQmlListModel(m_oauthTwitter);
+
     rootContext()->setContextProperty("hometimelineListModel", m_tweetListModel);
     rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
     rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
+    rootContext()->setContextProperty("searchListModel", m_searchListModel);
     rootContext()->setContextProperty("viewWidth", 500);
     rootContext()->setContextProperty("rootWindow", this);
 
