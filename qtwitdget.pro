@@ -64,7 +64,6 @@ SOURCES += main.cpp \
     qtweetlib/oauth.cpp \
     tweetqmllistmodel.cpp \
     shortenedurl.cpp \
-    networkaccessmanagerfactory.cpp \
     mentionsqmllistmodel.cpp \
     directmessagesqmllistmodel.cpp \
     mainwindow.cpp \
@@ -119,7 +118,6 @@ HEADERS += \
     qtweetlib/oauth.h \
     tweetqmllistmodel.h \
     shortenedurl.h \
-    networkaccessmanagerfactory.h \
     mentionsqmllistmodel.h \
     directmessagesqmllistmodel.h \
     mainwindow.h \

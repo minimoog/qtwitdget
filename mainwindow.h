@@ -70,7 +70,6 @@ private:
     void writeSettings();
 
     QNetworkAccessManager *m_netManager;
-    NetworkAccessManagerFactory *m_namFactory;
     OAuthTwitter *m_oauthTwitter;
     QTweetUserStream *m_userStream;
 

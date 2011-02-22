@@ -31,7 +31,7 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QApplication>
-#include "networkaccessmanagerfactory.h"
+//#include "networkaccessmanagerfactory.h"
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetuserstream.h"
 #include "qtweetlib/qtweetaccountverifycredentials.h"
@@ -48,7 +48,6 @@
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
     m_netManager(new QNetworkAccessManager(this)),
-    m_namFactory(new NetworkAccessManagerFactory),
     m_oauthTwitter(new OAuthTwitter(this)),
     m_userStream(new QTweetUserStream(this))
 {
@@ -366,9 +365,6 @@ void MainWindow::createDeclarativeView()
 
     //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));
     setMainQmlFile(QLatin1String("qml/QTwitdget/Main.qml"));
-
-    //set NAM cacher
-    engine()->setNetworkAccessManagerFactory(m_namFactory);
 }
 
 void MainWindow::readSettings()
