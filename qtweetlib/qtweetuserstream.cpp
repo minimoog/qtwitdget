@@ -117,8 +117,10 @@ void QTweetUserStream::replyFinished()
         //increase back off interval
         int nextInterval = 2 * m_backofftimer->interval();
 
-        if (nextInterval > 300000)
+        if (nextInterval > 300000) {
             m_backofftimer->setInterval(300000);
+            emit failureConnect();
+        }
 
         m_backofftimer->setInterval(nextInterval);
         m_backofftimer->start();
@@ -132,7 +134,7 @@ void QTweetUserStream::replyReadyRead()
     QByteArray response = m_reply->readAll();
 
     if (m_streamTryingReconnect) {
-        emit reconnectedToStream();
+        emit reconnected();
         m_streamTryingReconnect = false;
     }
 
@@ -181,8 +183,10 @@ void QTweetUserStream::replyTimeout()
     } else {
         int nextInterval = 2 * m_backofftimer->interval();
 
-        if (nextInterval > 300000)
+        if (nextInterval > 300000) {
             m_backofftimer->setInterval(300000);
+            emit failureConnect();
+        }
 
         m_backofftimer->setInterval(nextInterval);
         m_backofftimer->start();

@@ -72,7 +72,12 @@ signals:
      *  Emited when user stream is reconnected after failure
      *  Usefull when user stream connection fails to fetch missed tweets with REST API
      */
-    void reconnectedToStream();
+    void reconnected();
+    /**
+     * Emited when user stream doesn't connect and backoff timer reaches maximum value (300 seconds)
+     * Usefull when usera stream fails to revert to REST API
+     */
+    void failureConnect();
 
 public slots:
     void startFetching();
