@@ -33,14 +33,22 @@
 
 #define TWITTER_USERSTREAM_URL "https://userstream.twitter.com/2/user.json"
 
+// ### TODO User Agent or X-User-Agent
+
 /**
  *  Constructor
  */
 QTweetUserStream::QTweetUserStream(QObject *parent) :
-    QObject(parent), m_oauthTwitter(0), m_reply(0), m_backofftimer(new QTimer(this))
+    QObject(parent), m_oauthTwitter(0), m_reply(0),
+    m_backofftimer(new QTimer(this)),
+    m_timeoutTimer(new QTimer(this))
 {
+    m_backofftimer->setInterval(20000);
     m_backofftimer->setSingleShot(true);
     connect(m_backofftimer, SIGNAL(timeout()), this, SLOT(startFetching()));
+
+    m_timeoutTimer->setInterval(90000);
+    //connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(replyTimeout()));
 }
 
 /**
@@ -57,49 +65,6 @@ void QTweetUserStream::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 OAuthTwitter* QTweetUserStream::oauthTwitter() const
 {
     return m_oauthTwitter;
-}
-
-/**
- *  Called when there is network error
- */
-void QTweetUserStream::replyError(QNetworkReply::NetworkError code)
-{
-    qDebug() << "Reply error: " << code;
-
-    // ### TODO: determine network error codes, assumptions here
-
-    if (code < 200) {
-        //linear backoff
-        if (m_backofftimer->interval() < 250) {
-            m_backofftimer->setInterval(250);
-        } else {
-            int nextLinInterval = m_backofftimer->interval() + 250;
-
-            if (nextLinInterval > 16000)    //cap
-                nextLinInterval = 16000;
-
-            m_backofftimer->setInterval(nextLinInterval);
-        }
-
-        m_backofftimer->start();
-        return;
-    }
-
-    if (code > 200) {
-        //exp. backoff
-        if (m_backofftimer->interval() < 10000) {
-            m_backofftimer->setInterval(10000);
-        } else {
-            int nextExpInterval = 2 * m_backofftimer->interval();
-
-            if (nextExpInterval > 240000)
-                nextExpInterval = 240000;
-
-            m_backofftimer->setInterval(240000);
-        }
-
-        m_backofftimer->start();
-    }
 }
 
 /**
@@ -122,7 +87,8 @@ void QTweetUserStream::startFetching()
     m_reply = m_oauthTwitter->networkAccessManager()->get(req);
     connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
     connect(m_reply, SIGNAL(readyRead()), this, SLOT(replyReadyRead()));
-    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(replyError(QNetworkReply::NetworkError)));
+    connect(m_reply, SIGNAL(readyRead()), m_timeoutTimer, SLOT(start()));
+    connect(m_reply, SIGNAL(finished()), m_timeoutTimer, SLOT(stop()));
 }
 
 /**
@@ -130,16 +96,33 @@ void QTweetUserStream::startFetching()
  */
 void QTweetUserStream::replyFinished()
 {
-    if (!m_reply->error()) { //no error, reconnect
+    qDebug() << "User stream closed ";
 
-        //sligh delay for reconnect
-        m_backofftimer->setInterval(250);
+    if (!m_reply->error()) { //no error, reconnect
+        qDebug() << "No error, reconnect";
+
+        m_reply->deleteLater();
+        m_reply = 0;
+
+        startFetching();
+    } else {    //error
+        qDebug() << "Error: " << m_reply->error() << ", " << m_reply->errorString();
+
+        m_reply->deleteLater();
+        m_reply = 0;
+
+        //increase back off interval
+        int nextInterval = 2 * m_backofftimer->interval();
+
+        if (nextInterval > 300000)
+            m_backofftimer->setInterval(300000);
+
+        m_backofftimer->setInterval(nextInterval);
         m_backofftimer->start();
-        m_reply->deleteLater();
-        m_reply = 0;
-    } else {    //error, delete QNetworkReply
-        m_reply->deleteLater();
-        m_reply = 0;
+
+        //m_timeoutTimer->stop();
+
+        qDebug() << "Exp backoff interval: " << nextInterval;
     }
 }
 
@@ -147,30 +130,61 @@ void QTweetUserStream::replyReadyRead()
 {
     QByteArray response = m_reply->readAll();
 
-    //reset timer
-    m_backofftimer->setInterval(0);
+    //set backoff timer to initial interval
+    m_backofftimer->setInterval(20000);
 
-    //split to response to delimited and not delimited part
-    int lastCarrReturn = response.lastIndexOf('\r');
-    QByteArray rightNotDelimitedPart = response.mid(lastCarrReturn + 1);
-    QByteArray leftDelimitedPart = response.left(lastCarrReturn);
+    int start = 0;
+    int end;
 
-    //prepend to left previous not delimited response
-    leftDelimitedPart = leftDelimitedPart.prepend(m_cashedResponse);
+    while ((end = response.indexOf('\r', start)) != -1) {
+        if (start != end) {
+            QByteArray element = response.mid(start, end - start);
 
-    QList<QByteArray> elements = leftDelimitedPart.split('\r');
-
-    for (int i = 0; i < elements.size(); ++i) {
-        if (elements.at(i) != QByteArray(1, '\n')) {
-            emit stream(elements.at(i));
-            parseStream(elements.at(i));
+            if (!element.isEmpty()) {
+                qDebug() << "JSON obj: " << element;
+                emit stream(element);
+                parseStream(element);
+            }
         }
+
+        int skip = (response.at(end + 1) == QLatin1Char('\n')) ? 2 : 1;
+        start = end + skip;
     }
 
-    if (rightNotDelimitedPart != QByteArray(1, '\n'))
-        m_cashedResponse = rightNotDelimitedPart;
-    else
-        m_cashedResponse.clear();
+    if (start != response.size()) {
+        QByteArray element = response.mid(start);
+        if (!element.isEmpty()) {
+            qDebug() << "JSON obj: " << element;
+            emit stream(element);
+            parseStream(element);
+        }
+    }
+}
+
+void QTweetUserStream::replyTimeout()
+{
+    qDebug() << "Timeout connection";
+
+    m_reply->abort();
+    m_reply->deleteLater();
+    m_reply = 0;
+
+    if (m_backofftimer->interval() < 20001) {//immediately reconnect
+        qDebug() << "Reconnect immediately";
+        startFetching();
+    } else {
+        int nextInterval = 2 * m_backofftimer->interval();
+
+        if (nextInterval > 300000)
+            m_backofftimer->setInterval(300000);
+
+        m_backofftimer->setInterval(nextInterval);
+        m_backofftimer->start();
+
+        m_timeoutTimer->stop();
+
+        qDebug() << "Exp backoff interval: " << nextInterval;
+    }
 }
 
 void QTweetUserStream::parseStream(const QByteArray& data)

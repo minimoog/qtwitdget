@@ -73,9 +73,9 @@ public slots:
     void startFetching();
 
 private slots:
-    void replyError(QNetworkReply::NetworkError code);
     void replyFinished();
     void replyReadyRead();
+    void replyTimeout();
     void parsingFinished(const QVariant& json, bool ok, const QString& errorMsg);
 
 private:
@@ -87,7 +87,7 @@ private:
     OAuthTwitter *m_oauthTwitter;
     QNetworkReply *m_reply;
     QTimer *m_backofftimer;
-    QByteArray m_cashedResponse;
+    QTimer *m_timeoutTimer;
 };
 
 #endif // QTWEETUSERSTREAM_H
