@@ -138,7 +138,6 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
 
 /**
  *  Fetches last 200 mentions.
- *  Called at the startup of application
  *  @reimp
  */
 void MentionsQmlListModel::fetchLastTweets()
@@ -195,12 +194,16 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
                 query.bindValue(":mention", 1);
                 query.bindValue(":created", s.createdAt());
                 query.exec();
+
+                m_newStatuses.prepend(s);
             }
             query.exec("COMMIT;");
+
+            m_numNewTweets = m_newStatuses.count();
+            emit numNewTweetsChanged();
         }
         mentions->deleteLater();
     }
-    loadTweetsFromDatabase();
 }
 
 /**
@@ -212,6 +215,4 @@ void MentionsQmlListModel::errorFetchingTweets()
 
     if (mentions)
         mentions->deleteLater();
-
-    loadTweetsFromDatabase();
 }

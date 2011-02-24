@@ -291,12 +291,16 @@ void DirectMessagesQmlListModel::finishedFetchDirectMessages(const QList<QTweetD
                 query.bindValue(":senderScreenName", s.senderScreenName());
                 query.bindValue(":senderProfileImageUrl", s.sender().profileImageUrl());
                 query.exec();
+
+                m_newDirectMessages.prepend(s);
             }
             query.exec("COMMIT;");
+
+            m_numNewDirectMessages = m_newDirectMessages.count();
+            emit numNewDirectMessagesChanged();
         }
         directMessages->deleteLater();
     }
-    loadTweetsFromDatabase();
 }
 
 void DirectMessagesQmlListModel::errorFetchingDirectMessages()
@@ -305,6 +309,4 @@ void DirectMessagesQmlListModel::errorFetchingDirectMessages()
 
     if (directMessages)
         directMessages->deleteLater();
-
-    loadTweetsFromDatabase();
 }

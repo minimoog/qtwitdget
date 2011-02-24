@@ -31,7 +31,6 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QApplication>
-//#include "networkaccessmanagerfactory.h"
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetuserstream.h"
 #include "qtweetlib/qtweetaccountverifycredentials.h"
@@ -148,6 +147,11 @@ void MainWindow::startUp()
         m_directMessagesListModel->setUserID(m_userId);
 
         //show last tweets from database
+        m_tweetListModel->loadTweetsFromDatabase();
+        m_mentionsListModel->loadTweetsFromDatabase();
+        m_directMessagesListModel->loadTweetsFromDatabase();
+
+        //then fetch last 200 tweets
         m_tweetListModel->fetchLastTweets();
         m_mentionsListModel->fetchLastTweets();
         m_directMessagesListModel->fetchLastTweets();
@@ -331,8 +335,6 @@ void MainWindow::createDatabase(const QString& databaseName)
                "profileImageUrl TEXT, "
                "url TEXT, "
                "UNIQUE (id));");
-
-    query.exec("CREATE TABLE IF NOT EXISTS images (imageName TEXT NOT NULL, image BLOB, UNIQUE (imageName));");
 }
 
 void MainWindow::createDeclarativeView()
@@ -343,12 +345,20 @@ void MainWindow::createDeclarativeView()
             m_tweetListModel, SLOT(onStatusesStream(QTweetStatus)));
     connect(m_userStream, SIGNAL(deleteStatusStream(qint64,qint64)),
             m_tweetListModel, SLOT(onDeleteStatusStream(qint64,qint64)));
+    // ### TODO: Test for syncing problems
+    connect(m_userStream, SIGNAL(reconnected()),
+            m_tweetListModel, SLOT(fetchLastTweets()));
+    //try using REST API when streams fails
+    connect(m_userStream, SIGNAL(failureConnect()),
+            m_tweetListModel, SLOT(fetchLastTweets()));
 
     m_mentionsListModel = new MentionsQmlListModel(m_oauthTwitter);
     connect(m_userStream, SIGNAL(statusesStream(QTweetStatus)),
             m_mentionsListModel, SLOT(onStatusesStream(QTweetStatus)));
     connect(m_userStream, SIGNAL(deleteStatusStream(qint64,qint64)),
             m_mentionsListModel, SLOT(onDeleteStatusStream(qint64,qint64)));
+    connect(m_userStream, SIGNAL(reconnected()),
+            m_mentionsListModel, SLOT(fetchLastTweets()));
 
     m_directMessagesListModel = new DirectMessagesQmlListModel(m_oauthTwitter);
     connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
@@ -360,7 +370,6 @@ void MainWindow::createDeclarativeView()
     rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
     rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
     rootContext()->setContextProperty("searchListModel", m_searchListModel);
-    rootContext()->setContextProperty("viewWidth", 500);
     rootContext()->setContextProperty("rootWindow", this);
 
     //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));

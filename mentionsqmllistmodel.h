@@ -34,13 +34,11 @@ class MentionsQmlListModel : public TweetQmlListModel
 public:
     MentionsQmlListModel(QObject *parent = 0);
     MentionsQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent = 0);
-    void fetchLastTweets();
-
-protected:
     void loadTweetsFromDatabase();
 
 public slots:
     void onStatusesStream(const QTweetStatus& status);
+    void fetchLastTweets();
 
 private slots:
     void finishedFetchTweets(const QList<QTweetStatus>& statuses);

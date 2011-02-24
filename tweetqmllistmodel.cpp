@@ -377,7 +377,6 @@ void TweetQmlListModel::loadTweetsFromDatabase()
 
 /**
  *  Fetches last 200 tweets
- *  Called at the start of application
  */
 void TweetQmlListModel::fetchLastTweets()
 {
@@ -406,9 +405,6 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
     QTweetHomeTimeline *homeTimeline = qobject_cast<QTweetHomeTimeline*>(sender());
 
     if (homeTimeline) {
-        //just dump to database, database will be again read in loadTweetsFromDatabase()
-        //### TODO Reconsider fixing
-
         if (!statuses.isEmpty()) {
             qDebug() << "New statuses: " << statuses.count();
             QSqlQuery query;
@@ -433,13 +429,17 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
                 query.bindValue(":profileImageUrl", s.user().profileImageUrl());
                 query.bindValue(":created", s.createdAt());
                 query.exec();
+
+                m_newStatuses.prepend(s);
             }
             query.exec("COMMIT;");
+
+
+            m_numNewTweets = m_newStatuses.count();
+            emit numNewTweetsChanged();
         }
         homeTimeline->deleteLater();
     }
-    //now load them from database
-    loadTweetsFromDatabase();
 }
 
 /**
@@ -451,9 +451,6 @@ void TweetQmlListModel::errorFetchingTweets()
 
     if (homeTimeline)
         homeTimeline->deleteLater();
-
-    //on error just load tweets from database
-    loadTweetsFromDatabase();
 }
 
 /**

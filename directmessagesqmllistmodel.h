@@ -58,10 +58,11 @@ public:
     void resetNumNewDirectMessages();
 
     Q_INVOKABLE void showNewTweets();
-    void fetchLastTweets();
+    void loadTweetsFromDatabase();
 
 public slots:
     void onDirectMessageStream(const QTweetDMStatus& directMessage);
+    void fetchLastTweets();
 
 private slots:
     void finishedFetchDirectMessages(const QList<QTweetDMStatus>& directMessages);
@@ -70,9 +71,7 @@ private slots:
 signals:
     void numNewDirectMessagesChanged();
 
-private:
-    void loadTweetsFromDatabase();
-
+private:   
     QList<QTweetDMStatus> m_directMessages;
     QList<QTweetDMStatus> m_newDirectMessages; //doesn't show in the model
     qint64 m_userid;
