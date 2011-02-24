@@ -68,6 +68,11 @@ signals:
      *   Emits deletion of status in the stream
      */
     void deleteStatusStream(qint64 id, qint64 userid);
+    /**
+     *  Emited when user stream is reconnected after failure
+     *  Usefull when user stream connection fails to fetch missed tweets with REST API
+     */
+    void reconnectedToStream();
 
 public slots:
     void startFetching();
@@ -88,6 +93,7 @@ private:
     QNetworkReply *m_reply;
     QTimer *m_backofftimer;
     QTimer *m_timeoutTimer;
+    bool m_streamTryingReconnect;
 };
 
 #endif // QTWEETUSERSTREAM_H

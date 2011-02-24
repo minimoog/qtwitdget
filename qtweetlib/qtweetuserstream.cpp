@@ -41,14 +41,14 @@
 QTweetUserStream::QTweetUserStream(QObject *parent) :
     QObject(parent), m_oauthTwitter(0), m_reply(0),
     m_backofftimer(new QTimer(this)),
-    m_timeoutTimer(new QTimer(this))
+    m_timeoutTimer(new QTimer(this)),
+    m_streamTryingReconnect(false)
 {
     m_backofftimer->setInterval(20000);
     m_backofftimer->setSingleShot(true);
     connect(m_backofftimer, SIGNAL(timeout()), this, SLOT(startFetching()));
 
     m_timeoutTimer->setInterval(90000);
-    //connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(replyTimeout()));
 }
 
 /**
@@ -87,6 +87,7 @@ void QTweetUserStream::startFetching()
     m_reply = m_oauthTwitter->networkAccessManager()->get(req);
     connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
     connect(m_reply, SIGNAL(readyRead()), this, SLOT(replyReadyRead()));
+
     connect(m_reply, SIGNAL(readyRead()), m_timeoutTimer, SLOT(start()));
     connect(m_reply, SIGNAL(finished()), m_timeoutTimer, SLOT(stop()));
 }
@@ -97,6 +98,8 @@ void QTweetUserStream::startFetching()
 void QTweetUserStream::replyFinished()
 {
     qDebug() << "User stream closed ";
+
+    m_streamTryingReconnect = true;
 
     if (!m_reply->error()) { //no error, reconnect
         qDebug() << "No error, reconnect";
@@ -120,8 +123,6 @@ void QTweetUserStream::replyFinished()
         m_backofftimer->setInterval(nextInterval);
         m_backofftimer->start();
 
-        //m_timeoutTimer->stop();
-
         qDebug() << "Exp backoff interval: " << nextInterval;
     }
 }
@@ -129,6 +130,11 @@ void QTweetUserStream::replyFinished()
 void QTweetUserStream::replyReadyRead()
 {
     QByteArray response = m_reply->readAll();
+
+    if (m_streamTryingReconnect) {
+        emit reconnectedToStream();
+        m_streamTryingReconnect = false;
+    }
 
     //set backoff timer to initial interval
     m_backofftimer->setInterval(20000);
@@ -141,7 +147,6 @@ void QTweetUserStream::replyReadyRead()
             QByteArray element = response.mid(start, end - start);
 
             if (!element.isEmpty()) {
-                qDebug() << "JSON obj: " << element;
                 emit stream(element);
                 parseStream(element);
             }
@@ -154,7 +159,6 @@ void QTweetUserStream::replyReadyRead()
     if (start != response.size()) {
         QByteArray element = response.mid(start);
         if (!element.isEmpty()) {
-            qDebug() << "JSON obj: " << element;
             emit stream(element);
             parseStream(element);
         }
@@ -168,6 +172,8 @@ void QTweetUserStream::replyTimeout()
     m_reply->abort();
     m_reply->deleteLater();
     m_reply = 0;
+
+    m_streamTryingReconnect = true;
 
     if (m_backofftimer->interval() < 20001) {//immediately reconnect
         qDebug() << "Reconnect immediately";
