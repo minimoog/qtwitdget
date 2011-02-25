@@ -49,6 +49,11 @@ QTweetUserStream::QTweetUserStream(QObject *parent) :
     connect(m_backofftimer, SIGNAL(timeout()), this, SLOT(startFetching()));
 
     m_timeoutTimer->setInterval(90000);
+
+#ifdef STREAM_LOGGER
+    m_streamLog.setFileName("streamlog.txt");
+    m_streamLog.open(QIODevice::WriteOnly | QIODevice::Text);
+#endif
 }
 
 /**
@@ -133,6 +138,11 @@ void QTweetUserStream::replyReadyRead()
 {
     QByteArray response = m_reply->readAll();
 
+#ifdef STREAM_LOGGER
+    m_streamLog.write(response);
+    m_streamLog.write("\n--------------------------------------------");
+#endif
+
     if (m_streamTryingReconnect) {
         emit reconnected();
         m_streamTryingReconnect = false;
@@ -141,12 +151,14 @@ void QTweetUserStream::replyReadyRead()
     //set backoff timer to initial interval
     m_backofftimer->setInterval(20000);
 
+    QByteArray responseWithPreviousCache = response.prepend(m_cachedResponse);
+
     int start = 0;
     int end;
 
-    while ((end = response.indexOf('\r', start)) != -1) {
+    while ((end = responseWithPreviousCache.indexOf('\r', start)) != -1) {
         if (start != end) {
-            QByteArray element = response.mid(start, end - start);
+            QByteArray element = responseWithPreviousCache.mid(start, end - start);
 
             if (!element.isEmpty()) {
                 emit stream(element);
@@ -158,12 +170,13 @@ void QTweetUserStream::replyReadyRead()
         start = end + skip;
     }
 
-    if (start != response.size()) {
-        QByteArray element = response.mid(start);
-        if (!element.isEmpty()) {
-            emit stream(element);
-            parseStream(element);
-        }
+    //undelimited part just cache it
+    m_cachedResponse.clear();
+
+    if (start != responseWithPreviousCache.size()) {
+        QByteArray element = responseWithPreviousCache.mid(start);
+        if (!element.isEmpty())
+            m_cachedResponse = element;
     }
 }
 
@@ -211,6 +224,9 @@ void QTweetUserStream::parsingFinished(const QVariant &json, bool ok, const QStr
 {
     if (!ok) {
         qDebug() << "JSON parsing error: " << errorMsg;
+#ifdef STREAM_LOGGER
+        m_streamLog.write("***** JSON parsing error *****\n");
+#endif
         return;
     }
 

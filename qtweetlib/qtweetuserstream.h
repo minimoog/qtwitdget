@@ -25,6 +25,10 @@
 #include <QNetworkReply>
 #include "qtweetlib_global.h"
 
+#ifdef STREAM_LOGGER
+    #include <QFile>
+#endif
+
 class QNetworkAccessManager;
 class QNetworkReply;
 class OAuthTwitter;
@@ -94,11 +98,16 @@ private:
     void parseDirectMessage(const QVariantMap& streamObject);
     void parseDeleteStatus(const QVariantMap& streamObject);
 
+    QByteArray m_cachedResponse;
     OAuthTwitter *m_oauthTwitter;
     QNetworkReply *m_reply;
     QTimer *m_backofftimer;
     QTimer *m_timeoutTimer;
     bool m_streamTryingReconnect;
+
+#ifdef STREAM_LOGGER
+    QFile m_streamLog;
+#endif
 };
 
 #endif // QTWEETUSERSTREAM_H
