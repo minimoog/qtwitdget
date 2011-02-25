@@ -5,100 +5,90 @@ Item {
 
     signal loginClicked(string username, string password)
 
-    Column {
-        anchors.centerIn: parent
-        spacing: 20
-        Column {
-            spacing: 4
-            Text {
-                text: "Username:"
-                font.family: "Segoe UI"
-                font.pixelSize: 16
-                font.bold: true
-                color: "#000000"
-                style: "Normal"
-                styleColor:  "black"
-                horizontalAlignment: Qt.AlignRight
-            }
-            Item {
-                width: 220
-                height: 28
+    width: 360; height: 640
 
-                Rectangle {
-                    radius: 8
-                    border.width: 2
-                    border.color: "#6bccef"
-                    anchors.fill: parent
-                }
-
-                TextInput {
-                    id: nameIn
-                    width: parent.width - 8
-                    anchors.centerIn: parent
-                    maximumLength: 21
-                    font.pixelSize: 16
-                    font.bold: true
-                    color: "#151515"; selectionColor: "green"
-                    KeyNavigation.tab: passIn
-                    focus: true
-                }
-            }
-        }
-        Column {
-             spacing: 4
-             Text {
-                 text: "Password:"
-                 font.family: "Segoe UI"
-                 font.pixelSize: 16; font.bold: true; color: "#000000"; style: "Normal"; styleColor: "black"
-                 horizontalAlignment: Qt.AlignRight
-             }
-             Item {
-                 width: 220
-                 height: 28
-
-                 Rectangle {
-                     radius: 8
-                     border.width: 2
-                     border.color: "#6bccef"
-                     anchors.fill: parent
-                 }
-
-                 TextInput{
-                     id: passIn
-                     width: parent.width - 8
-                     anchors.centerIn: parent
-                     maximumLength:21
-                     echoMode: TextInput.Password
-                     font.pixelSize: 16;
-                     font.bold: true
-                     color: "#151515"; selectionColor: "green"
-                     KeyNavigation.tab: login
-                     KeyNavigation.backtab: nameIn
-                     onAccepted: login.doLogin();
-                 }
-             }
-        }
-        Row {
-             spacing: 10
-             TestButton {
-                 width: 100
-                 height: 32
-                 id: login
-                 keyUsing: true
-
-                 function doLogin(){
-                    loginClicked(nameIn.text, passIn.text)
-                 }
-
-                 text: "Log in"
-                 KeyNavigation.tab: nameIn
-                 KeyNavigation.backtab: passIn
-                 Keys.onReturnPressed: login.doLogin();
-                 Keys.onEnterPressed: login.doLogin();
-                 Keys.onSelectPressed: login.doLogin();
-                 Keys.onSpacePressed: login.doLogin();
-                 onClicked: login.doLogin();
-             }
-         }
+    function doLogin() {
+        loginClicked(usernameInput.text, passwordInput.text)
     }
+
+    Rectangle {
+        id: background
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: "#ffffff"
+            }
+            GradientStop {
+                position: 1
+                color: "#d9d9d9"
+            }
+        }
+        anchors.fill: parent
+
+        Image {
+            id: logo
+            anchors.top: parent.top; anchors.topMargin: 84
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "images/logo.png"
+        }
+
+        Image {
+            id: username_background
+            anchors.top: logo.bottom; anchors.topMargin: 53
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "images/text_input_background.png"
+            // ### TODO: BorderImage
+
+            TextInput {
+                id: usernameInput
+                color: "#a3a3a3"
+                font.pixelSize: 13
+                font.family: "Segoe UI"
+                anchors.rightMargin: 13
+                anchors.bottomMargin: 6
+                anchors.topMargin: 6
+                anchors.leftMargin: 13
+                anchors.fill: parent
+                focus: true
+                KeyNavigation.tab: passwordInput
+            }
+        }
+
+        Image {
+            id: password_background
+            anchors.top: username_background.bottom; anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "images/text_input_background.png"
+
+            TextInput {
+                id: passwordInput
+                color: "#a3a3a3"
+                echoMode: TextInput.Password
+                font.pixelSize: 13
+                font.family: "Segoe UI"
+                anchors.rightMargin: 13
+                anchors.bottomMargin: 6
+                anchors.topMargin: 6
+                anchors.leftMargin: 13
+                anchors.fill: parent
+                KeyNavigation.backtab: usernameInput
+            }
+        }
+
+        ButtonImage {
+            id: signinButton
+            width: 121
+            height: 39
+            anchors.top: password_background.bottom; anchors.topMargin: 52
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            buttonImageUrl: "images/signin.png"
+            pressedButtonImageUrl: "images/signin_pressed.png"
+
+            onClicked: doLogin()
+        }
+    }
+
+    Keys.onReturnPressed: doLogin()
+    Keys.onEnterPressed: doLogin()
 }
