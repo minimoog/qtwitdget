@@ -21,6 +21,8 @@
 #ifndef QTWEETUSERSTREAM_H
 #define QTWEETUSERSTREAM_H
 
+#define STREAM_LOGGER 1
+
 #include <QObject>
 #include <QNetworkReply>
 #include "qtweetlib_global.h"

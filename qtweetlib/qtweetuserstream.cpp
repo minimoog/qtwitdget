@@ -140,7 +140,7 @@ void QTweetUserStream::replyReadyRead()
 
 #ifdef STREAM_LOGGER
     m_streamLog.write(response);
-    m_streamLog.write("\n--------------------------------------------");
+    m_streamLog.write("\n");
 #endif
 
     if (m_streamTryingReconnect) {

@@ -1,6 +1,6 @@
 import QtQuick 1.0
 
-Rectangle  {
+Item  {
     id: container
 
     property string tweetid
@@ -15,19 +15,6 @@ Rectangle  {
     //width: 360;
     //height: (statusText.paintedHeight < 96) ? 96 : statusText.paintedHeight
     height: 116;
-
-    gradient: Gradient {
-        GradientStop {
-            id: firstGradientStop
-            position: isNewTweet ? 0.3 : 0
-            color: isNewTweet ? "#FFD954" : "#FFFFFF"
-        }
-        GradientStop {
-            id: secondGradientStop
-            position: 1
-            color: isNewTweet? "#FFB300": "#D9D9D9"
-        }
-    }
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
@@ -45,6 +32,19 @@ Rectangle  {
         var ret2 = ret1.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");
         var ret3 = ret2.replace(/[#]+[A-Za-z0-9-_]+/g, '<a href="tag://$&">$&</a>')
         return ret3;
+    }
+
+    Image {
+        id: background
+        anchors.fill: parent
+        source: {
+            if (isOwnTweet)
+                return "images/blue_gradient.png"
+            else if (isNewTweet)
+                return "images/yellow_gradient.png"
+            else
+                return "images/gray_gradient.png"
+        }
     }
 
     Rectangle {
