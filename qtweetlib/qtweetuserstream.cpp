@@ -49,6 +49,7 @@ QTweetUserStream::QTweetUserStream(QObject *parent) :
     connect(m_backofftimer, SIGNAL(timeout()), this, SLOT(startFetching()));
 
     m_timeoutTimer->setInterval(90000);
+    connect(m_timeoutTimer, SIGNAL(timeout()), this, SLOT(replyTimeout()));
 
 #ifdef STREAM_LOGGER
     m_streamLog.setFileName("streamlog.txt");
