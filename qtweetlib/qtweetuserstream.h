@@ -55,7 +55,6 @@ signals:
      *   Emits stream elements
      */
     void stream(const QByteArray& );
-
     /**
      *   Emits tweets (parsed) elements from stream
      */
@@ -81,7 +80,7 @@ signals:
     void reconnected();
     /**
      * Emited when user stream doesn't connect and backoff timer reaches maximum value (300 seconds)
-     * Usefull when usera stream fails to revert to REST API
+     * Usefull when users stream fails to revert to REST API
      */
     void failureConnect();
 

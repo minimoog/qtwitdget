@@ -36,6 +36,8 @@ Item {
         mentionsModel: mentionsListModel
         directMessagesModel: directMessagesListModel
         searchModel: searchListModel
+
+        onSendClicked: rootWindow.updateButtonClicked(tweetid, text, screenname)
     }
 
     states: [

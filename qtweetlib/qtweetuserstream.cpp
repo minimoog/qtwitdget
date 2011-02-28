@@ -120,6 +120,11 @@ void QTweetUserStream::replyFinished()
         m_reply->deleteLater();
         m_reply = 0;
 
+        //if (m_backofftimer->interval() < 20001) {
+        //  m_backofftimer->start();
+        //  return;
+        //}
+
         //increase back off interval
         int nextInterval = 2 * m_backofftimer->interval();
 
@@ -186,29 +191,6 @@ void QTweetUserStream::replyTimeout()
     qDebug() << "Timeout connection";
 
     m_reply->abort();
-    m_reply->deleteLater();
-    m_reply = 0;
-
-    m_streamTryingReconnect = true;
-
-    if (m_backofftimer->interval() < 20001) {//immediately reconnect
-        qDebug() << "Reconnect immediately";
-        startFetching();
-    } else {
-        int nextInterval = 2 * m_backofftimer->interval();
-
-        if (nextInterval > 300000) {
-            m_backofftimer->setInterval(300000);
-            emit failureConnect();
-        }
-
-        m_backofftimer->setInterval(nextInterval);
-        m_backofftimer->start();
-
-        m_timeoutTimer->stop();
-
-        qDebug() << "Exp backoff interval: " << nextInterval;
-    }
 }
 
 void QTweetUserStream::parseStream(const QByteArray& data)
