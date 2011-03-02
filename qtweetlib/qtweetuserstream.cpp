@@ -129,7 +129,7 @@ void QTweetUserStream::replyFinished()
         int nextInterval = 2 * m_backofftimer->interval();
 
         if (nextInterval > 300000) {
-            m_backofftimer->setInterval(300000);
+            nextInterval = 300000;
             emit failureConnect();
         }
 
