@@ -68,7 +68,9 @@ SOURCES += main.cpp \
     directmessagesqmllistmodel.cpp \
     mainwindow.cpp \
     qtweetlib/qtweetsearch.cpp \
-    searchqmllistmodel.cpp
+    searchqmllistmodel.cpp \
+    qtweetlib/qtweetusershow.cpp \
+    userinfo.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -122,4 +124,6 @@ HEADERS += \
     directmessagesqmllistmodel.h \
     mainwindow.h \
     qtweetlib/qtweetsearch.h \
-    searchqmllistmodel.h
+    searchqmllistmodel.h \
+    qtweetlib/qtweetusershow.h \
+    userinfo.h

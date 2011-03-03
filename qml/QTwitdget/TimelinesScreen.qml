@@ -1,3 +1,7 @@
+//userInfo external
+//UserInfoScreen properties should be exposed in Main.qml, too many properties
+//maybe later
+
 import QtQuick 1.0
 
 Item {
@@ -15,6 +19,13 @@ Item {
         width: parent.width
         anchors.bottom: bottomToolbar.top
         anchors.top: topToolbar.bottom
+
+        onMoreClicked: {
+            userInfo.fetchByName(screenname)
+            parent.state = 'userinfo'
+            userinformation.text = text
+            userinformation.time = sincetime
+        }
     }
 
     TweetList {
@@ -23,7 +34,13 @@ Item {
         width: parent.width
         anchors.bottom: bottomToolbar.top
         anchors.top: topToolbar.bottom
-        opacity: 0
+
+        onMoreClicked: {
+            userInfo.fetchByName(screenname)
+            parent.state = 'userinfo'
+            userinformation.text = text
+            userinformation.time = sincetime
+        }
     }
 
     TweetList {
@@ -32,7 +49,13 @@ Item {
         width:  parent.width
         anchors.bottom: bottomToolbar.top
         anchors.top: topToolbar.bottom
-        opacity: 0
+
+        onMoreClicked:  {
+            userInfo.fetchByName(screenname)
+            parent.state = 'userinfo'
+            userinformation.text = text
+            userinformation.time = sincetime
+        }
     }
 
     SearchList {
@@ -41,7 +64,33 @@ Item {
         width: parent.width
         anchors.bottom: bottomToolbar.top
         anchors.top: topToolbar.bottom
-        opacity: 0
+
+        onMoreClicked: {
+            userInfo.fetchByName(screenname)
+            parent.state = 'userinfo'
+            userinformation.text = text
+            userinformation.time = sincetime
+        }
+    }
+
+    UserInfoScreen {
+        id: userinformation
+        x: 4 * parent.width
+        width: parent.width
+        anchors.bottom: bottomToolbar.top
+        anchors.top:  topToolbar.bottom
+
+        //should be exposed in Main.qml
+        avatar: userInfo.avatarUrl
+        screenname: userInfo.screenName
+        name: userInfo.name
+        url: userInfo.url
+        location: userInfo.location
+        description: userInfo.description
+        numTweets: userInfo.numTweets
+        numFollowers: userInfo.numFollowers
+        numFollowing: userInfo.numFollowing
+        numFavorites: userInfo.numFavorites
     }
 
     StatusUpdate {
@@ -122,22 +171,11 @@ Item {
             }
         }
 
-        ButtonImage {
-            id: reloadButton
-
-            anchors.top: parent.top; anchors.topMargin: 21
-            anchors.left: statusUpdateButton.right; anchors.leftMargin: 9
-            width: 39; height: 39
-
-            buttonImageUrl: "images/reload.png"
-            pressedButtonImageUrl: "images/reload_pressed.png"
-        }
-
         ButtonText {
             id: usernameButton
 
             anchors.top: parent.top; anchors.topMargin: 21
-            anchors.left: reloadButton.right; anchors.leftMargin: 10
+            anchors.left: statusUpdateButton.right; anchors.leftMargin: 10
             width: 145; height: 39
 
             buttonImageUrl: "images/username.png"
@@ -154,19 +192,6 @@ Item {
 
             buttonImageUrl: "images/settings.png"
             pressedButtonImageUrl: "images/settings_pressed.png"
-        }
-
-        ButtonImage {
-            id: closeButton
-
-            anchors.top: parent.top; anchors.topMargin: 21
-            anchors.left: settingsButton.right; anchors.leftMargin: 10
-            width: 39; height: 39
-
-            buttonImageUrl: "images/close.png"
-            pressedButtonImageUrl: "images/close_pressed.png"
-
-            onClicked: Qt.quit()
         }
     }
 
@@ -232,10 +257,9 @@ Item {
             anchors.left: mentionsButton.right; anchors.leftMargin: 11
             buttonImageUrl: "images/directmessages.png"
             pressedButtonImageUrl: "images/directmessages_pressed.png"
-            //showNotification: mentionsModel.numNewTweets
+            showNotification: directMessagesModel.numNewDirectMessages
 
             onClicked: {
-                //mentionsModel.showNewTweets();
                 dmList.model.showNewTweets();
                 timelines.state = "directMessages"
                 htButton.toggled = false;
@@ -251,7 +275,6 @@ Item {
             anchors.left: directMessagesButton.right; anchors.leftMargin: 11
             buttonImageUrl: "images/search.png"
             pressedButtonImageUrl: "images/search_pressed.png"
-            //showNotification: mentionsModel.numNewTweets
 
             onClicked: {
                 timelines.state = "search"
@@ -267,44 +290,41 @@ Item {
     states: [
         State {
             name: "mentions"
-            PropertyChanges { target: mentionsList; opacity: 1 }
             PropertyChanges { target: mentionsList; x: 0 }
-            PropertyChanges { target: homeTimelineList; opacity: 0 }
             PropertyChanges { target: homeTimelineList; x: - parent.width }
             PropertyChanges { target: dmList; x: parent.width }
-            PropertyChanges { target: dmList; opacity: 0 }
             PropertyChanges { target: searchResultList; x: 2 * parent.width }
-            PropertyChanges { target: searchResultList; opacity: 0 }
+            PropertyChanges { target: userinformation; x: 3 * parent.width }
         },
-
         State {
             name: "directMessages"
-            PropertyChanges { target: dmList; opacity: 1 }
-            PropertyChanges { target: mentionsList; opacity: 0 }
-            PropertyChanges { target: homeTimelineList; opacity: 0 }
-            PropertyChanges { target: searchResultList; opacity: 0 }
             PropertyChanges { target: dmList; x: 0 }
             PropertyChanges { target: searchResultList; x: parent.width }
+            PropertyChanges { target: userinformation; x: 2 * parent.width }
             PropertyChanges { target: mentionsList; x: - parent.width }
             PropertyChanges { target: homeTimelineList; x: - 2 * parent.width }
         },
-
         State {
             name: "search"
-            PropertyChanges { target: searchResultList; opacity: 1 }
-            PropertyChanges { target: dmList; opacity: 0 }
-            PropertyChanges { target: mentionsList; opacity: 0 }
-            PropertyChanges { target: homeTimelineList; opacity: 0 }
             PropertyChanges { target: homeTimelineList; x: - 3 * parent.width }
             PropertyChanges { target: mentionsList; x: - 2 * parent.width }
             PropertyChanges { target: dmList; x: - parent.width }
             PropertyChanges { target: searchResultList; x: 0 }
+            PropertyChanges { target: userinformation; x: 2 * parent.width }
+        },
+        State {
+            name: "userinfo"
+            PropertyChanges { target: homeTimelineList; x: - 4 * parent.width }
+            PropertyChanges { target: mentionsList; x: - 3 * parent.width }
+            PropertyChanges { target: dmList; x: - 2 * parent.width }
+            PropertyChanges { target: searchResultList; x: parent.width }
+            PropertyChanges { target: userinformation; x: 0 }
         }
     ]
 
     transitions: [
         Transition {
-            NumberAnimation { properties: "x, opacity"; duration: 300 }
+            NumberAnimation { properties: "x"; duration: 500; easing.type: Easing.InOutBack }
         }
     ]
 }

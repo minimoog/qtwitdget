@@ -36,6 +36,7 @@ class TweetQmlListModel;
 class MentionsQmlListModel;
 class DirectMessagesQmlListModel;
 class SearchQmlListModel;
+class UserInfo;
 class QMenu;
 
 class MainWindow : public QmlApplicationViewer
@@ -77,8 +78,10 @@ private:
     MentionsQmlListModel* m_mentionsListModel;
     DirectMessagesQmlListModel *m_directMessagesListModel;
     SearchQmlListModel *m_searchListModel;
+    UserInfo *m_userInfo;
 
     qint64 m_userId;
+    QString m_userScreenName;
 
     QSqlDatabase m_database;
 

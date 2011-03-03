@@ -43,6 +43,7 @@
 #include "mentionsqmllistmodel.h"
 #include "directmessagesqmllistmodel.h"
 #include "searchqmllistmodel.h"
+#include "userinfo.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
@@ -366,10 +367,14 @@ void MainWindow::createDeclarativeView()
 
     m_searchListModel = new SearchQmlListModel(m_oauthTwitter);
 
+    m_userInfo = new UserInfo;
+    m_userInfo->setOAuthTwitter(m_oauthTwitter);
+
     rootContext()->setContextProperty("hometimelineListModel", m_tweetListModel);
     rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
     rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
     rootContext()->setContextProperty("searchListModel", m_searchListModel);
+    rootContext()->setContextProperty("userInfo", m_userInfo);
     rootContext()->setContextProperty("rootWindow", this);
 
     //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));

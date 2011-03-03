@@ -9,6 +9,9 @@ Item {
 //    signal retweetClicked(string text, string screenname)
 //    signal deleteClicked(string id)
 
+    //since time is not updated
+    signal moreClicked(string text, string screenname, string sincetime)
+
     ListView {
         id: tweetListView
         anchors.fill: parent;
@@ -25,6 +28,8 @@ Item {
             //onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
             //onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
             //onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
+
+            onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
         }
     }
 

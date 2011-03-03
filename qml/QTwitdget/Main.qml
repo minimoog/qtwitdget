@@ -3,6 +3,7 @@
 //directMessagesListModel - external
 //searchListModel - external
 //rootWindow - external
+//userInfo - external
 
 import QtQuick 1.0
 

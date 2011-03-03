@@ -11,8 +11,10 @@ Item  {
     property bool isOwnTweet: false
     property bool isNewTweet: false
 
-    width: ListView.view.width;
-    //width: 360;
+    signal moreButtonClicked
+
+    //width: ListView.view.width;
+    width: 360;
     //height: (statusText.paintedHeight < 96) ? 96 : statusText.paintedHeight
     height: 116;
 
@@ -72,24 +74,18 @@ Item  {
         }
     }
 
-    MouseArea {
-        id: moreMouseArea
-        width: 30
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
 
-        ButtonImage {
-            id: rightArrow
+    ButtonImage {
+        id: rightArrow
 
-            buttonImageUrl: "images/right_arrow.png"
-            pressedButtonImageUrl: "images/right_arrow_pressed.png"
+        buttonImageUrl: "images/right_arrow.png"
+        pressedButtonImageUrl: "images/right_arrow_pressed.png"
 
-            height: 16
-            anchors.top: parent.top; anchors.topMargin: 14
-            anchors.right: parent.right; anchors.rightMargin: 9
-            anchors.left: parent.left; anchors.leftMargin: 10
-        }
+        width: 11; height: 16
+        anchors.top: parent.top; anchors.topMargin: 16
+        anchors.right: parent.right; anchors.rightMargin: 9
+
+        onClicked: moreButtonClicked()
     }
 
     Text {
@@ -98,7 +94,7 @@ Item  {
         //text: addTags(tweetText)
         text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
         anchors.top: parent.top;
-        anchors.right: moreMouseArea.left
+        anchors.right: parent.right; anchors.rightMargin: 35
         anchors.left: avatarContainer.right; anchors.leftMargin: 10
         textFormat: Text.RichText
         wrapMode: "WordWrap"

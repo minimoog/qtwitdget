@@ -10,6 +10,8 @@ Item {
     //width: 360
     //height: 462
 
+    signal moreClicked(string text, string screenname)
+
     TextInput {
         id: queryInput
 
@@ -38,6 +40,8 @@ Item {
             tweetScreenName: screenNameRole
             tweetAvatar: avatarUrlRole
             tweetText: statusTextRole
+
+            onMoreButtonClicked: moreClicked(tweetText, tweetScreenName)
         }
     }
 
