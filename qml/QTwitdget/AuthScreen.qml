@@ -5,7 +5,7 @@ Item {
 
     signal loginClicked(string username, string password)
 
-    width: 360; height: 640
+    //width: 360; height: 640
 
     function doLogin() {
         loginClicked(usernameInput.text, passwordInput.text)
@@ -14,14 +14,8 @@ Item {
     Rectangle {
         id: background
         gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#ffffff"
-            }
-            GradientStop {
-                position: 1
-                color: "#d9d9d9"
-            }
+            GradientStop { position: 0; color: "#ffffff" }
+            GradientStop { position: 1; color: "#d9d9d9" }
         }
         anchors.fill: parent
 
@@ -88,7 +82,6 @@ Item {
             onClicked: doLogin()
         }
     }
-
     Keys.onReturnPressed: doLogin()
     Keys.onEnterPressed: doLogin()
 }

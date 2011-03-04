@@ -14,83 +14,100 @@ Item {
 
     id: timelines
 
-    TweetList {
-        id: homeTimelineList
-        width: parent.width
-        anchors.bottom: bottomToolbar.top
+    Row {
+        id: rowTimelines
         anchors.top: topToolbar.bottom
-
-        onMoreClicked: {
-            userInfo.fetchByName(screenname)
-            parent.state = 'userinfo'
-            userinformation.text = text
-            userinformation.time = sincetime
-        }
-    }
-
-    TweetList {
-        id: mentionsList
-        x: parent.width
+        anchors.bottom: bottomToolbar.top
         width: parent.width
-        anchors.bottom: bottomToolbar.top
-        anchors.top: topToolbar.bottom
 
-        onMoreClicked: {
-            userInfo.fetchByName(screenname)
-            parent.state = 'userinfo'
-            userinformation.text = text
-            userinformation.time = sincetime
+        TweetList {
+            id: homeTimelineList
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            onMoreClicked: {
+                userInfo.fetchByName(screenname)
+                timelines.state = 'userinfo'
+                userinformation.text = text
+                userinformation.time = sincetime
+            }
+            onHashtagClicked: {
+                searchResultList.doSearch(hashtag)
+                timelines.state = 'search'
+            }
         }
-    }
 
-    TweetList {
-        id: dmList
-        x: 2 * parent.width
-        width:  parent.width
-        anchors.bottom: bottomToolbar.top
-        anchors.top: topToolbar.bottom
+        TweetList {
+            id: mentionsList
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            //anchors.left: homeTimelineList.right
 
-        onMoreClicked:  {
-            userInfo.fetchByName(screenname)
-            parent.state = 'userinfo'
-            userinformation.text = text
-            userinformation.time = sincetime
+            onMoreClicked: {
+                userInfo.fetchByName(screenname)
+                timelines.state = 'userinfo'
+                userinformation.text = text
+                userinformation.time = sincetime
+            }
+            onHashtagClicked: {
+                searchResultList.doSearch(hashtag)
+                timelines.state = 'search'
+            }
         }
-    }
 
-    SearchList {
-        id: searchResultList
-        x: 3 * parent.width
-        width: parent.width
-        anchors.bottom: bottomToolbar.top
-        anchors.top: topToolbar.bottom
+        TweetList {
+            id: dmList
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            //anchors.left: mentionsList.right
 
-        onMoreClicked: {
-            userInfo.fetchByName(screenname)
-            parent.state = 'userinfo'
-            userinformation.text = text
-            userinformation.time = sincetime
+            onMoreClicked:  {
+                userInfo.fetchByName(screenname)
+                timelines.state = 'userinfo'
+                userinformation.text = text
+                userinformation.time = sincetime
+            }
+            onHashtagClicked: {
+                searchResultList.doSearch(hashtag)
+                timelines.state = 'search'
+            }
         }
-    }
 
-    UserInfoScreen {
-        id: userinformation
-        x: 4 * parent.width
-        width: parent.width
-        anchors.bottom: bottomToolbar.top
-        anchors.top:  topToolbar.bottom
+        SearchList {
+            id: searchResultList
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        //should be exposed in Main.qml
-        avatar: userInfo.avatarUrl
-        screenname: userInfo.screenName
-        name: userInfo.name
-        url: userInfo.url
-        location: userInfo.location
-        description: userInfo.description
-        numTweets: userInfo.numTweets
-        numFollowers: userInfo.numFollowers
-        numFollowing: userInfo.numFollowing
-        numFavorites: userInfo.numFavorites
+            onMoreClicked: {
+                userInfo.fetchByName(screenname)
+                timelines.state = 'userinfo'
+                userinformation.text = text
+                userinformation.time = sincetime
+            }
+        }
+
+        UserInfoScreen {
+            id: userinformation
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            //should be exposed in Main.qml
+            avatar: userInfo.avatarUrl
+            screenname: userInfo.screenName
+            name: userInfo.name
+            url: userInfo.url
+            location: userInfo.location
+            description: userInfo.description
+            numTweets: userInfo.numTweets
+            numFollowers: userInfo.numFollowers
+            numFollowing: userInfo.numFollowing
+            numFavorites: userInfo.numFavorites
+        }
     }
 
     StatusUpdate {
@@ -215,20 +232,18 @@ Item {
         anchors.right: parent.right
 
         ButtonWithNotification {
-            id: htButton
+            id: homeTimelineButton
             width: 77; height: 77
             anchors.left: parent.left; anchors.leftMargin: 10
             anchors.top: parent.top; anchors.topMargin: 9
             buttonImageUrl:  "images/hometimeline.png"
             pressedButtonImageUrl: "images/hometimeline_pressed.png"
+            toggled: true
             showNotification: homeTimelineModel.numNewTweets
 
             onClicked: {
                 homeTimelineModel.showNewTweets();
                 timelines.state = "";   //default state
-                mentionsButton.toggled = false;
-                directMessagesButton.toggled = false;
-                searchButton.toggled = false;
             }
         }
 
@@ -236,7 +251,7 @@ Item {
             id: mentionsButton
             width: 77; height: 77
             anchors.top: parent.top; anchors.topMargin: 9
-            anchors.left: htButton.right; anchors.leftMargin: 11
+            anchors.left: homeTimelineButton.right; anchors.leftMargin: 11
             buttonImageUrl: "images/replies.png"
             pressedButtonImageUrl: "images/replies_pressed.png"
             showNotification: mentionsModel.numNewTweets
@@ -244,9 +259,6 @@ Item {
             onClicked: {
                 mentionsModel.showNewTweets();
                 timelines.state = "mentions";
-                htButton.toggled = false;
-                directMessagesButton.toggled = false;
-                searchButton.toggled = false;
             }
         }
 
@@ -262,9 +274,6 @@ Item {
             onClicked: {
                 dmList.model.showNewTweets();
                 timelines.state = "directMessages"
-                htButton.toggled = false;
-                mentionsButton.toggled = false;
-                searchButton.toggled = false;
             }
         }
 
@@ -278,9 +287,6 @@ Item {
 
             onClicked: {
                 timelines.state = "search"
-                htButton.toggled = false;
-                mentionsButton.toggled = false;
-                directMessagesButton.toggled = false;
             }
         }
     }
@@ -290,35 +296,35 @@ Item {
     states: [
         State {
             name: "mentions"
-            PropertyChanges { target: mentionsList; x: 0 }
-            PropertyChanges { target: homeTimelineList; x: - parent.width }
-            PropertyChanges { target: dmList; x: parent.width }
-            PropertyChanges { target: searchResultList; x: 2 * parent.width }
-            PropertyChanges { target: userinformation; x: 3 * parent.width }
+            PropertyChanges { target: rowTimelines; x: - parent.width }
+            PropertyChanges { target: homeTimelineButton; toggled: false }
+            PropertyChanges { target: mentionsButton; toggled: true }
+            PropertyChanges { target: directMessagesButton; toggled: false }
+            PropertyChanges { target: searchButton; toggled: false }
         },
         State {
             name: "directMessages"
-            PropertyChanges { target: dmList; x: 0 }
-            PropertyChanges { target: searchResultList; x: parent.width }
-            PropertyChanges { target: userinformation; x: 2 * parent.width }
-            PropertyChanges { target: mentionsList; x: - parent.width }
-            PropertyChanges { target: homeTimelineList; x: - 2 * parent.width }
+            PropertyChanges { target: rowTimelines; x: - 2 * parent.width }
+            PropertyChanges { target: homeTimelineButton; toggled: false }
+            PropertyChanges { target: mentionsButton; toggled: false }
+            PropertyChanges { target: directMessagesButton; toggled: true }
+            PropertyChanges { target: searchButton; toggled: false }
         },
         State {
             name: "search"
-            PropertyChanges { target: homeTimelineList; x: - 3 * parent.width }
-            PropertyChanges { target: mentionsList; x: - 2 * parent.width }
-            PropertyChanges { target: dmList; x: - parent.width }
-            PropertyChanges { target: searchResultList; x: 0 }
-            PropertyChanges { target: userinformation; x: 2 * parent.width }
+            PropertyChanges { target: rowTimelines; x: - 3 * parent.width }
+            PropertyChanges { target: homeTimelineButton; toggled: false }
+            PropertyChanges { target: mentionsButton; toggled: false }
+            PropertyChanges { target: directMessagesButton; toggled: false }
+            PropertyChanges { target: searchButton; toggled: true }
         },
         State {
             name: "userinfo"
-            PropertyChanges { target: homeTimelineList; x: - 4 * parent.width }
-            PropertyChanges { target: mentionsList; x: - 3 * parent.width }
-            PropertyChanges { target: dmList; x: - 2 * parent.width }
-            PropertyChanges { target: searchResultList; x: parent.width }
-            PropertyChanges { target: userinformation; x: 0 }
+            PropertyChanges { target: rowTimelines; x: - 4 * parent.width }
+            PropertyChanges { target: homeTimelineButton; toggled: false }
+            PropertyChanges { target: mentionsButton; toggled: false }
+            PropertyChanges { target: directMessagesButton; toggled: false }
+            PropertyChanges { target: searchButton; toggled: false }
         }
     ]
 

@@ -70,7 +70,8 @@ SOURCES += main.cpp \
     qtweetlib/qtweetsearch.cpp \
     searchqmllistmodel.cpp \
     qtweetlib/qtweetusershow.cpp \
-    userinfo.cpp
+    userinfo.cpp \
+    qtweetlib/qtweetusertimeline.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -126,4 +127,5 @@ HEADERS += \
     qtweetlib/qtweetsearch.h \
     searchqmllistmodel.h \
     qtweetlib/qtweetusershow.h \
-    userinfo.h
+    userinfo.h \
+    qtweetlib/qtweetusertimeline.h

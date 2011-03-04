@@ -12,19 +12,21 @@ Item  {
     property bool isNewTweet: false
 
     signal moreButtonClicked
+    signal mentionLinkClicked(string screenname)
+    signal hashtagLinkClicked(string hashtag)
 
-    //width: ListView.view.width;
-    width: 360;
+    width: ListView.view.width;
+    //width: 360;
     //height: (statusText.paintedHeight < 96) ? 96 : statusText.paintedHeight
     height: 116;
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
-            console.log('tag clicked');
+            hashtagLinkClicked(link.slice(6))
         } else if (link.slice(0, 4) == 'http') {
             Qt.openUrlExternally(link);
         } else if (link.slice(0, 7) == 'mention') {
-            console.log('mention clicked');
+            mentionLinkClicked(link.slice(10));
         }
     }
 
@@ -101,7 +103,7 @@ Item  {
         font.family: "Segoe UI"
         font.pointSize: 10
 
-        onLinkActivated: container.handleLink(link)
+        onLinkActivated: container.handleLink(link);
     }
 
     Text {

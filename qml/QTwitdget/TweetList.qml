@@ -10,7 +10,10 @@ Item {
 //    signal deleteClicked(string id)
 
     //since time is not updated
+
+    //right arrow pressed or mention clicked
     signal moreClicked(string text, string screenname, string sincetime)
+    signal hashtagClicked(string hashtag)
 
     ListView {
         id: tweetListView
@@ -30,6 +33,8 @@ Item {
             //onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
 
             onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
+            onMentionLinkClicked: moreClicked('' /* temp */, screenname, '')
+            onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 

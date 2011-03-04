@@ -3,20 +3,20 @@ import QtQuick 1.0
 Item {
     id: container
 
-    property string text : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at ligula justo, in vulputate massa. Duis suscipit orci non enim vestibulum sed. "
-    property string time : "Some time ago"
+    property string text
+    property string time
     property string avatar : "images/avatar.png"
-    property string screenname : "@screenname"
-    property string name : "Name"
-    property string url : "www.url.com"
-    property string location : "Struga, Macedonia"
-    property string description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at ligula justo, in vulputate massa. Duis suscipit orci non enim vestibulum sed."
+    property string screenname
+    property string name
+    property string url
+    property string location
+    property string description
     property int numTweets : 0
     property int numFollowers : 0
     property int numFollowing : 0
     property int numFavorites : 0
 
-    width: 360; height: 640
+    //width: 360; height: 640
 
     Rectangle {
         id: userInfoBackground

@@ -10,7 +10,12 @@ Item {
     //width: 360
     //height: 462
 
-    signal moreClicked(string text, string screenname)
+    signal moreClicked(string text, string screenname, string sincetime)
+
+    function doSearch(query) {
+        queryInput.text = query
+        model.startSearch(query)
+    }
 
     TextInput {
         id: queryInput
@@ -21,10 +26,7 @@ Item {
         height: 20
         focus: true
 
-        onAccepted: {
-            console.log('Oooh accepted');
-            model.startSearch(queryInput.text);
-        }
+        onAccepted: model.startSearch(queryInput.text)
     }
 
     ListView {
@@ -41,7 +43,9 @@ Item {
             tweetAvatar: avatarUrlRole
             tweetText: statusTextRole
 
-            onMoreButtonClicked: moreClicked(tweetText, tweetScreenName)
+            onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
+            onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
+            onHashtagLinkClicked: doSearch(hashtag)
         }
     }
 
