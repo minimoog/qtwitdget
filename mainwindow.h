@@ -37,6 +37,7 @@ class MentionsQmlListModel;
 class DirectMessagesQmlListModel;
 class SearchQmlListModel;
 class UserInfo;
+class UserTimelineListModel;
 class QMenu;
 
 class MainWindow : public QmlApplicationViewer
@@ -78,6 +79,7 @@ private:
     MentionsQmlListModel* m_mentionsListModel;
     DirectMessagesQmlListModel *m_directMessagesListModel;
     SearchQmlListModel *m_searchListModel;
+    UserTimelineListModel *m_userTimelineListModel;
     UserInfo *m_userInfo;
 
     qint64 m_userId;

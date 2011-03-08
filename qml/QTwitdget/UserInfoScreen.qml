@@ -1,9 +1,11 @@
 import QtQuick 1.0
 
 Item {
+    property alias model : tweetSimpleList.model
+
     id: container
 
-    property string text : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices massa eu leo pellentesque a condimentum nulla feugiat. Maecenas metus."
+    property string text : "A bre"
     property string time : "Sime time ago"
     property string avatar : "images/avatar.png"
     property string screenname : "powertwitter"
@@ -20,6 +22,10 @@ Item {
 
     Rectangle {
         id: userInfoBackground
+        height: oblace.height + userDescription.paintedHeight + 140 //296
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.top: parent.top
         gradient: Gradient {
             GradientStop {
                 position: 0
@@ -30,11 +36,11 @@ Item {
                 color: "#d9d9d9"
             }
         }
-        anchors.fill: parent
 
         Image {
             id: oblace
-            height: 114
+            height: (container.text) ? (tweetText.paintedHeight + 55) : 0
+            visible: container.text
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -311,5 +317,14 @@ Item {
             pressedButtonImageUrl: "images/message_button_pressed.png"
             buttonImageUrl: "images/message_button.png"
         }
+    }
+
+    TweetSimpleList {
+        id: tweetSimpleList
+        anchors.top: userInfoBackground.bottom
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.topMargin: 0
     }
 }

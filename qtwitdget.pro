@@ -71,7 +71,8 @@ SOURCES += main.cpp \
     searchqmllistmodel.cpp \
     qtweetlib/qtweetusershow.cpp \
     userinfo.cpp \
-    qtweetlib/qtweetusertimeline.cpp
+    qtweetlib/qtweetusertimeline.cpp \
+    usertimelinelistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -128,4 +129,5 @@ HEADERS += \
     searchqmllistmodel.h \
     qtweetlib/qtweetusershow.h \
     userinfo.h \
-    qtweetlib/qtweetusertimeline.h
+    qtweetlib/qtweetusertimeline.h \
+    usertimelinelistmodel.h

@@ -1,4 +1,5 @@
 //userInfo external
+//userTimelineListModel external
 //UserInfoScreen properties should be exposed in Main.qml, too many properties
 //maybe later
 
@@ -28,6 +29,7 @@ Item {
 
             onMoreClicked: {
                 userInfo.fetchByName(screenname)
+                userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
                 userinformation.text = text
                 userinformation.time = sincetime
@@ -107,6 +109,7 @@ Item {
             numFollowers: userInfo.numFollowers
             numFollowing: userInfo.numFollowing
             numFavorites: userInfo.numFavorites
+            model: userTimelineListModel
         }
     }
 

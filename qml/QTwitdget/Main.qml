@@ -4,6 +4,7 @@
 //searchListModel - external
 //rootWindow - external
 //userInfo - external
+//userTimelineListModel - external
 
 import QtQuick 1.0
 
