@@ -5,7 +5,7 @@ Item  {
 
     property string tweetid
     property string tweetScreenName: "Screen Name"
-    property string tweetText: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
+    property string tweetText: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
     property string tweetAvatar
     property string tweetSinceTime: "sometimes ago"
     property bool isOwnTweet: false
@@ -17,8 +17,8 @@ Item  {
 
     width: ListView.view.width;
     //width: 360;
-    //height: (statusText.paintedHeight < 96) ? 96 : statusText.paintedHeight
-    height: 116;
+    //height: (statusText.paintedHeight < 80) ? 80 : statusText.paintedHeight
+    height: 86
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
@@ -59,8 +59,8 @@ Item  {
         color: "#b3b3b3"
         radius: 5
         border.width: 2
-        anchors.left: parent.left; anchors.leftMargin: 11
-        anchors.top: parent.top; anchors.topMargin: 11
+        anchors.left: parent.left; anchors.leftMargin: 5
+        anchors.top: parent.top; anchors.topMargin: 5
         border.color: "#717171"
 
         Image {
@@ -93,15 +93,14 @@ Item  {
     Text {
         id: statusText
         color: "#333333"
-        //text: addTags(tweetText)
         text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
         anchors.top: parent.top;
-        anchors.right: parent.right; anchors.rightMargin: 35
-        anchors.left: avatarContainer.right; anchors.leftMargin: 10
+        anchors.right: rightArrow.left; anchors.rightMargin: 0
+        anchors.left: avatarContainer.right; anchors.leftMargin: 5
         textFormat: Text.RichText
         wrapMode: "WordWrap"
         font.family: "Segoe UI"
-        font.pointSize: 10
+        font.pointSize: 9
 
         onLinkActivated: container.handleLink(link);
     }
@@ -121,7 +120,7 @@ Item  {
             PropertyAction { target: container; property: "x"; value: container.width }
             PropertyAction { target: container; property: "opacity"; value: 0 }
         }
-        NumberAnimation { target: container; property: "height"; from: 0; to: 116; duration: 500 }
+        NumberAnimation { target: container; property: "height"; from: 0; to: 86; duration: 500 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }

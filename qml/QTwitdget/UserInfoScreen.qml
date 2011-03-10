@@ -23,6 +23,7 @@ Item {
     signal mentionClicked(string mention)   //doesn't need to go outside
     signal replyButtonClicked
     signal retweetButtonClicked
+    signal messageButtonClicked
 
     function addTags(str) {
         //surrounds http links with html link tags
@@ -349,6 +350,8 @@ Item {
             anchors.leftMargin: 5
             pressedButtonImageUrl: "images/message_button_pressed.png"
             buttonImageUrl: "images/message_button.png"
+
+            onClicked: messageButtonClicked()
         }
     }
 

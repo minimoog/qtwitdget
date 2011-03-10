@@ -4,8 +4,8 @@ Rectangle {
     id: background
 
     property string tweetid;
-    property string tweetText //: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
-    property string tweetSinceTime //: "Sometimes ago"
+    property string tweetText : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
+    property string tweetSinceTime : "Sometimes ago"
 
     signal clicked
 //    signal hashtagLinkClicked(string hashtag)
@@ -31,7 +31,8 @@ Rectangle {
     }
 
     width: ListView.view.width;
-    height: statusText.paintedHeight + 45
+    //width: 360
+    height: statusText.paintedHeight + 30
     gradient: Gradient {
         GradientStop {
             position: 0
@@ -46,14 +47,14 @@ Rectangle {
     Text {
         id: statusText
         color: background.ListView.isCurrentItem ? "red" : "#666666"
-        text: addTags(tweetText)
+        text: tweetText
         textFormat: Text.RichText
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: 5
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 5
         anchors.top: parent.top
-        anchors.topMargin: 10
+        anchors.topMargin: 5
         wrapMode: Text.WordWrap
         font.pointSize: 10
         font.family: "Segoe UI"
@@ -69,9 +70,9 @@ Rectangle {
         color: background.ListView.isCurrentItem ? "red" :"#616161"
         text: tweetSinceTime
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 5
         anchors.top: statusText.bottom
-        anchors.topMargin: 7
+        anchors.topMargin: 5
         font.family: "Segoe UI"
     }
 
