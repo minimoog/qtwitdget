@@ -31,7 +31,7 @@ Rectangle {
     }
 
     width: ListView.view.width;
-    height: 96
+    height: statusText.paintedHeight + 45
     gradient: Gradient {
         GradientStop {
             position: 0
