@@ -47,6 +47,7 @@ Rectangle {
         id: statusText
         color: background.ListView.isCurrentItem ? "red" : "#666666"
         text: addTags(tweetText)
+        textFormat: Text.RichText
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.left: parent.left

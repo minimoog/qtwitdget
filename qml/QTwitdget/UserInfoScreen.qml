@@ -79,6 +79,7 @@ Item {
                 style: Text.Normal
                 font.family: "Segoe UI"
                 wrapMode: Text.WordWrap
+                textFormat: Text.RichText
                 anchors.right: parent.right; anchors.rightMargin: 5
                 anchors.left: parent.left; anchors.leftMargin: 5
                 anchors.top: parent.top; anchors.topMargin: 5
