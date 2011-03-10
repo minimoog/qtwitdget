@@ -136,6 +136,12 @@ Item {
                 tweetUpdate.state = 'show'
                 tweetUpdate.setRetweet(text, screenname)
             }
+            onMessageButtonClicked: {
+                tweetUpdate.state = 'show'
+                tweetUpdate.tweetid = ''
+                tweetUpdate.updateText = ''
+                tweetUpdate.screenname = screenname
+            }
         }
     }
 
@@ -359,7 +365,7 @@ Item {
 
     transitions: [
         Transition {
-            NumberAnimation { properties: "x"; duration: 500; easing.type: Easing.InOutBack }
+            NumberAnimation { properties: "x"; duration: 500; easing.type: Easing.InOutExpo }
         }
     ]
 }
