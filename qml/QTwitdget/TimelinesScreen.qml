@@ -123,7 +123,9 @@ Item {
                 timelines.state = 'search'
             }
             onMentionClicked: {
+                console.log(mention)
                 userInfo.fetchByName(mention)
+                userTimelineListModel.fetch(mention)
                 userinformation.text = ''
             }
             onReplyButtonClicked: {
