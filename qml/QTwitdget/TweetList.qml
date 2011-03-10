@@ -12,7 +12,7 @@ Item {
     //since time is not updated
 
     //right arrow pressed or mention clicked
-    signal moreClicked(string text, string screenname, string sincetime)
+    signal moreClicked(string statusid, string text, string screenname, string sincetime)
     signal hashtagClicked(string hashtag)
 
     ListView {
@@ -32,8 +32,8 @@ Item {
             //onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
             //onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
 
-            onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
-            onMentionLinkClicked: moreClicked('' /* temp */, screenname, '')
+            onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
+            onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
             onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }

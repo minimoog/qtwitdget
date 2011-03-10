@@ -5,18 +5,42 @@ Item {
 
     id: container
 
-    property string text : "A bre"
-    property string time : "Sime time ago"
+    property string text
+    property string statusid
+    property string time
     property string avatar : "images/avatar.png"
-    property string screenname : "powertwitter"
-    property string name : "??? ???????"
-    property string url : "www.nokia.com"
-    property string location : "Struga Macedonia"
-    property string description : "As a graphic designer, I like to collaborate. I don't want to be in a cold garret somewhere smoking unfiltered Camels all by myself with paint all over my body."
-    property int numTweets : 0
-    property int numFollowers : 0
-    property int numFollowing : 0
-    property int numFavorites : 0
+    property string screenname
+    property string name
+    property string url
+    property string location
+    property string description
+    property int numTweets
+    property int numFollowers
+    property int numFollowing
+    property int numFavorites
+
+    signal hashTagClicked(string hashtag)
+    signal mentionClicked(string mention)   //doesn't need to go outside
+    signal replyButtonClicked
+    signal retweetButtonClicked
+
+    function addTags(str) {
+        //surrounds http links with html link tags
+        var ret1 = str.replace(/@[a-zA-Z0-9_]+/g, '<a href="mention://$&">$&</a>');
+        var ret2 = ret1.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");
+        var ret3 = ret2.replace(/[#]+[A-Za-z0-9-_]+/g, '<a href="tag://$&">$&</a>')
+        return ret3;
+    }
+
+    function handleLink(link) {
+        if (link.slice(0, 3) == 'tag') {
+            hashTagClicked(link.slice(6))
+        } else if (link.slice(0, 4) == 'http') {
+            Qt.openUrlExternally(link);
+        } else if (link.slice(0, 7) == 'mention') {
+            mentionClicked(link.slice(10));
+        }
+    }
 
     width: 360; height: 640
 
@@ -46,9 +70,11 @@ Item {
 
             source: "images/oblace.png"
 
+            Behavior on height { PropertyAnimation { duration: 200 } }
+
             Text {
                 id: tweetText
-                text: container.text
+                text: addTags(container.text)
                 font.pointSize: 10
                 style: Text.Normal
                 font.family: "Segoe UI"
@@ -56,6 +82,8 @@ Item {
                 anchors.right: parent.right; anchors.rightMargin: 5
                 anchors.left: parent.left; anchors.leftMargin: 5
                 anchors.top: parent.top; anchors.topMargin: 5
+
+                onLinkActivated: container.handleLink(link)
             }
             Text {
                 id: since
@@ -74,6 +102,8 @@ Item {
                 anchors.leftMargin: 5
                 pressedButtonImageUrl: "images/retweet_button_pressed.png"
                 buttonImageUrl: "images/retweet_button.png"
+
+                onClicked: retweetButtonClicked()
             }
 
             ButtonImage {
@@ -86,6 +116,8 @@ Item {
                 anchors.left: retweetButton.right
                 anchors.leftMargin: 5
                 buttonImageUrl: "images/reply_button.png"
+
+                onClicked: replyButtonClicked()
             }
 
             ButtonImage {
@@ -325,6 +357,12 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.topMargin: 0
+
+        onClickedDelegate: {
+            statusid = delegateID
+            text = delegateText
+            time = delegateSinceTime
+        }
+//        onHashtagClicked: container.hashTagClicked(hashtag)
     }
 }

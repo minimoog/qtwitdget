@@ -31,6 +31,7 @@ Item {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
+                userinformation.statusid = statusid
                 userinformation.text = text
                 userinformation.time = sincetime
             }
@@ -49,7 +50,9 @@ Item {
 
             onMoreClicked: {
                 userInfo.fetchByName(screenname)
+                userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
+                userinformation.statusid = statusid
                 userinformation.text = text
                 userinformation.time = sincetime
             }
@@ -68,7 +71,9 @@ Item {
 
             onMoreClicked:  {
                 userInfo.fetchByName(screenname)
+                userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
+                userinformation.statusid = statusid
                 userinformation.text = text
                 userinformation.time = sincetime
             }
@@ -86,7 +91,9 @@ Item {
 
             onMoreClicked: {
                 userInfo.fetchByName(screenname)
+                userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
+                userinformation.statusid = statusid
                 userinformation.text = text
                 userinformation.time = sincetime
             }
@@ -110,6 +117,23 @@ Item {
             numFollowing: userInfo.numFollowing
             numFavorites: userInfo.numFavorites
             model: userTimelineListModel
+
+            onHashTagClicked: {
+                searchResultList.doSearch(hashtag)
+                timelines.state = 'search'
+            }
+            onMentionClicked: {
+                userInfo.fetchByName(mention)
+                userinformation.text = ''
+            }
+            onReplyButtonClicked: {
+                tweetUpdate.state = 'show'
+                tweetUpdate.setReply(statusid, screenname)
+            }
+            onRetweetButtonClicked: {
+                tweetUpdate.state = 'show'
+                tweetUpdate.setRetweet(text, screenname)
+            }
         }
     }
 

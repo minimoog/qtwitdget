@@ -123,7 +123,7 @@ Item  {
         }
         NumberAnimation { target: container; property: "height"; from: 0; to: 116; duration: 500 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
-        //PauseAnimation { duration: ListView.view.currentIndex * 100 }
+        PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
     }
 }
