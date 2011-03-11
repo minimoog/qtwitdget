@@ -10,6 +10,7 @@ Item {
     property alias mentionsModel: mentionsList.model
     property alias directMessagesModel: dmList.model
     property alias searchModel: searchResultList.model
+    property string username
 
     signal sendClicked(string tweetid, string text, string screenname)
 
@@ -188,7 +189,7 @@ Item {
     Rectangle {
         id: topToolbar
 
-        height: 82
+        height: 51
         gradient: Gradient {
             GradientStop {
                 position: 0
@@ -207,8 +208,8 @@ Item {
         ButtonImage {
             id: statusUpdateButton
 
-            anchors.top: parent.top; anchors.topMargin: 21
-            anchors.left: parent.left; anchors.leftMargin: 10
+            anchors.top: parent.top; anchors.topMargin: 5
+            anchors.left: parent.left; anchors.leftMargin: 5
             width: 39; height: 39
 
             buttonImageUrl: "images/statusupdate.png"
@@ -226,20 +227,20 @@ Item {
         ButtonText {
             id: usernameButton
 
-            anchors.top: parent.top; anchors.topMargin: 21
-            anchors.left: statusUpdateButton.right; anchors.leftMargin: 10
+            anchors.top: parent.top; anchors.topMargin: 5
+            anchors.left: statusUpdateButton.right; anchors.leftMargin: 5
             width: 145; height: 39
 
             buttonImageUrl: "images/username.png"
             pressedButtonImageUrl: "images/username_pressed.png"
-            text: "@minimoog77" //test
+            text: timelines.username
         }
 
         ButtonImage {
             id: settingsButton
 
-            anchors.top: parent.top; anchors.topMargin: 21
-            anchors.left: usernameButton.right; anchors.leftMargin: 10
+            anchors.top: parent.top; anchors.topMargin: 5
+            anchors.left: usernameButton.right; anchors.leftMargin: 5
             width: 39; height: 39
 
             buttonImageUrl: "images/settings.png"
@@ -249,7 +250,7 @@ Item {
 
     Rectangle {
         id: bottomToolbar
-        height: 96
+        height: 50
         border.color: "#474747"
         gradient: Gradient {
             GradientStop {
@@ -266,62 +267,60 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        ButtonWithNotification {
-            id: homeTimelineButton
-            width: 77; height: 77
-            anchors.left: parent.left; anchors.leftMargin: 10
-            anchors.top: parent.top; anchors.topMargin: 9
-            buttonImageUrl:  "images/hometimeline.png"
-            pressedButtonImageUrl: "images/hometimeline_pressed.png"
-            toggled: true
-            showNotification: homeTimelineModel.numNewTweets
+        Row {
+            spacing: 5
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.horizontalCenter: parent.horizontalCenter
+            ButtonWithNotification {
+                id: homeTimelineButton
+                width: 40; height: 40
+                buttonImageUrl:  "images/hometimeline.png"
+                pressedButtonImageUrl: "images/hometimeline_pressed.png"
+                toggled: true
+                showNotification: homeTimelineModel.numNewTweets
 
-            onClicked: {
-                homeTimelineModel.showNewTweets();
-                timelines.state = "";   //default state
+                onClicked: {
+                    homeTimelineModel.showNewTweets();
+                    timelines.state = "";   //default state
+                }
             }
-        }
 
-        ButtonWithNotification {
-            id: mentionsButton
-            width: 77; height: 77
-            anchors.top: parent.top; anchors.topMargin: 9
-            anchors.left: homeTimelineButton.right; anchors.leftMargin: 11
-            buttonImageUrl: "images/replies.png"
-            pressedButtonImageUrl: "images/replies_pressed.png"
-            showNotification: mentionsModel.numNewTweets
+            ButtonWithNotification {
+                id: mentionsButton
+                width: 40; height: 40
+                buttonImageUrl: "images/replies.png"
+                pressedButtonImageUrl: "images/replies_pressed.png"
+                showNotification: mentionsModel.numNewTweets
 
-            onClicked: {
-                mentionsModel.showNewTweets();
-                timelines.state = "mentions";
+                onClicked: {
+                    mentionsModel.showNewTweets();
+                    timelines.state = "mentions";
+                }
             }
-        }
 
-        ButtonWithNotification {
-            id: directMessagesButton
-            width: 77; height: 77
-            anchors.top: parent.top; anchors.topMargin: 9
-            anchors.left: mentionsButton.right; anchors.leftMargin: 11
-            buttonImageUrl: "images/directmessages.png"
-            pressedButtonImageUrl: "images/directmessages_pressed.png"
-            showNotification: directMessagesModel.numNewDirectMessages
+            ButtonWithNotification {
+                id: directMessagesButton
+                width: 40; height: 40
+                buttonImageUrl: "images/directmessages.png"
+                pressedButtonImageUrl: "images/directmessages_pressed.png"
+                showNotification: directMessagesModel.numNewDirectMessages
 
-            onClicked: {
-                dmList.model.showNewTweets();
-                timelines.state = "directMessages"
+                onClicked: {
+                    dmList.model.showNewTweets();
+                    timelines.state = "directMessages"
+                }
             }
-        }
 
-        ButtonWithNotification {
-            id: searchButton
-            width: 77; height: 77
-            anchors.top: parent.top; anchors.topMargin: 9
-            anchors.left: directMessagesButton.right; anchors.leftMargin: 11
-            buttonImageUrl: "images/search.png"
-            pressedButtonImageUrl: "images/search_pressed.png"
+            ButtonWithNotification {
+                id: searchButton
+                width: 40; height: 40
+                buttonImageUrl: "images/search.png"
+                pressedButtonImageUrl: "images/search_pressed.png"
 
-            onClicked: {
-                timelines.state = "search"
+                onClicked: {
+                    timelines.state = "search"
+                }
             }
         }
     }

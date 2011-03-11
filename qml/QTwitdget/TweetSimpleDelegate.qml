@@ -47,7 +47,7 @@ Rectangle {
     Text {
         id: statusText
         color: background.ListView.isCurrentItem ? "red" : "#666666"
-        text: tweetText
+        text: addTags(tweetText)
         textFormat: Text.RichText
         anchors.right: parent.right
         anchors.rightMargin: 5
@@ -56,7 +56,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 5
         wrapMode: Text.WordWrap
-        font.pointSize: 10
+        font.pointSize: 9
         font.family: "Segoe UI"
 
 //        onLinkActivated: {
@@ -74,6 +74,7 @@ Rectangle {
         anchors.top: statusText.bottom
         anchors.topMargin: 5
         font.family: "Segoe UI"
+        font.pointSize: 7
     }
 
     MouseArea {
