@@ -43,12 +43,17 @@ class QMenu;
 class MainWindow : public QmlApplicationViewer
 {
     Q_OBJECT
+    Q_PROPERTY(QString userScreenName READ userScreenName NOTIFY userScreenNameChanged)
 public:
     explicit MainWindow(QWidget *parent = 0);
     void startUp();
 
     Q_INVOKABLE void authorize(const QString& username, const QString& password);
     Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
+    QString userScreenName() const;
+
+signals:
+    void userScreenNameChanged();
 
 private slots:
     void authorizationFinished();

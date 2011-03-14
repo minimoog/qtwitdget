@@ -97,6 +97,7 @@ void MainWindow::authorizationFailed()
     settings.remove("oauth_token");
     settings.remove("oauth_token_secret");
     settings.remove("user_id");
+    settings.remove("user_screenname");
 }
 
 void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
@@ -109,8 +110,12 @@ void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
         settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
         settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
         settings.setValue("user_id", userinfo.id());
+        settings.setValue("user_screenname", userinfo.screenName());
 
         m_userId = userinfo.id();
+        m_userScreenName = userinfo.screenName();
+
+        emit userScreenNameChanged();
 
         tweetVerifyCredentials->deleteLater();
 
@@ -129,8 +134,12 @@ void MainWindow::startUp()
     //read settings
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
     m_userId = settings.value("user_id", 0).toInt();
+    m_userScreenName = settings.value("user_screenname").toString();
     QString oauthToken = settings.value("oauth_token").toString();
     QString oauthTokenSecret = settings.value("oauth_token_secret").toString();
+
+    if (!m_userScreenName.isEmpty())
+        emit userScreenNameChanged();
 
     if(m_userId != 0 && !oauthToken.isEmpty() && !oauthTokenSecret.isEmpty()){
         m_oauthTwitter->setOAuthToken(oauthToken.toUtf8());
@@ -383,6 +392,11 @@ void MainWindow::createDeclarativeView()
 
     //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));
     setMainQmlFile(QLatin1String("qml/QTwitdget/Main.qml"));
+}
+
+QString MainWindow::userScreenName() const
+{
+    return m_userScreenName;
 }
 
 void MainWindow::readSettings()

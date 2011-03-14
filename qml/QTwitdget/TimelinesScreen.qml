@@ -234,6 +234,13 @@ Item {
             buttonImageUrl: "images/username.png"
             pressedButtonImageUrl: "images/username_pressed.png"
             text: timelines.username
+
+            onClicked: {
+                userInfo.fetchByName(text)
+                userTimelineListModel.fetch(text)
+                timelines.state = 'userinfo'
+                userinformation.text = ''
+            }
         }
 
         ButtonImage {
