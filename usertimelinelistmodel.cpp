@@ -24,6 +24,25 @@
 #include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetusertimeline.h"
 
+static QString SinceTimeString(const QDateTime& from)
+{
+    int passedSeconds = from.secsTo(QDateTime::currentDateTimeUtc());
+
+    if (passedSeconds < 0)
+        return QString("Time travel!");
+
+    if (passedSeconds < 60)
+        return QString("%1 seconds ago").arg(passedSeconds);
+
+    if (passedSeconds < 3600)
+        return QString("%1 minutes ago").arg(passedSeconds / 60);
+
+    if (passedSeconds < 86400)
+        return QString("%1 hours ago").arg(passedSeconds / 3600);
+
+    return QString("%1 days ago").arg(passedSeconds / 86400);
+}
+
 UserTimelineListModel::UserTimelineListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -66,7 +85,7 @@ QVariant UserTimelineListModel::data(const QModelIndex &index, int role) const
     if (role == StatusTextRole)
         return st.text();
     else if (role == SinceTimeRole)
-        return st.createdAt().toString();   // test case
+        return SinceTimeString(st.createdAt());
     else if (role == StatusIdRole)
         return QString::number(st.id());
 

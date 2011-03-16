@@ -146,8 +146,6 @@ void ConversationListModel::followConversation(const QString &statusID)
 
 void ConversationListModel::fetchConversation(qint64 statusID)
 {
-    qDebug() << "Following: " << statusID;
-
     QTweetStatus status = findInDatabase(statusID);
 
     if (status.id() == 0) {
