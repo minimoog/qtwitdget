@@ -120,7 +120,7 @@ Item  {
             PropertyAction { target: container; property: "x"; value: container.width }
             PropertyAction { target: container; property: "opacity"; value: 0 }
         }
-        NumberAnimation { target: container; property: "height"; from: 0; to: 86; duration: 500 }
+        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: 86; duration: 300 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }

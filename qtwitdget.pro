@@ -65,14 +65,16 @@ SOURCES += main.cpp \
     tweetqmllistmodel.cpp \
     shortenedurl.cpp \
     mentionsqmllistmodel.cpp \
-    directmessagesqmllistmodel.cpp \
     mainwindow.cpp \
     qtweetlib/qtweetsearch.cpp \
     searchqmllistmodel.cpp \
     qtweetlib/qtweetusershow.cpp \
     userinfo.cpp \
     qtweetlib/qtweetusertimeline.cpp \
-    usertimelinelistmodel.cpp
+    usertimelinelistmodel.cpp \
+    qtweetlib/qtweetstatusshow.cpp \
+    conversationlistmodel.cpp \
+    directmessagesqmllistmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -130,4 +132,6 @@ HEADERS += \
     qtweetlib/qtweetusershow.h \
     userinfo.h \
     qtweetlib/qtweetusertimeline.h \
-    usertimelinelistmodel.h
+    usertimelinelistmodel.h \
+    qtweetlib/qtweetstatusshow.h \
+    conversationlistmodel.h

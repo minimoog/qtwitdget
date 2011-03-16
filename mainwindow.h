@@ -38,6 +38,7 @@ class DirectMessagesQmlListModel;
 class SearchQmlListModel;
 class UserInfo;
 class UserTimelineListModel;
+class ConversationListModel;
 class QMenu;
 
 class MainWindow : public QmlApplicationViewer
@@ -86,6 +87,7 @@ private:
     SearchQmlListModel *m_searchListModel;
     UserTimelineListModel *m_userTimelineListModel;
     UserInfo *m_userInfo;
+    ConversationListModel *m_conversationListModel;
 
     qint64 m_userId;
     QString m_userScreenName;

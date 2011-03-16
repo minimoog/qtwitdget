@@ -5,6 +5,7 @@
 //rootWindow - external
 //userInfo - external
 //userTimelineListModel - external
+//conversationListModel - external
 
 import QtQuick 1.0
 
@@ -38,6 +39,7 @@ Item {
         mentionsModel: mentionsListModel
         directMessagesModel: directMessagesListModel
         searchModel: searchListModel
+        conversationModel: conversationListModel
         username: rootWindow.userScreenName
 
         onSendClicked: rootWindow.updateButtonClicked(tweetid, text, screenname)

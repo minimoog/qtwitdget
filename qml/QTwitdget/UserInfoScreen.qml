@@ -24,6 +24,7 @@ Item {
     signal replyButtonClicked
     signal retweetButtonClicked
     signal messageButtonClicked
+    signal conversationButtonClicked
 
     function addTags(str) {
         //surrounds http links with html link tags
@@ -144,6 +145,8 @@ Item {
                 anchors.topMargin: 10
                 pressedButtonImageUrl: "images/conversation_button_pressed.png"
                 buttonImageUrl: "images/conversation_button.png"
+
+                onClicked: conversationButtonClicked()
             }
         }
 

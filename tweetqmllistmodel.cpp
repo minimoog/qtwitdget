@@ -280,15 +280,16 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     QSqlQuery query;
 
     query.prepare("INSERT OR ABORT INTO status "
-                  "(id, text, screenName, profileImageUrl, userId, created) "
+                  "(id, text, screenName, profileImageUrl, userId, created, replyToStatusId) "
                   "VALUES "
-                  "(:id, :text, :screenName, :profileImageUrl, :userId, :created);");
+                  "(:id, :text, :screenName, :profileImageUrl, :userId, :created, :replyToStatusId);");
     query.bindValue(":id", status.id());
     query.bindValue(":text", status.text());
     query.bindValue(":userId", status.userid());
     query.bindValue(":screenName", status.user().screenName());
     query.bindValue(":profileImageUrl", status.user().profileImageUrl());
     query.bindValue(":created", status.createdAt());
+    query.bindValue(":replyToStatusId", status.inReplyToStatusId());
     query.exec();
 
     m_newStatuses.prepend(status);
@@ -411,9 +412,9 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
 
             query.exec("BEGIN;");
             query.prepare("INSERT OR ABORT INTO status "
-                          "(id, text, screenName, profileImageUrl, userId, created) "
+                          "(id, text, screenName, profileImageUrl, userId, created, replyToStatusId) "
                           "VALUES "
-                          "(:id, :text, :screenName, :profileImageUrl, :userId, :created);");
+                          "(:id, :text, :screenName, :profileImageUrl, :userId, :created, :replyToStatusId);");
 
             QListIterator<QTweetStatus> i(statuses);
             i.toBack();
@@ -421,7 +422,7 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
                 QTweetStatus s = i.previous();
                 query.bindValue(":id", s.id());
                 query.bindValue(":text", s.text());
-                //query.bindValue(":replyToStatusId", s.replyToStatusId());
+                query.bindValue(":replyToStatusId", s.inReplyToStatusId());
                 //query.bindValue(":replyToUserId", s.replyToUserId());
                 //query.bindValue(":replyToScreenName", s.replyToScreenName());
                 query.bindValue(":userId", s.user().id());

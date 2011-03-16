@@ -61,9 +61,9 @@ void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
             QSqlQuery query;
 
             query.prepare("INSERT OR REPLACE INTO status "
-                          "(id, text, screenName, profileImageUrl, userId, mention, created) "
+                          "(id, text, screenName, profileImageUrl, userId, mention, created, replyToStatusId) "
                           "VALUES "
-                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created);");
+                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created, :replyToStatusId);");
             query.bindValue(":id", status.id());
             query.bindValue(":text", status.text());
             query.bindValue(":userId", status.user().id());
@@ -71,6 +71,7 @@ void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
             query.bindValue(":profileImageUrl", status.user().profileImageUrl());
             query.bindValue(":mention", 1);
             query.bindValue(":created", status.createdAt());
+            query.bindValue(":replyToStatusId", status.inReplyToStatusId());
             query.exec();
 
             m_newStatuses.prepend(status);
@@ -175,9 +176,9 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
 
             query.exec("BEGIN;");
             query.prepare("INSERT OR REPLACE INTO status "
-                          "(id, text, screenName, profileImageUrl, userId, mention, created) "
+                          "(id, text, screenName, profileImageUrl, userId, mention, created, replyToStatusId) "
                           "VALUES "
-                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created);");
+                          "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created, :replyToStatusId);");
 
             QListIterator<QTweetStatus> i(statuses);
             i.toBack();
@@ -185,7 +186,7 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
                 QTweetStatus s = i.previous();
                 query.bindValue(":id", s.id());
                 query.bindValue(":text", s.text());
-                //query.bindValue(":replyToStatusId", s.replyToStatusId());
+                query.bindValue(":replyToStatusId", s.inReplyToStatusId());
                 //query.bindValue(":replyToUserId", s.replyToUserId());
                 //query.bindValue(":replyToScreenName", s.replyToScreenName());
                 query.bindValue(":userId", s.user().id());

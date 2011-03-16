@@ -10,6 +10,7 @@ Item {
     property alias mentionsModel: mentionsList.model
     property alias directMessagesModel: dmList.model
     property alias searchModel: searchResultList.model
+    property alias conversationModel: conversationList.model
     property string username
 
     signal sendClicked(string tweetid, string text, string screenname)
@@ -142,6 +143,30 @@ Item {
                 tweetUpdate.tweetid = ''
                 tweetUpdate.updateText = ''
                 tweetUpdate.screenname = screenname
+            }
+            onConversationButtonClicked: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(statusid)
+            }
+        }
+
+        TweetList {
+            id: conversationList
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            onMoreClicked: {
+                userInfo.fetchByName(screenname)
+                userTimelineListModel.fetch(screenname)
+                timelines.state = 'userinfo'
+                userinformation.statusid = statusid
+                userinformation.text = text
+                userinformation.time = sincetime
+            }
+            onHashtagClicked: {
+                searchResultList.doSearch(hashtag)
+                timelines.state = 'search'
             }
         }
     }
@@ -362,6 +387,14 @@ Item {
         State {
             name: "userinfo"
             PropertyChanges { target: rowTimelines; x: - 4 * parent.width }
+            PropertyChanges { target: homeTimelineButton; toggled: false }
+            PropertyChanges { target: mentionsButton; toggled: false }
+            PropertyChanges { target: directMessagesButton; toggled: false }
+            PropertyChanges { target: searchButton; toggled: false }
+        },
+        State {
+            name: "conversation"
+            PropertyChanges { target: rowTimelines; x: - 5 * parent.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
