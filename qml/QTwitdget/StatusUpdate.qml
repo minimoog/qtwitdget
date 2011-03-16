@@ -79,4 +79,15 @@ Rectangle {
         buttonImageUrl: "images/shorturl.png"
         pressedButtonImageUrl: "images/shorturl_pressed.png"
     }
+
+    Text {
+        id: counter
+        text: 140 - statusTextInput.text.length
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
+        font.family: "Segoe UI"
+        font.pixelSize: 12
+    }
 }
