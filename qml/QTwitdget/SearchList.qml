@@ -11,6 +11,9 @@ Item {
     //height: 462
 
     signal moreClicked(string text, string screenname, string sincetime)
+    signal replyClicked(string id, string screenname)
+    signal retweetClicked(string text, string screenname)
+    signal hashtagClicked(string hashtag)
 
     function doSearch(query) {
         queryInput.text = query
@@ -46,6 +49,8 @@ Item {
             onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
             onHashtagLinkClicked: doSearch(hashtag)
+            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName)
+            onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
         }
     }
 

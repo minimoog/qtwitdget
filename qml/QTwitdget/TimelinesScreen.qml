@@ -41,6 +41,14 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
+            onReplyClicked: {
+                tweetUpdate.setReply(id, screenname)
+                tweetUpdate.state = 'show'
+            }
+            onRetweetClicked: {
+                tweetUpdate.setRetweet(text, screenname)
+                tweetUpdate.state = 'show'
+            }
         }
 
         TweetList {
@@ -61,6 +69,14 @@ Item {
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
+            }
+            onReplyClicked: {
+                tweetUpdate.setReply(id, screenname)
+                tweetUpdate.state = 'show'
+            }
+            onRetweetClicked: {
+                tweetUpdate.setRetweet(text, screenname)
+                tweetUpdate.state = 'show'
             }
         }
 
@@ -83,6 +99,14 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
+//            onReplyClicked: {
+//                tweetUpdate.setReply(id, screenname)
+//                tweetUpdate.state = 'show'
+//            }
+//            onRetweetClicked: {
+//                tweetUpdate.setRetweet(text, screenname)
+//                tweetUpdate.state = 'show'
+//            }
         }
 
         SearchList {
@@ -98,6 +122,18 @@ Item {
                 userinformation.statusid = statusid
                 userinformation.text = text
                 userinformation.time = sincetime
+            }
+            onHashtagClicked: {
+                searchResultList.doSearch(hashtag)
+                timelines.state = 'search'
+            }
+            onReplyClicked: {
+                tweetUpdate.setReply(id, screenname)
+                tweetUpdate.state = 'show'
+            }
+            onRetweetClicked: {
+                tweetUpdate.setRetweet(text, screenname)
+                tweetUpdate.state = 'show'
             }
         }
 
