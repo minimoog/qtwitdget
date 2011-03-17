@@ -303,6 +303,20 @@ void DirectMessagesQmlListModel::finishedFetchDirectMessages(const QList<QTweetD
     }
 }
 
+void DirectMessagesQmlListModel::clear()
+{
+    if (m_directMessages.count()) {
+        beginRemoveRows(QModelIndex(), 0, m_directMessages.count() - 1);
+        m_directMessages.clear();
+        endRemoveRows();
+    }
+
+    m_newDirectMessages.clear();
+
+    m_numNewDirectMessages = 0;
+    m_numUnreadDirectMessages = 0;
+}
+
 void DirectMessagesQmlListModel::errorFetchingDirectMessages()
 {
     QTweetDirectMessages *directMessages = qobject_cast<QTweetDirectMessages*>(sender());

@@ -99,6 +99,19 @@ void QTweetUserStream::startFetching()
 }
 
 /**
+ *  Disconnects from stream
+ */
+void QTweetUserStream::streamDisconnect()
+{
+    if (m_reply != 0) {
+        m_reply->disconnect();
+        m_reply->abort();
+        m_reply->deleteLater();
+        m_reply = 0;
+    }
+}
+
+/**
  *  Called when connection is finished. Reconnects.
  */
 void QTweetUserStream::replyFinished()

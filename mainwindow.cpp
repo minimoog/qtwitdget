@@ -58,9 +58,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qApp->setOrganizationName("QTwitdget");
 
-    //connect signal
-    //connect(ui.actionChangeUserPass, SIGNAL(triggered()), this, SLOT(changeUserPass()));
-
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthFinished()), this, SLOT(authorizationFinished()));
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthError()), this, SLOT(authorizationFailed()));
 
@@ -128,6 +125,12 @@ void MainWindow::changeUserPass()
 {
     QGraphicsObject *obj = rootObject();
     obj->setProperty("authed", false);
+
+    m_userStream->streamDisconnect();
+    m_tweetListModel->clear();
+    m_mentionsListModel->clear();
+
+    // ### TODO Clear tokens in .ini?
 }
 
 void MainWindow::startUp()
@@ -233,17 +236,24 @@ void MainWindow::setupTrayIcon()
 {
     QAction *actionMinimize = new QAction(this);
     actionMinimize->setText(tr("Minimize"));
+    connect(actionMinimize, SIGNAL(triggered()), this, SLOT(showMinimized()));
 
     QAction *actionRestore = new QAction(this);
     actionRestore->setText(tr("Restore"));
+    connect(actionRestore, SIGNAL(triggered()), this, SLOT(showNormal()));
 
     QAction *actionQuit = new QAction(this);
     actionQuit->setText("Quit");
+
+    QAction *actionLogout = new QAction(this);
+    actionLogout->setText("Logout");
+    connect(actionLogout, SIGNAL(triggered()), this, SLOT(changeUserPass()));
 
     m_trayIconMenu = new QMenu(this);
     m_trayIconMenu->addAction(actionMinimize);
     m_trayIconMenu->addAction(actionRestore);
     m_trayIconMenu->addSeparator();
+    m_trayIconMenu->addAction(actionLogout);
     m_trayIconMenu->addAction(actionQuit);
 
     m_trayIcon = new QSystemTrayIcon(this);

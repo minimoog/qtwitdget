@@ -86,6 +86,7 @@ signals:
 
 public slots:
     void startFetching();
+    void streamDisconnect();
 
 private slots:
     void replyFinished();

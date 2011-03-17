@@ -454,6 +454,20 @@ void TweetQmlListModel::errorFetchingTweets()
         homeTimeline->deleteLater();
 }
 
+void TweetQmlListModel::clear()
+{
+    if (m_statuses.count()) {
+        beginRemoveRows(QModelIndex(), 0, m_statuses.count() - 1);
+        m_statuses.clear();
+        endRemoveRows();
+    }
+
+    m_newStatuses.clear();
+
+    m_numNewTweets = 0;
+    m_numUnreadTweets = 0;
+}
+
 /**
  * Destructor
  */

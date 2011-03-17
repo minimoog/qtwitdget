@@ -62,7 +62,6 @@ public:
     Q_INVOKABLE void showNewTweets();
     virtual void loadTweetsFromDatabase();
 
-
 signals:
     /** Emited when new tweets arived */
     void numNewTweetsChanged();
@@ -71,6 +70,7 @@ public slots:
     virtual void onStatusesStream(const QTweetStatus& status);
     void onDeleteStatusStream(qint64 id, qint64 userid);
     virtual void fetchLastTweets();
+    void clear();
 
 private slots:
     void finishedDestroyTweet(const QTweetStatus& status);

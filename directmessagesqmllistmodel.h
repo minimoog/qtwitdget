@@ -63,6 +63,7 @@ public:
 public slots:
     void onDirectMessageStream(const QTweetDMStatus& directMessage);
     void fetchLastTweets();
+    void clear();
 
 private slots:
     void finishedFetchDirectMessages(const QList<QTweetDMStatus>& directMessages);
