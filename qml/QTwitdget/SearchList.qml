@@ -1,12 +1,12 @@
 import QtQuick 1.0
 
 Item {
+    id: item1
 
     property alias model: searchListView.model
 
     //signal searchClicked
 
-    //add search box
     //width: 360
     //height: 462
 
@@ -20,22 +20,59 @@ Item {
         model.startSearch(query)
     }
 
-    TextInput {
-        id: queryInput
+    Rectangle {
+        id: background
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: "#ffffff"
+            }
+            GradientStop {
+                position: 1
+                color: "#D1D1D1"
+            }
+        }
+        anchors.fill: parent
+    }
 
-        anchors.top: parent.top
-        anchors.left: parent.left
+    BorderImage {
+        id: queryInputBackground
+        height: 33
         anchors.right: parent.right
-        height: 20
-        focus: true
+        anchors.rightMargin: 54
+        anchors.left: parent.left
+        anchors.leftMargin: 53
+        anchors.top: parent.top
+        anchors.topMargin: 21
+        border.bottom: 5
+        border.top: 5
+        border.right: 5
+        border.left: 5
+        source: "images/status_update_background.png"
 
-        onAccepted: model.startSearch(queryInput.text)
+        TextInput {
+            id: queryInput
+            color: "#b0b0b0"
+            text: ""
+            font.pointSize: 10
+            cursorVisible: true
+            font.family: "Segoe UI"
+            anchors.bottomMargin: 6
+            anchors.leftMargin: 6
+            anchors.rightMargin: 6
+            anchors.topMargin: 6
+            anchors.fill: parent
+            focus: true
+
+            onAccepted: model.startSearch(queryInput.text)
+        }
     }
 
     ListView {
         id: searchListView
+        anchors.topMargin: 16
         //anchors.fill: parent
-        anchors.top: queryInput.bottom
+        anchors.top: queryInputBackground.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
