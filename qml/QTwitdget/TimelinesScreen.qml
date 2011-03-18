@@ -342,7 +342,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             ButtonWithNotification {
                 id: homeTimelineButton
-                width: 40; height: 40
+                width: 76; height: 40
                 buttonImageUrl:  "images/hometimeline.png"
                 pressedButtonImageUrl: "images/hometimeline_pressed.png"
                 toggled: true
@@ -356,7 +356,7 @@ Item {
 
             ButtonWithNotification {
                 id: mentionsButton
-                width: 40; height: 40
+                width: 76; height: 40
                 buttonImageUrl: "images/replies.png"
                 pressedButtonImageUrl: "images/replies_pressed.png"
                 showNotification: mentionsModel.numNewTweets
@@ -369,7 +369,7 @@ Item {
 
             ButtonWithNotification {
                 id: directMessagesButton
-                width: 40; height: 40
+                width: 76; height: 40
                 buttonImageUrl: "images/directmessages.png"
                 pressedButtonImageUrl: "images/directmessages_pressed.png"
                 showNotification: directMessagesModel.numNewDirectMessages
@@ -382,7 +382,7 @@ Item {
 
             ButtonWithNotification {
                 id: searchButton
-                width: 40; height: 40
+                width: 76; height: 40
                 buttonImageUrl: "images/search.png"
                 pressedButtonImageUrl: "images/search_pressed.png"
 
