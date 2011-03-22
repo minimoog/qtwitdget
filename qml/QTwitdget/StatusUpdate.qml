@@ -9,9 +9,10 @@ Rectangle {
 
     signal sendButtonClicked
 
-    function setReply(id, name) {
+    function setReply(id, name, text) {
         tweetid = id;
         statusTextInput.text = '@' + name + ' ';
+        tweetReplyText.text = '@' + name + ': ' + text;
         screenname = '';
     }
 
@@ -21,7 +22,7 @@ Rectangle {
     }
 
     width: 360
-    height:177
+    height:184 + tweetReplyText.paintedHeight
     gradient: Gradient {
         GradientStop {
             position: 0
@@ -37,7 +38,7 @@ Rectangle {
         id: statusTextBackground
         anchors.right: parent.right; anchors.rightMargin: 20
         anchors.left: parent.left; anchors.leftMargin: 20
-        anchors.top: parent.top; anchors.topMargin: 25
+        anchors.top: parent.top; anchors.topMargin: 20
         border.bottom: 5
         border.top: 5
         border.right: 5
@@ -60,10 +61,24 @@ Rectangle {
         }
     }
 
+    Text {
+        id: tweetReplyText
+        color: "#a0a0a0"
+        text: 'Lores ipsum '
+        font.family: "Segoe UI"
+        wrapMode: Text.WordWrap
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        anchors.top: statusTextBackground.bottom
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+    }
+
     ButtonImage {
         id: sendButton
         width: 56; height: 56
-        anchors.top: statusTextBackground.bottom; anchors.topMargin: 9
+        anchors.top: tweetReplyText.bottom; anchors.topMargin: 10
         anchors.left: parent.left; anchors.leftMargin: 20
         buttonImageUrl: "images/send_button.png"
         pressedButtonImageUrl: "images/send_button_pressed.png"
@@ -74,7 +89,7 @@ Rectangle {
     ButtonImage {
         id: shortUrlButton
         width: 56; height: 56
-        anchors.top: statusTextBackground.bottom; anchors.topMargin: 9
+        anchors.top: tweetReplyText.bottom; anchors.topMargin: 10
         anchors.left: sendButton.right; anchors.leftMargin: 9
         buttonImageUrl: "images/shorturl.png"
         pressedButtonImageUrl: "images/shorturl_pressed.png"

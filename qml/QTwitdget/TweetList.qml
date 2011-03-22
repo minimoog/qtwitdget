@@ -5,7 +5,7 @@ Item {
 
     property alias model: tweetListView.model
 
-    signal replyClicked(string id, string screenname)
+    signal replyClicked(string id, string screenname, string tweettext)
     signal retweetClicked(string text, string screenname)
     //signal deleteClicked(string id)
 
@@ -35,7 +35,7 @@ Item {
             onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
             onHashtagLinkClicked: hashtagClicked(hashtag)
-            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName)
+            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName, tweetText)
             onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
         }
     }

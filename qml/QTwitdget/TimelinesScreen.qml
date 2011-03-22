@@ -42,7 +42,7 @@ Item {
                 timelines.state = 'search'
             }
             onReplyClicked: {
-                tweetUpdate.setReply(id, screenname)
+                tweetUpdate.setReply(id, screenname, tweettext)
                 tweetUpdate.state = 'show'
             }
             onRetweetClicked: {
@@ -128,7 +128,7 @@ Item {
                 timelines.state = 'search'
             }
             onReplyClicked: {
-                tweetUpdate.setReply(id, screenname)
+                tweetUpdate.setReply(id, screenname, tweettext)
                 tweetUpdate.state = 'show'
             }
             onRetweetClicked: {
@@ -168,7 +168,7 @@ Item {
             }
             onReplyButtonClicked: {
                 tweetUpdate.state = 'show'
-                tweetUpdate.setReply(statusid, screenname)
+                tweetUpdate.setReply(statusid, screenname, text)
             }
             onRetweetButtonClicked: {
                 tweetUpdate.state = 'show'
