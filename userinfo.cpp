@@ -20,6 +20,8 @@
 
 #include "userinfo.h"
 #include "qtweetlib/qtweetusershow.h"
+#include "qtweetlib/qtweetfriendshipcreate.h"
+#include "qtweetlib/qtweetfriendshipdestroy.h"
 
 UserInfo::UserInfo(QObject *parent) :
     QObject(parent)
@@ -60,5 +62,70 @@ void UserInfo::finishedFetch(const QTweetUser &userInfo)
         m_userinfo = userInfo;
         emit userInfoChanged();
         userShow->deleteLater();
+
+        //check if is in friends list
+        bool isInFriendsList = m_friends.contains(m_userinfo.id());
+
+        if (isInFriendsList != m_isFriend) {
+            m_isFriend = isInFriendsList;
+            emit isFriendChanged();
+        }
+    }
+}
+
+void UserInfo::onUserStreamFriendsList(const QList<qint64> friends)
+{
+    m_friends = friends;
+}
+
+void UserInfo::followUser(const QString &screenName)
+{
+    QTweetFriendshipCreate *createFriend = new QTweetFriendshipCreate(m_oauthTwitter, this);
+    createFriend->create(screenName);
+    connect(createFriend, SIGNAL(parsedUser(QTweetUser)), this, SLOT(finishedFollowUser(QTweetUser)));
+}
+
+void UserInfo::finishedFollowUser(const QTweetUser &user)
+{
+    QTweetFriendshipCreate *createFriend = qobject_cast<QTweetFriendshipCreate*>(sender());
+
+    if (createFriend) {
+        createFriend->deleteLater();
+
+        m_friends.append(user.id());
+
+        if (m_userinfo.id() == user.id()) {
+            if (!m_isFriend) {
+                m_isFriend = true;
+                emit isFriendChanged();
+            }
+        }
+    }
+}
+
+void UserInfo::unfollowUser(const QString &screenName)
+{
+    QTweetFriendshipDestroy *destroyFriend = new QTweetFriendshipDestroy(m_oauthTwitter, this);
+    destroyFriend->unfollow(screenName);
+    connect(destroyFriend, SIGNAL(parsedUser(QTweetUser)), this, SLOT(finishedUnfollowUser(QTweetUser)));
+}
+
+void UserInfo::finishedUnfollowUser(const QTweetUser &user)
+{
+    QTweetFriendshipDestroy *destroyFriend = qobject_cast<QTweetFriendshipDestroy*>(sender());
+
+    if (destroyFriend) {
+        destroyFriend->deleteLater();
+
+        //remove from friend list
+        m_friends.removeOne(user.id());
+
+        //if it's the same user info changed the isFriend property
+        if (m_userinfo.id() == user.id()) {
+            if (m_isFriend) {
+                m_isFriend = false;
+                emit isFriendChanged();
+            }
+        }
     }
 }

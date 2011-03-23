@@ -56,7 +56,6 @@ Item {
             width: parent.width
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            //anchors.left: homeTimelineList.right
 
             onMoreClicked: {
                 userInfo.fetchByName(screenname)
@@ -154,6 +153,7 @@ Item {
             numFollowers: userInfo.numFollowers
             numFollowing: userInfo.numFollowing
             numFavorites: userInfo.numFavorites
+            isFriend: userInfo.isFriend
             model: userTimelineListModel
 
             onHashTagClicked: {
@@ -161,7 +161,6 @@ Item {
                 timelines.state = 'search'
             }
             onMentionClicked: {
-                console.log(mention)
                 userInfo.fetchByName(mention)
                 userTimelineListModel.fetch(mention)
                 userinformation.text = ''
@@ -183,6 +182,12 @@ Item {
             onConversationButtonClicked: {
                 timelines.state = 'conversation'
                 conversationList.model.followConversation(statusid)
+            }
+            onFollowButtonClicked: {
+                userInfo.followUser(screenname)
+            }
+            onUnfollowButtonClicked: {
+                userInfo.unfollowUser(screenname)
             }
         }
 

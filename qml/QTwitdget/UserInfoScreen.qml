@@ -18,6 +18,7 @@ Item {
     property int numFollowers
     property int numFollowing
     property int numFavorites
+    property bool isFriend
 
     signal hashTagClicked(string hashtag)
     signal mentionClicked(string mention)   //doesn't need to go outside
@@ -25,6 +26,8 @@ Item {
     signal retweetButtonClicked
     signal messageButtonClicked
     signal conversationButtonClicked
+    signal followButtonClicked
+    signal unfollowButtonClicked
 
     function addTags(str) {
         //surrounds http links with html link tags
@@ -329,8 +332,15 @@ Item {
             anchors.topMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 5
-            buttonImageUrl: "images/unfollow_button.png"
-            pressedButtonImageUrl: "images/unfollow_button_pressed.png"
+            buttonImageUrl: container.isFriend ? 'images/unfollow_button.png' : ''
+            pressedButtonImageUrl: container.isFriend ? 'images/unfollow_button_pressed.png' : ''
+
+            onClicked: {
+                if (container.isFriend)
+                    unfollowButtonClicked()
+                else
+                    followButtonClicked()
+            }
         }
         ButtonImage {
             id: blockButton

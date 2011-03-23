@@ -40,6 +40,7 @@ class UserInfo : public QObject
     Q_PROPERTY(int numFollowers READ numFollowers NOTIFY userInfoChanged)
     Q_PROPERTY(int numFollowing READ numFollowing NOTIFY userInfoChanged)
     Q_PROPERTY(int numFavorites READ numFavorites NOTIFY userInfoChanged)
+    Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
 public:
     explicit UserInfo(QObject *parent = 0);
     QString screenName() const { return m_userinfo.screenName(); }
@@ -53,21 +54,32 @@ public:
     int numFollowers() const { return m_userinfo.followersCount(); }
     int numFollowing() const { return m_userinfo.friendsCount(); }
     int numFavorites() const { return m_userinfo.favouritesCount(); }
+    bool isFriend() const { return m_isFriend; }
 
     void setOAuthTwitter(OAuthTwitter* oauthTwitter) { m_oauthTwitter = oauthTwitter; }
     void fetch(qint64 userid);
     Q_INVOKABLE void fetch(const QString& userid);
     Q_INVOKABLE void fetchByName(const QString& screenName);
+    Q_INVOKABLE void followUser(const QString& screenName);
+    Q_INVOKABLE void unfollowUser(const QString& screenName);
+
+public slots:
+    void onUserStreamFriendsList(const QList<qint64> friends);
 
 signals:
     void userInfoChanged();
+    void isFriendChanged();
 
 private slots:
     void finishedFetch(const QTweetUser& userInfo);
+    void finishedFollowUser(const QTweetUser& user);
+    void finishedUnfollowUser(const QTweetUser& user);
 
 private:
     QTweetUser m_userinfo;
     OAuthTwitter* m_oauthTwitter;
+    QList<qint64> m_friends;
+    bool m_isFriend;
 };
 
 #endif // USERINFO_H

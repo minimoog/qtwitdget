@@ -64,7 +64,6 @@ Rectangle {
     Text {
         id: tweetReplyText
         color: "#a0a0a0"
-        text: 'Lores ipsum '
         font.family: "Segoe UI"
         wrapMode: Text.WordWrap
         anchors.right: parent.right

@@ -28,10 +28,6 @@ Item {
             isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
-            //onReplyButtonClicked: replyClicked(tweetDelegate.tweetid, tweetDelegate.tweetScreenName)
-            //onRetweetButtonClicked: retweetClicked(tweetDelegate.tweetText, tweetDelegate.tweetScreenName)
-            //onDeleteButtonClicked: deleteClicked(tweetDelegate.tweetid)
-
             onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
             onHashtagLinkClicked: hashtagClicked(hashtag)

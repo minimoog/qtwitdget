@@ -391,6 +391,8 @@ void MainWindow::createDeclarativeView()
 
     m_userInfo = new UserInfo;
     m_userInfo->setOAuthTwitter(m_oauthTwitter);
+    connect(m_userStream, SIGNAL(friendsList(QList<qint64>)),
+            m_userInfo, SLOT(onUserStreamFriendsList(QList<qint64>)));
 
     m_userTimelineListModel = new UserTimelineListModel(m_oauthTwitter);
 
