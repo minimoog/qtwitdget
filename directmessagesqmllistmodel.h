@@ -22,6 +22,7 @@
 #define DIRECTMESSAGESQMLLISTMODEL_H
 
 #include <QAbstractListModel>
+#include "qtweetlib/qtweetdmstatus.h"
 
 class QTweetDMStatus;
 class OAuthTwitter;
