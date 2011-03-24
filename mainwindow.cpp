@@ -409,6 +409,8 @@ void MainWindow::createDeclarativeView()
 	
 #ifdef Q_OS_MAC
 	rootContext()->setContextProperty("osMac", true);
+#else
+	rootContext()->setContextProperty("osMac", false);
 #endif
 
     //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));
