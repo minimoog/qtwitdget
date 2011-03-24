@@ -25,7 +25,7 @@ Item {
             anchors.centerIn: parent
             text: container.text
             color: "#F0F0F0"
-            font.pixelSize: 12
+            font.pixelSize: 12 + (osMac?2:0)
         }
     }
 

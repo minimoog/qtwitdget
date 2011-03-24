@@ -126,8 +126,8 @@ Item  {
         anchors.left: avatarBackground.right; anchors.leftMargin: 10
         textFormat: Text.RichText
         wrapMode: "WordWrap"
-        font.family: "Segoe UI"
-        font.pointSize: 10
+        font.family: "Segoe UI,Lucida Grande"
+        font.pointSize: 10 + (osMac?2:0)
 
         onLinkActivated: container.handleLink(link);
     }
@@ -139,8 +139,8 @@ Item  {
         anchors.leftMargin: 11
         anchors.topMargin: 5
         anchors.left: parent.left
-        font.family: "Segoe UI"
-        font.pointSize: 7
+        font.family: "Segoe UI,Lucida Grande"
+        font.pointSize: 7 + (osMac?2:0)
     }
 
     ListView.onAdd: SequentialAnimation {

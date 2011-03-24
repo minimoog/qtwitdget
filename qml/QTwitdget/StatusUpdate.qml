@@ -48,8 +48,8 @@ Rectangle {
         TextEdit {
             id: statusTextInput
             color: "#919191"
-            font.pointSize: 10
-            font.family: "Segoe UI"
+            font.pointSize: 10 + (osMac?4:0)
+            font.family: "Segoe UI,Lucida Grande"
             wrapMode: TextEdit.WordWrap
             anchors.rightMargin: 8
             anchors.leftMargin: 8
@@ -64,7 +64,7 @@ Rectangle {
     Text {
         id: tweetReplyText
         color: "#a0a0a0"
-        font.family: "Segoe UI"
+        font.family: "Segoe UI,Lucida Grande"
         wrapMode: Text.WordWrap
         anchors.right: parent.right
         anchors.rightMargin: 20
@@ -101,7 +101,7 @@ Rectangle {
         anchors.rightMargin: 20
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
-        font.family: "Segoe UI"
+        font.family: "Segoe UI,Lucida Grande"
         font.pixelSize: 12
     }
 }

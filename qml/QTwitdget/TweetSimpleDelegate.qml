@@ -56,7 +56,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 5
         wrapMode: Text.WordWrap
-        font.pointSize: 9
+        font.pointSize: 9 + (osMac?2:0)
         font.family: "Segoe UI"
 
 //        onLinkActivated: {
@@ -74,7 +74,7 @@ Rectangle {
         anchors.top: statusText.bottom
         anchors.topMargin: 5
         font.family: "Segoe UI"
-        font.pointSize: 7
+        font.pointSize: 7 + (osMac?2:0)
     }
 
     MouseArea {

@@ -36,8 +36,8 @@ Item {
             TextInput {
                 id: usernameInput
                 color: "#a3a3a3"
-                font.pixelSize: 13
-                font.family: "Segoe UI"
+                font.pixelSize: 13 + (osMac?2:0)
+                font.family: "Segoe UI,Lucida Grande"
                 anchors.rightMargin: 13
                 anchors.bottomMargin: 6
                 anchors.topMargin: 6
@@ -58,8 +58,8 @@ Item {
                 id: passwordInput
                 color: "#a3a3a3"
                 echoMode: TextInput.Password
-                font.pixelSize: 13
-                font.family: "Segoe UI"
+                font.pixelSize: 13 + (osMac?2:0)
+                font.family: "Segoe UI,Lucida Grande"
                 anchors.rightMargin: 13
                 anchors.bottomMargin: 6
                 anchors.topMargin: 6

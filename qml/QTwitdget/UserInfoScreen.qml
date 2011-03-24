@@ -80,9 +80,9 @@ Item {
             Text {
                 id: tweetText
                 text: addTags(container.text)
-                font.pointSize: 10
+                font.pointSize: 10 + (osMac?2:0)
                 style: Text.Normal
-                font.family: "Segoe UI"
+                font.family: "Segoe UI,Lucida Grande"
                 wrapMode: Text.WordWrap
                 textFormat: Text.RichText
                 anchors.right: parent.right; anchors.rightMargin: 5
@@ -164,10 +164,10 @@ Item {
             text: container.screenname
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
-            font.pointSize: 10
+            font.pointSize: 10 + (osMac?2:0)
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userAvatar.top
-            font.family: "Segoe UI"
+            font.family: "Segoe UI,Lucida Grande"
             font.bold: true
         }
         Text {
@@ -178,9 +178,9 @@ Item {
             horizontalAlignment: Text.AlignLeft
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
-            font.pointSize: 10
+            font.pointSize: 10 + (osMac?2:0)
             font.bold: true
-            font.family: "Segoe UI"
+            font.family: "Segoe UI,Lucida Grande"
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userScreenname.bottom
         }
@@ -193,7 +193,7 @@ Item {
             anchors.rightMargin: 5
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userName.bottom
-            font.family: "Segoe UI"
+            font.family: "Segoe UI,Lucida Grande"
         }
         Text {
             id: userLocation
@@ -204,17 +204,17 @@ Item {
             anchors.rightMargin: 5
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userUrl.bottom
-            font.family: "Segoe UI"
+            font.family: "Segoe UI,Lucida Grande"
         }
         Text {
             id: userDescription
             color: "#919191"
             text: container.description
-            font.pointSize: 10
+            font.pointSize: 10 + (osMac?2:0)
             anchors.right: parent.right; anchors.rightMargin: 5
             anchors.left: parent.left; anchors.leftMargin: 5
             anchors.top: numFavoritesBackground.bottom; anchors.topMargin: 12
-            font.family: "Segoe UI"
+            font.family: "Segoe UI,Lucida Grande"
             wrapMode: Text.WordWrap
         }
         Image {
@@ -228,8 +228,8 @@ Item {
                 text: container.numTweets
                 anchors.right: parent.right; anchors.rightMargin: 5
                 anchors.top: parent.top
-                font.pointSize: 8
-                font.family: "Segoe UI"
+                font.pointSize: 8 + (osMac?2:0)
+                font.family: "Segoe UI,Lucida Grande"
                 anchors.topMargin: 2
             }
         }
@@ -239,8 +239,8 @@ Item {
             text: "tweets"
             anchors.top: oblace.bottom; anchors.topMargin: 5
             anchors.right: numTweetsBackground.left
-            font.pointSize: 10
-            font.family: "Segoe UI"
+            font.pointSize: 10 + (osMac?2:0)
+            font.family: "Segoe UI,Lucida Grande"
         }
         Image {
             id: numFollowersBackground
@@ -254,8 +254,8 @@ Item {
                 anchors.rightMargin: 5
                 anchors.right: parent.right
                 anchors.top: parent.top
-                font.pointSize: 8
-                font.family: "Segoe UI"
+                font.pointSize: 8 + (osMac?2:0)
+                font.family: "Segoe UI,Lucida Grande"
                 anchors.topMargin: 2
             }
         }
@@ -266,8 +266,8 @@ Item {
             anchors.top: labelTweets.bottom
             anchors.topMargin: 1
             anchors.right: numFollowersBackground.left
-            font.pointSize: 10
-            font.family: "Segoe UI"
+            font.pointSize: 10 + (osMac?2:0)
+            font.family: "Segoe UI,Lucida Grande"
         }
 
         Image {
@@ -283,8 +283,8 @@ Item {
                 anchors.topMargin: 2
                 anchors.right: parent.right
                 anchors.rightMargin: 5
-                font.pointSize: 8
-                font.family: "Segoe UI"
+                font.pointSize: 8 + (osMac?2:0)
+                font.family: "Segoe UI,Lucida Grande"
             }
         }
         Text {
@@ -294,8 +294,8 @@ Item {
             anchors.right: numFollowingBackground.left
             anchors.top: labelFollowers.bottom
             anchors.topMargin: 1
-            font.pointSize: 10
-            font.family: "Segoe UI"
+            font.pointSize: 10 + (osMac?2:0)
+            font.family: "Segoe UI,Lucida Grande"
         }
 
         Image {
@@ -311,8 +311,8 @@ Item {
                 anchors.topMargin: 2
                 anchors.right: parent.right
                 anchors.rightMargin: 5
-                font.pointSize: 8
-                font.family: "Segoe UI"
+                font.pointSize: 8 + (osMac?2:0)
+                font.family: "Segoe UI,Lucida Grande"
             }
         }
         Text {
@@ -321,8 +321,8 @@ Item {
             text: "favorites"
             anchors.right: numFavoritesBackground.left
             anchors.top: labelFollowing.bottom
-            font.pointSize: 10
-            font.family: "Segoe UI"
+            font.pointSize: 10 + (osMac?2:0)
+            font.family: "Segoe UI,Lucida Grande"
         }
 
         ButtonImage {

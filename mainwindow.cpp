@@ -406,6 +406,10 @@ void MainWindow::createDeclarativeView()
     rootContext()->setContextProperty("userTimelineListModel", m_userTimelineListModel);
     rootContext()->setContextProperty("conversationListModel", m_conversationListModel);
     rootContext()->setContextProperty("rootWindow", this);
+	
+#ifdef Q_OS_MAC
+	rootContext()->setContextProperty("osMac", true);
+#endif
 
     //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));
     setMainQmlFile(QLatin1String("qml/QTwitdget/Main.qml"));

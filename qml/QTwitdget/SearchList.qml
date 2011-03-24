@@ -54,9 +54,9 @@ Item {
             id: queryInput
             color: "#b0b0b0"
             text: ""
-            font.pointSize: 10
+            font.pointSize: 10 + (osMac?4:0)
             cursorVisible: true
-            font.family: "Segoe UI"
+            font.family: "Segoe UI,Lucida Grande"
             anchors.bottomMargin: 6
             anchors.leftMargin: 6
             anchors.rightMargin: 6
