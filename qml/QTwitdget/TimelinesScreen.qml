@@ -70,7 +70,7 @@ Item {
                 timelines.state = 'search'
             }
             onReplyClicked: {
-                tweetUpdate.setReply(id, screenname)
+                tweetUpdate.setReply(id, screenname, tweettext)
                 tweetUpdate.state = 'show'
             }
             onRetweetClicked: {

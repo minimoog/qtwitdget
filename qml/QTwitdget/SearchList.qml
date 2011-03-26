@@ -11,7 +11,7 @@ Item {
     //height: 462
 
     signal moreClicked(string text, string screenname, string sincetime)
-    signal replyClicked(string id, string screenname)
+    signal replyClicked(string id, string screenname, string tweettext)
     signal retweetClicked(string text, string screenname)
     signal hashtagClicked(string hashtag)
 
@@ -86,7 +86,7 @@ Item {
             onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
             onHashtagLinkClicked: doSearch(hashtag)
-            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName)
+            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName, tweetText)
             onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
         }
     }

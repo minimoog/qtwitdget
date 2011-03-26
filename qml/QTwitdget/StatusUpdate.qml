@@ -18,6 +18,7 @@ Rectangle {
 
     function setRetweet(text, name) {
         statusTextInput.text = 'RT @' + name + ': ' + text;
+        tweetReplyText.text = ''
         screenname = '';
     }
 
