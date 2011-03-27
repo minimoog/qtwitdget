@@ -45,6 +45,7 @@ class MainWindow : public QmlApplicationViewer
 {
     Q_OBJECT
     Q_PROPERTY(QString userScreenName READ userScreenName NOTIFY userScreenNameChanged)
+    Q_PROPERTY(bool authed READ authed NOTIFY authedChanged)
 public:
     explicit MainWindow(QWidget *parent = 0);
     void startUp();
@@ -52,9 +53,11 @@ public:
     Q_INVOKABLE void authorize(const QString& username, const QString& password);
     Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
     QString userScreenName() const;
+    bool authed() const;
 
 signals:
     void userScreenNameChanged();
+    void authedChanged();
 
 private slots:
     void authorizationFinished();
@@ -91,6 +94,7 @@ private:
 
     qint64 m_userId;
     QString m_userScreenName;
+    bool m_authed;
 
     QSqlDatabase m_database;
 

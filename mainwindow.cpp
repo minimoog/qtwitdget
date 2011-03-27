@@ -22,7 +22,6 @@
 #include <QtDebug>
 #include <QNetworkAccessManager>
 #include <QSettings>
-#include <QGraphicsObject>
 #include <QMenu>
 #include <QCloseEvent>
 #include <QDesktopServices>
@@ -123,8 +122,10 @@ void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
 
 void MainWindow::changeUserPass()
 {
-    QGraphicsObject *obj = rootObject();
-    obj->setProperty("authed", false);
+    if (m_authed) {
+        m_authed = false;
+        emit authedChanged();
+    }
 
     m_userStream->streamDisconnect();
     m_tweetListModel->clear();
@@ -153,8 +154,10 @@ void MainWindow::startUp()
         createDatabase(QString::number(m_userId));
 
         //show/animate tweets list page
-        QGraphicsObject *obj = rootObject();
-        obj->setProperty("authed", true);
+        if (!m_authed) {
+            m_authed = true;
+            emit authedChanged();
+        }
 
         //set user id in the models
         m_tweetListModel->setUserID(m_userId);
@@ -414,6 +417,11 @@ void MainWindow::createDeclarativeView()
 QString MainWindow::userScreenName() const
 {
     return m_userScreenName;
+}
+
+bool MainWindow::authed() const
+{
+    return m_authed;
 }
 
 void MainWindow::readSettings()

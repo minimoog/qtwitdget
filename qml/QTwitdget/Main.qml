@@ -13,10 +13,7 @@ Item {
     width: 360
     height: 640
 
-    property bool authed: true
-
     id: mainview
-    objectName: "mainview"
 
     AuthScreen {
         id: authorizepage
@@ -24,7 +21,9 @@ Item {
         opacity: 0
 
         onLoginClicked: {
-            authed = true;
+            //authed = true;
+            //if user clicks Login at the moment of auth, there are problems
+            //### TODO disable somehow login button when doing auth process
             rootWindow.authorize(username, password);
         }
     }
@@ -48,7 +47,7 @@ Item {
     states: [
         State {
             name: "authscreen"
-            when: !mainview.authed
+            when: !rootWindow.authed
             PropertyChanges { target: timelines; x: mainview.width }
             PropertyChanges { target: timelines; opacity: 0 }
             PropertyChanges { target: authorizepage; opacity: 1 }
@@ -56,7 +55,7 @@ Item {
 
         State {
             name: "timelinesscreen"
-            when:  mainview.authed
+            when:  rootWindow.authed
             PropertyChanges { target: timelines; x: 0 }
             PropertyChanges { target: timelines; opacity: 1 }
             PropertyChanges { target: authorizepage; opacity: 0 }
