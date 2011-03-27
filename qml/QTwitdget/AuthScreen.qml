@@ -5,8 +5,6 @@ Item {
 
     signal loginClicked(string username, string password)
 
-    //width: 360; height: 640
-
     function doLogin() {
         loginClicked(usernameInput.text, passwordInput.text)
     }
@@ -80,6 +78,18 @@ Item {
             pressedButtonImageUrl: "images/signin_pressed.png"
 
             onClicked: doLogin()
+        }
+
+        Text {
+            id: authorsText
+            color: "#7c7c7c"
+            text: 'Programmed by: Toni Jovanoski <br> UI design by: Daniel Janev'
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            font.family: "Segoe UI"
+            font.pixelSize: 12
         }
     }
     Keys.onReturnPressed: doLogin()
