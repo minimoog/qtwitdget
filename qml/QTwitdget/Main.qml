@@ -21,7 +21,6 @@ Item {
         opacity: 0
 
         onLoginClicked: {
-            //authed = true;
             //if user clicks Login at the moment of auth, there are problems
             //### TODO disable somehow login button when doing auth process
             rootWindow.authorize(username, password);
@@ -56,6 +55,7 @@ Item {
         State {
             name: "timelinesscreen"
             when:  rootWindow.authed
+            StateChangeScript { script: authorizepage.clear() }
             PropertyChanges { target: timelines; x: 0 }
             PropertyChanges { target: timelines; opacity: 1 }
             PropertyChanges { target: authorizepage; opacity: 0 }

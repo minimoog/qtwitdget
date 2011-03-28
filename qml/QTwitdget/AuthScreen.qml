@@ -5,8 +5,9 @@ Item {
 
     signal loginClicked(string username, string password)
 
-    function doLogin() {
-        loginClicked(usernameInput.text, passwordInput.text)
+    function clear() {
+        usernameInput.text = ''
+        passwordInput.text = ''
     }
 
     Rectangle {
@@ -77,7 +78,7 @@ Item {
             buttonImageUrl: "images/signin.png"
             pressedButtonImageUrl: "images/signin_pressed.png"
 
-            onClicked: doLogin()
+            onClicked: loginClicked(usernameInput.text, passwordInput.text)
         }
 
         Text {
@@ -92,6 +93,6 @@ Item {
             font.pixelSize: 12
         }
     }
-    Keys.onReturnPressed: doLogin()
-    Keys.onEnterPressed: doLogin()
+    Keys.onReturnPressed: loginClicked(usernameInput.text, passwordInput.text)
+    Keys.onEnterPressed: loginClicked(usernameInput.text, passwordInput.text)
 }
