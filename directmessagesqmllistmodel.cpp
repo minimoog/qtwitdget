@@ -315,6 +315,8 @@ void DirectMessagesQmlListModel::clear()
 
     m_numNewDirectMessages = 0;
     m_numUnreadDirectMessages = 0;
+
+    emit numNewDirectMessagesChanged();
 }
 
 void DirectMessagesQmlListModel::errorFetchingDirectMessages()

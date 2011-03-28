@@ -130,6 +130,7 @@ void MainWindow::changeUserPass()
     m_userStream->streamDisconnect();
     m_tweetListModel->clear();
     m_mentionsListModel->clear();
+    m_directMessagesListModel->clear();
 
     // ### TODO Clear tokens in .ini?
 }

@@ -466,6 +466,8 @@ void TweetQmlListModel::clear()
 
     m_numNewTweets = 0;
     m_numUnreadTweets = 0;
+
+    emit numNewTweetsChanged();
 }
 
 /**
