@@ -282,8 +282,8 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
             else
                 showMinimized();
                         break;
-                default:
-                        ;
+            default:
+                ;
     }
 }
 
@@ -349,18 +349,6 @@ void MainWindow::createDatabase(const QString& databaseName)
                "senderScreenName TEXT, "
                "recipientScreenName TEXT, "
                "senderProfileImageUrl TEXT, "
-               "UNIQUE (id));");
-
-    //temp table for friends
-    query.exec("CREATE TEMPORARY TABLE IF NOT EXISTS friends "
-               "(key INTEGER PRIMARY KEY, "
-               "id INTEGER, "
-               "name TEXT, "
-               "screenName TEXT, "
-               "location TEXT, "
-               "description TEXT, "
-               "profileImageUrl TEXT, "
-               "url TEXT, "
                "UNIQUE (id));");
 }
 
