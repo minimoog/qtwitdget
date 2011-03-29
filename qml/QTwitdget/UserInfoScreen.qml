@@ -28,6 +28,7 @@ Item {
     signal conversationButtonClicked
     signal followButtonClicked
     signal unfollowButtonClicked
+    signal favoriteButtonClicked
 
     function addTags(str) {
         //surrounds http links with html link tags
@@ -47,7 +48,7 @@ Item {
         }
     }
 
-    width: 360; height: 640
+//    width: 360; height: 640
 
     Rectangle {
         id: userInfoBackground
@@ -136,6 +137,8 @@ Item {
                 anchors.leftMargin: 5
                 pressedButtonImageUrl: "images/favourite_button_pressed.png"
                 buttonImageUrl: "images/favourite_button.png"
+
+                onClicked: favoriteButtonClicked()
             }
 
             ButtonImage {

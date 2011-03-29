@@ -22,6 +22,7 @@
 #include "qtweetlib/qtweetusershow.h"
 #include "qtweetlib/qtweetfriendshipcreate.h"
 #include "qtweetlib/qtweetfriendshipdestroy.h"
+#include "qtweetlib/qtweetfavoritescreate.h"
 
 UserInfo::UserInfo(QObject *parent) :
     QObject(parent)
@@ -52,6 +53,19 @@ void UserInfo::fetchByName(const QString &screenName)
     QTweetUserShow* userShow = new QTweetUserShow(m_oauthTwitter, this);
     userShow->fetch(screenName);
     connect(userShow, SIGNAL(parsedUserInfo(QTweetUser)), this, SLOT(finishedFetch(QTweetUser)));
+}
+
+void UserInfo::createFavorite(const QString &id)
+{
+    bool ok;
+    qint64 tweetid = id.toLongLong(&ok);
+
+    if (ok) {
+        QTweetFavoritesCreate* favorited = new QTweetFavoritesCreate(m_oauthTwitter, this);
+        favorited->create(tweetid);
+        connect(favorited, SIGNAL(parsedStatus(QTweetStatus)),
+                this, SLOT(finishedCreateFavorite(QTweetStatus)));
+    }
 }
 
 void UserInfo::finishedFetch(const QTweetUser &userInfo)
@@ -127,5 +141,16 @@ void UserInfo::finishedUnfollowUser(const QTweetUser &user)
                 emit isFriendChanged();
             }
         }
+    }
+}
+
+void UserInfo::finishedCreateFavorite(const QTweetStatus &status)
+{
+    QTweetFavoritesCreate *favorited = qobject_cast<QTweetFavoritesCreate*>(sender());
+
+    if (favorited) {
+        favorited->deleteLater();
+
+        // ### TODO: Some kind of confirmation that tweet was favorited
     }
 }

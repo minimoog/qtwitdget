@@ -25,6 +25,7 @@
 #include "qtweetlib/qtweetuser.h"
 
 class OAuthTwitter;
+class QTweetStatus;
 
 class UserInfo : public QObject
 {
@@ -62,6 +63,7 @@ public:
     Q_INVOKABLE void fetchByName(const QString& screenName);
     Q_INVOKABLE void followUser(const QString& screenName);
     Q_INVOKABLE void unfollowUser(const QString& screenName);
+    Q_INVOKABLE void createFavorite(const QString& id);
 
 public slots:
     void onUserStreamFriendsList(const QList<qint64> friends);
@@ -74,6 +76,7 @@ private slots:
     void finishedFetch(const QTweetUser& userInfo);
     void finishedFollowUser(const QTweetUser& user);
     void finishedUnfollowUser(const QTweetUser& user);
+    void finishedCreateFavorite(const QTweetStatus& status);
 
 private:
     QTweetUser m_userinfo;

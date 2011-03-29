@@ -183,12 +183,9 @@ Item {
                 timelines.state = 'conversation'
                 conversationList.model.followConversation(statusid)
             }
-            onFollowButtonClicked: {
-                userInfo.followUser(screenname)
-            }
-            onUnfollowButtonClicked: {
-                userInfo.unfollowUser(screenname)
-            }
+            onFollowButtonClicked: userInfo.followUser(screenname)
+            onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
+            onFavoriteButtonClicked: userInfo.createFavorite(statusid)
         }
 
         TweetList {
