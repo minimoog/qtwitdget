@@ -8,7 +8,7 @@ Item {
     property string text
     property string statusid
     property string time
-    property string avatar : "images/avatar.png"
+    property string avatar : "../images/avatar.png"
     property string screenname
     property string name
     property string url
@@ -73,7 +73,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            source: "images/oblace.png"
+            source: "../images/oblace.png"
 
             Behavior on height { PropertyAnimation { duration: 200 } }
 
@@ -106,8 +106,8 @@ Item {
                 anchors.topMargin: 10
                 anchors.left: parent.left
                 anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/retweet_button_pressed.png"
-                buttonImageUrl: "images/retweet_button.png"
+                pressedButtonImageUrl: "../images/retweet_button_pressed.png"
+                buttonImageUrl: "../images/retweet_button.png"
 
                 onClicked: retweetButtonClicked()
             }
@@ -116,12 +116,12 @@ Item {
                 id: replyButton
                 width: 84
                 height: 23
-                pressedButtonImageUrl: "images/reply_button_pressed.png"
+                pressedButtonImageUrl: "../images/reply_button_pressed.png"
                 anchors.top: tweetText.bottom
                 anchors.topMargin: 10
                 anchors.left: retweetButton.right
                 anchors.leftMargin: 5
-                buttonImageUrl: "images/reply_button.png"
+                buttonImageUrl: "../images/reply_button.png"
 
                 onClicked: replyButtonClicked()
             }
@@ -134,8 +134,8 @@ Item {
                 anchors.topMargin: 10
                 anchors.left: replyButton.right
                 anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/favourite_button_pressed.png"
-                buttonImageUrl: "images/favourite_button.png"
+                pressedButtonImageUrl: "../images/favourite_button_pressed.png"
+                buttonImageUrl: "../images/favourite_button.png"
             }
 
             ButtonImage {
@@ -146,8 +146,8 @@ Item {
                 anchors.leftMargin: 5
                 anchors.top: tweetText.bottom
                 anchors.topMargin: 10
-                pressedButtonImageUrl: "images/conversation_button_pressed.png"
-                buttonImageUrl: "images/conversation_button.png"
+                pressedButtonImageUrl: "../images/conversation_button_pressed.png"
+                buttonImageUrl: "../images/conversation_button.png"
 
                 onClicked: conversationButtonClicked()
             }
@@ -221,7 +221,7 @@ Item {
             id: numTweetsBackground
             anchors.right: parent.right
             anchors.top: oblace.bottom; anchors.topMargin: 5
-            source: "images/lenta_nalevo.png"
+            source: "../images/lenta_nalevo.png"
             Text {
                 id: userNumTweets
                 color: "#ffffff"
@@ -246,7 +246,7 @@ Item {
             id: numFollowersBackground
             anchors.right: parent.right
             anchors.top: numTweetsBackground.bottom
-            source: "images/lenta_nalevo.png"
+            source: "../images/lenta_nalevo.png"
             Text {
                 id: userNumFollowers
                 color: "#ffffff"
@@ -274,7 +274,7 @@ Item {
             id: numFollowingBackground
             anchors.top: numFollowersBackground.bottom
             anchors.right: parent.right
-            source: "images/lenta_nalevo.png"
+            source: "../images/lenta_nalevo.png"
             Text {
                 id: userNumFollowing
                 color: "#ffffff"
@@ -302,7 +302,7 @@ Item {
             id: numFavoritesBackground
             anchors.top: numFollowingBackground.bottom
             anchors.right: parent.right
-            source: "images/lenta_nalevo.png"
+            source: "../images/lenta_nalevo.png"
             Text {
                 id: userNumFavorites
                 color: "#ffffff"
@@ -349,8 +349,8 @@ Item {
             anchors.leftMargin: 5
             anchors.top: userDescription.bottom
             anchors.topMargin: 10
-            buttonImageUrl: "images/block_button.png"
-            pressedButtonImageUrl: "images/block_button_pressed.png"
+            buttonImageUrl: "../images/block_button.png"
+            pressedButtonImageUrl: "../images/block_button_pressed.png"
         }
 
         ButtonImage {
@@ -361,8 +361,8 @@ Item {
             anchors.topMargin: 10
             anchors.left: blockButton.right
             anchors.leftMargin: 5
-            pressedButtonImageUrl: "images/message_button_pressed.png"
-            buttonImageUrl: "images/message_button.png"
+            pressedButtonImageUrl: "../images/message_button_pressed.png"
+            buttonImageUrl: "../images/message_button.png"
 
             onClicked: messageButtonClicked()
         }

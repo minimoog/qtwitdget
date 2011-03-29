@@ -411,8 +411,13 @@ void MainWindow::createDeclarativeView()
     rootContext()->setContextProperty("conversationListModel", m_conversationListModel);
     rootContext()->setContextProperty("rootWindow", this);
 
-    //setSource(QUrl::fromLocalFile("qml/QTwitdget/Main.qml"));
-    setMainQmlFile(QLatin1String("qml/QTwitdget/Main.qml"));
+#ifdef Q_WS_MAC
+    addImportPath(QLatin1String("qml/QTwitdget/macosx/"));
+    setMainQmlFile(QLatin1String("qml/QTwitdget/macosx/Main.qml"));
+#else
+    addImportPath(QLatin1String("qml/QTwitdget/default/"));
+    setMainQmlFile(QLatin1String("qml/QTwitdget/default/Main.qml"));
+#endif
 }
 
 QString MainWindow::userScreenName() const
