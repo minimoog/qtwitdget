@@ -10,16 +10,22 @@ Rectangle {
     signal sendButtonClicked
 
     function setReply(id, name, text) {
-        tweetid = id;
-        statusTextInput.text = '@' + name + ' ';
-        tweetReplyText.text = '@' + name + ': ' + text;
-        screenname = '';
+        tweetid = id
+        statusTextInput.text = '@' + name + ' '
+        tweetReplyText.text = '@' + name + ': ' + text
+        screenname = ''
     }
 
     function setRetweet(text, name) {
-        statusTextInput.text = 'RT @' + name + ': ' + text;
+        statusTextInput.text = 'RT @' + name + ': ' + text
         tweetReplyText.text = ''
-        screenname = '';
+        screenname = ''
+    }
+
+    function clear() {
+        statusTextInput.text = ''
+        tweetReplyText.text = ''
+        screenname = ''
     }
 
     width: 360

@@ -242,9 +242,7 @@ Item {
 
         onSendButtonClicked: {
             sendClicked(tweetUpdate.tweetid, tweetUpdate.updateText, tweetUpdate.screenname);
-            tweetUpdate.tweetid = "";
-            tweetUpdate.screenname = "";
-            tweetUpdate.updateText = "";
+            tweetUpdate.clear();
             tweetUpdate.state = "";
         }
     }
@@ -282,8 +280,10 @@ Item {
                 // ### TODO Toogle Button
                 if (tweetUpdate.state == 'show')
                     tweetUpdate.state = ''
-                else
+                else {
                     tweetUpdate.state = 'show'
+                    tweetUpdate.clear()
+                }
             }
         }
 
