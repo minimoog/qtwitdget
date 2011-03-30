@@ -25,16 +25,28 @@
 
 class QNetworkAccessManager;
 
-/*!
-    Class for shortening url
-    \remarks Uses bit.ly services
+/**
+ *   Class for shortening url
+ *   @remarks Uses bit.ly services
  */
 class ShortenedUrl : public QObject
 {
+    Q_OBJECT
 public:
     ShortenedUrl(QObject *parent = 0);
     ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent = 0);
-	QString shortUrl(const QString& url);
+    void setNetworkAccessManager(QNetworkAccessManager *netManager);
+    void shortUrl(const QString& url);
+
+signals:
+    /**
+     * emits the short url and long url which was shorten
+     * If short url is empty there was error with shortening
+     */
+    void finishedShortingUrl(const QString& shortUrl, const QString& longUrl);
+
+private slots:
+    void finished();
 
 private:
     QNetworkAccessManager *m_netManager;

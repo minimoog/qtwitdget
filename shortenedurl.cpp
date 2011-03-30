@@ -18,30 +18,24 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
+#include "shortenedurl.h"
 #include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QEventLoop>
-#include <QTimer>
 #include <QNetworkAccessManager>
-#include "shortenedurl.h"
-//#include "mainwindow.h"
 
-/*!
-    Constructor
-    \param parent QObject parent
-    \remarks Uses global network access manager from MainWindow class
+/**
+ *   Constructor
  */
 ShortenedUrl::ShortenedUrl(QObject *parent)
     : QObject(parent)
 {
-    //m_netManager = MainWindow::networkAccessManager();
 }
 
-/*!
-    Constructor
-    \param netManager Network Access Manager
-    \param parent Object parent
+/**
+ *   Constructor
+ *   @param netManager network Access Manager
+ *   @param parent parent
  */
 ShortenedUrl::ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent)
     : QObject(parent)
@@ -49,38 +43,48 @@ ShortenedUrl::ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent)
     m_netManager = netManager;
 }
 
-/*!
-   Shortens url
-   \param url Url to shorten
-   \return Shorten url
+/**
+ *  Sets network access manager
  */
-QString ShortenedUrl::shortUrl(const QString &url)
+void ShortenedUrl::setNetworkAccessManager(QNetworkAccessManager *netManager)
 {
-	//TODO: Add other services for shortening
+    m_netManager = netManager;
+}
+
+/**
+ *  Shortens url
+ *  @param url url to shorten
+ */
+void ShortenedUrl::shortUrl(const QString &url)
+{
+    //TODO: Add other services for shortening
     QUrl urlService("http://api.bit.ly/v3/shorten");
     urlService.addQueryItem("login", "minimoog");
     urlService.addQueryItem("apiKey", "R_17b8dfb25efd629d31c8c8f93ea51b9e");
     urlService.addQueryItem("longUrl", url);
     urlService.addQueryItem("format", "txt");
 
-    //QNetworkRequest req(urlService);
-    //QNetworkReply *reply = m_netManager->get(req);
+    QNetworkRequest req(urlService);
+    req.setAttribute(QNetworkRequest::User, url);
 
-//    SignalWaiter signalWaiter(reply, SIGNAL(finished()));
+    QNetworkReply *reply = m_netManager->get(req);
+    connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+}
 
-//    if (signalWaiter.wait(2000)) {
-//        if (reply->error() != QNetworkReply::NoError) {
-//            qDebug() << "Error shortening url";
-//            qDebug() << reply->readAll();
+void ShortenedUrl::finished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
-//            return QString();
-//        }
+    if (reply) {
+        if (reply->error() != QNetworkReply::NoError) {
+            QString shortenedUrl(reply->readAll());
+            QString longUrl = reply->attribute(QNetworkRequest::User).toString();
+            emit finishedShortingUrl(shortenedUrl, longUrl);
+        } else {
+            QString longUrl = reply->attribute(QNetworkRequest::User).toString();
+            emit finishedShortingUrl(QString(), longUrl);
+        }
 
-//        return reply->readAll();
-//    } else {
-//        qDebug() << "Timeout";
-//        return QString();
-//    }
-
-    return url;
+        reply->deleteLater();
+    }
 }
