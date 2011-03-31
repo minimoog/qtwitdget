@@ -77,7 +77,8 @@ SOURCES += main.cpp \
     directmessagesqmllistmodel.cpp \
     qtweetlib/qtweetfriendshipdestroy.cpp \
     qtweetlib/qtweetfriendshipcreate.cpp \
-    qtweetlib/qtweetfavoritescreate.cpp
+    qtweetlib/qtweetfavoritescreate.cpp \
+    shorturlsitem.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -140,4 +141,5 @@ HEADERS += \
     conversationlistmodel.h \
     qtweetlib/qtweetfriendshipdestroy.h \
     qtweetlib/qtweetfriendshipcreate.h \
-    qtweetlib/qtweetfavoritescreate.h
+    qtweetlib/qtweetfavoritescreate.h \
+    shorturlsitem.h

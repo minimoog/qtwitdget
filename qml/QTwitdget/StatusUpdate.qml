@@ -1,4 +1,5 @@
 import QtQuick 1.0
+import qtwitdget.components 1.0
 
 Rectangle {
     id: rectangle1
@@ -65,6 +66,14 @@ Rectangle {
             anchors.fill: parent
             selectByMouse: true
             textFormat: TextEdit.PlainText
+
+            ShortUrlsComponent {
+                id: shortUrlsText
+
+                onShortedText: {
+                    statusTextInput.text = text
+                }
+            }
         }
     }
 
@@ -99,6 +108,10 @@ Rectangle {
         anchors.left: sendButton.right; anchors.leftMargin: 9
         buttonImageUrl: "images/shorturl.png"
         pressedButtonImageUrl: "images/shorturl_pressed.png"
+
+        onClicked: {
+            shortUrlsText.shortUrls(statusTextInput.text)
+        }
     }
 
     Text {

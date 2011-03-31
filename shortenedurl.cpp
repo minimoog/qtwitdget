@@ -19,7 +19,6 @@
  */
 
 #include "shortenedurl.h"
-#include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
@@ -65,9 +64,9 @@ void ShortenedUrl::shortUrl(const QString &url)
     urlService.addQueryItem("format", "txt");
 
     QNetworkRequest req(urlService);
-    req.setAttribute(QNetworkRequest::User, url);
 
     QNetworkReply *reply = m_netManager->get(req);
+    reply->setProperty("longurl", QVariant(url));
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
 }
 
@@ -76,15 +75,14 @@ void ShortenedUrl::finished()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
     if (reply) {
-        if (reply->error() != QNetworkReply::NoError) {
+        if (reply->error() == QNetworkReply::NoError) {
             QString shortenedUrl(reply->readAll());
-            QString longUrl = reply->attribute(QNetworkRequest::User).toString();
+            QString longUrl = reply->property("longurl").toString();
             emit finishedShortingUrl(shortenedUrl, longUrl);
         } else {
-            QString longUrl = reply->attribute(QNetworkRequest::User).toString();
+            QString longUrl = reply->property("longurl").toString();
             emit finishedShortingUrl(QString(), longUrl);
         }
-
         reply->deleteLater();
     }
 }
