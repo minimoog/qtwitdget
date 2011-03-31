@@ -265,14 +265,7 @@ void MainWindow::setupTrayIcon()
     m_trayIcon->setContextMenu(m_trayIconMenu);
     m_trayIcon->show();
 
-    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-}
-
-void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
-{
-
 }
 
 void MainWindow::closeEvent(QCloseEvent *e)

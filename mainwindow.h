@@ -65,7 +65,6 @@ private slots:
     void verifyCredentialsFinished(const QTweetUser& userinfo);
     void directMessageNewFinished(const QTweetDMStatus& dm);
     void statusUpdateFinished(const QTweetStatus& status);
-    void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void changeUserPass();
 
 protected:
