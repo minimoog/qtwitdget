@@ -143,3 +143,5 @@ HEADERS += \
     qtweetlib/qtweetfriendshipcreate.h \
     qtweetlib/qtweetfavoritescreate.h \
     shorturlsitem.h
+
+ICON = qtwitdget.icns
