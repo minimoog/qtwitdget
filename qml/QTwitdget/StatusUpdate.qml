@@ -30,7 +30,7 @@ Rectangle {
     }
 
     width: 360
-    height:184 + tweetReplyText.paintedHeight
+    height:170 + tweetReplyText.paintedHeight
     gradient: Gradient {
         GradientStop {
             position: 0
@@ -92,7 +92,7 @@ Rectangle {
 
     ButtonImage {
         id: sendButton
-        width: 56; height: 56
+        width: 77; height: 41
         anchors.top: tweetReplyText.bottom; anchors.topMargin: 10
         anchors.left: parent.left; anchors.leftMargin: 20
         buttonImageUrl: "images/send_button.png"
@@ -103,7 +103,7 @@ Rectangle {
 
     ButtonImage {
         id: shortUrlButton
-        width: 56; height: 56
+        width: 78; height: 41
         anchors.top: tweetReplyText.bottom; anchors.topMargin: 10
         anchors.left: sendButton.right; anchors.leftMargin: 9
         buttonImageUrl: "images/shorturl.png"

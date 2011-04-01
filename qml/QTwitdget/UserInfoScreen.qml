@@ -335,8 +335,9 @@ Item {
             anchors.topMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 5
-            buttonImageUrl: container.isFriend ? 'images/unfollow_button.png' : ''
-            pressedButtonImageUrl: container.isFriend ? 'images/unfollow_button_pressed.png' : ''
+            smooth: true
+            buttonImageUrl: container.isFriend ? 'images/unfollow_button.png' : 'images/follow_button.png'
+            pressedButtonImageUrl: container.isFriend ? 'images/unfollow_button_pressed.png' : 'images/follow_button_pressed.png'
 
             onClicked: {
                 if (container.isFriend)
