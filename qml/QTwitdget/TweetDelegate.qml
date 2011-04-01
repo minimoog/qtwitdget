@@ -20,7 +20,7 @@ Item  {
     width: ListView.view.width;
     //width: 360;
     //height: (statusText.paintedHeight < 80) ? 80 : statusText.paintedHeight
-    height: 110;
+    height: 95
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
@@ -53,15 +53,17 @@ Item  {
         }
     }
 
-    Image {
+    Rectangle {
         id: avatarBackground
-        width: 62
-        height: 62
+        width: 60
+        height: 60
+        color: "#00000000"
+        border.width: 4
         anchors.top: parent.top
         anchors.topMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10
-        source: "images/avatar_background.png"
+        border.color: "#2bace2"
 
         Image {
             id: avatarImage
@@ -81,7 +83,7 @@ Item  {
         pressedButtonImageUrl: "images/right_arrow_pressed.png"
 
         width: 11; height: 16
-        anchors.top: parent.top; anchors.topMargin: 14
+        anchors.top: parent.top; anchors.topMargin: 10
         anchors.right: parent.right; anchors.rightMargin: 10
 
         onClicked: moreButtonClicked()
@@ -94,7 +96,7 @@ Item  {
         pressedButtonImageUrl: "images/small_retweet_button_pressed.png"
         width: 16; height: 16
         anchors.top: rightArrow.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: 17
         anchors.right: parent.right
         anchors.rightMargin: 7
 
@@ -127,7 +129,7 @@ Item  {
         textFormat: Text.RichText
         wrapMode: "WordWrap"
         font.family: "Segoe UI"
-        font.pointSize: 10
+        font.pointSize: 9
 
         onLinkActivated: container.handleLink(link);
     }
@@ -149,7 +151,7 @@ Item  {
             PropertyAction { target: container; property: "x"; value: container.width }
             PropertyAction { target: container; property: "opacity"; value: 0 }
         }
-        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: 110; duration: 300 }
+        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: 95; duration: 300 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
