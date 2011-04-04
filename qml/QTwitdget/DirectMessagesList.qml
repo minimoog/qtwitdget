@@ -3,6 +3,8 @@ import QtQuick 1.0
 Item {
     property alias model: dmListView.model
 
+    signal replyClicked(string screenname)
+
     ListView {
         id: dmListView
         anchors.fill: parent
@@ -15,6 +17,8 @@ Item {
             isOwnTweet: ownTweetRole
             isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
+
+            onReplyButtonClicked: replyClicked(tweetScreenName)
         }
     }
 

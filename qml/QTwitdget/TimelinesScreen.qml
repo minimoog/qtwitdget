@@ -98,14 +98,10 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
-//            onReplyClicked: {
-//                tweetUpdate.setReply(id, screenname)
-//                tweetUpdate.state = 'show'
-//            }
-//            onRetweetClicked: {
-//                tweetUpdate.setRetweet(text, screenname)
-//                tweetUpdate.state = 'show'
-//            }
+            onReplyClicked: {
+                tweetUpdate.setDirectMessage(screenname)
+                tweetUpdate.state = 'show'
+            }
         }
 
         SearchList {

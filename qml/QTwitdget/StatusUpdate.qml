@@ -23,6 +23,12 @@ Rectangle {
         screenname = ''
     }
 
+    function setDirectMessage(name) {
+        statusTextInput.text = ''
+        tweetReplyText.text = 'Sending DM to @' + name
+        screenname = name
+    }
+
     function clear() {
         statusTextInput.text = ''
         tweetReplyText.text = ''
