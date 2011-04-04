@@ -170,10 +170,8 @@ Item {
                 tweetUpdate.setRetweet(text, screenname)
             }
             onMessageButtonClicked: {
+                tweetUpdate.setDirectMessage(screenname)
                 tweetUpdate.state = 'show'
-                tweetUpdate.tweetid = ''
-                tweetUpdate.updateText = ''
-                tweetUpdate.screenname = screenname
             }
             onConversationButtonClicked: {
                 timelines.state = 'conversation'

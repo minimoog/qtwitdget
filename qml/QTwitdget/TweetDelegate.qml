@@ -156,4 +156,11 @@ Item  {
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
     }
+
+    ListView.onRemove: SequentialAnimation {
+        PropertyAction { target: container; property: "ListView.delayRemove"; value: true }
+        NumberAnimation { target: container; property: "opacity"; from:  1; to: 0; duration: 300 }
+        NumberAnimation { target: container; property: "height"; from: 95; to: 0; duration: 300 }
+        PropertyAction { target: container; property: "ListView.delayRemove"; value: false }
+    }
 }
