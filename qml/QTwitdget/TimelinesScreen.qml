@@ -114,85 +114,7 @@ Item {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
-            }
-            onHashtagClicked: {
-                searchResultList.doSearch(hashtag)
-                timelines.state = 'search'
-            }
-            onReplyClicked: {
-                tweetUpdate.setReply(id, screenname, tweettext)
-                tweetUpdate.state = 'show'
-            }
-            onRetweetClicked: {
-                tweetUpdate.setRetweet(text, screenname)
-                tweetUpdate.state = 'show'
-            }
-        }
-
-        UserInfoScreen {
-            id: userinformation
-            width: parent.width
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-
-            //should be exposed in Main.qml
-            avatar: userInfo.avatarUrl
-            screenname: userInfo.screenName
-            name: userInfo.name
-            url: userInfo.url
-            location: userInfo.location
-            description: userInfo.description
-            numTweets: userInfo.numTweets
-            numFollowers: userInfo.numFollowers
-            numFollowing: userInfo.numFollowing
-            numFavorites: userInfo.numFavorites
-            isFriend: userInfo.isFriend
-            model: userTimelineListModel
-
-            onHashTagClicked: {
-                searchResultList.doSearch(hashtag)
-                timelines.state = 'search'
-            }
-            onMentionClicked: {
-                userInfo.fetchByName(mention)
-                userTimelineListModel.fetch(mention)
-                userinformation.text = ''
-            }
-            onReplyButtonClicked: {
-                tweetUpdate.state = 'show'
-                tweetUpdate.setReply(statusid, screenname, text)
-            }
-            onRetweetButtonClicked: {
-                tweetUpdate.state = 'show'
-                tweetUpdate.setRetweet(text, screenname)
-            }
-            onMessageButtonClicked: {
-                tweetUpdate.setDirectMessage(screenname)
-                tweetUpdate.state = 'show'
-            }
-            onConversationButtonClicked: {
-                timelines.state = 'conversation'
-                conversationList.model.followConversation(statusid)
-            }
-            onFollowButtonClicked: userInfo.followUser(screenname)
-            onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
-            onFavoriteButtonClicked: userInfo.createFavorite(statusid)
-        }
-
-        TweetList {
-            id: conversationList
-            width: parent.width
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-
-            onMoreClicked: {
-                userInfo.fetchByName(screenname)
-                userTimelineListModel.fetch(screenname)
-                timelines.state = 'userinfo'
-                userinformation.statusid = statusid
+                userinformation.statusid = statusid // ### TODO: FIXME
                 userinformation.text = text
                 userinformation.time = sincetime
             }
@@ -320,6 +242,94 @@ Item {
         }
     }
 
+    UserInfoScreen {
+        id: userinformation
+        opacity: 0
+        width: parent.width
+        anchors.top: topToolbar.bottom
+        anchors.bottom: bottomToolbar.top
+
+        //should be exposed in Main.qml
+        avatar: userInfo.avatarUrl
+        screenname: userInfo.screenName
+        name: userInfo.name
+        url: userInfo.url
+        location: userInfo.location
+        description: userInfo.description
+        numTweets: userInfo.numTweets
+        numFollowers: userInfo.numFollowers
+        numFollowing: userInfo.numFollowing
+        numFavorites: userInfo.numFavorites
+        isFriend: userInfo.isFriend
+        model: userTimelineListModel
+
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+
+        onHashTagClicked: {
+            searchResultList.doSearch(hashtag)
+            timelines.state = 'search'
+        }
+        onMentionClicked: {
+            userInfo.fetchByName(mention)
+            userTimelineListModel.fetch(mention)
+            userinformation.text = ''
+        }
+        onReplyButtonClicked: {
+            tweetUpdate.state = 'show'
+            tweetUpdate.setReply(statusid, screenname, text)
+        }
+        onRetweetButtonClicked: {
+            tweetUpdate.state = 'show'
+            tweetUpdate.setRetweet(text, screenname)
+        }
+        onMessageButtonClicked: {
+            tweetUpdate.setDirectMessage(screenname)
+            tweetUpdate.state = 'show'
+        }
+        onConversationButtonClicked: {
+            timelines.state = 'conversation'
+            conversationList.model.followConversation(statusid)
+        }
+        onFollowButtonClicked: userInfo.followUser(screenname)
+        onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
+        onFavoriteButtonClicked: userInfo.createFavorite(statusid)
+    }
+
+    TweetList {
+        id: conversationList
+        opacity: 0
+        width: parent.width
+        anchors.top: topToolbar.bottom
+        anchors.bottom: bottomToolbar.top
+
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+
+        onMoreClicked: {
+            userInfo.fetchByName(screenname)
+            userTimelineListModel.fetch(screenname)
+            timelines.state = 'userinfo'
+            userinformation.statusid = statusid
+            userinformation.text = text
+            userinformation.time = sincetime
+        }
+        onHashtagClicked: {
+            searchResultList.doSearch(hashtag)
+            timelines.state = 'search'
+        }
+        onReplyClicked: {
+            tweetUpdate.setReply(id, screenname, tweettext)
+            tweetUpdate.state = 'show'
+        }
+        onRetweetClicked: {
+            tweetUpdate.setRetweet(text, screenname)
+            tweetUpdate.state = 'show'
+        }
+    }
+
     Rectangle {
         id: bottomToolbar
         height: 50
@@ -426,7 +436,7 @@ Item {
         },
         State {
             name: "userinfo"
-            PropertyChanges { target: rowTimelines; x: - 4 * parent.width }
+            PropertyChanges { target: userinformation; opacity: 1}
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
@@ -434,7 +444,7 @@ Item {
         },
         State {
             name: "conversation"
-            PropertyChanges { target: rowTimelines; x: - 5 * parent.width }
+            PropertyChanges { target: conversationList; opacity: 1 }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
