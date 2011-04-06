@@ -1,7 +1,7 @@
 import QtQuick 1.0
 
 Item {
-    id: item1
+    id: container
 
     property alias model: searchListView.model
 

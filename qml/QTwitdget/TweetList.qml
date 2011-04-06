@@ -1,7 +1,7 @@
 import Qt 4.7
 
-Item {
-    //id: tweetListView
+Rectangle {
+    id: container
 
     property alias model: tweetListView.model
 
@@ -14,6 +14,8 @@ Item {
     //right arrow pressed or mention clicked
     signal moreClicked(string statusid, string text, string screenname, string sincetime)
     signal hashtagClicked(string hashtag)
+
+    color: "#ffffff"
 
     ListView {
         id: tweetListView

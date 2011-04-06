@@ -1,10 +1,12 @@
 import QtQuick 1.0
 
-Item {
+Rectangle {
     property alias model: tweetListView.model
 
     signal clickedDelegate(string delegateID, string delegateText, string delegateSinceTime)
     signal hashtagClicked(string hashtag)
+
+    color: "#ffffff"
 
     ListView {
         id: tweetListView

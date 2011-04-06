@@ -412,7 +412,7 @@ Item {
     states: [
         State {
             name: "mentions"
-            PropertyChanges { target: rowTimelines; x: - parent.width }
+            PropertyChanges { target: rowTimelines; x: - rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: true }
             PropertyChanges { target: directMessagesButton; toggled: false }
@@ -420,7 +420,7 @@ Item {
         },
         State {
             name: "directMessages"
-            PropertyChanges { target: rowTimelines; x: - 2 * parent.width }
+            PropertyChanges { target: rowTimelines; x: - 2 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: true }
@@ -428,7 +428,7 @@ Item {
         },
         State {
             name: "search"
-            PropertyChanges { target: rowTimelines; x: - 3 * parent.width }
+            PropertyChanges { target: rowTimelines; x: - 3 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
