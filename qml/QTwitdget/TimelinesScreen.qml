@@ -133,6 +133,94 @@ Item {
         }
     }
 
+    UserInfoScreen {
+        id: userinformation
+        opacity: 0
+        width: parent.width
+        anchors.top: topToolbar.bottom
+        anchors.bottom: bottomToolbar.top
+
+        //should be exposed in Main.qml
+        avatar: userInfo.avatarUrl
+        screenname: userInfo.screenName
+        name: userInfo.name
+        url: userInfo.url
+        location: userInfo.location
+        description: userInfo.description
+        numTweets: userInfo.numTweets
+        numFollowers: userInfo.numFollowers
+        numFollowing: userInfo.numFollowing
+        numFavorites: userInfo.numFavorites
+        isFriend: userInfo.isFriend
+        model: userTimelineListModel
+
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+
+        onHashTagClicked: {
+            searchResultList.doSearch(hashtag)
+            timelines.state = 'search'
+        }
+        onMentionClicked: {
+            userInfo.fetchByName(mention)
+            userTimelineListModel.fetch(mention)
+            userinformation.text = ''
+        }
+        onReplyButtonClicked: {
+            tweetUpdate.state = 'show'
+            tweetUpdate.setReply(statusid, screenname, text)
+        }
+        onRetweetButtonClicked: {
+            tweetUpdate.state = 'show'
+            tweetUpdate.setRetweet(text, screenname)
+        }
+        onMessageButtonClicked: {
+            tweetUpdate.setDirectMessage(screenname)
+            tweetUpdate.state = 'show'
+        }
+        onConversationButtonClicked: {
+            timelines.state = 'conversation'
+            conversationList.model.followConversation(statusid)
+        }
+        onFollowButtonClicked: userInfo.followUser(screenname)
+        onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
+        onFavoriteButtonClicked: userInfo.createFavorite(statusid)
+    }
+
+    TweetList {
+        id: conversationList
+        opacity: 0
+        width: parent.width
+        anchors.top: topToolbar.bottom
+        anchors.bottom: bottomToolbar.top
+
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+
+        onMoreClicked: {
+            userInfo.fetchByName(screenname)
+            userTimelineListModel.fetch(screenname)
+            timelines.state = 'userinfo'
+            userinformation.statusid = statusid
+            userinformation.text = text
+            userinformation.time = sincetime
+        }
+        onHashtagClicked: {
+            searchResultList.doSearch(hashtag)
+            timelines.state = 'search'
+        }
+        onReplyClicked: {
+            tweetUpdate.setReply(id, screenname, tweettext)
+            tweetUpdate.state = 'show'
+        }
+        onRetweetClicked: {
+            tweetUpdate.setRetweet(text, screenname)
+            tweetUpdate.state = 'show'
+        }
+    }
+
     StatusUpdate {
         id: tweetUpdate
         y: - (height - topToolbar.height) //topToolbar.height
@@ -239,94 +327,6 @@ Item {
 
             buttonImageUrl: "images/settings.png"
             pressedButtonImageUrl: "images/settings_pressed.png"
-        }
-    }
-
-    UserInfoScreen {
-        id: userinformation
-        opacity: 0
-        width: parent.width
-        anchors.top: topToolbar.bottom
-        anchors.bottom: bottomToolbar.top
-
-        //should be exposed in Main.qml
-        avatar: userInfo.avatarUrl
-        screenname: userInfo.screenName
-        name: userInfo.name
-        url: userInfo.url
-        location: userInfo.location
-        description: userInfo.description
-        numTweets: userInfo.numTweets
-        numFollowers: userInfo.numFollowers
-        numFollowing: userInfo.numFollowing
-        numFavorites: userInfo.numFavorites
-        isFriend: userInfo.isFriend
-        model: userTimelineListModel
-
-        Behavior on opacity {
-            NumberAnimation { duration: 500 }
-        }
-
-        onHashTagClicked: {
-            searchResultList.doSearch(hashtag)
-            timelines.state = 'search'
-        }
-        onMentionClicked: {
-            userInfo.fetchByName(mention)
-            userTimelineListModel.fetch(mention)
-            userinformation.text = ''
-        }
-        onReplyButtonClicked: {
-            tweetUpdate.state = 'show'
-            tweetUpdate.setReply(statusid, screenname, text)
-        }
-        onRetweetButtonClicked: {
-            tweetUpdate.state = 'show'
-            tweetUpdate.setRetweet(text, screenname)
-        }
-        onMessageButtonClicked: {
-            tweetUpdate.setDirectMessage(screenname)
-            tweetUpdate.state = 'show'
-        }
-        onConversationButtonClicked: {
-            timelines.state = 'conversation'
-            conversationList.model.followConversation(statusid)
-        }
-        onFollowButtonClicked: userInfo.followUser(screenname)
-        onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
-        onFavoriteButtonClicked: userInfo.createFavorite(statusid)
-    }
-
-    TweetList {
-        id: conversationList
-        opacity: 0
-        width: parent.width
-        anchors.top: topToolbar.bottom
-        anchors.bottom: bottomToolbar.top
-
-        Behavior on opacity {
-            NumberAnimation { duration: 500 }
-        }
-
-        onMoreClicked: {
-            userInfo.fetchByName(screenname)
-            userTimelineListModel.fetch(screenname)
-            timelines.state = 'userinfo'
-            userinformation.statusid = statusid
-            userinformation.text = text
-            userinformation.time = sincetime
-        }
-        onHashtagClicked: {
-            searchResultList.doSearch(hashtag)
-            timelines.state = 'search'
-        }
-        onReplyClicked: {
-            tweetUpdate.setReply(id, screenname, tweettext)
-            tweetUpdate.state = 'show'
-        }
-        onRetweetClicked: {
-            tweetUpdate.setRetweet(text, screenname)
-            tweetUpdate.state = 'show'
         }
     }
 
