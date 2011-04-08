@@ -78,7 +78,8 @@ SOURCES += main.cpp \
     qtweetlib/qtweetfriendshipdestroy.cpp \
     qtweetlib/qtweetfriendshipcreate.cpp \
     qtweetlib/qtweetfavoritescreate.cpp \
-    shorturlsitem.cpp
+    shorturlsitem.cpp \
+    userlogins.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -142,6 +143,7 @@ HEADERS += \
     qtweetlib/qtweetfriendshipdestroy.h \
     qtweetlib/qtweetfriendshipcreate.h \
     qtweetlib/qtweetfavoritescreate.h \
-    shorturlsitem.h
+    shorturlsitem.h \
+    userlogins.h
 
 ICON = qtwitdget.icns
