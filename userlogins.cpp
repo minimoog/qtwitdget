@@ -27,7 +27,7 @@ UserLogins::UserLogins()
 
 QList<UserLoginData> UserLogins::getUserLogins() const
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
 
     int size = settings.beginReadArray("logins");
     QList<UserLoginData> userlogins;
@@ -51,7 +51,7 @@ QList<UserLoginData> UserLogins::getUserLogins() const
 
 UserLoginData UserLogins::lastLoggedUser() const
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
     UserLoginData login;
 
     int size = settings.beginReadArray("logins");
@@ -73,7 +73,7 @@ UserLoginData UserLogins::lastLoggedUser() const
 // remark, writes user login at last place
 void UserLogins::writeUserLogin(const UserLoginData &userlogin)
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
 
     QList<UserLoginData> userlogins = getUserLogins();
 
@@ -107,7 +107,7 @@ void UserLogins::clearUserLogin(qint64 userid)
     int index = userlogins.indexOf(fakeUserLoginData);
 
     if (index != -1) {
-        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
 
         settings.beginWriteArray("logins");
         settings.setArrayIndex(index);

@@ -28,7 +28,6 @@
 #include <QDir>
 #include <QSqlQuery>
 #include <QDeclarativeContext>
-#include <QDeclarativeEngine>
 #include <QApplication>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetuserstream.h"
@@ -45,6 +44,7 @@
 #include "userinfo.h"
 #include "usertimelinelistmodel.h"
 #include "conversationlistmodel.h"
+#include "userlogins.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
@@ -90,11 +90,7 @@ void MainWindow::authorizationFailed()
 {
     qDebug() << "Authorization failed";
 
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-    settings.remove("oauth_token");
-    settings.remove("oauth_token_secret");
-    settings.remove("user_id");
-    settings.remove("user_screenname");
+    // ### TODO Add notification
 }
 
 void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
@@ -103,11 +99,14 @@ void MainWindow::verifyCredentialsFinished(const QTweetUser& userinfo)
 
     QTweetAccountVerifyCredentials *tweetVerifyCredentials = qobject_cast<QTweetAccountVerifyCredentials*>(sender());
     if (tweetVerifyCredentials) {
-        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-        settings.setValue("oauth_token", m_oauthTwitter->oauthToken());
-        settings.setValue("oauth_token_secret", m_oauthTwitter->oauthTokenSecret());
-        settings.setValue("user_id", userinfo.id());
-        settings.setValue("user_screenname", userinfo.screenName());
+        UserLogins logins;
+        UserLoginData loginData;
+        loginData.oauthToken = m_oauthTwitter->oauthToken();
+        loginData.oauthTokenSecret = m_oauthTwitter->oauthTokenSecret();
+        loginData.id = userinfo.id();
+        loginData.screenName = userinfo.screenName();
+
+        logins.writeUserLogin(loginData);
 
         m_userId = userinfo.id();
         m_userScreenName = userinfo.screenName();
@@ -138,11 +137,13 @@ void MainWindow::changeUserPass()
 void MainWindow::startUp()
 {
     //read settings
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
-    m_userId = settings.value("user_id", 0).toInt();
-    m_userScreenName = settings.value("user_screenname").toString();
-    QString oauthToken = settings.value("oauth_token").toString();
-    QString oauthTokenSecret = settings.value("oauth_token_secret").toString();
+    UserLogins logins;
+    UserLoginData lastLoginData = logins.lastLoggedUser();
+
+    m_userId = lastLoginData.id;
+    m_userScreenName = lastLoginData.screenName;
+    QString oauthToken = lastLoginData.oauthToken;
+    QString oauthTokenSecret = lastLoginData.oauthTokenSecret;
 
     if (!m_userScreenName.isEmpty())
         emit userScreenNameChanged();
@@ -396,7 +397,7 @@ bool MainWindow::authed() const
 
 void MainWindow::readSettings()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
     QPoint pos = settings.value("pos", QPoint(200, 50)).toPoint();
     QSize size = settings.value("size", QSize(480, 880)).toSize();
     resize(size);
@@ -405,7 +406,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
 }

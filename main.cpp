@@ -5,6 +5,8 @@
 
 int main(int argc, char *argv[])
 {
+    //QApplication::setGraphicsSystem("opengl");
+
     QApplication app(argc, argv);
 
     qmlRegisterType<ShortUrlsItem>("qtwitdget.components", 1, 0, "ShortUrlsComponent");
