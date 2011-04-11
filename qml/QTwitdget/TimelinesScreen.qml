@@ -17,6 +17,8 @@ Item {
 
     id: timelines
 
+    width: 360; height: 640
+
     Row {
         id: rowTimelines
         anchors.top: topToolbar.bottom
@@ -263,6 +265,10 @@ Item {
         id: topToolbar
 
         height: 51
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.top: parent.top
+
         gradient: Gradient {
             GradientStop {
                 position: 0
@@ -274,16 +280,13 @@ Item {
             }
         }
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-
         ButtonImage {
             id: statusUpdateButton
 
             anchors.top: parent.top; anchors.topMargin: 5
-            anchors.left: parent.left; anchors.leftMargin: 5
             width: 39; height: 39
+            anchors.right: usernameButton.left
+            anchors.rightMargin: 5
 
             buttonImageUrl: "images/statusupdate.png"
             pressedButtonImageUrl: "images/statusupdate_pressed.png"
@@ -302,13 +305,14 @@ Item {
         ButtonText {
             id: usernameButton
 
-            anchors.top: parent.top; anchors.topMargin: 5
-            anchors.left: statusUpdateButton.right; anchors.leftMargin: 5
             width: 145; height: 39
 
             buttonImageUrl: "images/username.png"
             pressedButtonImageUrl: "images/username_pressed.png"
             text: timelines.username
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.horizontalCenter: parent.horizontalCenter
 
             onClicked: {
                 userInfo.fetchByName(text)
