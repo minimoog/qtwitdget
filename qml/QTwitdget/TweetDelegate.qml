@@ -129,7 +129,7 @@ Item  {
         textFormat: Text.RichText
         wrapMode: "WordWrap"
         font.family: "Segoe UI"
-        font.pointSize: 9
+        font.pointSize: 6
 
         onLinkActivated: container.handleLink(link);
     }
@@ -142,7 +142,7 @@ Item  {
         anchors.topMargin: 5
         anchors.left: parent.left
         font.family: "Segoe UI"
-        font.pointSize: 7
+        font.pointSize: 5
     }
 
     ListView.onAdd: SequentialAnimation {

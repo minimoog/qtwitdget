@@ -233,18 +233,11 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 
 void MainWindow::createDatabase(const QString& databaseName)
 {
-    QString workdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-
-    QDir dir;
-    dir.setPath(workdir);
-    if(!dir.exists())
-        dir.mkpath(".");
-
     //close any previous open database
     if(m_database.isOpen())
         m_database.close();
 
-    m_database.setDatabaseName(workdir + databaseName + ".sqlite");
+    m_database.setDatabaseName(databaseName + ".sqlite");
     m_database.open();
 
     QSqlQuery query;
