@@ -27,3 +27,6 @@ qtwitdget.pro.user.*
 moc_*.cpp
 qrc_qtwitdget.cpp
 qtwitdget
+
+.make.cache
+bld.inf

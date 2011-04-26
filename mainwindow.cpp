@@ -22,7 +22,6 @@
 #include <QtDebug>
 #include <QNetworkAccessManager>
 #include <QSettings>
-#include <QMenu>
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDir>
@@ -61,10 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthError()), this, SLOT(authorizationFailed()));
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
-
-    setupTrayIcon();
-
-    readSettings();
 
     createDeclarativeView();
 }
@@ -237,52 +232,11 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
     }
 }
 
-void MainWindow::setupTrayIcon()
-{
-    QAction *actionMinimize = new QAction(this);
-    actionMinimize->setText(tr("Minimize"));
-    connect(actionMinimize, SIGNAL(triggered()), this, SLOT(showMinimized()));
-
-    QAction *actionRestore = new QAction(this);
-    actionRestore->setText(tr("Restore"));
-    connect(actionRestore, SIGNAL(triggered()), this, SLOT(showNormal()));
-
-    QAction *actionQuit = new QAction(this);
-    actionQuit->setText("Quit");
-
-    QAction *actionLogout = new QAction(this);
-    actionLogout->setText("Logout");
-    connect(actionLogout, SIGNAL(triggered()), this, SLOT(changeUserPass()));
-
-    m_trayIconMenu = new QMenu(this);
-    m_trayIconMenu->addAction(actionMinimize);
-    m_trayIconMenu->addAction(actionRestore);
-    m_trayIconMenu->addSeparator();
-    m_trayIconMenu->addAction(actionLogout);
-    m_trayIconMenu->addAction(actionQuit);
-
-    m_trayIcon = new QSystemTrayIcon(this);
-    m_trayIcon->setIcon(QIcon(":/qtwidget_icon.ico"));
-    m_trayIcon->setContextMenu(m_trayIconMenu);
-    m_trayIcon->show();
-
-    connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-}
-
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    writeSettings();
     hide();
     e->ignore();
 }
-
-//void MainWindow::changeEvent(QEvent *e)
-//{
-//    if(e->type() == QEvent::LanguageChange)
-//           // ui.retranslateUi(this);
-
-//    QMainWindow::changeEvent(e);
-//}
 
 void MainWindow::createDatabase(const QString& databaseName)
 {
@@ -393,20 +347,4 @@ QString MainWindow::userScreenName() const
 bool MainWindow::authed() const
 {
     return m_authed;
-}
-
-void MainWindow::readSettings()
-{
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
-    QPoint pos = settings.value("pos", QPoint(200, 50)).toPoint();
-    QSize size = settings.value("size", QSize(480, 880)).toSize();
-    resize(size);
-    move(pos);
-}
-
-void MainWindow::writeSettings()
-{
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
-    settings.setValue("pos", pos());
-    settings.setValue("size", size());
 }

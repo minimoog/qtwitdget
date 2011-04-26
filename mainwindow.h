@@ -22,11 +22,9 @@
 #define MAINWINDOW_H
 
 #include <QSqlDatabase>
-#include <QSystemTrayIcon>
 #include "qmlapplicationviewer.h"
 
 class QNetworkAccessManager;
-class NetworkAccessManagerFactory;
 class OAuthTwitter;
 class QTweetUserStream;
 class QTweetUser;
@@ -39,7 +37,6 @@ class SearchQmlListModel;
 class UserInfo;
 class UserTimelineListModel;
 class ConversationListModel;
-class QMenu;
 
 class MainWindow : public QmlApplicationViewer
 {
@@ -69,15 +66,11 @@ private slots:
 
 protected:
     void closeEvent(QCloseEvent *e);
-    //void changeEvent(QEvent *e);
 
 private:
-    void setupTrayIcon();
     void createDatabase(const QString& databaseName);
     void updateCurrentPage();
     void createDeclarativeView();
-    void readSettings();
-    void writeSettings();
 
     QNetworkAccessManager *m_netManager;
     OAuthTwitter *m_oauthTwitter;
@@ -96,9 +89,6 @@ private:
     bool m_authed;
 
     QSqlDatabase m_database;
-
-    QSystemTrayIcon *m_trayIcon;
-    QMenu *m_trayIconMenu;
 };
 
 #endif // MAINWINDOW_H

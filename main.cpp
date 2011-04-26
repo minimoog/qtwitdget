@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     //mainWindow.setMainQmlFile(QLatin1String("qml/QTwitdget/main.qml"));
     mainWindow.show();
     mainWindow.startUp();
-    //mainWindow.showExpanded();
+    mainWindow.showExpanded();
 
     return app.exec();
 }
