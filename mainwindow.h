@@ -64,9 +64,6 @@ private slots:
     void statusUpdateFinished(const QTweetStatus& status);
     void changeUserPass();
 
-protected:
-    void closeEvent(QCloseEvent *e);
-
 private:
     void createDatabase(const QString& databaseName);
     void updateCurrentPage();

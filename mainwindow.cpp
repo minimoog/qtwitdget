@@ -22,7 +22,6 @@
 #include <QtDebug>
 #include <QNetworkAccessManager>
 #include <QSettings>
-#include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDir>
 #include <QSqlQuery>
@@ -230,12 +229,6 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
 
         statusUpdate->deleteLater();
     }
-}
-
-void MainWindow::closeEvent(QCloseEvent *e)
-{
-    hide();
-    e->ignore();
 }
 
 void MainWindow::createDatabase(const QString& databaseName)

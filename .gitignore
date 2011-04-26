@@ -30,3 +30,11 @@ qtwitdget
 
 .make.cache
 bld.inf
+qtwitdget.loc
+qtwitdget.rss
+*.sis
+qtwitdget_exe.mmp
+qtwitdget_installer.pkg
+qtwitdget_template.pkg
+qtwitdget_stub.pkg
+qtwitdget_reg.rss
