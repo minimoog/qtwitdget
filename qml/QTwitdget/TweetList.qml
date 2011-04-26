@@ -21,6 +21,7 @@ Rectangle {
         id: tweetListView
         anchors.fill: parent;
         clip: true
+        cacheBuffer: 95 * 20
         delegate: TweetDelegate {
             tweetScreenName: screenNameRole
             tweetText: statusTextRole

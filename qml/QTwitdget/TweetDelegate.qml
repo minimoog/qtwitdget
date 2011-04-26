@@ -19,8 +19,8 @@ Item  {
 
     width: ListView.view.width;
     //width: 360;
-    //height: (statusText.paintedHeight < 80) ? 80 : statusText.paintedHeight
-    height: 95
+    height: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 8)
+    //height: 95
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
@@ -114,7 +114,10 @@ Item  {
         anchors.right: parent.right
         anchors.rightMargin: 7
 
-        onClicked: replyButtonClicked();
+        onClicked: {
+            console.log(container.height)
+            replyButtonClicked();
+        }
     }
 
     Text {
@@ -151,7 +154,7 @@ Item  {
             PropertyAction { target: container; property: "x"; value: container.width }
             PropertyAction { target: container; property: "opacity"; value: 0 }
         }
-        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: 95; duration: 300 }
+        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 8); duration: 300 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
@@ -159,8 +162,8 @@ Item  {
 
     ListView.onRemove: SequentialAnimation {
         PropertyAction { target: container; property: "ListView.delayRemove"; value: true }
-        NumberAnimation { target: container; property: "opacity"; from:  1; to: 0; duration: 300 }
-        NumberAnimation { target: container; property: "height"; from: 95; to: 0; duration: 300 }
+        NumberAnimation { target: container; property: "opacity"; to: 0; duration: 300 }
+        NumberAnimation { target: container; property: "height"; to: 0; duration: 300 }
         PropertyAction { target: container; property: "ListView.delayRemove"; value: false }
     }
 }
