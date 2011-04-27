@@ -25,7 +25,6 @@
 #include <QSystemTrayIcon>
 #include "qmlapplicationviewer.h"
 
-class QNetworkAccessManager;
 class NetworkAccessManagerFactory;
 class OAuthTwitter;
 class QTweetUserStream;
@@ -79,7 +78,6 @@ private:
     void readSettings();
     void writeSettings();
 
-    QNetworkAccessManager *m_netManager;
     OAuthTwitter *m_oauthTwitter;
     QTweetUserStream *m_userStream;
 

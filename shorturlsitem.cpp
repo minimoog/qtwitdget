@@ -28,7 +28,7 @@
  *  Constructor
  */
 ShortUrlsItem::ShortUrlsItem(QObject *parent) :
-    QObject(parent), m_netManager(new QNetworkAccessManager(this))
+    QObject(parent)
 {
 }
 
@@ -51,7 +51,7 @@ void ShortUrlsItem::shortUrls(const QString &textWithUrls)
             QString matchedUrl = textWithUrls.mid(pos, rx.matchedLength());
 
             if (!matchedUrl.contains("http://bit.ly/")) {
-                ShortenedUrl *shortenedUrl = new ShortenedUrl(m_netManager, this);
+                ShortenedUrl *shortenedUrl = new ShortenedUrl(this);
                 shortenedUrl->shortUrl(matchedUrl);
                 connect(shortenedUrl, SIGNAL(finishedShortingUrl(QString,QString)),
                         this, SLOT(finishedShortingUrl(QString,QString)));

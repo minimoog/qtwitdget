@@ -23,8 +23,6 @@
 
 #include <QObject>
 
-class QNetworkAccessManager;
-
 class ShortUrlsItem : public QObject
 {
     Q_OBJECT
@@ -40,7 +38,6 @@ private slots:
     void finishedShortingUrl(const QString& shortUrl, const QString& longUrl);
 
 private:
-    QNetworkAccessManager* m_netManager;
     QString m_textWithUrls;
 };
 
