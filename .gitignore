@@ -27,3 +27,14 @@ qtwitdget.pro.user.*
 moc_*.cpp
 qrc_qtwitdget.cpp
 qtwitdget
+
+.make.cache
+bld.inf
+qtwitdget.loc
+qtwitdget.rss
+qtwitdget.sis
+qtwitdget_exe.mmp
+qtwitdget_installer.pkg
+qtwitdget_template.pkg
+qtwitdget_stub.pkg
+qtwitdget_reg.rss
