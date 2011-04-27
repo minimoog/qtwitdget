@@ -124,14 +124,6 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
-            onReplyClicked: {
-                tweetUpdate.setReply(id, screenname, tweettext)
-                tweetUpdate.state = 'show'
-            }
-            onRetweetClicked: {
-                tweetUpdate.setRetweet(text, screenname)
-                tweetUpdate.state = 'show'
-            }
         }
     }
 

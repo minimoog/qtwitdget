@@ -34,8 +34,6 @@ Rectangle {
             onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
             onHashtagLinkClicked: hashtagClicked(hashtag)
-            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName, tweetText)
-            onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
         }
     }
 

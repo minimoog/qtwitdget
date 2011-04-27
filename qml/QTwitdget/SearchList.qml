@@ -86,8 +86,6 @@ Item {
             onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
             onHashtagLinkClicked: doSearch(hashtag)
-            onReplyButtonClicked: replyClicked(tweetid, tweetScreenName, tweetText)
-            onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
         }
     }
 

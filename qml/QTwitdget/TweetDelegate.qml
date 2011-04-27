@@ -14,13 +14,10 @@ Item  {
     signal moreButtonClicked
     signal mentionLinkClicked(string screenname)
     signal hashtagLinkClicked(string hashtag)
-    signal retweetButtonClicked
-    signal replyButtonClicked
 
     width: ListView.view.width;
     //width: 360;
-    height: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 8)
-    //height: 95
+    height: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 4)
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
@@ -60,9 +57,9 @@ Item  {
         color: "#00000000"
         border.width: 4
         anchors.top: parent.top
-        anchors.topMargin: 10
+        anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 4
         border.color: "#2bace2"
 
         Image {
@@ -76,48 +73,24 @@ Item  {
         }
     }
 
-    ButtonImage {
-        id: rightArrow
-
-        buttonImageUrl: "images/right_arrow.png"
-        pressedButtonImageUrl: "images/right_arrow_pressed.png"
-
-        width: 11; height: 16
-        anchors.top: parent.top; anchors.topMargin: 10
-        anchors.right: parent.right; anchors.rightMargin: 10
+    MouseArea {
+        id: moreArea
+        anchors.leftMargin: -20
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: rightArrow.left
+        anchors.right: parent.right
 
         onClicked: moreButtonClicked()
     }
 
-    ButtonImage {
-        id: retweet
-
-        buttonImageUrl: "images/small_retweet_button.png"
-        pressedButtonImageUrl: "images/small_retweet_button_pressed.png"
-        width: 16; height: 16
-        anchors.top: rightArrow.bottom
-        anchors.topMargin: 17
+    Image {
+        id: rightArrow
+        source: "images/right_arrow.png"
+        width: 11; height: 16
         anchors.right: parent.right
-        anchors.rightMargin: 7
-
-        onClicked: retweetButtonClicked();
-    }
-
-    ButtonImage {
-        id: reply
-
-        buttonImageUrl: "images/small_reply_button.png"
-        pressedButtonImageUrl: "images/small_reply_button_pressed.png"
-        width: 15; height: 8
-        anchors.top: retweet.bottom
-        anchors.topMargin: 16
-        anchors.right: parent.right
-        anchors.rightMargin: 7
-
-        onClicked: {
-            console.log(container.height)
-            replyButtonClicked();
-        }
+        anchors.rightMargin: 4
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     Text {
@@ -125,10 +98,10 @@ Item  {
         color: "#333333"
         text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
         //text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
-        anchors.topMargin: 4
+        anchors.topMargin: 0
         anchors.top: parent.top;
-        anchors.right: retweet.left; anchors.rightMargin: 0
-        anchors.left: avatarBackground.right; anchors.leftMargin: 10
+        anchors.right: rightArrow.left; anchors.rightMargin: 0
+        anchors.left: avatarBackground.right; anchors.leftMargin: 4
         textFormat: Text.RichText
         wrapMode: "WordWrap"
         font.family: "Segoe UI"
@@ -141,8 +114,8 @@ Item  {
         id: sinceText
         text: tweetSinceTime
         anchors.top: avatarBackground.bottom
-        anchors.leftMargin: 11
-        anchors.topMargin: 5
+        anchors.leftMargin: 10
+        anchors.topMargin: 4
         anchors.left: parent.left
         font.family: "Segoe UI"
         font.pointSize: 5
@@ -154,7 +127,7 @@ Item  {
             PropertyAction { target: container; property: "x"; value: container.width }
             PropertyAction { target: container; property: "opacity"; value: 0 }
         }
-        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 8); duration: 300 }
+        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutBounce; from: 0; to: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 4); duration: 300 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
