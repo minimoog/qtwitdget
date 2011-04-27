@@ -34,18 +34,18 @@ static QString SinceTimeString(const QDateTime& from)
     int passedSeconds = from.secsTo(QDateTime::currentDateTimeUtc());
 
     if (passedSeconds < 0)
-        return QString("Time travel!");
+        return QString("now");
 
     if (passedSeconds < 60)
-        return QString("%1 seconds ago").arg(passedSeconds);
+        return QString("%1 s").arg(passedSeconds);
 
     if (passedSeconds < 3600)
-        return QString("%1 minutes ago").arg(passedSeconds / 60);
+        return QString("%1 m").arg(passedSeconds / 60);
 
     if (passedSeconds < 86400)
-        return QString("%1 hours ago").arg(passedSeconds / 3600);
+        return QString("%1 h").arg(passedSeconds / 3600);
 
-    return QString("%1 days ago").arg(passedSeconds / 86400);
+    return QString("%1 d").arg(passedSeconds / 86400);
 }
 
 ConversationListModel::ConversationListModel(QObject *parent) :
