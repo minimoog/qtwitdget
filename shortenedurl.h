@@ -23,8 +23,6 @@
  
 #include <QUrl>
 
-class QNetworkAccessManager;
-
 /**
  *   Class for shortening url
  *   @remarks Uses bit.ly services
@@ -34,8 +32,6 @@ class ShortenedUrl : public QObject
     Q_OBJECT
 public:
     ShortenedUrl(QObject *parent = 0);
-    ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent = 0);
-    void setNetworkAccessManager(QNetworkAccessManager *netManager);
     void shortUrl(const QString& url);
 
 signals:
@@ -48,8 +44,6 @@ signals:
 private slots:
     void finished();
 
-private:
-    QNetworkAccessManager *m_netManager;
 };
  
 #endif //SHORTENEDEURL_H

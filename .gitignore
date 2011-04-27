@@ -38,3 +38,4 @@ qtwitdget_installer.pkg
 qtwitdget_template.pkg
 qtwitdget_stub.pkg
 qtwitdget_reg.rss
+*.orig

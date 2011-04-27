@@ -20,7 +20,6 @@
 
 #include "mainwindow.h"
 #include <QtDebug>
-#include <QNetworkAccessManager>
 #include <QSettings>
 #include <QDesktopServices>
 #include <QDir>
@@ -43,14 +42,14 @@
 #include "usertimelinelistmodel.h"
 #include "conversationlistmodel.h"
 #include "userlogins.h"
+#include "namsingleton.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
-    m_netManager(new QNetworkAccessManager(this)),
     m_oauthTwitter(new OAuthTwitter(this)),
     m_userStream(new QTweetUserStream(this))
 {
-    m_oauthTwitter->setNetworkAccessManager(m_netManager);
+    m_oauthTwitter->setNetworkAccessManager(NAMSingleton::instance()->qnam());
     m_userStream->setOAuthTwitter(m_oauthTwitter);
 
     qApp->setOrganizationName("QTwitdget");

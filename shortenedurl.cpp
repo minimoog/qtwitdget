@@ -21,7 +21,7 @@
 #include "shortenedurl.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include "namsingleton.h"
 
 /**
  *   Constructor
@@ -29,25 +29,6 @@
 ShortenedUrl::ShortenedUrl(QObject *parent)
     : QObject(parent)
 {
-}
-
-/**
- *   Constructor
- *   @param netManager network Access Manager
- *   @param parent parent
- */
-ShortenedUrl::ShortenedUrl(QNetworkAccessManager *netManager, QObject *parent)
-    : QObject(parent)
-{
-    m_netManager = netManager;
-}
-
-/**
- *  Sets network access manager
- */
-void ShortenedUrl::setNetworkAccessManager(QNetworkAccessManager *netManager)
-{
-    m_netManager = netManager;
 }
 
 /**
@@ -65,7 +46,7 @@ void ShortenedUrl::shortUrl(const QString &url)
 
     QNetworkRequest req(urlService);
 
-    QNetworkReply *reply = m_netManager->get(req);
+    QNetworkReply *reply = NAMSingleton::instance()->qnam()->get(req);
     reply->setProperty("longurl", QVariant(url));
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
 }

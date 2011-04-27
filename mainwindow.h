@@ -24,7 +24,6 @@
 #include <QSqlDatabase>
 #include "qmlapplicationviewer.h"
 
-class QNetworkAccessManager;
 class OAuthTwitter;
 class QTweetUserStream;
 class QTweetUser;
@@ -69,7 +68,6 @@ private:
     void updateCurrentPage();
     void createDeclarativeView();
 
-    QNetworkAccessManager *m_netManager;
     OAuthTwitter *m_oauthTwitter;
     QTweetUserStream *m_userStream;
 

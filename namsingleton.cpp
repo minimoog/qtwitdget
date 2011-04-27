@@ -18,27 +18,6 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
-#ifndef SHORTURLSITEM_H
-#define SHORTURLSITEM_H
+#include <namsingleton.h>
 
-#include <QObject>
-
-class ShortUrlsItem : public QObject
-{
-    Q_OBJECT
-public:
-    explicit ShortUrlsItem(QObject *parent = 0);
-    Q_INVOKABLE void shortUrls(const QString& textWithUrls);
-
-signals:
-    /** Emits the text with shortened urls */
-    void shortedText(const QString& text);
-
-private slots:
-    void finishedShortingUrl(const QString& shortUrl, const QString& longUrl);
-
-private:
-    QString m_textWithUrls;
-};
-
-#endif // SHORTURLSITEM_H
+NAMSingleton* NAMSingleton::m_namInstance = 0;
