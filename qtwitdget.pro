@@ -146,6 +146,7 @@ HEADERS += \
     qtweetlib/qtweetfavoritescreate.h \
     shorturlsitem.h \
     userlogins.h \
-    namsingleton.h
+    namsingleton.h \
+    namfactory.h
 
 ICON = qtwitdget.icns
