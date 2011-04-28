@@ -34,7 +34,7 @@ public:
 
         QNetworkDiskCache *diskCache = new QNetworkDiskCache(nam);
         diskCache->setCacheDirectory(QDesktopServices::storageLocation(QDesktopServices::CacheLocation));
-        diskCache->setMaximumCacheSize(5 * 1024 * 1024);
+        diskCache->setMaximumCacheSize(1024 * 1024);
 
         nam->setCache(diskCache);
 
