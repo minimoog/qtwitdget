@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QSqlQuery>
 #include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 #include <QApplication>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetuserstream.h"
@@ -43,6 +44,7 @@
 #include "conversationlistmodel.h"
 #include "userlogins.h"
 #include "namsingleton.h"
+#include "namfactory.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
@@ -59,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
 
+
+    engine()->setNetworkAccessManagerFactory(new NAMFactory);
     createDeclarativeView();
 }
 
