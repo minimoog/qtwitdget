@@ -48,7 +48,7 @@ Item {
         }
     }
 
-//    width: 360; height: 640
+    width: 360; height: 640
 
     Rectangle {
         id: userInfoBackground
@@ -81,7 +81,7 @@ Item {
             Text {
                 id: tweetText
                 text: addTags(container.text)
-                font.pointSize: 10
+                font.pointSize: 6
                 style: Text.Normal
                 font.family: "Segoe UI"
                 wrapMode: Text.WordWrap
@@ -95,6 +95,7 @@ Item {
             Text {
                 id: since
                 text: container.time
+                font.pointSize: 5
                 anchors.bottom: oblace.bottom
                 anchors.right: parent.right; anchors.rightMargin: 16
             }
@@ -167,7 +168,7 @@ Item {
             text: container.screenname
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
-            font.pointSize: 10
+            font.pointSize: 6
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userAvatar.top
             font.family: "Segoe UI"
@@ -181,7 +182,7 @@ Item {
             horizontalAlignment: Text.AlignLeft
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
-            font.pointSize: 10
+            font.pointSize: 6
             font.bold: true
             font.family: "Segoe UI"
             anchors.left: userAvatar.right; anchors.leftMargin: 11
@@ -197,6 +198,7 @@ Item {
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userName.bottom
             font.family: "Segoe UI"
+            font.pointSize: 6
         }
         Text {
             id: userLocation
@@ -208,12 +210,13 @@ Item {
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userUrl.bottom
             font.family: "Segoe UI"
+            font.pointSize: 6
         }
         Text {
             id: userDescription
             color: "#919191"
             text: container.description
-            font.pointSize: 10
+            font.pointSize: 6
             anchors.right: parent.right; anchors.rightMargin: 5
             anchors.left: parent.left; anchors.leftMargin: 5
             anchors.top: numFavoritesBackground.bottom; anchors.topMargin: 12
@@ -231,7 +234,7 @@ Item {
                 text: container.numTweets
                 anchors.right: parent.right; anchors.rightMargin: 5
                 anchors.top: parent.top
-                font.pointSize: 8
+                font.pointSize: 5
                 font.family: "Segoe UI"
                 anchors.topMargin: 2
             }
@@ -242,7 +245,7 @@ Item {
             text: "tweets"
             anchors.top: oblace.bottom; anchors.topMargin: 5
             anchors.right: numTweetsBackground.left
-            font.pointSize: 10
+            font.pointSize: 6
             font.family: "Segoe UI"
         }
         Image {
@@ -257,7 +260,7 @@ Item {
                 anchors.rightMargin: 5
                 anchors.right: parent.right
                 anchors.top: parent.top
-                font.pointSize: 8
+                font.pointSize: 5
                 font.family: "Segoe UI"
                 anchors.topMargin: 2
             }
@@ -269,7 +272,7 @@ Item {
             anchors.top: labelTweets.bottom
             anchors.topMargin: 1
             anchors.right: numFollowersBackground.left
-            font.pointSize: 10
+            font.pointSize: 6
             font.family: "Segoe UI"
         }
 
@@ -286,7 +289,7 @@ Item {
                 anchors.topMargin: 2
                 anchors.right: parent.right
                 anchors.rightMargin: 5
-                font.pointSize: 8
+                font.pointSize: 5
                 font.family: "Segoe UI"
             }
         }
@@ -297,7 +300,7 @@ Item {
             anchors.right: numFollowingBackground.left
             anchors.top: labelFollowers.bottom
             anchors.topMargin: 1
-            font.pointSize: 10
+            font.pointSize: 6
             font.family: "Segoe UI"
         }
 
@@ -314,7 +317,7 @@ Item {
                 anchors.topMargin: 2
                 anchors.right: parent.right
                 anchors.rightMargin: 5
-                font.pointSize: 8
+                font.pointSize: 5
                 font.family: "Segoe UI"
             }
         }
@@ -324,7 +327,7 @@ Item {
             text: "favorites"
             anchors.right: numFavoritesBackground.left
             anchors.top: labelFollowing.bottom
-            font.pointSize: 10
+            font.pointSize: 6
             font.family: "Segoe UI"
         }
 
