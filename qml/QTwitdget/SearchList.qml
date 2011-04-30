@@ -83,7 +83,7 @@ Item {
             tweetAvatar: avatarUrlRole
             tweetText: statusTextRole
 
-            onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
+            //onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
             onHashtagLinkClicked: doSearch(hashtag)
         }

@@ -11,7 +11,10 @@ Item  {
     property bool isOwnTweet: false
     property bool isNewTweet: false
 
-    signal moreButtonClicked
+    signal replyClicked
+    signal retweetClicked
+    signal favoriteClicked
+    signal conversationClicked
     signal mentionLinkClicked(string screenname)
     signal hashtagLinkClicked(string hashtag)
 
@@ -137,11 +140,21 @@ Item  {
         onLoaded: PropertyAnimation { target: buttonLoader; properties: 'opacity'; to: 1; duration: 200 }
     }
 
+    Connections { target: buttonLoader.item; onReplyButtonClicked: replyClicked() }
+    Connections { target: buttonLoader.item; onRetweetButtonClicked: retweetClicked() }
+    Connections { target: buttonLoader.item; onFavoriteButtonClicked: favoriteClicked() }
+    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationCliced() }
+
     Component {
         id: buttonRow
 
         Item {
             id: buttonContainer
+
+            signal replyButtonClicked()
+            signal retweetButtonClicked()
+            signal favoriteButtonClicked()
+            signal convesrationButtonClicked()
 
             ButtonImage {
                 id: replyButton
@@ -154,7 +167,7 @@ Item  {
                 pressedButtonImageUrl: "images/reply_button_pressed.png"
                 buttonImageUrl: "images/reply_button.png"
 
-                //onClicked: replyButtonClicked()
+                onClicked: replyButtonClicked()
             }
 
             ButtonImage {
@@ -168,7 +181,7 @@ Item  {
                 pressedButtonImageUrl: "images/retweet_button_pressed.png"
                 buttonImageUrl: "images/retweet_button.png"
 
-                //onClicked: retweetButtonClicked()
+                onClicked: retweetButtonClicked()
             }
 
             ButtonImage {
@@ -182,7 +195,7 @@ Item  {
                 pressedButtonImageUrl: "images/favourite_button_pressed.png"
                 buttonImageUrl: "images/favourite_button.png"
 
-                //onClicked: favoriteButtonClicked()
+                onClicked: favoriteButtonClicked()
             }
 
             ButtonImage {
@@ -196,7 +209,7 @@ Item  {
                 pressedButtonImageUrl: "images/conversation_button_pressed.png"
                 buttonImageUrl: "images/conversation_button.png"
 
-                //onClicked: conversationButtonClicked()
+                onClicked: conversationButtonClicked()
             }
         }
     }

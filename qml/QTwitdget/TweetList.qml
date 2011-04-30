@@ -21,7 +21,7 @@ Rectangle {
         id: tweetListView
         anchors.fill: parent;
         clip: true
-        cacheBuffer: 95 * 20
+        cacheBuffer: 120 * 20
         delegate: TweetDelegate {
             tweetScreenName: screenNameRole
             tweetText: statusTextRole
@@ -31,7 +31,7 @@ Rectangle {
             isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
-            onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
+            //onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
             onHashtagLinkClicked: hashtagClicked(hashtag)
         }
