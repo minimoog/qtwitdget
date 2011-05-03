@@ -62,7 +62,7 @@ Rectangle {
         TextEdit {
             id: statusTextInput
             color: "#919191"
-            font.pointSize: 10
+            font.pointSize: 6
             font.family: "Segoe UI"
             wrapMode: TextEdit.WordWrap
             anchors.rightMargin: 8
@@ -87,6 +87,7 @@ Rectangle {
         id: tweetReplyText
         color: "#a0a0a0"
         font.family: "Segoe UI"
+        font.pointSize: 6
         wrapMode: Text.WordWrap
         anchors.right: parent.right
         anchors.rightMargin: 20
@@ -128,6 +129,6 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
         font.family: "Segoe UI"
-        font.pixelSize: 12
+        font.pointSize: 6
     }
 }
