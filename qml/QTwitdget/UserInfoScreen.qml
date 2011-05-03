@@ -165,7 +165,6 @@ Item {
         Text {
             id: userScreenname
             text: container.screenname
-            anchors.right: labelFollowers.left
             anchors.rightMargin: 5
             font.pointSize: 6
             anchors.left: userAvatar.right; anchors.leftMargin: 11
@@ -179,7 +178,6 @@ Item {
             text: container.name
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignLeft
-            anchors.right: labelFollowers.left
             anchors.rightMargin: 5
             font.pointSize: 6
             font.bold: true
@@ -192,7 +190,6 @@ Item {
             color: "#528ca8"
             text:  container.url
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            anchors.right: labelFollowers.left
             anchors.rightMargin: 5
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userName.bottom
@@ -204,7 +201,6 @@ Item {
             color: "#666666"
             text: container.location
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            anchors.right: labelFollowers.left
             anchors.rightMargin: 5
             anchors.left: userAvatar.right; anchors.leftMargin: 11
             anchors.top: userUrl.bottom
@@ -222,37 +218,9 @@ Item {
             font.family: "Segoe UI"
             wrapMode: Text.WordWrap
         }
-        Image {
-            id: numFollowersBackground
-            anchors.right: parent.right
-            anchors.top: numTweetsBackground.bottom
-            source: "images/lenta_nalevo.png"
-            Text {
-                id: userNumFollowers
-                color: "#ffffff"
-                text: container.numFollowers
-                anchors.rightMargin: 5
-                anchors.right: parent.right
-                anchors.top: parent.top
-                font.pointSize: 5
-                font.family: "Segoe UI"
-                anchors.topMargin: 2
-            }
-        }
-        Text {
-            id: labelFollowers
-            color: "#919191"
-            text: 'followers'
-            anchors.top: labelTweets.bottom
-            anchors.topMargin: 1
-            anchors.right: numFollowersBackground.left
-            font.pointSize: 6
-            font.family: "Segoe UI"
-        }
 
         Image {
             id: numFollowingBackground
-            anchors.top: numFollowersBackground.bottom
             anchors.right: parent.right
             source: "images/lenta_nalevo.png"
             Text {
@@ -272,7 +240,6 @@ Item {
             color: "#919191"
             text: "following"
             anchors.right: numFollowingBackground.left
-            anchors.top: labelFollowers.bottom
             anchors.topMargin: 1
             font.pointSize: 6
             font.family: "Segoe UI"

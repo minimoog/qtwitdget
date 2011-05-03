@@ -149,7 +149,6 @@ Item {
         url: userInfo.url
         location: userInfo.location
         description: userInfo.description
-        numFollowers: userInfo.numFollowers
         numFollowing: userInfo.numFollowing
         numFavorites: userInfo.numFavorites
         isFriend: userInfo.isFriend

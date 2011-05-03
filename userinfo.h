@@ -37,7 +37,6 @@ class UserInfo : public QObject
     Q_PROPERTY(QString location READ location NOTIFY userInfoChanged)
     Q_PROPERTY(QString userid READ userid NOTIFY userInfoChanged)
     Q_PROPERTY(QString name READ name NOTIFY userInfoChanged)
-    Q_PROPERTY(int numFollowers READ numFollowers NOTIFY userInfoChanged)
     Q_PROPERTY(int numFollowing READ numFollowing NOTIFY userInfoChanged)
     Q_PROPERTY(int numFavorites READ numFavorites NOTIFY userInfoChanged)
     Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
@@ -50,7 +49,6 @@ public:
     QString location() const { return m_userinfo.location(); }
     QString userid() const { return QString::number(m_userinfo.id()); }
     QString name() const { return m_userinfo.name(); }
-    int numFollowers() const { return m_userinfo.followersCount(); }
     int numFollowing() const { return m_userinfo.friendsCount(); }
     int numFavorites() const { return m_userinfo.favouritesCount(); }
     bool isFriend() const { return m_isFriend; }
