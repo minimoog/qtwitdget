@@ -32,6 +32,7 @@ Rectangle {
             tweetSinceTime: sinceTimeRole
 
             onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
+            onRetweetClicked: retweet(tweetText, tweetScreenName)
             //onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
             onHashtagLinkClicked: hashtagClicked(hashtag)
