@@ -14,7 +14,6 @@ Item {
     property string url
     property string location
     property string description
-    property int numTweets
     property int numFollowers
     property int numFollowing
     property int numFavorites
@@ -222,31 +221,6 @@ Item {
             anchors.top: numFavoritesBackground.bottom; anchors.topMargin: 12
             font.family: "Segoe UI"
             wrapMode: Text.WordWrap
-        }
-        Image {
-            id: numTweetsBackground
-            anchors.right: parent.right
-            anchors.top: oblace.bottom; anchors.topMargin: 5
-            source: "images/lenta_nalevo.png"
-            Text {
-                id: userNumTweets
-                color: "#ffffff"
-                text: container.numTweets
-                anchors.right: parent.right; anchors.rightMargin: 5
-                anchors.top: parent.top
-                font.pointSize: 5
-                font.family: "Segoe UI"
-                anchors.topMargin: 2
-            }
-        }
-        Text {
-            id: labelTweets
-            color: "#919191"
-            text: "tweets"
-            anchors.top: oblace.bottom; anchors.topMargin: 5
-            anchors.right: numTweetsBackground.left
-            font.pointSize: 6
-            font.family: "Segoe UI"
         }
         Image {
             id: numFollowersBackground
