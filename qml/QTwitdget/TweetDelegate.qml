@@ -18,8 +18,8 @@ Item  {
     signal mentionLinkClicked(string screenname)
     signal hashtagLinkClicked(string hashtag)
 
-    //width: ListView.view.width;
-    width: 360;
+    width: ListView.view.width;
+    //width: 360;
     height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
 
     function handleLink(link) {
@@ -105,8 +105,8 @@ Item  {
     Text {
         id: statusText
         color: "#333333"
-        //text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
-        text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
+        text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
+        //text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
         anchors.topMargin: 0
         anchors.top: parent.top;
         anchors.right: rightArrow.left; anchors.rightMargin: 0
@@ -132,18 +132,15 @@ Item  {
 
     Loader {
         id: buttonLoader
-        opacity: 0
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-
-        onLoaded: PropertyAnimation { target: buttonLoader; properties: 'opacity'; to: 1; duration: 200 }
     }
 
     Connections { target: buttonLoader.item; onReplyButtonClicked: replyClicked() }
     Connections { target: buttonLoader.item; onRetweetButtonClicked: retweetClicked() }
     Connections { target: buttonLoader.item; onFavoriteButtonClicked: favoriteClicked() }
-    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationCliced() }
+    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationClicked() }
 
     Component {
         id: buttonRow
@@ -154,7 +151,7 @@ Item  {
             signal replyButtonClicked()
             signal retweetButtonClicked()
             signal favoriteButtonClicked()
-            signal convesrationButtonClicked()
+            signal conversationButtonClicked()
 
             ButtonImage {
                 id: replyButton
@@ -218,10 +215,12 @@ Item  {
         name: 'showButtons'
         PropertyChanges { target: buttonLoader; sourceComponent: buttonRow }
         PropertyChanges { target: container; height: container.height + 23; explicit: true }
+        PropertyChanges { target: rightArrow; rotation: 90 }
     }
 
     transitions: Transition {
             NumberAnimation { target: container; property: "height"; duration: 200 }
+            NumberAnimation { target: rightArrow; property: "rotation"; duration: 200 }
     }
 
     ListView.onAdd: SequentialAnimation {
