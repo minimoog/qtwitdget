@@ -17,7 +17,7 @@ Item {
 
     id: timelines
 
-    width: 360; height: 640
+    //width: 360; height: 640
 
     Row {
         id: rowTimelines
@@ -51,6 +51,10 @@ Item {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
             }
+            onConversation: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(id)
+            }
         }
 
         TweetList {
@@ -78,6 +82,10 @@ Item {
             onRetweet: {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
+            }
+            onConversation: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(id)
             }
         }
 
