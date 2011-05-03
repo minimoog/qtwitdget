@@ -14,9 +14,6 @@ Item {
     property string url
     property string location
     property string description
-    property int numFollowers
-    property int numFollowing
-    property int numFavorites
     property bool isFriend
 
     signal hashTagClicked(string hashtag)
@@ -214,62 +211,8 @@ Item {
             font.pointSize: 6
             anchors.right: parent.right; anchors.rightMargin: 5
             anchors.left: parent.left; anchors.leftMargin: 5
-            anchors.top: numFavoritesBackground.bottom; anchors.topMargin: 12
             font.family: "Segoe UI"
             wrapMode: Text.WordWrap
-        }
-
-        Image {
-            id: numFollowingBackground
-            anchors.right: parent.right
-            source: "images/lenta_nalevo.png"
-            Text {
-                id: userNumFollowing
-                color: "#ffffff"
-                text: container.numFollowing
-                anchors.top: parent.top
-                anchors.topMargin: 2
-                anchors.right: parent.right
-                anchors.rightMargin: 5
-                font.pointSize: 5
-                font.family: "Segoe UI"
-            }
-        }
-        Text {
-            id: labelFollowing
-            color: "#919191"
-            text: "following"
-            anchors.right: numFollowingBackground.left
-            anchors.topMargin: 1
-            font.pointSize: 6
-            font.family: "Segoe UI"
-        }
-
-        Image {
-            id: numFavoritesBackground
-            anchors.top: numFollowingBackground.bottom
-            anchors.right: parent.right
-            source: "images/lenta_nalevo.png"
-            Text {
-                id: userNumFavorites
-                color: "#ffffff"
-                text: container.numFavorites
-                anchors.top: parent.top
-                anchors.topMargin: 2
-                anchors.right: parent.right
-                anchors.rightMargin: 5
-                font.pointSize: 5
-                font.family: "Segoe UI"
-            }
-        }
-        Text {
-            id: labelFavorites
-            color: "#919191"
-            text: "favorites"
-            anchors.right: numFavoritesBackground.left
-            anchors.top: labelFollowing.bottom
-            font.pointSize: 6
-            font.family: "Segoe UI"
         }
 
         ButtonImage {

@@ -149,8 +149,6 @@ Item {
         url: userInfo.url
         location: userInfo.location
         description: userInfo.description
-        numFollowing: userInfo.numFollowing
-        numFavorites: userInfo.numFavorites
         isFriend: userInfo.isFriend
         model: userTimelineListModel
 
