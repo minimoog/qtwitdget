@@ -43,11 +43,11 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
-            onReplyClicked: {
+            onReply: {
                 tweetUpdate.setReply(id, screenname, tweettext)
                 tweetUpdate.state = 'show'
             }
-            onRetweetClicked: {
+            onRetweet: {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
             }
@@ -71,11 +71,11 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
-            onReplyClicked: {
+            onReply: {
                 tweetUpdate.setReply(id, screenname, tweettext)
                 tweetUpdate.state = 'show'
             }
-            onRetweetClicked: {
+            onRetweet: {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
             }
@@ -100,7 +100,7 @@ Item {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
             }
-            onReplyClicked: {
+            onReply: {
                 tweetUpdate.setDirectMessage(screenname)
                 tweetUpdate.state = 'show'
             }
@@ -205,11 +205,11 @@ Item {
             searchResultList.doSearch(hashtag)
             timelines.state = 'search'
         }
-        onReplyClicked: {
+        onReply: {
             tweetUpdate.setReply(id, screenname, tweettext)
             tweetUpdate.state = 'show'
         }
-        onRetweetClicked: {
+        onRetweet: {
             tweetUpdate.setRetweet(text, screenname)
             tweetUpdate.state = 'show'
         }
