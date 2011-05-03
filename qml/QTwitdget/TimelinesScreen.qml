@@ -316,6 +316,19 @@ Item {
             buttonImageUrl: "images/settings.png"
             pressedButtonImageUrl: "images/settings_pressed.png"
         }
+
+        ButtonImage {
+            id: closeButton
+
+            anchors.top: parent.top; anchors.topMargin: 5
+            anchors.right: parent.right; anchors.rightMargin: 5
+            width: 39; height: 39
+
+            buttonImageUrl: "images/close.png"
+            pressedButtonImageUrl: "images/close_pressed.png"
+
+            onClicked: Qt.quit()
+        }
     }
 
     Rectangle {
