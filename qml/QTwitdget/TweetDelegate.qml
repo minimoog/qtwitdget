@@ -74,6 +74,13 @@ Item  {
             fillMode: Image.Stretch
             source: tweetAvatar
         }
+
+        MouseArea {
+            id: avatarMouseArea
+            anchors.fill: parent
+
+            onClicked: mentionLinkClicked(tweetScreenName)
+        }
     }
 
     MouseArea {

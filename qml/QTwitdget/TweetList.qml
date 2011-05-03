@@ -8,12 +8,12 @@ Rectangle {
     signal reply(string id, string screenname, string tweettext)
     signal retweet(string text, string screenname)
     signal conversation(string id)
+    signal userinformation(string screenname)
     //signal deleteClicked(string id)
 
     //since time is not updated
 
     //right arrow pressed or mention clicked
-    signal moreClicked(string statusid, string text, string screenname, string sincetime)
     signal hashtagClicked(string hashtag)
 
     color: "#ffffff"
@@ -35,8 +35,7 @@ Rectangle {
             onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
             onRetweetClicked: retweet(tweetText, tweetScreenName)
             onConversationClicked: conversation(tweetid)
-            //onMoreButtonClicked: moreClicked(tweetid, tweetText, tweetScreenName, tweetSinceTime)
-            onMentionLinkClicked: moreClicked('', '' /* temp */, screenname, '')
+            onMentionLinkClicked: userinformation(screenname)
             onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }

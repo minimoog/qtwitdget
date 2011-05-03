@@ -70,8 +70,10 @@ Item {
         Text {
             id: userDescription
             text: container.screenname + '<br \/> ' + container.name + '<br \/> ' + container.url + '<br \/> ' + container.location + '<br \/> ' + container.description
+            anchors.right: parent.right
+            wrapMode: Text.WordWrap
             anchors.topMargin: 4
-            anchors.rightMargin: 5
+            anchors.rightMargin: 4
             font.pointSize: 6
             anchors.left: userAvatar.right; anchors.leftMargin: 4
             anchors.top: parent.top

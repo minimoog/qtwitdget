@@ -31,13 +31,10 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onMoreClicked: {
+            onUserinformation: {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -63,13 +60,10 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onMoreClicked: {
+            onUserinformation: {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -96,13 +90,10 @@ Item {
             anchors.bottom: parent.bottom
             //anchors.left: mentionsList.right
 
-            onMoreClicked:  {
+            onUserinformation:  {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -197,13 +188,10 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onMoreClicked: {
+        onUserinformation: {
             userInfo.fetchByName(screenname)
             userTimelineListModel.fetch(screenname)
             timelines.state = 'userinfo'
-            userinformation.statusid = statusid
-            userinformation.text = text
-            userinformation.time = sincetime
         }
         onHashtagClicked: {
             searchResultList.doSearch(hashtag)
