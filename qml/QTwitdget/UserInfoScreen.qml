@@ -5,9 +5,6 @@ Item {
 
     id: container
 
-    property string text
-    property string statusid
-    property string time
     property string avatar : "images/avatar.png"
     property string screenname
     property string name
@@ -48,7 +45,8 @@ Item {
 
     Rectangle {
         id: userInfoBackground
-        height: oblace.height + userDescription.paintedHeight + 140 //296
+        //97
+        height: (userDescription.paintedHeight < 70) ? 97 : userDescription.paintedHeight + 35
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: parent.top
@@ -64,164 +62,29 @@ Item {
         }
 
         Image {
-            id: oblace
-            height: (container.text) ? (tweetText.paintedHeight + 55) : 0
-            visible: container.text
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            source: "images/oblace.png"
-
-            Behavior on height { PropertyAnimation { duration: 200 } }
-
-            Text {
-                id: tweetText
-                text: addTags(container.text)
-                font.pointSize: 6
-                style: Text.Normal
-                font.family: "Segoe UI"
-                wrapMode: Text.WordWrap
-                textFormat: Text.RichText
-                anchors.right: parent.right; anchors.rightMargin: 5
-                anchors.left: parent.left; anchors.leftMargin: 5
-                anchors.top: parent.top; anchors.topMargin: 5
-
-                onLinkActivated: container.handleLink(link)
-            }
-            Text {
-                id: since
-                text: container.time
-                font.pointSize: 5
-                anchors.bottom: oblace.bottom
-                anchors.right: parent.right; anchors.rightMargin: 16
-            }
-
-            ButtonImage {
-                id: retweetButton
-                width: 84
-                height: 23
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/retweet_button_pressed.png"
-                buttonImageUrl: "images/retweet_button.png"
-
-                onClicked: retweetButtonClicked()
-            }
-
-            ButtonImage {
-                id: replyButton
-                width: 84
-                height: 23
-                pressedButtonImageUrl: "images/reply_button_pressed.png"
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                anchors.left: retweetButton.right
-                anchors.leftMargin: 5
-                buttonImageUrl: "images/reply_button.png"
-
-                onClicked: replyButtonClicked()
-            }
-
-            ButtonImage {
-                id: favouriteButton
-                width: 84
-                height: 23
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                anchors.left: replyButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/favourite_button_pressed.png"
-                buttonImageUrl: "images/favourite_button.png"
-
-                onClicked: favoriteButtonClicked()
-            }
-
-            ButtonImage {
-                id: conversationButton
-                width: 84
-                height: 23
-                anchors.left: favouriteButton.right
-                anchors.leftMargin: 5
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                pressedButtonImageUrl: "images/conversation_button_pressed.png"
-                buttonImageUrl: "images/conversation_button.png"
-
-                onClicked: conversationButtonClicked()
-            }
-        }
-
-        Image {
             id: userAvatar
-            anchors.top: oblace.bottom; anchors.topMargin: 5
-            anchors.left: parent.left; anchors.leftMargin: 11
+            anchors.top: parent.top; anchors.topMargin: 4
+            anchors.left: parent.left; anchors.leftMargin: 4
             source: container.avatar
         }
         Text {
-            id: userScreenname
-            text: container.screenname
-            anchors.rightMargin: 5
-            font.pointSize: 6
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
-            anchors.top: userAvatar.top
-            font.family: "Segoe UI"
-            font.bold: true
-        }
-        Text {
-            id: userName
-            color: "#666666"
-            text: container.name
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            horizontalAlignment: Text.AlignLeft
-            anchors.rightMargin: 5
-            font.pointSize: 6
-            font.bold: true
-            font.family: "Segoe UI"
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
-            anchors.top: userScreenname.bottom
-        }
-        Text {
-            id: userUrl
-            color: "#528ca8"
-            text:  container.url
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            anchors.rightMargin: 5
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
-            anchors.top: userName.bottom
-            font.family: "Segoe UI"
-            font.pointSize: 6
-        }
-        Text {
-            id: userLocation
-            color: "#666666"
-            text: container.location
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            anchors.rightMargin: 5
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
-            anchors.top: userUrl.bottom
-            font.family: "Segoe UI"
-            font.pointSize: 6
-        }
-        Text {
             id: userDescription
-            color: "#919191"
-            text: container.description
+            text: container.screenname + '<br \/> ' + container.name + '<br \/> ' + container.url + '<br \/> ' + container.location + '<br \/> ' + container.description
+            anchors.topMargin: 4
+            anchors.rightMargin: 5
             font.pointSize: 6
-            anchors.right: parent.right; anchors.rightMargin: 5
-            anchors.left: parent.left; anchors.leftMargin: 5
+            anchors.left: userAvatar.right; anchors.leftMargin: 4
+            anchors.top: parent.top
             font.family: "Segoe UI"
-            wrapMode: Text.WordWrap
         }
 
         ButtonImage {
             id: unfollowButton
             width: 84; height: 23
-            anchors.top: userDescription.bottom
-            anchors.topMargin: 10
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 4
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 4
             smooth: true
             buttonImageUrl: container.isFriend ? 'images/unfollow_button.png' : 'images/follow_button.png'
             pressedButtonImageUrl: container.isFriend ? 'images/unfollow_button_pressed.png' : 'images/follow_button_pressed.png'
@@ -236,10 +99,10 @@ Item {
         ButtonImage {
             id: blockButton
             width: 84; height: 23
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 4
             anchors.left: unfollowButton.right
-            anchors.leftMargin: 5
-            anchors.top: userDescription.bottom
-            anchors.topMargin: 10
+            anchors.leftMargin: 4
             buttonImageUrl: "images/block_button.png"
             pressedButtonImageUrl: "images/block_button_pressed.png"
         }
@@ -248,10 +111,10 @@ Item {
             id: messageButton
             width: 84
             height: 23
-            anchors.top: userDescription.bottom
-            anchors.topMargin: 10
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 4
             anchors.left: blockButton.right
-            anchors.leftMargin: 5
+            anchors.leftMargin: 4
             pressedButtonImageUrl: "images/message_button_pressed.png"
             buttonImageUrl: "images/message_button.png"
 
@@ -266,11 +129,11 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 
-        onClickedDelegate: {
-            statusid = delegateID
-            text = delegateText
-            time = delegateSinceTime
-        }
+//        onClickedDelegate: {
+//            statusid = delegateID
+//            text = delegateText
+//            time = delegateSinceTime
+//        }
 //        onHashtagClicked: container.hashTagClicked(hashtag)
     }
 }
