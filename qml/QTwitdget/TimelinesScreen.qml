@@ -155,35 +155,35 @@ Item {
         Behavior on opacity {
             NumberAnimation { duration: 500 }
         }
-
+        onReply: {
+            tweetUpdate.setReply(id, screenname, tweettext)
+            tweetUpdate.state = 'show'
+        }
+        onRetweet: {
+            tweetUpdate.setRetweet(text, screenname)
+            tweetUpdate.state = 'show'
+        }
+        onConversation: {
+            timelines.state = 'conversation'
+            conversationList.model.followConversation(id)
+        }
+        onUserinformation:  {
+            console.log(screenname)
+            userInfo.fetchByName(screenname)
+            userTimelineListModel.fetch(screenname)
+            timelines.state = 'userinfo'
+        }
         onHashTagClicked: {
             searchResultList.doSearch(hashtag)
             timelines.state = 'search'
         }
-        onMentionClicked: {
-            userInfo.fetchByName(mention)
-            userTimelineListModel.fetch(mention)
-            userinformation.text = ''
-        }
-        onReplyButtonClicked: {
-            tweetUpdate.state = 'show'
-            tweetUpdate.setReply(statusid, screenname, text)
-        }
-        onRetweetButtonClicked: {
-            tweetUpdate.state = 'show'
-            tweetUpdate.setRetweet(text, screenname)
-        }
-        onMessageButtonClicked: {
+        onMessage: {
             tweetUpdate.setDirectMessage(screenname)
             tweetUpdate.state = 'show'
         }
-        onConversationButtonClicked: {
-            timelines.state = 'conversation'
-            conversationList.model.followConversation(statusid)
-        }
-        onFollowButtonClicked: userInfo.followUser(screenname)
-        onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
-        onFavoriteButtonClicked: userInfo.createFavorite(statusid)
+        onFollow: userInfo.followUser(screenname)
+        onUnfollow: userInfo.unfollowUser(screenname)
+        //onFavoriteButtonClicked: userInfo.createFavorite(statusid)
     }
 
     TweetList {

@@ -13,15 +13,14 @@ Item {
     property string description
     property bool isFriend
 
+    signal reply(string id, string screenname, string tweettext)
+    signal retweet(string text, string screenname)
+    signal conversation(string id)
     signal hashTagClicked(string hashtag)
-    signal mentionClicked(string mention)   //doesn't need to go outside
-    signal replyButtonClicked
-    signal retweetButtonClicked
-    signal messageButtonClicked
-    signal conversationButtonClicked
-    signal followButtonClicked
-    signal unfollowButtonClicked
-    signal favoriteButtonClicked
+    signal userinformation(string screenname)
+    signal message
+    signal follow
+    signal unfollow
 
     function addTags(str) {
         //surrounds http links with html link tags
@@ -41,7 +40,7 @@ Item {
         }
     }
 
-    width: 360; height: 640
+    //width: 360; height: 640
 
     Rectangle {
         id: userInfoBackground
@@ -93,9 +92,9 @@ Item {
 
             onClicked: {
                 if (container.isFriend)
-                    unfollowButtonClicked()
+                    unfollow()
                 else
-                    followButtonClicked()
+                    follow()
             }
         }
         ButtonImage {
@@ -120,7 +119,7 @@ Item {
             pressedButtonImageUrl: "images/message_button_pressed.png"
             buttonImageUrl: "images/message_button.png"
 
-            onClicked: messageButtonClicked()
+            onClicked: message()
         }
     }
 
@@ -131,11 +130,11 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 
-//        onClickedDelegate: {
-//            statusid = delegateID
-//            text = delegateText
-//            time = delegateSinceTime
-//        }
-//        onHashtagClicked: container.hashTagClicked(hashtag)
+        // ### TODO rename the signal this is confusing
+        onReplyButtonClicked: reply(statusid, screenname, statustext)
+        onRetweet: container.retweet(tweettext, screenname)
+        onConversation: container.conversation(id)
+        onUserinformation: container.userinformation(screenname)
+        onHashtagClicked: container.hashTagClicked(hashtag)
     }
 }

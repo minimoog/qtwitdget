@@ -3,7 +3,10 @@ import QtQuick 1.0
 Rectangle {
     property alias model: tweetListView.model
 
-    signal clickedDelegate(string delegateID, string delegateText, string delegateSinceTime)
+    signal replyButtonClicked(string statusid, string statustext)
+    signal retweet(string tweettext)
+    signal conversation(string id)
+    signal userinformation(string screenname)
     signal hashtagClicked(string hashtag)
 
     color: "#ffffff"
@@ -18,8 +21,11 @@ Rectangle {
             tweetText: statusTextRole
             tweetSinceTime: sinceTimeRole
 
-            onClicked: clickedDelegate(tweetid, tweetText, tweetSinceTime)
-            //onHashtagLinkClicked: hashtagClicked(hashtag)
+            onReplyClicked: replyButtonClicked(tweetid, tweetText)
+            onRetweetClicked: retweet(tweetText)
+            onConversationClicked: conversation(tweetid)
+            onMentionLinkClicked: userinformation(screenname)
+            onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 
