@@ -19,6 +19,33 @@ Item {
 
     //width: 360; height: 640
 
+    function doReply(id, name, text) {
+        tweetUpdate.setReply(id, name, text)
+        tweetUpdate.state = 'show'
+    }
+
+    function doRetweet(text, name) {
+        tweetUpdate.setRetweet(text, name)
+        tweetUpdate.state = 'show'
+    }
+
+    function showConversation(id) {
+        timelines.state = 'conversation'
+        conversationList.model.followConversation(id)
+    }
+
+    function showUser(screenname) {
+        // ### TODO Shouldn't be separated
+        userInfo.fetchByName(screenname)
+        userTimelineListModel.fetch(screenname)
+        timelines.state = 'userinfo'
+    }
+
+    function searchHashtag(hashtag) {
+        searchResultList.doSearch(hashtag)
+        timelines.state = 'search'
+    }
+
     Row {
         id: rowTimelines
         anchors.top: topToolbar.bottom
@@ -31,27 +58,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: {
-                userInfo.fetchByName(screenname)
-                userTimelineListModel.fetch(screenname)
-                timelines.state = 'userinfo'
-            }
-            onHashtagClicked: {
-                searchResultList.doSearch(hashtag)
-                timelines.state = 'search'
-            }
-            onReply: {
-                tweetUpdate.setReply(id, screenname, tweettext)
-                tweetUpdate.state = 'show'
-            }
-            onRetweet: {
-                tweetUpdate.setRetweet(text, screenname)
-                tweetUpdate.state = 'show'
-            }
-            onConversation: {
-                timelines.state = 'conversation'
-                conversationList.model.followConversation(id)
-            }
+            onUserinformation: showUser(screenname)
+            onHashtagClicked: searchHashtag(hashtag)
+            onReply: doReply(id, screenname, tweettext)
+            onRetweet: doRetweet(text, screenname)
+            onConversation: showConversation(id)
         }
 
         TweetList {
@@ -60,27 +71,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: {
-                userInfo.fetchByName(screenname)
-                userTimelineListModel.fetch(screenname)
-                timelines.state = 'userinfo'
-            }
-            onHashtagClicked: {
-                searchResultList.doSearch(hashtag)
-                timelines.state = 'search'
-            }
-            onReply: {
-                tweetUpdate.setReply(id, screenname, tweettext)
-                tweetUpdate.state = 'show'
-            }
-            onRetweet: {
-                tweetUpdate.setRetweet(text, screenname)
-                tweetUpdate.state = 'show'
-            }
-            onConversation: {
-                timelines.state = 'conversation'
-                conversationList.model.followConversation(id)
-            }
+            onUserinformation: showUser(screenname)
+            onHashtagClicked: searchHashtag(hashtag)
+            onReply: doReply(id, screenname, tweettext)
+            onRetweet: doRetweet(text, screenname)
+            onConversation: showConversation(id)
         }
 
         TweetList {
@@ -90,15 +85,8 @@ Item {
             anchors.bottom: parent.bottom
             //anchors.left: mentionsList.right
 
-            onUserinformation:  {
-                userInfo.fetchByName(screenname)
-                userTimelineListModel.fetch(screenname)
-                timelines.state = 'userinfo'
-            }
-            onHashtagClicked: {
-                searchResultList.doSearch(hashtag)
-                timelines.state = 'search'
-            }
+            onUserinformation: showUser(screenname)
+            onHashtagClicked: searchHashtag(hashtag)
             onReply: {
                 tweetUpdate.setDirectMessage(screenname)
                 tweetUpdate.state = 'show'
@@ -111,27 +99,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation:  {
-                userInfo.fetchByName(screenname)
-                userTimelineListModel.fetch(screenname)
-                timelines.state = 'userinfo'
-            }
-            onHashtagClicked: {
-                searchResultList.doSearch(hashtag)
-                timelines.state = 'search'
-            }
-            onReply: {
-                tweetUpdate.setReply(id, screenname, tweettext)
-                tweetUpdate.state = 'show'
-            }
-            onRetweet: {
-                tweetUpdate.setRetweet(text, screenname)
-                tweetUpdate.state = 'show'
-            }
-            onConversation: {
-                timelines.state = 'conversation'
-                conversationList.model.followConversation(id)
-            }
+            onUserinformation: showUser(screenname)
+            onHashtagClicked: searchHashtag(hashtag)
+            onReply: doReply(id, screenname, tweettext)
+            onRetweet: doRetweet(text, screenname)
+            onConversation: showConversation(id)
         }
     }
 
@@ -155,28 +127,12 @@ Item {
         Behavior on opacity {
             NumberAnimation { duration: 500 }
         }
-        onReply: {
-            tweetUpdate.setReply(id, screenname, tweettext)
-            tweetUpdate.state = 'show'
-        }
-        onRetweet: {
-            tweetUpdate.setRetweet(text, screenname)
-            tweetUpdate.state = 'show'
-        }
-        onConversation: {
-            timelines.state = 'conversation'
-            conversationList.model.followConversation(id)
-        }
-        onUserinformation:  {
-            console.log(screenname)
-            userInfo.fetchByName(screenname)
-            userTimelineListModel.fetch(screenname)
-            timelines.state = 'userinfo'
-        }
-        onHashTagClicked: {
-            searchResultList.doSearch(hashtag)
-            timelines.state = 'search'
-        }
+
+        onReply: doReply(id, screenname, tweettext)
+        onRetweet: doRetweet(text, screenname)
+        onConversation: showConversation(id)
+        onUserinformation: showUser(screenname)
+        onHashTagClicked: searchHashtag(hashtag)
         onMessage: {
             tweetUpdate.setDirectMessage(screenname)
             tweetUpdate.state = 'show'
@@ -197,23 +153,12 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onUserinformation: {
-            userInfo.fetchByName(screenname)
-            userTimelineListModel.fetch(screenname)
-            timelines.state = 'userinfo'
-        }
-        onHashtagClicked: {
-            searchResultList.doSearch(hashtag)
-            timelines.state = 'search'
-        }
-        onReply: {
-            tweetUpdate.setReply(id, screenname, tweettext)
-            tweetUpdate.state = 'show'
-        }
-        onRetweet: {
-            tweetUpdate.setRetweet(text, screenname)
-            tweetUpdate.state = 'show'
-        }
+        onUserinformation: showUser(screenname)
+        onHashtagClicked: searchHashtag(hashtag)
+        onReply: doReply(id, screenname, tweettext)
+        onRetweet: doRetweet(text, screenname)
+
+        // ### TODO add conversation
     }
 
     StatusUpdate {
