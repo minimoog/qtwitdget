@@ -111,17 +111,26 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onMoreClicked: {
+            onUserinformation:  {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid // ### TODO: FIXME
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
                 timelines.state = 'search'
+            }
+            onReply: {
+                tweetUpdate.setReply(id, screenname, tweettext)
+                tweetUpdate.state = 'show'
+            }
+            onRetweet: {
+                tweetUpdate.setRetweet(text, screenname)
+                tweetUpdate.state = 'show'
+            }
+            onConversation: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(id)
             }
         }
     }

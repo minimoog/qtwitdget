@@ -51,6 +51,7 @@ SearchQmlListModel::SearchQmlListModel(QObject *parent) :
     roles[ScreenNameRole] = "screenNameRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusTextRole] = "statusTextRole";
+    roles[StatusIdRole] = "statusIdRole";
     setRoleNames(roles);
 }
 
@@ -62,6 +63,7 @@ SearchQmlListModel::SearchQmlListModel(OAuthTwitter *oauthTwitter, QObject *pare
     roles[ScreenNameRole] = "screenNameRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusTextRole] = "statusTextRole";
+    roles[StatusIdRole] = "statusIdRole";
     setRoleNames(roles);
 
     m_oauthTwitter = oauthTwitter;
@@ -98,6 +100,8 @@ QVariant SearchQmlListModel::data(const QModelIndex &index, int role) const
         return searchResult.profileImageUrl();
     else if (role == StatusTextRole)
         return searchResult.text();
+    else if (role == StatusIdRole)
+        return QString::number(searchResult.id());
 
     return QVariant();
 }

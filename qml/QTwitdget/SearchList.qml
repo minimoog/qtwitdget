@@ -7,12 +7,10 @@ Item {
 
     //signal searchClicked
 
-    //width: 360
-    //height: 462
-
-    signal moreClicked(string text, string screenname, string sincetime)
-    signal replyClicked(string id, string screenname, string tweettext)
-    signal retweetClicked(string text, string screenname)
+    signal reply(string id, string screenname, string tweettext)
+    signal retweet(string text, string screenname)
+    signal conversation(string id)
+    signal userinformation(string screenname)
     signal hashtagClicked(string hashtag)
 
     function doSearch(query) {
@@ -54,7 +52,7 @@ Item {
             id: queryInput
             color: "#b0b0b0"
             text: ""
-            font.pointSize: 10
+            font.pointSize: 6
             cursorVisible: true
             font.family: "Segoe UI"
             anchors.bottomMargin: 6
@@ -82,10 +80,13 @@ Item {
             tweetScreenName: screenNameRole
             tweetAvatar: avatarUrlRole
             tweetText: statusTextRole
+            tweetid: statusIdRole
 
-            //onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
-            onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
-            onHashtagLinkClicked: doSearch(hashtag)
+            onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
+            onRetweetClicked: retweet(tweetText, tweetScreenName)
+            onConversationClicked: conversation(tweetid)
+            onMentionLinkClicked: userinformation(screenname)
+            onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 
