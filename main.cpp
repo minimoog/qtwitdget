@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 
     MainWindow mainWindow;
     mainWindow.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    mainWindow.setAttribute(Qt::WA_NoSystemBackground); //Symbian^3
     //mainWindow.setMainQmlFile(QLatin1String("qml/QTwitdget/main.qml"));
     mainWindow.show();
     mainWindow.startUp();
