@@ -236,6 +236,8 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
     if (statusUpdate) {
         qDebug() << "Sended status with id: " << status.id();
 
+        emit showNotification("Sended status");
+
         statusUpdate->deleteLater();
     }
 }

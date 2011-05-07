@@ -57,6 +57,7 @@ public:
 signals:
     void userScreenNameChanged();
     void authedChanged();
+    void showNotification(const QString& notificationText);
 
 private slots:
     void authorizationFinished();

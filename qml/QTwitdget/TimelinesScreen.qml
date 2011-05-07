@@ -12,12 +12,13 @@ Item {
     property alias searchModel: searchResultList.model
     property alias conversationModel: conversationList.model
     property string username
+    property string notification
 
     signal sendClicked(string tweetid, string text, string screenname)
 
     id: timelines
 
-    width: 360; height: 640
+    //width: 360; height: 640
 
     Row {
         id: rowTimelines
@@ -331,6 +332,20 @@ Item {
 
             buttonImageUrl: "images/settings.png"
             pressedButtonImageUrl: "images/settings_pressed.png"
+        }
+    }
+
+    Notification {
+        id: notificationArea
+
+        height: 50
+        anchors.left: parent.left
+        anchors.right: parent.right
+        y: bottomToolbar.y
+
+        Connections {
+            target: rootWindow
+            onShowNotification: notificationArea.show(notificationText)
         }
     }
 
