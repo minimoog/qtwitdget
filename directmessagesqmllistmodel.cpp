@@ -47,6 +47,9 @@ static QString SinceTimeString(const QDateTime& from)
     return QString("%1 days ago").arg(passedSeconds / 86400);
 }
 
+/**
+ *  Constructor
+ */
 DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_numNewDirectMessages(0),
@@ -63,6 +66,9 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     setRoleNames(roles);
 }
 
+/**
+ *  Constructor
+ */
 DirectMessagesQmlListModel::DirectMessagesQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
     QAbstractListModel(parent),
     m_numNewDirectMessages(0),
@@ -81,6 +87,9 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(OAuthTwitter *oauthTwitte
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  @reimp
+ */
 int DirectMessagesQmlListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -92,6 +101,9 @@ void DirectMessagesQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  @reimp
+ */
 QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() > m_directMessages.count())
@@ -123,21 +135,33 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
     return QVariant();
 }
 
+/**
+ *  Sets id for the authenticated user
+ */
 void DirectMessagesQmlListModel::setUserID(qint64 id)
 {
     m_userid = id;
 }
 
+/**
+ *  Returns the number of new DM
+ */
 int DirectMessagesQmlListModel::numNewDirectMessages() const
 {
     return m_numNewDirectMessages;
 }
 
+/**
+ *  Resets to 0 number of DM
+ */
 void DirectMessagesQmlListModel::resetNumNewDirectMessages()
 {
     m_numNewDirectMessages = 0;
 }
 
+/**
+ *  Stream receiver for DM
+ */
 void DirectMessagesQmlListModel::onDirectMessageStream(const QTweetDMStatus &directMessage)
 {
     QSqlQuery query;
@@ -162,6 +186,9 @@ void DirectMessagesQmlListModel::onDirectMessageStream(const QTweetDMStatus &dir
     emit numNewDirectMessagesChanged();
 }
 
+/**
+ *  Show new DM's in the model
+ */
 void DirectMessagesQmlListModel::showNewTweets()
 {
     if (m_newDirectMessages.count()) {
@@ -199,6 +226,9 @@ void DirectMessagesQmlListModel::showNewTweets()
     }
 }
 
+/**
+ *  Loads DM's from database, used at the start up of the application
+ */
 void DirectMessagesQmlListModel::loadTweetsFromDatabase()
 {
     QSqlQuery query;
@@ -248,6 +278,11 @@ void DirectMessagesQmlListModel::loadTweetsFromDatabase()
     }
 }
 
+/**
+ *  Fetches the last DM
+ */
+
+//## TODO: Rename?
 void DirectMessagesQmlListModel::fetchLastTweets()
 {
     qint64 lastDirectMessageID = 0;
@@ -303,6 +338,9 @@ void DirectMessagesQmlListModel::finishedFetchDirectMessages(const QList<QTweetD
     }
 }
 
+/**
+ *  Clears the model
+ */
 void DirectMessagesQmlListModel::clear()
 {
     if (m_directMessages.count()) {
