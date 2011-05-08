@@ -1,4 +1,4 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright (c) 2011, Antonie Jovanoski
  *
  * All rights reserved.
  *
@@ -48,6 +48,9 @@ static QString SinceTimeString(const QDateTime& from)
     return QString("%1 d").arg(passedSeconds / 86400);
 }
 
+/**
+ *  Constructor
+ */
 ConversationListModel::ConversationListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -77,26 +80,31 @@ ConversationListModel::ConversationListModel(OAuthTwitter *oauthTwitter, QObject
     setRoleNames(roles);
 }
 
-ConversationListModel::~ConversationListModel()
-{
-}
-
 void ConversationListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 {
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  Sets id for the current authenticated user
+ */
 void ConversationListModel::setUserID(qint64 userid)
 {
     m_userid = userid;
 }
 
+/**
+ *  @reimp
+ */
 int ConversationListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_statuses.count();
 }
 
+/**
+ *  @reimp
+ */
 QVariant ConversationListModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() > m_statuses.count())
@@ -125,6 +133,10 @@ QVariant ConversationListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/**
+ *  Updates the converstaion tweet model
+ *  @param statusID tweet id to follow conversation
+ */
 void ConversationListModel::followConversation(qint64 statusID)
 {
     beginResetModel();
@@ -134,6 +146,10 @@ void ConversationListModel::followConversation(qint64 statusID)
     fetchConversation(statusID);
 }
 
+/**
+ *  Updates the conversaton tweet model
+ *  @param statusID tweet id in string
+ */
 void ConversationListModel::followConversation(const QString &statusID)
 {
     bool ok;
@@ -144,6 +160,9 @@ void ConversationListModel::followConversation(const QString &statusID)
         followConversation(id);
 }
 
+/**
+ *  Fetches conversation for given tweet id
+ */
 void ConversationListModel::fetchConversation(qint64 statusID)
 {
     QTweetStatus status = findInDatabase(statusID);
@@ -167,6 +186,10 @@ void ConversationListModel::fetchConversation(qint64 statusID)
     }
 }
 
+/**
+ *  Search the tweet in the sqlite local database
+ *  @returns Founded tweet, empty tweet if it's not found
+ */
 QTweetStatus ConversationListModel::findInDatabase(qint64 id)
 {
     QSqlQuery query;

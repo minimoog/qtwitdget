@@ -38,6 +38,7 @@ class DirectMessagesQmlListModel : public QAbstractListModel
                RESET resetNumNewDirectMessages
                NOTIFY numNewDirectMessagesChanged)
 public:
+    /** model roles */
     enum TweetRoles {
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
@@ -71,6 +72,7 @@ private slots:
     void errorFetchingDirectMessages();
 
 signals:
+    /** emited when number of new DM's is changed */
     void numNewDirectMessagesChanged();
 
 private:   

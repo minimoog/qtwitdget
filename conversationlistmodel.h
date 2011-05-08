@@ -26,10 +26,14 @@
 class OAuthTwitter;
 class QTweetStatus;
 
+/**
+ *  Model list class for twitter conversation (replies of replies
+ */
 class ConversationListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    /** model roles */
     enum TweetRoles {
         ScreenNameRole = Qt::UserRole + 1,
         StatusTextRole,
@@ -42,7 +46,6 @@ public:
 
     explicit ConversationListModel(QObject *parent = 0);
     ConversationListModel(OAuthTwitter *oauthTwitter, QObject *parent = 0);
-    virtual ~ConversationListModel();
     void setOAuthTwitter(OAuthTwitter *oauthTwitter);
     void setUserID(qint64 userid);
     int rowCount(const QModelIndex &parent) const;
