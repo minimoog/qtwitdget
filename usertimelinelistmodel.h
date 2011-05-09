@@ -26,10 +26,14 @@
 class OAuthTwitter;
 class QTweetStatus;
 
+/**
+ *  List model for user timeline
+ */
 class UserTimelineListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    /** model roles */
     enum TweetRoles {
         StatusTextRole = Qt::UserRole + 1,
         SinceTimeRole,
@@ -38,7 +42,6 @@ public:
 
     explicit UserTimelineListModel(QObject *parent = 0);
     UserTimelineListModel(OAuthTwitter *oauthTwitter, QObject *parent = 0);
-    ~UserTimelineListModel();
     void setOAuthTwitter(OAuthTwitter *oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;

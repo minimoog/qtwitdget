@@ -43,6 +43,9 @@ static QString SinceTimeString(const QDateTime& from)
     return QString("%1 days ago").arg(passedSeconds / 86400);
 }
 
+/**
+ * Constructor
+ */
 UserTimelineListModel::UserTimelineListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -53,6 +56,9 @@ UserTimelineListModel::UserTimelineListModel(QObject *parent) :
     setRoleNames(roles);
 }
 
+/**
+ *  Constructor
+ */
 UserTimelineListModel::UserTimelineListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
     QAbstractListModel(parent),
     m_oauthTwitter(oauthTwitter)
@@ -64,17 +70,26 @@ UserTimelineListModel::UserTimelineListModel(OAuthTwitter *oauthTwitter, QObject
     setRoleNames(roles);
 }
 
+/**
+ *  Sets oauth twitter object
+ */
 void UserTimelineListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 {
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  @reimp
+ */
 int UserTimelineListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_statuses.count();
 }
 
+/**
+ *  @reimp
+ */
 QVariant UserTimelineListModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() > m_statuses.count())
@@ -92,6 +107,10 @@ QVariant UserTimelineListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/**
+ *  Fetches user timeline
+ *  @param userid id of the user to fetch the timeline
+ */
 void UserTimelineListModel::fetch(qint64 userid)
 {
     QTweetUserTimeline *userTimeline = new QTweetUserTimeline(m_oauthTwitter, this);
@@ -102,6 +121,10 @@ void UserTimelineListModel::fetch(qint64 userid)
             this, SLOT(errorFetching()));
 }
 
+/**
+ *  Fetches user timeline
+ *  @param screenname screenname of the user to fetch the timeline
+ */
 void UserTimelineListModel::fetch(const QString &screenname)
 {
     QTweetUserTimeline *userTimeline = new QTweetUserTimeline(m_oauthTwitter, this);
@@ -112,6 +135,9 @@ void UserTimelineListModel::fetch(const QString &screenname)
             this, SLOT(errorFetching()));
 }
 
+/**
+ *  Called when fetching user timeline is finished
+ */
 void UserTimelineListModel::finishedFetching(const QList<QTweetStatus> &statuses)
 {
     QTweetUserTimeline *userTimeline = qobject_cast<QTweetUserTimeline*>(sender());
@@ -140,9 +166,4 @@ void UserTimelineListModel::errorFetching()
 
     if (userTimeline)
         userTimeline->deleteLater();
-}
-
-UserTimelineListModel::~UserTimelineListModel()
-{
-
 }
