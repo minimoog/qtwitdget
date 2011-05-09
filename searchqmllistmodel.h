@@ -26,10 +26,14 @@
 
 class OAuthTwitter;
 
+/**
+ * List model for search results
+ */
 class SearchQmlListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    /** model roles */
     enum SearchResultRoles {
         SinceTimeRole = Qt::UserRole + 1,
         ScreenNameRole,
@@ -39,7 +43,6 @@ public:
 
     explicit SearchQmlListModel(QObject *parent = 0);
     SearchQmlListModel(OAuthTwitter* oauthTwitter, QObject *parent = 0);
-    virtual ~SearchQmlListModel();
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
 
     int rowCount(const QModelIndex &parent) const;

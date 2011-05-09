@@ -43,6 +43,9 @@ static QString SinceTimeString(const QDateTime& from)
     return QString("%1 days ago").arg(passedSeconds / 86400);
 }
 
+/**
+ *  Constructor
+ */
 SearchQmlListModel::SearchQmlListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -54,6 +57,9 @@ SearchQmlListModel::SearchQmlListModel(QObject *parent) :
     setRoleNames(roles);
 }
 
+/**
+ *  Constructor
+ */
 SearchQmlListModel::SearchQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -67,15 +73,17 @@ SearchQmlListModel::SearchQmlListModel(OAuthTwitter *oauthTwitter, QObject *pare
     m_oauthTwitter = oauthTwitter;
 }
 
-SearchQmlListModel::~SearchQmlListModel()
-{
-}
-
+/**
+ *  Sets ouathtwitter object
+ */
 void SearchQmlListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
 {
     m_oauthTwitter = oauthTwitter;
 }
 
+/**
+ *  @reimp
+ */
 int SearchQmlListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
@@ -83,6 +91,9 @@ int SearchQmlListModel::rowCount(const QModelIndex &parent) const
     return m_searchPageResult.results().count();
 }
 
+/**
+ *  @reimp
+ */
 QVariant SearchQmlListModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() > m_searchPageResult.results().count())     // ### TODO
@@ -102,6 +113,10 @@ QVariant SearchQmlListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/**
+ *  Starts searching
+ *  @param query search query
+ */
 void SearchQmlListModel::startSearch(const QString &query)
 {
     QTweetSearch *twitterSearch = new QTweetSearch(m_oauthTwitter, this);
@@ -112,6 +127,9 @@ void SearchQmlListModel::startSearch(const QString &query)
             this, SLOT(finishedSearch(QTweetSearchPageResults)));
 }
 
+/**
+ *  Called when twitter search is finished
+ */
 void SearchQmlListModel::finishedSearch(const QTweetSearchPageResults &pageResults)
 {
     QTweetSearch *twitterSearch = qobject_cast<QTweetSearch*>(sender());
