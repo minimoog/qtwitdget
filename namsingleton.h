@@ -30,6 +30,7 @@
 class NAMSingleton
 {
 public:
+    /** returns the instance */
     static NAMSingleton* instance() {
         static QMutex mutex;
         if (!m_namInstance) {
@@ -44,6 +45,7 @@ public:
         return m_namInstance;
     }
 
+    /** returns the network access manager */
     QNetworkAccessManager* qnam() const { return m_netManager; }
 
 private:
