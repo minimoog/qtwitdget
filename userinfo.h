@@ -1,4 +1,4 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright (c) 2011, Antonie Jovanoski
  *
  * All rights reserved.
  *
@@ -27,6 +27,9 @@
 class OAuthTwitter;
 class QTweetStatus;
 
+/**
+ *  Stores, fetches twitter user information.
+ */
 class UserInfo : public QObject
 {
     Q_OBJECT
@@ -40,13 +43,21 @@ class UserInfo : public QObject
     Q_PROPERTY(bool isFriend READ isFriend NOTIFY isFriendChanged)
 public:
     explicit UserInfo(QObject *parent = 0);
+    /** returns user screenname */
     QString screenName() const { return m_userinfo.screenName(); }
+    /** returns user description */
     QString description() const { return m_userinfo.description(); }
+    /** returns user url */
     QString url() const { return m_userinfo.url(); }
+    /** returns user avatar url */
     QString avatarUrl() const { return m_userinfo.profileImageUrl(); }
+    /** returns user location */
     QString location() const { return m_userinfo.location(); }
+    /** returns user id in string */
     QString userid() const { return QString::number(m_userinfo.id()); }
+    /** returns user name */
     QString name() const { return m_userinfo.name(); }
+    /** true if authenticated user is following the user */
     bool isFriend() const { return m_isFriend; }
 
     void setOAuthTwitter(OAuthTwitter* oauthTwitter) { m_oauthTwitter = oauthTwitter; }
@@ -61,6 +72,7 @@ public slots:
     void onUserStreamFriendsList(const QList<qint64> friends);
 
 signals:
+    /** emited when user information is changed */
     void userInfoChanged();
     void isFriendChanged();
 

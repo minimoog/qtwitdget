@@ -21,10 +21,16 @@
 #include "userlogins.h"
 #include <QSettings>
 
+/**
+ *  Constructor
+ */
 UserLogins::UserLogins()
 {
 }
 
+/**
+ *  Gets the list of all user logins
+ */
 QList<UserLoginData> UserLogins::getUserLogins() const
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
@@ -49,6 +55,9 @@ QList<UserLoginData> UserLogins::getUserLogins() const
     return userlogins;
 }
 
+/**
+ *  Returns the last logged user
+ */
 UserLoginData UserLogins::lastLoggedUser() const
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
@@ -70,7 +79,9 @@ UserLoginData UserLogins::lastLoggedUser() const
     return login;
 }
 
-// remark, writes user login at last place
+/**
+ *  Stores user login in settings file at the last place
+ */
 void UserLogins::writeUserLogin(const UserLoginData &userlogin)
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
@@ -97,6 +108,10 @@ void UserLogins::writeUserLogin(const UserLoginData &userlogin)
     settings.endArray();
 }
 
+/**
+ *  Removed user login
+ *  @param userid id of the user to remove the login
+ */
 void UserLogins::clearUserLogin(qint64 userid)
 {
     QList<UserLoginData> userlogins = getUserLogins();

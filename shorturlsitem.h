@@ -23,6 +23,10 @@
 
 #include <QObject>
 
+/**
+ *  QML item for shortening urls in the text
+ *  @remarks it is used like item in the declarative engine
+ */
 class ShortUrlsItem : public QObject
 {
     Q_OBJECT

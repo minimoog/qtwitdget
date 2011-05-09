@@ -26,6 +26,9 @@
 #include <QNetworkDiskCache>
 #include <QDesktopServices>
 
+/**
+ *  Implements qnam factory where qnam uses a disk cache
+ */
 class NAMFactory : public QDeclarativeNetworkAccessManagerFactory
 {
 public:
