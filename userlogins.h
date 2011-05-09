@@ -23,6 +23,9 @@
 
 #include <QString>
 
+/**
+ *  Stores login data for one user
+ */
 struct UserLoginData
 {
     UserLoginData() : id(0) { }
@@ -34,6 +37,9 @@ struct UserLoginData
     bool operator ==(const UserLoginData& other) const { return id == other.id; }
 };
 
+/**
+ *  Class for maintaning user logins
+ */
 class UserLogins
 {
 public:
