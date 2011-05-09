@@ -38,6 +38,7 @@ ShortUrlsItem::ShortUrlsItem(QObject *parent) :
  */
 void ShortUrlsItem::shortUrls(const QString &textWithUrls)
 {
+    // ### TODO: short url when text has <href> tags
     m_textWithUrls = textWithUrls;
 
     QRegExp rx("\\(?\\bhttp://[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]", Qt::CaseInsensitive, QRegExp::RegExp2);
