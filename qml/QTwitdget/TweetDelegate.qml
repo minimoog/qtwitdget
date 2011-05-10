@@ -16,6 +16,7 @@ Item  {
     signal hashtagLinkClicked(string hashtag)
     signal retweetButtonClicked
     signal replyButtonClicked
+    signal conversationButtonClicked
 
     width: ListView.view.width;
     //width: 360;
@@ -73,20 +74,27 @@ Item  {
             smooth: true
             fillMode: Image.Stretch
             source: tweetAvatar
+
+            MouseArea {
+                id: avatarImageMouseArea
+                anchors.fill: parent
+
+                onClicked: moreButtonClicked()
+            }
         }
     }
 
     ButtonImage {
-        id: rightArrow
+        id: conversation
 
-        buttonImageUrl: "images/right_arrow.png"
-        pressedButtonImageUrl: "images/right_arrow_pressed.png"
+        buttonImageUrl: "images/small_conversation_button.png"
+        pressedButtonImageUrl: "images/small_conversation_button_pressed.png"
 
-        width: 11; height: 16
+        width: 15; height: 15
         anchors.top: parent.top; anchors.topMargin: 10
         anchors.right: parent.right; anchors.rightMargin: 10
 
-        onClicked: moreButtonClicked()
+        onClicked: conversationButtonClicked()
     }
 
     ButtonImage {
@@ -95,7 +103,7 @@ Item  {
         buttonImageUrl: "images/small_retweet_button.png"
         pressedButtonImageUrl: "images/small_retweet_button_pressed.png"
         width: 16; height: 16
-        anchors.top: rightArrow.bottom
+        anchors.top: conversation.bottom
         anchors.topMargin: 17
         anchors.right: parent.right
         anchors.rightMargin: 7

@@ -52,6 +52,10 @@ Item {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
             }
+            onConversationClicked: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(id)
+            }
         }
 
         TweetList {
@@ -79,6 +83,10 @@ Item {
             onRetweetClicked: {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
+            }
+            onConversationClicked: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(id)
             }
         }
 
@@ -132,6 +140,10 @@ Item {
             onRetweetClicked: {
                 tweetUpdate.setRetweet(text, screenname)
                 tweetUpdate.state = 'show'
+            }
+            onConversationClicked: {
+                timelines.state = 'conversation'
+                conversationList.model.followConversation(id)
             }
         }
     }

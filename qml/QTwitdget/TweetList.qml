@@ -7,6 +7,7 @@ Rectangle {
 
     signal replyClicked(string id, string screenname, string tweettext)
     signal retweetClicked(string text, string screenname)
+    signal conversationClicked(string id)
     //signal deleteClicked(string id)
 
     //since time is not updated
@@ -35,6 +36,7 @@ Rectangle {
             onHashtagLinkClicked: hashtagClicked(hashtag)
             onReplyButtonClicked: replyClicked(tweetid, tweetScreenName, tweetText)
             onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
+            onConversationButtonClicked: conversationClicked(tweetid)
         }
     }
 
