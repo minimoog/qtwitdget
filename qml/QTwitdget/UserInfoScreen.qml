@@ -5,9 +5,6 @@ Item {
 
     id: container
 
-    property string text
-    property string statusid
-    property string time
     property string avatar : "images/avatar.png"
     property string screenname
     property string name
@@ -48,11 +45,11 @@ Item {
         }
     }
 
-//    width: 360; height: 640
+   //width: 360; height: 640
 
     Rectangle {
         id: userInfoBackground
-        height: oblace.height + userDescription.paintedHeight + 140 //296
+        height: userDescription.paintedHeight + 110
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: parent.top
@@ -68,98 +65,10 @@ Item {
         }
 
         Image {
-            id: oblace
-            height: (container.text) ? (tweetText.paintedHeight + 55) : 0
-            visible: container.text
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            source: "images/oblace.png"
-
-            Behavior on height { PropertyAnimation { duration: 200 } }
-
-            Text {
-                id: tweetText
-                text: addTags(container.text)
-                font.pointSize: 10
-                style: Text.Normal
-                font.family: "Segoe UI"
-                wrapMode: Text.WordWrap
-                textFormat: Text.RichText
-                anchors.right: parent.right; anchors.rightMargin: 5
-                anchors.left: parent.left; anchors.leftMargin: 5
-                anchors.top: parent.top; anchors.topMargin: 5
-
-                onLinkActivated: container.handleLink(link)
-            }
-            Text {
-                id: since
-                text: container.time
-                anchors.bottom: oblace.bottom
-                anchors.right: parent.right; anchors.rightMargin: 16
-            }
-
-            ButtonImage {
-                id: retweetButton
-                width: 84
-                height: 23
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/retweet_button_pressed.png"
-                buttonImageUrl: "images/retweet_button.png"
-
-                onClicked: retweetButtonClicked()
-            }
-
-            ButtonImage {
-                id: replyButton
-                width: 84
-                height: 23
-                pressedButtonImageUrl: "images/reply_button_pressed.png"
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                anchors.left: retweetButton.right
-                anchors.leftMargin: 5
-                buttonImageUrl: "images/reply_button.png"
-
-                onClicked: replyButtonClicked()
-            }
-
-            ButtonImage {
-                id: favouriteButton
-                width: 84
-                height: 23
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                anchors.left: replyButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/favourite_button_pressed.png"
-                buttonImageUrl: "images/favourite_button.png"
-
-                onClicked: favoriteButtonClicked()
-            }
-
-            ButtonImage {
-                id: conversationButton
-                width: 84
-                height: 23
-                anchors.left: favouriteButton.right
-                anchors.leftMargin: 5
-                anchors.top: tweetText.bottom
-                anchors.topMargin: 10
-                pressedButtonImageUrl: "images/conversation_button_pressed.png"
-                buttonImageUrl: "images/conversation_button.png"
-
-                onClicked: conversationButtonClicked()
-            }
-        }
-
-        Image {
             id: userAvatar
-            anchors.top: oblace.bottom; anchors.topMargin: 5
-            anchors.left: parent.left; anchors.leftMargin: 11
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.left: parent.left; anchors.leftMargin: 5
             source: container.avatar
         }
         Text {
@@ -168,7 +77,7 @@ Item {
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
             font.pointSize: 10
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
+            anchors.left: userAvatar.right; anchors.leftMargin: 5
             anchors.top: userAvatar.top
             font.family: "Segoe UI"
             font.bold: true
@@ -184,7 +93,7 @@ Item {
             font.pointSize: 10
             font.bold: true
             font.family: "Segoe UI"
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
+            anchors.left: userAvatar.right; anchors.leftMargin: 5
             anchors.top: userScreenname.bottom
         }
         Text {
@@ -194,7 +103,7 @@ Item {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
+            anchors.left: userAvatar.right; anchors.leftMargin: 6
             anchors.top: userName.bottom
             font.family: "Segoe UI"
         }
@@ -205,7 +114,7 @@ Item {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             anchors.right: labelFollowers.left
             anchors.rightMargin: 5
-            anchors.left: userAvatar.right; anchors.leftMargin: 11
+            anchors.left: userAvatar.right; anchors.leftMargin: 5
             anchors.top: userUrl.bottom
             font.family: "Segoe UI"
         }
@@ -216,14 +125,13 @@ Item {
             font.pointSize: 10
             anchors.right: parent.right; anchors.rightMargin: 5
             anchors.left: parent.left; anchors.leftMargin: 5
-            anchors.top: numFavoritesBackground.bottom; anchors.topMargin: 12
+            anchors.top: numFavoritesBackground.bottom; anchors.topMargin: 5
             font.family: "Segoe UI"
             wrapMode: Text.WordWrap
         }
         Image {
             id: numTweetsBackground
             anchors.right: parent.right
-            anchors.top: oblace.bottom; anchors.topMargin: 5
             source: "images/lenta_nalevo.png"
             Text {
                 id: userNumTweets
@@ -240,7 +148,6 @@ Item {
             id: labelTweets
             color: "#919191"
             text: "tweets"
-            anchors.top: oblace.bottom; anchors.topMargin: 5
             anchors.right: numTweetsBackground.left
             font.pointSize: 10
             font.family: "Segoe UI"
@@ -332,7 +239,7 @@ Item {
             id: unfollowButton
             width: 84; height: 23
             anchors.top: userDescription.bottom
-            anchors.topMargin: 10
+            anchors.topMargin: 5
             anchors.left: parent.left
             anchors.leftMargin: 5
             smooth: true
@@ -352,7 +259,7 @@ Item {
             anchors.left: unfollowButton.right
             anchors.leftMargin: 5
             anchors.top: userDescription.bottom
-            anchors.topMargin: 10
+            anchors.topMargin: 5
             buttonImageUrl: "images/block_button.png"
             pressedButtonImageUrl: "images/block_button_pressed.png"
         }
@@ -362,7 +269,7 @@ Item {
             width: 84
             height: 23
             anchors.top: userDescription.bottom
-            anchors.topMargin: 10
+            anchors.topMargin: 5
             anchors.left: blockButton.right
             anchors.leftMargin: 5
             pressedButtonImageUrl: "images/message_button_pressed.png"

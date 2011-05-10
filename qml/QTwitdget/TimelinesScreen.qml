@@ -36,9 +36,6 @@ Item {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -68,9 +65,6 @@ Item {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -101,9 +95,6 @@ Item {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -125,9 +116,6 @@ Item {
                 userInfo.fetchByName(screenname)
                 userTimelineListModel.fetch(screenname)
                 timelines.state = 'userinfo'
-                userinformation.statusid = statusid // ### TODO: FIXME
-                userinformation.text = text
-                userinformation.time = sincetime
             }
             onHashtagClicked: {
                 searchResultList.doSearch(hashtag)
@@ -180,7 +168,6 @@ Item {
         onMentionClicked: {
             userInfo.fetchByName(mention)
             userTimelineListModel.fetch(mention)
-            userinformation.text = ''
         }
         onReplyButtonClicked: {
             tweetUpdate.state = 'show'
@@ -218,9 +205,6 @@ Item {
             userInfo.fetchByName(screenname)
             userTimelineListModel.fetch(screenname)
             timelines.state = 'userinfo'
-            userinformation.statusid = statusid
-            userinformation.text = text
-            userinformation.time = sincetime
         }
         onHashtagClicked: {
             searchResultList.doSearch(hashtag)
@@ -331,7 +315,6 @@ Item {
                 userInfo.fetchByName(text)
                 userTimelineListModel.fetch(text)
                 timelines.state = 'userinfo'
-                userinformation.text = ''
             }
         }
 
