@@ -469,10 +469,3 @@ void TweetQmlListModel::clear()
 
     emit numNewTweetsChanged();
 }
-
-/**
- * Destructor
- */
-TweetQmlListModel::~TweetQmlListModel()
-{
-}

@@ -48,7 +48,6 @@ public:
 
     TweetQmlListModel(QObject *parent = 0);
     TweetQmlListModel(OAuthTwitter* oauthTwitter, QObject *parent = 0);
-    virtual ~TweetQmlListModel();
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
