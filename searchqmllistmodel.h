@@ -38,7 +38,8 @@ public:
         SinceTimeRole = Qt::UserRole + 1,
         ScreenNameRole,
         AvatarUrlRole,
-        StatusTextRole
+        StatusTextRole,
+        StatusIdRole
     };
 
     explicit SearchQmlListModel(QObject *parent = 0);

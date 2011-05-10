@@ -13,6 +13,7 @@ Item {
     signal moreClicked(string text, string screenname, string sincetime)
     signal replyClicked(string id, string screenname, string tweettext)
     signal retweetClicked(string text, string screenname)
+    signal conversationClicked(string id)
     signal hashtagClicked(string hashtag)
 
     function doSearch(query) {
@@ -82,12 +83,14 @@ Item {
             tweetScreenName: screenNameRole
             tweetAvatar: avatarUrlRole
             tweetText: statusTextRole
+            tweetid: statusIdRole
 
             onMoreButtonClicked: moreClicked(tweetText, tweetScreenName, tweetSinceTime)
             onMentionLinkClicked: moreClicked('' /* temp */, screenname, '' /* temp */)
             onHashtagLinkClicked: doSearch(hashtag)
             onReplyButtonClicked: replyClicked(tweetid, tweetScreenName, tweetText)
             onRetweetButtonClicked: retweetClicked(tweetText, tweetScreenName)
+            onConversationButtonClicked: conversationClicked(tweetid)
         }
     }
 
