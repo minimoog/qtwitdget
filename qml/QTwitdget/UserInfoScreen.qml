@@ -285,12 +285,6 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-
-        onClickedDelegate: {
-            statusid = delegateID
-            text = delegateText
-            time = delegateSinceTime
-        }
 //        onHashtagClicked: container.hashTagClicked(hashtag)
     }
 }

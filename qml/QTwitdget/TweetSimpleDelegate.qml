@@ -7,7 +7,6 @@ Rectangle {
     property string tweetText : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
     property string tweetSinceTime : "Sometimes ago"
 
-    signal clicked
 //    signal hashtagLinkClicked(string hashtag)
 //    signal mentionLinkClicked(string screenname)
 
@@ -75,14 +74,5 @@ Rectangle {
         anchors.topMargin: 5
         font.family: "Segoe UI"
         font.pointSize: 7
-    }
-
-    MouseArea {
-        id: mousearea
-        anchors.fill: parent
-        onClicked: {
-            background.ListView.view.currentIndex = index;
-            background.clicked();
-        }
     }
 }
