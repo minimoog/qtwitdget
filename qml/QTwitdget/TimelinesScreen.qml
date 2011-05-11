@@ -252,7 +252,7 @@ Item {
             anchors.topMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
 
-            onClicked: showUser(text)
+            onClicked: StateFunctions.showUser(text)
         }
 
         ButtonImage {
@@ -313,10 +313,7 @@ Item {
                 toggled: true
                 showNotification: homeTimelineModel.numNewTweets
 
-                onClicked: {
-                    homeTimelineModel.showNewTweets();
-                    timelines.state = "";   //default state
-                }
+                onClicked: StateFunctions.showHometimeline()
             }
 
             ButtonWithNotification {
@@ -326,10 +323,7 @@ Item {
                 pressedButtonImageUrl: "images/replies_pressed.png"
                 showNotification: mentionsModel.numNewTweets
 
-                onClicked: {
-                    mentionsModel.showNewTweets();
-                    timelines.state = "mentions";
-                }
+                onClicked: StateFunctions.showMentions()
             }
 
             ButtonWithNotification {
@@ -339,10 +333,7 @@ Item {
                 pressedButtonImageUrl: "images/directmessages_pressed.png"
                 showNotification: directMessagesModel.numNewDirectMessages
 
-                onClicked: {
-                    dmList.model.showNewTweets();
-                    timelines.state = "directMessages"
-                }
+                onClicked: StateFunctions.showDirectMessages()
             }
 
             ButtonWithNotification {
@@ -351,9 +342,7 @@ Item {
                 buttonImageUrl: "images/search.png"
                 pressedButtonImageUrl: "images/search_pressed.png"
 
-                onClicked: {
-                    timelines.state = "search"
-                }
+                onClicked: StateFunctions.showSearch()
             }
         }
     }
