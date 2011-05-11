@@ -4,6 +4,7 @@
 //maybe later
 
 import QtQuick 1.0
+import 'timelinesScreenScripts.js' as StateFunctions
 
 Item {
     property alias homeTimelineModel: homeTimelineList.model
@@ -20,18 +21,6 @@ Item {
 
     //width: 360; height: 640
 
-    function showUser(screenname) {
-        // ### TODO Shouldn't be separated
-        userInfo.fetchByName(screenname)
-        userTimelineListModel.fetch(screenname)
-        timelines.state = 'userinfo'
-    }
-
-    function searchHashtag(hashtag) {
-        searchResultList.doSearch(hashtag)
-        timelines.state = 'search'
-    }
-
     function doReply(id, name, text) {
         tweetUpdate.setReply(id, name, text)
         tweetUpdate.state = 'show'
@@ -40,11 +29,6 @@ Item {
     function doRetweet(text, name) {
         tweetUpdate.setRetweet(text, name)
         tweetUpdate.state = 'show'
-    }
-
-    function showConversation(id) {
-        conversationList.model.followConversation(id)
-        timelines.state = 'conversation'
     }
 
     Row {
@@ -59,11 +43,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onMoreClicked: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onMoreClicked: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReplyClicked: doReply(id, screenname, tweettext)
             onRetweetClicked: doRetweet(text, screenname)
-            onConversationClicked: showConversation(id)
+            onConversationClicked: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -72,11 +56,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onMoreClicked: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onMoreClicked: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReplyClicked: doReply(id, screenname, tweettext)
             onRetweetClicked: doRetweet(text, screenname)
-            onConversationClicked: showConversation(id)
+            onConversationClicked: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -86,8 +70,8 @@ Item {
             anchors.bottom: parent.bottom
             //anchors.left: mentionsList.right
 
-            onMoreClicked: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onMoreClicked: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReplyClicked: {
                 tweetUpdate.setDirectMessage(screenname)
                 tweetUpdate.state = 'show'
@@ -100,11 +84,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onMoreClicked: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onMoreClicked: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReplyClicked: doReply(id, screenname, tweettext)
             onRetweetClicked: doRetweet(text, screenname)
-            onConversationClicked: showConversation(id)
+            onConversationClicked: StateFunctions.showConversation(id)
         }
     }
 
@@ -133,7 +117,7 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onHashTagClicked: searchHashtag(hashtag)
+        onHashTagClicked: StateFunctions.searchHashtag(hashtag)
         onMentionClicked: {
             userInfo.fetchByName(mention)
             userTimelineListModel.fetch(mention)
@@ -170,8 +154,8 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onMoreClicked: showUser(screenname)
-        onHashtagClicked: searchHashtag(hashtag)
+        onMoreClicked: StateFunctions.showUser(screenname)
+        onHashtagClicked: StateFunctions.searchHashtag(hashtag)
         onReplyClicked: doReply(id, screenname, tweettext)
         onRetweetClicked: doRetweet(text, screenname)
         // ### todo conversation
