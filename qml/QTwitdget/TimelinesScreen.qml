@@ -19,7 +19,7 @@ Item {
 
     id: timelines
 
-    //width: 360; height: 640
+    width: 360; height: 640
 
     function doReply(id, name, text) {
         tweetUpdate.setReply(id, name, text)
@@ -161,43 +161,43 @@ Item {
         // ### todo conversation
     }
 
-    StatusUpdate {
-        id: tweetUpdate
-        y: - (height - topToolbar.height) //topToolbar.height
-        opacity: 0
-        anchors.left: parent.left
-        anchors.right: parent.right
+//    StatusUpdate {
+//        id: tweetUpdate
+//        y: - (height - topToolbar.height) //topToolbar.height
+//        opacity: 0
+//        anchors.left: parent.left
+//        anchors.right: parent.right
 
-        states: State {
-            name: "show"
-            PropertyChanges { target: tweetUpdate;  y: topToolbar.height; opacity: 1}
-        }
+//        states: State {
+//            name: "show"
+//            PropertyChanges { target: tweetUpdate;  y: topToolbar.height; opacity: 1}
+//        }
 
-        transitions: [
-            Transition {
-                from: "";
-                to: "show"
-                SequentialAnimation {
-                    PropertyAction { property: "opacity"; value: 1 }
-                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
-                }
-            },
-            Transition {
-                from: "show"
-                to: ""
-                SequentialAnimation {
-                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
-                    PropertyAction { property: "opacity"; value: 0 }
-                }
-            }
-        ]
+//        transitions: [
+//            Transition {
+//                from: "";
+//                to: "show"
+//                SequentialAnimation {
+//                    PropertyAction { property: "opacity"; value: 1 }
+//                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
+//                }
+//            },
+//            Transition {
+//                from: "show"
+//                to: ""
+//                SequentialAnimation {
+//                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
+//                    PropertyAction { property: "opacity"; value: 0 }
+//                }
+//            }
+//        ]
 
-        onSendButtonClicked: {
-            sendClicked(tweetUpdate.tweetid, tweetUpdate.updateText, tweetUpdate.screenname);
-            tweetUpdate.clear();
-            tweetUpdate.state = "";
-        }
-    }
+//        onSendButtonClicked: {
+//            sendClicked(tweetUpdate.tweetid, tweetUpdate.updateText, tweetUpdate.screenname);
+//            tweetUpdate.clear();
+//            tweetUpdate.state = "";
+//        }
+//    }
 
     Rectangle {
         id: topToolbar
@@ -219,12 +219,23 @@ Item {
         }
 
         ButtonImage {
+            id: backButton
+            width: 87; height: 39
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.right: usernameButton.left
+            anchors.rightMargin: 5
+            pressedButtonImageUrl: "images/back_pressed.png"
+            buttonImageUrl: "images/back.png"
+        }
+
+        ButtonImage {
             id: statusUpdateButton
 
             anchors.top: parent.top; anchors.topMargin: 5
             width: 39; height: 39
-            anchors.right: usernameButton.left
-            anchors.rightMargin: 5
+            anchors.left: usernameButton.right
+            anchors.leftMargin: 5
 
             buttonImageUrl: "images/statusupdate.png"
             pressedButtonImageUrl: "images/statusupdate_pressed.png"
@@ -243,7 +254,7 @@ Item {
         ButtonText {
             id: usernameButton
 
-            width: 145; height: 39
+            width: 146; height: 39
 
             buttonImageUrl: "images/username.png"
             pressedButtonImageUrl: "images/username_pressed.png"
@@ -259,7 +270,7 @@ Item {
             id: settingsButton
 
             anchors.top: parent.top; anchors.topMargin: 5
-            anchors.left: usernameButton.right; anchors.leftMargin: 5
+            anchors.left: statusUpdateButton.right; anchors.leftMargin: 5
             width: 39; height: 39
 
             buttonImageUrl: "images/settings.png"
