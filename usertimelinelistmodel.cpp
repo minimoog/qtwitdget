@@ -21,7 +21,6 @@
 #include "usertimelinelistmodel.h"
 #include <QDateTime>
 #include "qtweetlib/oauthtwitter.h"
-#include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetusertimeline.h"
 
 static QString SinceTimeString(const QDateTime& from)

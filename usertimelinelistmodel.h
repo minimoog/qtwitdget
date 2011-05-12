@@ -22,9 +22,9 @@
 #define USERTIMELINELISTMODEL_H
 
 #include <QAbstractListModel>
+#include "qtweetlib/qtweetstatus.h"
 
 class OAuthTwitter;
-class QTweetStatus;
 
 /**
  *  List model for user timeline

@@ -23,7 +23,6 @@
 #include <QDateTime>
 #include <QSqlQuery>
 #include "qtweetlib/oauthtwitter.h"
-#include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetuser.h"
 #include "qtweetlib/qtweetstatusshow.h"
 

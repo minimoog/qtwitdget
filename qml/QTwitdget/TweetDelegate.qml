@@ -18,8 +18,8 @@ Item  {
     signal mentionLinkClicked(string screenname)
     signal hashtagLinkClicked(string hashtag)
 
-    width: ListView.view.width;
-    //width: 360;
+    //width: ListView.view.width;
+    width: 360;
     height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
 
     function handleLink(link) {
@@ -43,6 +43,8 @@ Item  {
     Image {
         id: background
         anchors.fill: parent
+        sourceSize.width: 360
+        sourceSize.height: parent.height
         source: {
             if (isOwnTweet)
                 return "images/blue_gradient.png"
@@ -55,8 +57,8 @@ Item  {
 
     Rectangle {
         id: avatarBackground
-        width: 60
-        height: 60
+        width: 52
+        height: 52
         color: "#00000000"
         border.width: 4
         anchors.top: parent.top
@@ -67,10 +69,11 @@ Item  {
 
         Image {
             id: avatarImage
-            width: 56
-            height: 56
+            width: 48
+            height: 48
+            sourceSize.width: 48
+            sourceSize.height: 48
             anchors.centerIn: parent
-            smooth: true
             fillMode: Image.Stretch
             source: tweetAvatar
         }
