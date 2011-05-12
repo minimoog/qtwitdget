@@ -19,7 +19,7 @@ Item {
 
     id: timelines
 
-    width: 360; height: 640
+    //width: 360; height: 640
 
     function doReply(id, name, text) {
         tweetUpdate.setReply(id, name, text)
@@ -161,43 +161,43 @@ Item {
         // ### todo conversation
     }
 
-//    StatusUpdate {
-//        id: tweetUpdate
-//        y: - (height - topToolbar.height) //topToolbar.height
-//        opacity: 0
-//        anchors.left: parent.left
-//        anchors.right: parent.right
+    StatusUpdate {
+        id: tweetUpdate
+        y: - (height - topToolbar.height) //topToolbar.height
+        opacity: 0
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-//        states: State {
-//            name: "show"
-//            PropertyChanges { target: tweetUpdate;  y: topToolbar.height; opacity: 1}
-//        }
+        states: State {
+            name: "show"
+            PropertyChanges { target: tweetUpdate;  y: topToolbar.height; opacity: 1}
+        }
 
-//        transitions: [
-//            Transition {
-//                from: "";
-//                to: "show"
-//                SequentialAnimation {
-//                    PropertyAction { property: "opacity"; value: 1 }
-//                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
-//                }
-//            },
-//            Transition {
-//                from: "show"
-//                to: ""
-//                SequentialAnimation {
-//                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
-//                    PropertyAction { property: "opacity"; value: 0 }
-//                }
-//            }
-//        ]
+        transitions: [
+            Transition {
+                from: "";
+                to: "show"
+                SequentialAnimation {
+                    PropertyAction { property: "opacity"; value: 1 }
+                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
+                }
+            },
+            Transition {
+                from: "show"
+                to: ""
+                SequentialAnimation {
+                    NumberAnimation { property: "y"; duration: 500; easing.type: Easing.InOutBack }
+                    PropertyAction { property: "opacity"; value: 0 }
+                }
+            }
+        ]
 
-//        onSendButtonClicked: {
-//            sendClicked(tweetUpdate.tweetid, tweetUpdate.updateText, tweetUpdate.screenname);
-//            tweetUpdate.clear();
-//            tweetUpdate.state = "";
-//        }
-//    }
+        onSendButtonClicked: {
+            sendClicked(tweetUpdate.tweetid, tweetUpdate.updateText, tweetUpdate.screenname);
+            tweetUpdate.clear();
+            tweetUpdate.state = "";
+        }
+    }
 
     Rectangle {
         id: topToolbar
@@ -227,6 +227,8 @@ Item {
             anchors.rightMargin: 5
             pressedButtonImageUrl: "images/back_pressed.png"
             buttonImageUrl: "images/back.png"
+
+            onClicked: StateFunctions.goBack()
         }
 
         ButtonImage {
@@ -353,7 +355,7 @@ Item {
                 buttonImageUrl: "images/search.png"
                 pressedButtonImageUrl: "images/search_pressed.png"
 
-                onClicked: StateFunctions.showSearch()
+                onClicked:  timelines.state = 'search' //StateFunctions.showSearch()
             }
         }
     }
