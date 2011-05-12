@@ -5,6 +5,8 @@ Item {
 
     property string buttonImageUrl
     property string pressedButtonImageUrl
+    property alias sourceSizeWidth : buttonImage.sourceSize.width
+    property alias sourceSizeHeight : buttonImage.sourceSize.height
 
     signal clicked
 
