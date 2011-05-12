@@ -64,33 +64,42 @@ function showConversation(id) {
 }
 
 function showHometimeline() {
+
+    //avoid pushing duplicate state
+    if (timelines.state != '') {
+        var stateSlot = {};
+        stateSlot.statename = '';
+
+        stateStack.push(stateSlot);
+    }
+
     homeTimelineModel.showNewTweets();
-    timelines.state = "";   //default state
-
-    var stateSlot = {};
-    stateSlot.statename = '';
-
-    stateStack.push(stateSlot);
+    timelines.state = '';   //default state
 }
 
 function showMentions() {
+    if (timelines.state != 'mentions') {
+        var stateSlot = {};
+        stateSlot.statename = 'mentions';
+
+        stateStack.push(stateSlot);
+    }
+
     mentionsModel.showNewTweets();
     timelines.state = 'mentions';
-
-    var stateSlot = {};
-    stateSlot.statename = 'mentions';
-
-    stateStack.push(stateSlot);
 }
 
 function showDirectMessages() {
+    if (timelines.state != 'directMessages') {
+
+        var stateSlot = {};
+        stateSlot.statename = 'directMessages';
+
+        stateStack.push(stateSlot);
+    }
+
     dmList.model.showNewTweets();
     timelines.state = 'directMessages';
-
-    var stateSlot = {};
-    stateSlot.statename = 'directMessages';
-
-    stateStack.push(stateSlot);
 }
 
 //function showSearch() {         // ### TODO: Needs to remember search query?
