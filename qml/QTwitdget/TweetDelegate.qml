@@ -18,8 +18,8 @@ Item  {
     signal mentionLinkClicked(string screenname)
     signal hashtagLinkClicked(string hashtag)
 
-    //width: ListView.view.width;
-    width: 360;
+    width: ListView.view.width;
+    //width: 360;
     height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
 
     function handleLink(link) {
@@ -107,6 +107,7 @@ Item  {
         id: rightArrow
         source: "images/right_arrow.png"
         width: 11; height: 16
+        sourceSize.width: 11; sourceSize.height: 16
         anchors.right: parent.right
         anchors.rightMargin: 4
         anchors.verticalCenter: parent.verticalCenter
@@ -165,8 +166,8 @@ Item  {
 
             ButtonImage {
                 id: replyButton
-                width: 84
-                height: 23
+                width: 84; height: 23
+                sourceSizeWidth: 84; sourceSizeHeight: 23
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
                 anchors.left: parent.left
@@ -179,8 +180,8 @@ Item  {
 
             ButtonImage {
                 id: retweetButton
-                width: 84
-                height: 23
+                width: 84; height: 23
+                sourceSizeWidth: 84; sourceSizeHeight: 23
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
                 anchors.left: replyButton.right
@@ -193,8 +194,8 @@ Item  {
 
             ButtonImage {
                 id: favouriteButton
-                width: 84
-                height: 23
+                width: 84; height: 23
+                sourceSizeWidth: 84; sourceSizeHeight: 23
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
                 anchors.left: retweetButton.right
@@ -207,8 +208,8 @@ Item  {
 
             ButtonImage {
                 id: conversationButton
-                width: 84
-                height: 23
+                width: 84; height: 23
+                sourceSizeWidth: 84; sourceSizeHeight: 23
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
                 anchors.left: favouriteButton.right
