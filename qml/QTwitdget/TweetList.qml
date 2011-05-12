@@ -16,11 +16,11 @@ Rectangle {
     //right arrow pressed or mention clicked
     signal hashtagClicked(string hashtag)
 
-    color: "#ffffff"
+     color: "#ffffff"
 
     ListView {
         id: tweetListView
-        anchors.fill: parent;
+        anchors.fill: parent
         clip: true
         cacheBuffer: 120 * 20
         delegate: TweetDelegate {
