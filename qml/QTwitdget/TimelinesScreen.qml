@@ -225,6 +225,7 @@ Item {
             anchors.topMargin: 5
             anchors.right: usernameButton.left
             anchors.rightMargin: 5
+            //opacity: (StateFunctions.stateStack.length != 0) ? 1 : 0
             pressedButtonImageUrl: "images/back_pressed.png"
             buttonImageUrl: "images/back.png"
 
@@ -355,7 +356,7 @@ Item {
                 buttonImageUrl: "images/search.png"
                 pressedButtonImageUrl: "images/search_pressed.png"
 
-                onClicked:  timelines.state = 'search' //StateFunctions.showSearch()
+                onClicked: StateFunctions.showSearch()
             }
         }
     }

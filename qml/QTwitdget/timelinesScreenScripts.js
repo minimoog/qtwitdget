@@ -16,12 +16,14 @@ function goBack() {
 
     //set state
     timelines.state = stateSlot.statename;
+    console.log(stateSlot.statename);
 
     if (stateSlot.statename == 'userinfo') {
         userInfo.fetchByName(stateSlot.screenname);
         userTimelineListModel.fetch(stateSlot.screenname);
     } else if (stateSlot.statename == 'search') {
-        searchResultList.doSearch(stateSlot.hashtag);
+        if (stateSlot.hashtag != undefined)
+            searchResultList.doSearch(stateSlot.hashtag);
     } else if (stateSlot.statename == 'conversation') {
         conversationList.model.followConversation(stateSlot.id);
     }
@@ -102,11 +104,11 @@ function showDirectMessages() {
     timelines.state = 'directMessages';
 }
 
-//function showSearch() {         // ### TODO: Needs to remember search query?
-//    timelines.state = 'search';
+function showSearch() {         // ### TODO: Needs to remember search query?
+    timelines.state = 'search';
 
-//    var stateSlot = {};
-//    stateSlot.statename = 'search';
+    var stateSlot = {};
+    stateSlot.statename = 'search';
 
-//    stateStack.push(stateSlot);
-//}
+    stateStack.push(stateSlot);
+}
