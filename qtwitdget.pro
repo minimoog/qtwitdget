@@ -1,4 +1,4 @@
-QT += network sql
+QT += network sql opengl
 
 RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc

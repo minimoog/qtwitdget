@@ -16,7 +16,6 @@ function goBack() {
 
     //set state
     timelines.state = stateSlot.statename;
-    console.log(stateSlot.statename);
 
     if (stateSlot.statename == 'userinfo') {
         userInfo.fetchByName(stateSlot.screenname);

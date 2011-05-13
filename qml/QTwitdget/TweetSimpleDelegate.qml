@@ -4,7 +4,7 @@ Rectangle {
     id: background
 
     property string tweetid;
-    property string tweetText : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
+    property string tweetText : "L" //orem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
     property string tweetSinceTime : "Sometimes ago"
 
 //    signal hashtagLinkClicked(string hashtag)
@@ -29,9 +29,9 @@ Rectangle {
         return ret3;
     }
 
-    width: ListView.view.width;
-    //width: 360
-    height: statusText.paintedHeight + 30
+    //width: ListView.view.width;
+    width: 360
+    height: (statusText.paintedHeight > 37) ? statusText.paintedHeight + 24 : 61
     gradient: Gradient {
         GradientStop {
             position: 0
@@ -45,15 +45,16 @@ Rectangle {
 
     Text {
         id: statusText
-        color: background.ListView.isCurrentItem ? "red" : "#666666"
-        text: addTags(tweetText)
+        color: "#666666"
+        //text: addTags(tweetText)
+        text:  tweetText
         textFormat: Text.RichText
-        anchors.right: parent.right
-        anchors.rightMargin: 5
+        anchors.right: retweetButton.left
+        anchors.rightMargin: 0
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 4
         anchors.top: parent.top
-        anchors.topMargin: 5
+        anchors.topMargin: 4
         wrapMode: Text.WordWrap
         font.pointSize: 9
         font.family: "Segoe UI"
@@ -66,13 +67,45 @@ Rectangle {
 
     Text {
         id: sinceText
-        color: background.ListView.isCurrentItem ? "red" :"#616161"
+        color: "#616161"
         text: tweetSinceTime
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
-        anchors.top: statusText.bottom
-        anchors.topMargin: 5
+        anchors.leftMargin: 4
         font.family: "Segoe UI"
         font.pointSize: 7
+    }
+
+    ButtonImage {
+        id: conversationButton
+        width: 15; height: 15
+        anchors.top: parent.top
+        anchors.topMargin: 4
+        anchors.right: parent.right
+        anchors.rightMargin: 4
+        buttonImageUrl: 'images/small_conversation_button.png'
+        pressedButtonImageUrl: 'images/small_conversation_button_pressed.png'
+    }
+
+    ButtonImage {
+        id: retweetButton
+        width: 15; height: 15
+        anchors.right: parent.right
+        anchors.rightMargin: 4
+        anchors.verticalCenter: parent.verticalCenter
+        buttonImageUrl: 'images/small_retweet_button.png'
+        pressedButtonImageUrl: 'images/small_retweet_button_pressed.png'
+    }
+
+    ButtonImage {
+        id: replyButton
+        width: 15; height: 15
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 4
+        anchors.right: parent.right
+        anchors.rightMargin: 4
+        buttonImageUrl: 'images/small_reply_button.png'
+        pressedButtonImageUrl: 'images/small_retweet_button_pressed.png'
     }
 }
