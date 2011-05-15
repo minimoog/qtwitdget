@@ -4,9 +4,10 @@ Rectangle {
     id: background
 
     property string tweetid;
-    property string tweetText : "L" //orem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
-    property string tweetSinceTime : "Sometimes ago"
+    property string tweetText
+    property string tweetSinceTime
 
+    signal conversationButtonClicked
 //    signal hashtagLinkClicked(string hashtag)
 //    signal mentionLinkClicked(string screenname)
 
@@ -29,9 +30,10 @@ Rectangle {
         return ret3;
     }
 
-    //width: ListView.view.width;
-    width: 360
+    width: ListView.view.width;
+    //width: 360
     height: (statusText.paintedHeight > 37) ? statusText.paintedHeight + 24 : 61
+
     gradient: Gradient {
         GradientStop {
             position: 0
@@ -46,8 +48,8 @@ Rectangle {
     Text {
         id: statusText
         color: "#666666"
-        //text: addTags(tweetText)
-        text:  tweetText
+        text: addTags(tweetText)
+        //text:  tweetText
         textFormat: Text.RichText
         anchors.right: retweetButton.left
         anchors.rightMargin: 0
@@ -86,6 +88,8 @@ Rectangle {
         anchors.rightMargin: 4
         buttonImageUrl: 'images/small_conversation_button.png'
         pressedButtonImageUrl: 'images/small_conversation_button_pressed.png'
+
+        onClicked: conversationButtonClicked()
     }
 
     ButtonImage {

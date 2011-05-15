@@ -1,10 +1,9 @@
 import QtQuick 1.0
 
 Item {
-    property alias model : tweetSimpleList.model
-
     id: container
 
+    property alias model : tweetSimpleList.model
     property string avatar : "images/avatar.png"
     property string screenname
     property string name
@@ -22,7 +21,7 @@ Item {
     signal replyButtonClicked
     signal retweetButtonClicked
     signal messageButtonClicked
-    signal conversationButtonClicked
+    signal conversationButtonClicked(string id)
     signal followButtonClicked
     signal unfollowButtonClicked
     signal favoriteButtonClicked
@@ -286,5 +285,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 //        onHashtagClicked: container.hashTagClicked(hashtag)
+
+        onConversationButtonClicked: container.conversationButtonClicked(id)
     }
 }

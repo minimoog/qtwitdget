@@ -1,8 +1,11 @@
 import QtQuick 1.0
 
 Rectangle {
+    id: container
+
     property alias model: tweetListView.model
 
+    signal conversationButtonClicked(string id)
     signal hashtagClicked(string hashtag)
 
     color: "#ffffff"
@@ -11,12 +14,12 @@ Rectangle {
         id: tweetListView
         anchors.fill: parent
         clip: true
-        currentIndex: -1
         delegate: TweetSimpleDelegate {
             tweetid: statusIdRole
             tweetText: statusTextRole
             tweetSinceTime: sinceTimeRole
 
+            onConversationButtonClicked: container.conversationButtonClicked(tweetid)
             //onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }

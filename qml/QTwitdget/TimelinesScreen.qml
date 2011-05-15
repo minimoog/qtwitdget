@@ -117,6 +117,8 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
+        onConversationButtonClicked: StateFunctions.showConversation(id)
+
         onHashTagClicked: StateFunctions.searchHashtag(hashtag)
         onMentionClicked: {
             userInfo.fetchByName(mention)
