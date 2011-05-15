@@ -10,18 +10,18 @@ Rectangle {
     signal conversationButtonClicked
     signal retweetButtonClicked
     signal replyButtonClicked
-//    signal hashtagLinkClicked(string hashtag)
-//    signal mentionLinkClicked(string screenname)
+    signal hashtagLinkClicked(string hashtag)
+    signal mentionLinkClicked(string screenname)
 
-//    function handleLink(link) {
-//        if (link.slice(0, 3) == 'tag') {
-//            hashtagLinkClicked(link.slice(6))
-//        } else if (link.slice(0, 4) == 'http') {
-//            Qt.openUrlExternally(link);
-//        } else if (link.slice(0, 7) == 'mention') {
-//            mentionLinkClicked(link.slice(10));
-//        }
-//    }
+    function handleLink(link) {
+        if (link.slice(0, 3) == 'tag') {
+            hashtagLinkClicked(link.slice(6))
+        } else if (link.slice(0, 4) == 'http') {
+            Qt.openUrlExternally(link);
+        } else if (link.slice(0, 7) == 'mention') {
+            mentionLinkClicked(link.slice(10));
+        }
+    }
 
     //### TODO: Make it global function
     function addTags(str) {
@@ -63,10 +63,8 @@ Rectangle {
         font.pointSize: 9
         font.family: "Segoe UI"
 
-//        onLinkActivated: {
-//            background.handleLink(link)
-//            console.log('link clicked')
-//        }
+        onLinkActivated: background.handleLink(link)
+
     }
 
     Text {

@@ -120,28 +120,17 @@ Item {
         onConversationButtonClicked: StateFunctions.showConversation(id)
         onRetweetButtonClicked: doRetweet(text, name)
         onReplyButtonClicked: doReply(id, name, text)
+        onHashtagLinkClicked: StateFunctions.searchHashtag(hashtag)
+        //onMentionClicked: {
+        //    userInfo.fetchByName(mention)
+        //    userTimelineListModel.fetch(mention)
+        //}
 
-        onHashTagClicked: StateFunctions.searchHashtag(hashtag)
-        onMentionClicked: {
-            userInfo.fetchByName(mention)
-            userTimelineListModel.fetch(mention)
-        }
-//        onReplyButtonClicked: {
-//            tweetUpdate.state = 'show'
-//            tweetUpdate.setReply(statusid, screenname, text)
-//        }
-//        onRetweetButtonClicked: {
-//            tweetUpdate.state = 'show'
-//            tweetUpdate.setRetweet(text, screenname)
-//        }
         onMessageButtonClicked: {
             tweetUpdate.setDirectMessage(screenname)
             tweetUpdate.state = 'show'
         }
-//        onConversationButtonClicked: {
-//            timelines.state = 'conversation'
-//            conversationList.model.followConversation(statusid)
-//        }
+
         onFollowButtonClicked: userInfo.followUser(screenname)
         onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
         onFavoriteButtonClicked: userInfo.createFavorite(statusid)

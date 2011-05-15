@@ -16,7 +16,7 @@ Item {
     property int numFavorites
     property bool isFriend
 
-    signal hashTagClicked(string hashtag)
+    signal hashtagLinkClicked(string hashtag)
     signal mentionClicked(string mention)   //doesn't need to go outside
     signal replyButtonClicked(string id, string name, string text)
     signal retweetButtonClicked(string text, string name)
@@ -284,10 +284,10 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-//        onHashtagClicked: container.hashTagClicked(hashtag)
 
         onConversationButtonClicked: container.conversationButtonClicked(id)
         onRetweetButtonClicked: container.retweetButtonClicked(text, container.screenname)
         onReplyButtonClicked: container.replyButtonClicked(id, container.screenname, text)
+        onHashtagLinkClicked: container.hashtagLinkClicked(hashtag)
     }
 }
