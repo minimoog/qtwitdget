@@ -9,6 +9,7 @@ Rectangle {
 
     signal conversationButtonClicked
     signal retweetButtonClicked
+    signal replyButtonClicked
 //    signal hashtagLinkClicked(string hashtag)
 //    signal mentionLinkClicked(string screenname)
 
@@ -113,6 +114,8 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: 4
         buttonImageUrl: 'images/small_reply_button.png'
-        pressedButtonImageUrl: 'images/small_retweet_button_pressed.png'
+        pressedButtonImageUrl: 'images/small_reply_button_pressed.png'
+
+        onClicked: replyButtonClicked()
     }
 }
