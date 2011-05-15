@@ -8,6 +8,7 @@ Rectangle {
     property string tweetSinceTime
 
     signal conversationButtonClicked
+    signal retweetButtonClicked
 //    signal hashtagLinkClicked(string hashtag)
 //    signal mentionLinkClicked(string screenname)
 
@@ -100,6 +101,8 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         buttonImageUrl: 'images/small_retweet_button.png'
         pressedButtonImageUrl: 'images/small_retweet_button_pressed.png'
+
+        onClicked: retweetButtonClicked()
     }
 
     ButtonImage {

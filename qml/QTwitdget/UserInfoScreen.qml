@@ -19,7 +19,7 @@ Item {
     signal hashTagClicked(string hashtag)
     signal mentionClicked(string mention)   //doesn't need to go outside
     signal replyButtonClicked
-    signal retweetButtonClicked
+    signal retweetButtonClicked(string text, string name)
     signal messageButtonClicked
     signal conversationButtonClicked(string id)
     signal followButtonClicked
@@ -287,5 +287,6 @@ Item {
 //        onHashtagClicked: container.hashTagClicked(hashtag)
 
         onConversationButtonClicked: container.conversationButtonClicked(id)
+        onRetweetButtonClicked: container.retweetButtonClicked(text, container.screenname)
     }
 }

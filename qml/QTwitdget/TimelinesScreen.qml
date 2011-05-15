@@ -118,6 +118,7 @@ Item {
         }
 
         onConversationButtonClicked: StateFunctions.showConversation(id)
+        onRetweetButtonClicked: doRetweet(text, name)
 
         onHashTagClicked: StateFunctions.searchHashtag(hashtag)
         onMentionClicked: {

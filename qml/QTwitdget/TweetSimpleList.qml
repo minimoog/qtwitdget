@@ -6,6 +6,7 @@ Rectangle {
     property alias model: tweetListView.model
 
     signal conversationButtonClicked(string id)
+    signal retweetButtonClicked(string text)
     signal hashtagClicked(string hashtag)
 
     color: "#ffffff"
@@ -20,6 +21,7 @@ Rectangle {
             tweetSinceTime: sinceTimeRole
 
             onConversationButtonClicked: container.conversationButtonClicked(tweetid)
+            onRetweetButtonClicked: container.retweetButtonClicked(tweetText)
             //onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
