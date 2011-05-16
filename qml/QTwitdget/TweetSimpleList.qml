@@ -9,6 +9,7 @@ Rectangle {
     signal retweetButtonClicked(string text)
     signal replyButtonClicked(string id, string text)
     signal hashtagLinkClicked(string hashtag)
+    signal mentionLinkClicked(string screenname)
 
     color: "#ffffff"
 
@@ -25,6 +26,7 @@ Rectangle {
             onRetweetButtonClicked: container.retweetButtonClicked(tweetText)
             onReplyButtonClicked: container.replyButtonClicked(tweetid, tweetText)
             onHashtagLinkClicked: container.hashtagLinkClicked(hashtag)
+            onMentionLinkClicked: container.mentionLinkClicked(screenname)
         }
     }
 

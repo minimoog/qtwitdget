@@ -121,10 +121,7 @@ Item {
         onRetweetButtonClicked: doRetweet(text, name)
         onReplyButtonClicked: doReply(id, name, text)
         onHashtagLinkClicked: StateFunctions.searchHashtag(hashtag)
-        //onMentionClicked: {
-        //    userInfo.fetchByName(mention)
-        //    userTimelineListModel.fetch(mention)
-        //}
+        onMentionLinkClicked: StateFunctions.showUser(screenname)
 
         onMessageButtonClicked: {
             tweetUpdate.setDirectMessage(screenname)

@@ -17,7 +17,7 @@ Item {
     property bool isFriend
 
     signal hashtagLinkClicked(string hashtag)
-    signal mentionClicked(string mention)   //doesn't need to go outside
+    signal mentionLinkClicked(string screenname)    //because of the state stack, goes outside
     signal replyButtonClicked(string id, string name, string text)
     signal retweetButtonClicked(string text, string name)
     signal messageButtonClicked
@@ -289,5 +289,9 @@ Item {
         onRetweetButtonClicked: container.retweetButtonClicked(text, container.screenname)
         onReplyButtonClicked: container.replyButtonClicked(id, container.screenname, text)
         onHashtagLinkClicked: container.hashtagLinkClicked(hashtag)
+        onMentionLinkClicked: {
+            if (screenname != container.screenname)
+                container.mentionLinkClicked(screenname)
+        }
     }
 }
