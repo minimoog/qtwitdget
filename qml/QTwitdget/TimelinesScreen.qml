@@ -257,7 +257,6 @@ Item {
                 userInfo.fetchByName(text)
                 userTimelineListModel.fetch(text)
                 timelines.state = 'userinfo'
-                userinformation.text = ''
             }
         }
 

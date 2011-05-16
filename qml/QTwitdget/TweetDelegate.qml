@@ -1,6 +1,6 @@
 import QtQuick 1.0
 
-Item  {
+Rectangle  {
     id: container
 
     property string tweetid
@@ -17,10 +17,6 @@ Item  {
     signal conversationClicked
     signal mentionLinkClicked(string screenname)
     signal hashtagLinkClicked(string hashtag)
-
-    width: ListView.view.width;
-    //width: 360;
-    height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
 
     function handleLink(link) {
         if (link.slice(0, 3) == 'tag') {
@@ -40,32 +36,25 @@ Item  {
         return ret3;
     }
 
-    Image {
-        id: background
-        anchors.fill: parent
-        sourceSize.width: 360
-        sourceSize.height: parent.height
-        source: {
-            if (isOwnTweet)
-                return "images/blue_gradient.png"
-            else if (isNewTweet)
-                return "images/yellow_gradient.png"
-            else
-                return "images/gray_gradient.png"
-        }
+    width: ListView.view.width;
+    //width: 360;
+    height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
+    color: {
+        if (isNewTweet)
+            return (index % 2) ? '#ffd954' : '#ffb300'
+        else
+            return (index % 2) ? '#ffffff' : '#d9d9d9'
     }
 
     Rectangle {
         id: avatarBackground
         width: 52
         height: 52
-        color: "#00000000"
-        border.width: 4
+        color:  '#2bace2'
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
         anchors.leftMargin: 4
-        border.color: "#2bace2"
 
         Image {
             id: avatarImage
