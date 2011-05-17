@@ -65,8 +65,6 @@ public:
     bool isGeoEnabled() const;
     void setStatusesCount(int count);
     int statusesCount() const;
-    void setStatus(const QTweetStatus& lastStatus);
-    QTweetStatus status() const;
 
     static QDateTime twitterDateToQDateTime(const QString& twitterDate);
 

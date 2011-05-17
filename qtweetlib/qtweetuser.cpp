@@ -42,15 +42,6 @@ public:
     QString screenName;
     int statusesCount;
     QString url;
-    //avoid recursion with QTweetStatus
-    qint64 statusId;
-    QString statusText;
-    QDateTime statusCreatedAt;
-    qint64 statusInReplyToUserId;
-    QString statusInReplyToScreenName;
-    qint64 statusInReplyToStatusId;
-    bool statusFavorited;
-    QString statusSource;
 };
 
 QTweetUser::QTweetUser() :
@@ -202,28 +193,6 @@ void QTweetUser::setStatusesCount(int count)
 int QTweetUser::statusesCount() const
 {
     return d->statusesCount;
-}
-
-void QTweetUser::setStatus(const QTweetStatus &lastStatus)
-{
-    //d->status = lastStatus;
-    d->statusId = lastStatus.id();
-    d->statusText = lastStatus.text();
-    d->statusCreatedAt = lastStatus.createdAt();
-    d->statusInReplyToStatusId = lastStatus.inReplyToStatusId();
-    d->statusFavorited = lastStatus.favorited();
-}
-
-QTweetStatus QTweetUser::status() const
-{
-    QTweetStatus lastStatus;
-    lastStatus.setId(d->statusId);
-    lastStatus.setText(d->statusText);
-    //lastStatus.setCreatedAt();    // ### TODO FIX IT!
-    lastStatus.setInReplyToStatusId(d->statusInReplyToStatusId);
-    lastStatus.setFavorited(d->statusFavorited);
-
-    return lastStatus;
 }
 
 QDateTime QTweetUser::twitterDateToQDateTime(const QString &twitterDate)

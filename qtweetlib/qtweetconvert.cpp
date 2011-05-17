@@ -144,15 +144,6 @@ QTweetUser QTweetConvert::variantMapToUserInfo(const QVariantMap &var)
         userInfo.setStatusesCount(var["statuses_count"].toInt());
         userInfo.setScreenName(var["screen_name"].toString());
         userInfo.setListedCount(var["listed_count"].toInt());
-
-        //check if contains status
-        if (var.contains("status")) {
-            QVariantMap statusMap = var["status"].toMap();
-
-            QTweetStatus status = variantMapToStatus(statusMap);
-
-            userInfo.setStatus(status);
-        }
     }
 
     return userInfo;
