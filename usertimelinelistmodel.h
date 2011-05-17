@@ -49,6 +49,8 @@ public:
     Q_INVOKABLE void fetch(qint64 userid);
     Q_INVOKABLE void fetch(const QString& screenname);
 
+    QString addTags(const QString& text);
+
 private slots:
     void finishedFetching(const QList<QTweetStatus>& statuses);
     void errorFetching();

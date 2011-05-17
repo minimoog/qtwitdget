@@ -20,6 +20,7 @@
 
 #include "usertimelinelistmodel.h"
 #include <QDateTime>
+#include <QRegExp>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetusertimeline.h"
 
@@ -151,7 +152,13 @@ void UserTimelineListModel::finishedFetching(const QList<QTweetStatus> &statuses
 
         if (!statuses.isEmpty()) {
             beginInsertRows(QModelIndex(), 0, statuses.count() - 1);
-            m_statuses.append(statuses);
+
+            foreach (QTweetStatus status, statuses) {
+                QString textWithTags = addTags(status.text());
+                status.setText(textWithTags);
+                m_statuses.append(status);
+            }
+
             endInsertRows();
         }
 
@@ -165,4 +172,14 @@ void UserTimelineListModel::errorFetching()
 
     if (userTimeline)
         userTimeline->deleteLater();
+}
+
+// ### TODO: Make it global
+QString UserTimelineListModel::addTags(const QString &text)
+{
+    QString tweet(text);
+    QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"), "<a href=\"mention://\\1\">\\1</a>");
+    QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
+                                        "<a href='\\1'>\\1</a>");
+    return httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"), "<a href=\"tag://\\1\">\\1</a>");
 }

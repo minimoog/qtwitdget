@@ -28,14 +28,6 @@ Rectangle  {
         }
     }
 
-    function addTags(str) {
-        //surrounds http links with html link tags
-        var ret1 = str.replace(/@[a-zA-Z0-9_]+/g, '<a href="mention://$&" style="color:rgb(0,129,230)">$&</a>');
-        var ret2 = ret1.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" style="color:rgb(0,129,230)">$1</a>');
-        var ret3 = ret2.replace(/[#]+[A-Za-z0-9-_]+/g, '<a href="tag://$&" style="color:rgb(0,129,230)">$&</a>')
-        return ret3;
-    }
-
     width: ListView.view.width;
     //width: 360;
     height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
@@ -105,8 +97,7 @@ Rectangle  {
     Text {
         id: statusText
         color: "#333333"
-        text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + addTags(tweetText)
-        //text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
+        text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
         anchors.topMargin: 0
         anchors.top: parent.top;
         anchors.right: rightArrow.left; anchors.rightMargin: 0

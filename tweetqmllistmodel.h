@@ -55,6 +55,7 @@ public:
     void setUserID(qint64 userid);
     qint64 userID() const;
     Q_INVOKABLE void destroyTweet(const QString& tweetid);
+    QString addTags(const QString& text);
 
     int numNewTweets() const;
     void resetNumNewTweets();

@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QSqlQuery>
+#include <QRegExp>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetuser.h"
 #include "qtweetlib/qtweetstatusshow.h"
@@ -175,6 +176,7 @@ void ConversationListModel::fetchConversation(qint64 statusID)
                 this, SLOT(onParsedStatus(QTweetStatus)));
     } else {
         beginInsertRows(QModelIndex(), m_statuses.count(), m_statuses.count());
+
         m_statuses.append(status);
         endInsertRows();
 
@@ -201,7 +203,7 @@ QTweetStatus ConversationListModel::findInDatabase(qint64 id)
     if (query.next()) {
         QTweetStatus st;
         st.setId(query.value(0).toLongLong());
-        st.setText(query.value(1).toString());
+        st.setText(addTags(query.value(1).toString()));
 
         QDateTime tempTime = query.value(5).toDateTime();
         QDateTime utcTime(tempTime.date(), tempTime.time(), Qt::UTC);
@@ -227,7 +229,12 @@ void ConversationListModel::onParsedStatus(const QTweetStatus &status)
 
     if (statusShow) {
         beginInsertRows(QModelIndex(), m_statuses.count(), m_statuses.count());
-        m_statuses.append(status);
+
+        QTweetStatus copyStatus(status);
+        QString textWithTags = addTags(status.text());
+        copyStatus.setText(textWithTags);
+
+        m_statuses.append(copyStatus);
         endInsertRows();
 
         qint64 replyID = status.inReplyToStatusId();
@@ -237,4 +244,14 @@ void ConversationListModel::onParsedStatus(const QTweetStatus &status)
 
         statusShow->deleteLater();
     }
+}
+
+QString ConversationListModel::addTags(const QString &text)
+{
+    QString tweet(text);
+    QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"), "<a href=\"mention://\\1\">\\1</a>");
+    QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
+                                            "<a href='\\1'>\\1</a>");
+    QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"), "<a href=\"tag://\\1\">\\1</a>");
+    return hashtags;
 }

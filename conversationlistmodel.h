@@ -54,6 +54,8 @@ public:
     void followConversation(qint64 statusID);
     Q_INVOKABLE void followConversation(const QString& statusID);
 
+    QString addTags(const QString& text);
+
 private slots:
     void onParsedStatus(const QTweetStatus& status);
 

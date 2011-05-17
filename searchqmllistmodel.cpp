@@ -20,6 +20,7 @@
 
 #include "searchqmllistmodel.h"
 #include <QDateTime>
+#include <QRegExp>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetsearchresult.h"
 #include "qtweetlib/qtweetsearch.h"
@@ -141,10 +142,33 @@ void SearchQmlListModel::finishedSearch(const QTweetSearchPageResults &pageResul
     if (twitterSearch) {
         beginResetModel();
 
-        m_searchPageResult = pageResults;
+        QList<QTweetSearchResult> taggedResults;
+        QList<QTweetSearchResult> results = pageResults.results();
+
+        foreach(const QTweetSearchResult& searchResult, results) {
+            QString taggedText = addTags(searchResult.text());
+            QTweetSearchResult copyResult(searchResult);
+            copyResult.setText(taggedText);
+
+            taggedResults.append(copyResult);
+        }
+
+        QTweetSearchPageResults copyPageResults(pageResults);
+        copyPageResults.setResults(taggedResults);
+        m_searchPageResult = copyPageResults;
 
         endResetModel();
 
         twitterSearch->deleteLater();
     }
+}
+
+QString SearchQmlListModel::addTags(const QString &text)
+{
+        QString tweet(text);
+        QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"), "<a href=\"mention://\\1\">\\1</a>");
+        QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
+                                            "<a href='\\1'>\\1</a>");
+        QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"), "<a href=\"tag://\\1\">\\1</a>");
+        return hashtags;
 }

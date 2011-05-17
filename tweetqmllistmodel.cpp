@@ -21,6 +21,7 @@
 #include <QtDebug>
 #include <QSqlQuery>
 #include <QDateTime>
+#include <QRegExp>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetuser.h"
@@ -292,7 +293,11 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     query.bindValue(":replyToStatusId", status.inReplyToStatusId());
     query.exec();
 
-    m_newStatuses.prepend(status);
+    QTweetStatus copyStatus(status);
+    QString textWithTags = addTags(copyStatus.text());
+    copyStatus.setText(textWithTags);
+
+    m_newStatuses.prepend(copyStatus);
 
     m_numNewTweets = m_newStatuses.count();
     emit numNewTweetsChanged();
@@ -349,7 +354,7 @@ void TweetQmlListModel::loadTweetsFromDatabase()
     while (query.next()) {
         QTweetStatus st;
         st.setId(query.value(0).toLongLong());
-        st.setText(query.value(1).toString());
+        st.setText(addTags(query.value(1).toString()));
 
         //Datetime is stored in UTC
         QDateTime tempTime = query.value(5).toDateTime();
@@ -431,7 +436,11 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
                 query.bindValue(":created", s.createdAt());
                 query.exec();
 
-                m_newStatuses.prepend(s);
+                QTweetStatus copys(s);
+                QString textWithTags = addTags(copys.text());
+                copys.setText(textWithTags);
+
+                m_newStatuses.prepend(copys);
             }
             query.exec("COMMIT;");
 
@@ -468,6 +477,16 @@ void TweetQmlListModel::clear()
     m_numUnreadTweets = 0;
 
     emit numNewTweetsChanged();
+}
+
+QString TweetQmlListModel::addTags(const QString &text)
+{
+    QString tweet(text);
+    QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"), "<a href=\"mention://\\1\">\\1</a>");
+    QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
+                                            "<a href='\\1'>\\1</a>");
+    QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"), "<a href=\"tag://\\1\">\\1</a>");
+    return hashtags;
 }
 
 /**

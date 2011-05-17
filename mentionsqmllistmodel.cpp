@@ -74,7 +74,11 @@ void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
             query.bindValue(":replyToStatusId", status.inReplyToStatusId());
             query.exec();
 
-            m_newStatuses.prepend(status);
+            QTweetStatus copyStatus(status);
+            QString textWithTags = addTags(status.text());
+            copyStatus.setText(textWithTags);
+
+            m_newStatuses.prepend(copyStatus);
 
             m_numNewTweets = m_newStatuses.count();
             emit numNewTweetsChanged();
@@ -110,7 +114,7 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
     while (query.next()) {
         QTweetStatus st;
         st.setId(query.value(0).toLongLong());
-        st.setText(query.value(1).toString());
+        st.setText(addTags(query.value(1).toString()));
 
         //Datetime is stored in UTC
         QDateTime tempTime = query.value(5).toDateTime();
@@ -196,7 +200,11 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
                 query.bindValue(":created", s.createdAt());
                 query.exec();
 
-                m_newStatuses.prepend(s);
+                QTweetStatus sc(s);
+                QString textWithTags = addTags(sc.text());
+                sc.setText(textWithTags);
+
+                m_newStatuses.prepend(sc);
             }
             query.exec("COMMIT;");
 

@@ -55,6 +55,8 @@ private slots:
     void finishedSearch(const QTweetSearchPageResults& pageResults);
 
 private:
+    QString addTags(const QString& text);
+
     OAuthTwitter *m_oauthTwitter;
     QTweetSearchPageResults m_searchPageResult;
 };

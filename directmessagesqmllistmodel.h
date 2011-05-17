@@ -61,6 +61,7 @@ public:
 
     Q_INVOKABLE void showNewTweets();
     void loadTweetsFromDatabase();
+    QString addTags(const QString& text);
 
 public slots:
     void onDirectMessageStream(const QTweetDMStatus& directMessage);
