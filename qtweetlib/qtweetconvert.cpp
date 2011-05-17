@@ -135,7 +135,6 @@ QTweetUser QTweetConvert::variantMapToUserInfo(const QVariantMap &var)
         userInfo.setName(var["name"].toString());
         userInfo.setLocation(var["location"].toString());
         userInfo.setprofileImageUrl(var["profile_image_url"].toString());
-        userInfo.setCreatedAt(var["created_at"].toString());
         userInfo.setFavouritesCount(var["favourites_count"].toInt());
         userInfo.setUrl(var["url"].toString());
         userInfo.setFollowersCount(var["followers_count"].toInt());

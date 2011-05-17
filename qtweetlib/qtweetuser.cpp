@@ -28,7 +28,6 @@ class QTweetUserData : public QSharedData
 public:
     QTweetUserData() : id(0) {}
 
-    QDateTime createdAt;
     QString description;
     int favoritesCount;
     bool followRequestSent;
@@ -173,21 +172,6 @@ void QTweetUser::setFriendsCount(int count)
 int QTweetUser::friendsCount() const
 {
     return d->friendsCount;
-}
-
-void QTweetUser::setCreatedAt(const QString &twitterDate)
-{
-    d->createdAt = twitterDateToQDateTime(twitterDate);
-}
-
-void QTweetUser::setCreatedAt(const QDateTime &datetime)
-{
-    d->createdAt = datetime;
-}
-
-QDateTime QTweetUser::createdAt() const
-{
-    return d->createdAt;
 }
 
 void QTweetUser::setFavouritesCount(int count)
