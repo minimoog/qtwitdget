@@ -40,7 +40,6 @@ public:
     QString location;
     QString name;
     QString profileImageUrl;
-    bool accountProtected;
     QString screenName;
     int statusesCount;
     QString timeZone;
@@ -109,18 +108,6 @@ QString QTweetUser::name() const
     return d->name;
 }
 
-//void QTweetUser::setProfileBackgroundColor(const QString &color)
-//{
-//    // ### TODO: prepend #?
-//    // ### TODO: use QColor (QGui dependancy?) instead QString
-//    d->profileBackgroundColor = color;
-//}
-
-//QString QTweetUser::profileBackgroundColor() const
-//{
-//    return d->profileBackgroundColor;
-//}
-
 void QTweetUser::setScreenName(const QString &screenName)
 {
     d->screenName = screenName;
@@ -169,16 +156,6 @@ void QTweetUser::setUrl(const QString &url)
 QString QTweetUser::url() const
 {
     return d->url;
-}
-
-void QTweetUser::setProtected(bool protected_)
-{
-    d->accountProtected = protected_;
-}
-
-bool QTweetUser::isProtected() const
-{
-    return d->accountProtected;
 }
 
 void QTweetUser::setFollowersCount(int count)

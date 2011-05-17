@@ -139,7 +139,6 @@ QTweetUser QTweetConvert::variantMapToUserInfo(const QVariantMap &var)
         userInfo.setFavouritesCount(var["favourites_count"].toInt());
         userInfo.setUrl(var["url"].toString());
         userInfo.setUtcOffset(var["utc_offset"].toInt());
-        userInfo.setProtected(var["protected"].toBool());
         userInfo.setFollowersCount(var["followers_count"].toInt());
         userInfo.setVerified(var["verified"].toBool());
         userInfo.setGeoEnabled(var["geo_enabled"].toBool());

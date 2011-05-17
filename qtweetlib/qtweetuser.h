@@ -55,8 +55,6 @@ public:
     QString profileImageUrl() const;
     void setUrl(const QString& url);
     QString url() const;
-    void setProtected(bool isProtected);
-    bool isProtected() const;
     void setFollowersCount(int count);
     int followersCount() const;
     void setFriendsCount(int count);
