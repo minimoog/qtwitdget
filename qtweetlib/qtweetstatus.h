@@ -59,8 +59,6 @@ public:
     qint64 inReplyToStatusId() const;
     void setFavorited(bool fav);
     bool favorited() const;
-    void setSource(const QString& source);
-    QString source() const;
     void setUser(const QTweetUser& user);
     QTweetUser user() const;
     qint64 userid() const;  //usefull for getting quick userid when userinfo is trimmed

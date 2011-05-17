@@ -66,7 +66,6 @@ QTweetStatus QTweetConvert::variantMapToStatus(const QVariantMap &var)
     QTweetUser user = variantMapToUserInfo(userMap);
 
     status.setUser(user);
-    status.setSource(var["source"].toString());
     status.setInReplyToStatusId(var["in_reply_to_status_id"].toLongLong());
 
     //check if contains native retweet

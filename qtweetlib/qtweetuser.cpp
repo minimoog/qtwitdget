@@ -321,7 +321,6 @@ void QTweetUser::setStatus(const QTweetStatus &lastStatus)
     d->statusInReplyToStatusId = lastStatus.inReplyToStatusId();
     d->statusInReplyToUserId = lastStatus.inReplyToUserId();
     d->statusFavorited = lastStatus.favorited();
-    d->statusSource = lastStatus.source();
 }
 
 QTweetStatus QTweetUser::status() const
@@ -334,7 +333,6 @@ QTweetStatus QTweetUser::status() const
     lastStatus.setInReplyToStatusId(d->statusInReplyToStatusId);
     lastStatus.setInReplyToUserId(d->statusInReplyToUserId);
     lastStatus.setFavorited(d->statusFavorited);
-    lastStatus.setSource(d->statusSource);
 
     return lastStatus;
 }

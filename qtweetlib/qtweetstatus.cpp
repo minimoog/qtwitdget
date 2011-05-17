@@ -41,7 +41,6 @@ public:
         inReplyToScreenName = other.inReplyToScreenName;
         inReplyToStatusId = other.inReplyToStatusId;
         favorited = other.favorited;
-        source = other.source;
         user = other.user;
         place = other.place;
 
@@ -64,7 +63,6 @@ public:
     QString inReplyToScreenName;
     qint64 inReplyToStatusId;
     bool favorited;
-    QString source;
     QTweetUser user;
     QTweetStatus *retweetedStatus;
     QTweetPlace place;
@@ -167,16 +165,6 @@ void QTweetStatus::setFavorited(bool fav)
 bool QTweetStatus::favorited() const
 {
     return d->favorited;
-}
-
-void QTweetStatus::setSource(const QString &source)
-{
-    d->source = source;
-}
-
-QString QTweetStatus::source() const
-{
-    return d->source;
 }
 
 void QTweetStatus::setUser(const QTweetUser &user)

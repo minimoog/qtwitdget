@@ -176,7 +176,6 @@ void ConversationListModel::fetchConversation(qint64 statusID)
                 this, SLOT(onParsedStatus(QTweetStatus)));
     } else {
         beginInsertRows(QModelIndex(), m_statuses.count(), m_statuses.count());
-
         m_statuses.append(status);
         endInsertRows();
 
