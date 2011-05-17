@@ -28,7 +28,6 @@ class QTweetUserData : public QSharedData
 public:
     QTweetUserData() : id(0) {}
 
-    bool contributorsEnabled;
     QDateTime createdAt;
     QString description;
     int favoritesCount;
@@ -41,18 +40,9 @@ public:
     int listedCount;
     QString location;
     QString name;
-    //QString profileBackgroundColor;
-    //QString profileBackgroundImageUrl;
-    //bool profileBackgroundTile;
     QString profileImageUrl;
-    //QString profileLinkColor;
-    //QString profileSidebarBorderColor;
-    //QString profileSidebarFillColor;
-    //QString profileTextColor;
-    //bool profileUseBackgroundImage;
     bool accountProtected;
     QString screenName;
-    //bool showAllInlineMedia;
     int statusesCount;
     QString timeZone;
     QString url;
@@ -67,10 +57,6 @@ public:
     qint64 statusInReplyToStatusId;
     bool statusFavorited;
     QString statusSource;
-    //QTweetUser user
-    //QTweetStatus retweetedStatus; //check if there is retweeted status in user response
-    //bool containsRetweetStatus;
-    //QTweetStatus status;    //should be pointer?
 };
 
 QTweetUser::QTweetUser() :
@@ -92,16 +78,6 @@ QTweetUser& QTweetUser::operator =(const QTweetUser& other)
 
 QTweetUser::~QTweetUser()
 {
-}
-
-void QTweetUser::setContributorsEnabled(bool enabled)
-{
-    d->contributorsEnabled = enabled;
-}
-
-bool QTweetUser::isContributorsEnabled() const
-{
-    return d->contributorsEnabled;
 }
 
 void QTweetUser::setId(qint64 id)

@@ -39,8 +39,6 @@ public:
     QTweetUser& operator=(const QTweetUser& other);
     ~QTweetUser();
 
-    void setContributorsEnabled(bool enabled);
-    bool isContributorsEnabled() const;
     void setId(qint64 id);
     qint64 id() const;
     void setLang(const QString& lang);
