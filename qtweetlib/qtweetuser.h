@@ -64,14 +64,8 @@ public:
     QDateTime createdAt() const;
     void setFavouritesCount(int count);
     int favouritesCount() const;
-    void setUtcOffset(int sec);
-    int utcOffset() const;
-    void setTimezone(const QString& timezone);
-    QString timezone() const;
     void setGeoEnabled(bool isGeoEnabled);
     bool isGeoEnabled() const;
-    void setVerified(bool verified);
-    bool isVerified() const;
     void setStatusesCount(int count);
     int statusesCount() const;
     void setStatus(const QTweetStatus& lastStatus);

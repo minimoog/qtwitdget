@@ -138,12 +138,9 @@ QTweetUser QTweetConvert::variantMapToUserInfo(const QVariantMap &var)
         userInfo.setCreatedAt(var["created_at"].toString());
         userInfo.setFavouritesCount(var["favourites_count"].toInt());
         userInfo.setUrl(var["url"].toString());
-        userInfo.setUtcOffset(var["utc_offset"].toInt());
         userInfo.setFollowersCount(var["followers_count"].toInt());
-        userInfo.setVerified(var["verified"].toBool());
         userInfo.setGeoEnabled(var["geo_enabled"].toBool());
         userInfo.setDescription(var["description"].toString());
-        userInfo.setTimezone(var["time_zone"].toString());
         userInfo.setFriendsCount(var["friends_count"].toInt());
         userInfo.setStatusesCount(var["statuses_count"].toInt());
         userInfo.setScreenName(var["screen_name"].toString());

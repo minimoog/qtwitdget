@@ -42,10 +42,7 @@ public:
     QString profileImageUrl;
     QString screenName;
     int statusesCount;
-    QString timeZone;
     QString url;
-    int utcOffset;
-    bool verified;
     //avoid recursion with QTweetStatus
     qint64 statusId;
     QString statusText;
@@ -203,26 +200,6 @@ int QTweetUser::favouritesCount() const
     return d->favoritesCount;
 }
 
-void QTweetUser::setUtcOffset(int sec)
-{
-    d->utcOffset = sec;
-}
-
-int QTweetUser::utcOffset() const
-{
-    return d->utcOffset;
-}
-
-void QTweetUser::setTimezone(const QString &timezone)
-{
-    d->timeZone = timezone;
-}
-
-QString QTweetUser::timezone() const
-{
-    return d->timeZone;
-}
-
 void QTweetUser::setGeoEnabled(bool isGeoEnabled)
 {
     d->geoEnabled = isGeoEnabled;
@@ -231,16 +208,6 @@ void QTweetUser::setGeoEnabled(bool isGeoEnabled)
 bool QTweetUser::isGeoEnabled() const
 {
     return d->geoEnabled;
-}
-
-void QTweetUser::setVerified(bool verified)
-{
-    d->verified = verified;
-}
-
-bool QTweetUser::isVerified() const
-{
-    return d->verified;
 }
 
 void QTweetUser::setStatusesCount(int count)
