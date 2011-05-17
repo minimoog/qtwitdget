@@ -61,9 +61,14 @@ QTweetStatus QTweetConvert::variantMapToStatus(const QVariantMap &var)
     status.setId(var["id"].toLongLong());
 
     QVariantMap userMap = var["user"].toMap();
-    QTweetUser user = variantMapToUserInfo(userMap);
 
-    status.setUser(user);
+    status.setUserId(userMap["id"].toLongLong());
+
+    if (userMap.contains("name")) { //check if user info is trimmed
+        status.setScreenName(userMap["screen_name"].toString());
+        status.setProfileImageUrl(userMap["profile_image_url"].toString());
+    }
+
     status.setInReplyToStatusId(var["in_reply_to_status_id"].toLongLong());
 
     //check if contains native retweet

@@ -66,9 +66,9 @@ void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
                           "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created, :replyToStatusId);");
             query.bindValue(":id", status.id());
             query.bindValue(":text", status.text());
-            query.bindValue(":userId", status.user().id());
-            query.bindValue(":screenName", status.user().screenName());
-            query.bindValue(":profileImageUrl", status.user().profileImageUrl());
+            query.bindValue(":userId", status.userid());
+            query.bindValue(":screenName", status.screenName());
+            query.bindValue(":profileImageUrl", status.profileImageUrl());
             query.bindValue(":mention", 1);
             query.bindValue(":created", status.createdAt());
             query.bindValue(":replyToStatusId", status.inReplyToStatusId());
@@ -121,12 +121,9 @@ void MentionsQmlListModel::loadTweetsFromDatabase()
         QDateTime utcTime(tempTime.date(), tempTime.time(), Qt::UTC);
         st.setCreatedAt(utcTime);
 
-        QTweetUser userinfo;
-        userinfo.setScreenName(query.value(2).toString());
-        userinfo.setprofileImageUrl(query.value(3).toString());
-        userinfo.setId(query.value(4).toInt());
-
-        st.setUser(userinfo);
+        st.setScreenName(query.value(2).toString());
+        st.setProfileImageUrl(query.value(3).toString());
+        st.setUserId(query.value(4).toInt());
 
         newStatuses.append(st);
     }
@@ -191,11 +188,9 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
                 query.bindValue(":id", s.id());
                 query.bindValue(":text", s.text());
                 query.bindValue(":replyToStatusId", s.inReplyToStatusId());
-                //query.bindValue(":replyToUserId", s.replyToUserId());
-                //query.bindValue(":replyToScreenName", s.replyToScreenName());
-                query.bindValue(":userId", s.user().id());
-                query.bindValue(":screenName", s.user().screenName());
-                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
+                query.bindValue(":userId", s.userid());
+                query.bindValue(":screenName", s.screenName());
+                query.bindValue(":profileImageUrl", s.profileImageUrl());
                 query.bindValue(":mention", 1);
                 query.bindValue(":created", s.createdAt());
                 query.exec();

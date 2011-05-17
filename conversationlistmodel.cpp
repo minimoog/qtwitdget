@@ -113,15 +113,15 @@ QVariant ConversationListModel::data(const QModelIndex &index, int role) const
     const QTweetStatus& st = m_statuses.at(index.row());
 
     if (role == ScreenNameRole)
-        return st.user().screenName();
+        return st.screenName();
     else if (role == StatusTextRole)
         return st.text();
     else if (role == AvatarUrlRole)
-        return st.user().profileImageUrl();
+        return st.profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
     else if (role == OwnTweetRole)
-        if (m_userid != st.user().id())
+        if (m_userid != st.userid())
             return false;
         else
             return true;
@@ -208,14 +208,10 @@ QTweetStatus ConversationListModel::findInDatabase(qint64 id)
         QDateTime utcTime(tempTime.date(), tempTime.time(), Qt::UTC);
         st.setCreatedAt(utcTime);
 
-        QTweetUser userinfo;
-        userinfo.setScreenName(query.value(2).toString());
-        userinfo.setprofileImageUrl(query.value(3).toString());
-        userinfo.setId(query.value(4).toLongLong());
-
+        st.setScreenName(query.value(2).toString());
+        st.setProfileImageUrl(query.value(3).toString());
+        st.setUserId(query.value(4).toLongLong());
         st.setInReplyToStatusId(query.value(6).toLongLong());
-
-        st.setUser(userinfo);
 
         return st;
     }

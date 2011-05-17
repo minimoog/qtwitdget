@@ -41,7 +41,6 @@ public:
         screenName = other.screenName;
         profileImageUrl = other.profileImageUrl;
         userid = other.userid;
-        user = other.user;
         place = other.place;
 
         if (other.retweetedStatus) {
@@ -63,7 +62,6 @@ public:
     QString screenName;
     QString profileImageUrl;
     qint64 userid;
-    QTweetUser user;
     QTweetStatus *retweetedStatus;
     QTweetPlace place;
     QList<QTweetEntityUrl> urlEntities;
@@ -135,16 +133,6 @@ void QTweetStatus::setInReplyToStatusId(qint64 id)
 qint64 QTweetStatus::inReplyToStatusId() const
 {
     return d->inReplyToStatusId;
-}
-
-void QTweetStatus::setUser(const QTweetUser &user)
-{
-    d->user = user;
-}
-
-QTweetUser QTweetStatus::user() const
-{
-    return d->user;
 }
 
 QString QTweetStatus::screenName() const

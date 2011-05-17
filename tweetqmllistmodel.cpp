@@ -124,15 +124,15 @@ QVariant TweetQmlListModel::data(const QModelIndex &index, int role) const
     const QTweetStatus &st = m_statuses.at(index.row());
 
     if (role == ScreenNameRole)
-        return st.user().screenName();
+        return st.screenName();
     else if (role == StatusTextRole)
         return st.text();
     else if (role == AvatarUrlRole)
-        return st.user().profileImageUrl();
+        return st.profileImageUrl();
     else if (role == StatusIdRole)
         return QString::number(st.id());
     else if (role == OwnTweetRole)
-        if (m_userid != st.user().id())
+        if (m_userid != st.userid())
             return false;
         else
             return true;
@@ -287,8 +287,8 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     query.bindValue(":id", status.id());
     query.bindValue(":text", status.text());
     query.bindValue(":userId", status.userid());
-    query.bindValue(":screenName", status.user().screenName());
-    query.bindValue(":profileImageUrl", status.user().profileImageUrl());
+    query.bindValue(":screenName", status.screenName());
+    query.bindValue(":profileImageUrl", status.profileImageUrl());
     query.bindValue(":created", status.createdAt());
     query.bindValue(":replyToStatusId", status.inReplyToStatusId());
     query.exec();
@@ -361,12 +361,9 @@ void TweetQmlListModel::loadTweetsFromDatabase()
         QDateTime utcTime(tempTime.date(), tempTime.time(), Qt::UTC);
         st.setCreatedAt(utcTime);
 
-        QTweetUser userinfo;
-        userinfo.setScreenName(query.value(2).toString());
-        userinfo.setprofileImageUrl(query.value(3).toString());
-        userinfo.setId(query.value(4).toInt());
-
-        st.setUser(userinfo);
+        st.setScreenName(query.value(2).toString());
+        st.setProfileImageUrl(query.value(3).toString());
+        st.setUserId(query.value(4).toInt());
 
         newStatuses.append(st);
     }
@@ -430,9 +427,9 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
                 query.bindValue(":replyToStatusId", s.inReplyToStatusId());
                 //query.bindValue(":replyToUserId", s.replyToUserId());
                 //query.bindValue(":replyToScreenName", s.replyToScreenName());
-                query.bindValue(":userId", s.user().id());
-                query.bindValue(":screenName", s.user().screenName());
-                query.bindValue(":profileImageUrl", s.user().profileImageUrl());
+                query.bindValue(":userId", s.userid());
+                query.bindValue(":screenName", s.screenName());
+                query.bindValue(":profileImageUrl", s.profileImageUrl());
                 query.bindValue(":created", s.createdAt());
                 query.exec();
 
