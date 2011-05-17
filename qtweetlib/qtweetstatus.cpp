@@ -37,7 +37,6 @@ public:
         id = other.id;
         text = other.text;
         createdAt = other.createdAt;
-        inReplyToScreenName = other.inReplyToScreenName;
         inReplyToStatusId = other.inReplyToStatusId;
         favorited = other.favorited;
         user = other.user;
@@ -58,7 +57,6 @@ public:
     qint64 id;
     QString text;
     QDateTime createdAt;
-    QString inReplyToScreenName;
     qint64 inReplyToStatusId;
     bool favorited;
     QTweetUser user;
@@ -123,16 +121,6 @@ void QTweetStatus::setCreatedAt(const QDateTime &dateTime)
 QDateTime QTweetStatus::createdAt() const
 {
     return d->createdAt;
-}
-
-void QTweetStatus::setInReplyToScreenName(const QString &screenName)
-{
-    d->inReplyToScreenName = screenName;
-}
-
-QString QTweetStatus::inReplyToScreenName() const
-{
-    return d->inReplyToScreenName;
 }
 
 void QTweetStatus::setInReplyToStatusId(qint64 id)

@@ -51,8 +51,6 @@ public:
     void setCreatedAt(const QString& twitterDate);
     void setCreatedAt(const QDateTime& dateTime);
     QDateTime createdAt() const;
-    void setInReplyToScreenName(const QString& screenName);
-    QString inReplyToScreenName() const;
     void setInReplyToStatusId(qint64 id);
     qint64 inReplyToStatusId() const;
     void setFavorited(bool fav);
