@@ -53,8 +53,6 @@ public:
     QDateTime createdAt() const;
     void setInReplyToStatusId(qint64 id);
     qint64 inReplyToStatusId() const;
-    void setFavorited(bool fav);
-    bool favorited() const;
     void setUser(const QTweetUser& user);
     QTweetUser user() const;
     qint64 userid() const;  //usefull for getting quick userid when userinfo is trimmed
