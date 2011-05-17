@@ -319,7 +319,6 @@ void QTweetUser::setStatus(const QTweetStatus &lastStatus)
     d->statusCreatedAt = lastStatus.createdAt();
     d->statusInReplyToScreenName = lastStatus.inReplyToScreenName();
     d->statusInReplyToStatusId = lastStatus.inReplyToStatusId();
-    d->statusInReplyToUserId = lastStatus.inReplyToUserId();
     d->statusFavorited = lastStatus.favorited();
 }
 
@@ -331,7 +330,6 @@ QTweetStatus QTweetUser::status() const
     //lastStatus.setCreatedAt();    // ### TODO FIX IT!
     lastStatus.setInReplyToScreenName(d->statusInReplyToScreenName);
     lastStatus.setInReplyToStatusId(d->statusInReplyToStatusId);
-    lastStatus.setInReplyToUserId(d->statusInReplyToUserId);
     lastStatus.setFavorited(d->statusFavorited);
 
     return lastStatus;
