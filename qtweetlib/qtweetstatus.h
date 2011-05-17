@@ -55,9 +55,12 @@ public:
     qint64 inReplyToStatusId() const;
     void setUser(const QTweetUser& user);
     QTweetUser user() const;
-    qint64 userid() const;  //usefull for getting quick userid when userinfo is trimmed
+    qint64 userid() const;
+    void setUserId(qint64 userid);
     QString screenName() const;
     void setScreenName(const QString& screenName);
+    QString profileImageUrl() const;
+    void setProfileImageUrl(const QString& profileImageUrl);
     void setRetweetedStatus(const QTweetStatus& status);
     QTweetStatus retweetedStatus() const;
     void setPlace(const QTweetPlace& place);

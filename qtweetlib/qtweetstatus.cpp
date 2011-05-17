@@ -39,6 +39,8 @@ public:
         createdAt = other.createdAt;
         inReplyToStatusId = other.inReplyToStatusId;
         screenName = other.screenName;
+        profileImageUrl = other.profileImageUrl;
+        userid = other.userid;
         user = other.user;
         place = other.place;
 
@@ -59,6 +61,8 @@ public:
     QDateTime createdAt;
     qint64 inReplyToStatusId;
     QString screenName;
+    QString profileImageUrl;
+    qint64 userid;
     QTweetUser user;
     QTweetStatus *retweetedStatus;
     QTweetPlace place;
@@ -153,9 +157,24 @@ void QTweetStatus::setScreenName(const QString &screenName)
     d->screenName = screenName;
 }
 
+QString QTweetStatus::profileImageUrl() const
+{
+    return d->profileImageUrl;
+}
+
+void QTweetStatus::setProfileImageUrl(const QString &profileImageUrl)
+{
+    d->profileImageUrl = profileImageUrl;
+}
+
 qint64 QTweetStatus::userid() const
 {
-    return d->user.id();
+    return d->userid;
+}
+
+void QTweetStatus::setUserId(qint64 userid)
+{
+    d->userid = userid;
 }
 
 void QTweetStatus::setRetweetedStatus(const QTweetStatus &status)
