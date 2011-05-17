@@ -149,7 +149,6 @@ QTweetUser QTweetConvert::variantMapToUserInfo(const QVariantMap &var)
         userInfo.setStatusesCount(var["statuses_count"].toInt());
         userInfo.setScreenName(var["screen_name"].toString());
         userInfo.setListedCount(var["listed_count"].toInt());
-        userInfo.setLang(var["lang"].toString());
 
         //check if contains status
         if (var.contains("status")) {

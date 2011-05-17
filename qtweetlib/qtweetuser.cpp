@@ -36,7 +36,6 @@ public:
     int friendsCount;
     bool geoEnabled;
     qint64 id;
-    QString lang;
     int listedCount;
     QString location;
     QString name;
@@ -88,16 +87,6 @@ void QTweetUser::setId(qint64 id)
 qint64 QTweetUser::id() const
 {
     return d->id;
-}
-
-void QTweetUser::setLang(const QString &lang)
-{
-    d->lang = lang;
-}
-
-QString QTweetUser::lang() const
-{
-    return d->lang;
 }
 
 void QTweetUser::setListedCount(int count)

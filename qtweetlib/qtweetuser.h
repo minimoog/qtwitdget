@@ -41,8 +41,6 @@ public:
 
     void setId(qint64 id);
     qint64 id() const;
-    void setLang(const QString& lang);
-    QString lang() const;
     void setListedCount(int count);
     int listedCount() const;
     void setName(const QString& name);
