@@ -4,10 +4,10 @@ Rectangle  {
     id: container
 
     property string tweetid
-    property string tweetScreenName: "Screen Name"
-    property string tweetText: "Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
+    property string tweetScreenName
+    property string tweetText
     property string tweetAvatar
-    property string tweetSinceTime: "sometimes ago"
+    property string tweetSinceTime
     property bool isOwnTweet: false
     property bool isNewTweet: false
 
@@ -37,6 +37,8 @@ Rectangle  {
         else
             return (index % 2) ? '#ffffff' : '#d9d9d9'
     }
+
+    Behavior on color { ColorAnimation { duration: 300 } }
 
     Rectangle {
         id: avatarBackground
