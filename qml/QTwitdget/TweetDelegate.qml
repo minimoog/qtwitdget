@@ -148,12 +148,12 @@ Rectangle  {
 
             ButtonImage {
                 id: replyButton
-                width: 84; height: 23
-                sourceSizeWidth: 84; sourceSizeHeight: 23
+                width: 76; height: 40
+                sourceSizeWidth: 76; sourceSizeHeight: 40
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
-                anchors.left: parent.left
-                anchors.leftMargin: 5
+                anchors.right: retweetButton.left
+                anchors.rightMargin: 5
                 pressedButtonImageUrl: "images/reply_button_pressed.png"
                 buttonImageUrl: "images/reply_button.png"
 
@@ -162,12 +162,12 @@ Rectangle  {
 
             ButtonImage {
                 id: retweetButton
-                width: 84; height: 23
-                sourceSizeWidth: 84; sourceSizeHeight: 23
+                width: 76; height: 40
+                sourceSizeWidth: 76; sourceSizeHeight: 40
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
-                anchors.left: replyButton.right
-                anchors.leftMargin: 5
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 2
                 pressedButtonImageUrl: "images/retweet_button_pressed.png"
                 buttonImageUrl: "images/retweet_button.png"
 
@@ -176,8 +176,8 @@ Rectangle  {
 
             ButtonImage {
                 id: favouriteButton
-                width: 84; height: 23
-                sourceSizeWidth: 84; sourceSizeHeight: 23
+                width: 76; height: 40
+                sourceSizeWidth: 76; sourceSizeHeight: 40
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
                 anchors.left: retweetButton.right
@@ -190,8 +190,8 @@ Rectangle  {
 
             ButtonImage {
                 id: conversationButton
-                width: 84; height: 23
-                sourceSizeWidth: 84; sourceSizeHeight: 23
+                width: 76; height: 40
+                sourceSizeWidth: 76; sourceSizeHeight: 40
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 4
                 anchors.left: favouriteButton.right
@@ -207,7 +207,7 @@ Rectangle  {
     states: State {
         name: 'showButtons'
         PropertyChanges { target: buttonLoader; sourceComponent: buttonRow }
-        PropertyChanges { target: container; height: container.height + 23; explicit: true }
+        PropertyChanges { target: container; height: container.height + 40; explicit: true }
         PropertyChanges { target: rightArrow; rotation: 90 }
     }
 
