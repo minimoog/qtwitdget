@@ -6,7 +6,7 @@ Rectangle {
     property alias model: tweetListView.model
 
     signal reply(string id, string screenname, string tweettext)
-    signal retweet(string text, string screenname)
+    signal retweet(string tweetid)
     signal conversation(string id)
     signal userinformation(string screenname)
     //signal deleteClicked(string id)
@@ -33,7 +33,7 @@ Rectangle {
             tweetSinceTime: sinceTimeRole
 
             onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
-            onRetweetClicked: retweet(tweetText, tweetScreenName)
+            onRetweetClicked: retweet(tweetid)
             onConversationClicked: conversation(tweetid)
             onMentionLinkClicked: userinformation(screenname)
             onHashtagLinkClicked: hashtagClicked(hashtag)

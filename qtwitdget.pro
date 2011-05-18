@@ -80,7 +80,8 @@ SOURCES += main.cpp \
     qtweetlib/qtweetfavoritescreate.cpp \
     shorturlsitem.cpp \
     userlogins.cpp \
-    namsingleton.cpp
+    namsingleton.cpp \
+    qtweetlib/qtweetstatusretweet.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -147,6 +148,7 @@ HEADERS += \
     shorturlsitem.h \
     userlogins.h \
     namsingleton.h \
-    namfactory.h
+    namfactory.h \
+    qtweetlib/qtweetstatusretweet.h
 
 ICON = qtwitdget.icns

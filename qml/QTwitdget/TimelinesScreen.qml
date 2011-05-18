@@ -7,6 +7,8 @@ import QtQuick 1.0
 import 'timelinesScreenScripts.js' as StateFunctions
 
 Item {
+    id: timelines
+
     property alias homeTimelineModel: homeTimelineList.model
     property alias mentionsModel: mentionsList.model
     property alias directMessagesModel: dmList.model
@@ -16,18 +18,12 @@ Item {
     property string notification
 
     signal sendClicked(string tweetid, string text, string screenname)
-
-    id: timelines
+    signal retweet(string tweetid)
 
     //width: 360; height: 640
 
     function doReply(id, name, text) {
         tweetUpdate.setReply(id, name, text)
-        tweetUpdate.state = 'show'
-    }
-
-    function doRetweet(text, name) {
-        tweetUpdate.setRetweet(text, name)
         tweetUpdate.state = 'show'
     }
 
@@ -46,7 +42,7 @@ Item {
             onUserinformation: StateFunctions.showUser(screenname)
             onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: doReply(id, screenname, tweettext)
-            onRetweet: doRetweet(text, screenname)
+            onRetweet: timelines.retweet(tweetid)
             onConversation: StateFunctions.showConversation(id)
         }
 
@@ -59,7 +55,7 @@ Item {
             onUserinformation: StateFunctions.showUser(screenname)
             onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: doReply(id, screenname, tweettext)
-            onRetweet: doRetweet(text, screenname)
+            onRetweet: timelines.retweet(tweetid)
             onConversation: StateFunctions.showConversation(id)
         }
 
@@ -87,7 +83,7 @@ Item {
             onUserinformation: StateFunctions.showUser(screenname)
             onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: doReply(id, screenname, tweettext)
-            onRetweet: doRetweet(text, screenname)
+            onRetweet: timelines.retweet(tweetid)
             onConversation: StateFunctions.showConversation(id)
         }
     }
@@ -114,7 +110,7 @@ Item {
         }
 
         onReply: doReply(id, screenname, tweettext)
-        onRetweet: doRetweet(text, screenname)
+        onRetweet: retweet(tweetid)
         onConversation: StateFunctions.showConversation(id)
         onUserinformation: StateFunctions.showUser(screenname)
         onHashTagClicked: StateFunctions.searchHashtag(hashtag)
@@ -143,7 +139,7 @@ Item {
         onUserinformation: StateFunctions.showUser(screenname)
         onHashtagClicked: StateFunctions.searchHashtag(hashtag)
         onReply: doReply(id, screenname, tweettext)
-        onRetweet: doRetweet(text, screenname)
+        onRetweet: timelines.retweet(tweetid)
 
         // ### TODO add conversation
     }

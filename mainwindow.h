@@ -48,6 +48,7 @@ public:
 
     Q_INVOKABLE void authorize(const QString& username, const QString& password);
     Q_INVOKABLE void updateButtonClicked(const QString& id, const QString& text, const QString& screenName);
+    Q_INVOKABLE void retweet(const QString& tweetid);
     QString userScreenName() const;
     bool authed() const;
 
@@ -62,6 +63,8 @@ private slots:
     void verifyCredentialsFinished(const QTweetUser& userinfo);
     void directMessageNewFinished(const QTweetDMStatus& dm);
     void statusUpdateFinished(const QTweetStatus& status);
+    void retweetFinished(const QTweetStatus& status);
+    void retweetError();
     void changeUserPass();
 
 private:

@@ -41,6 +41,7 @@ Item {
         username: rootWindow.userScreenName
 
         onSendClicked: rootWindow.updateButtonClicked(tweetid, text, screenname)
+        onRetweet: rootWindow.retweet(tweetid)
     }
 
     states: [

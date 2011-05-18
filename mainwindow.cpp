@@ -32,6 +32,7 @@
 #include "qtweetlib/qtweetaccountverifycredentials.h"
 #include "qtweetlib/qtweetdirectmessagenew.h"
 #include "qtweetlib/qtweetstatusupdate.h"
+#include "qtweetlib/qtweetstatusretweet.h"
 #include "qtweetlib/qtweetuser.h"
 #include "qtweetlib/qtweetdmstatus.h"
 #include "qtweetlib/qtweetstatus.h"
@@ -230,7 +231,7 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
     if (statusUpdate) {
         qDebug() << "Sended status with id: " << status.id();
 
-        emit showNotification("Sended status");
+        emit showNotification("Sent.");
 
         statusUpdate->deleteLater();
     }
@@ -338,4 +339,42 @@ QString MainWindow::userScreenName() const
 bool MainWindow::authed() const
 {
     return m_authed;
+}
+
+void MainWindow::retweet(const QString &tweetid)
+{
+    bool ok;
+
+    qint64 id = tweetid.toLongLong(&ok);
+
+    if (ok) {
+        QTweetStatusRetweet *statusRetweet = new QTweetStatusRetweet(m_oauthTwitter, this);
+        statusRetweet->retweet(id);
+        connect(statusRetweet, SIGNAL(postedRetweet(QTweetStatus)),
+                this, SLOT(retweetFinished(QTweetStatus)));
+        connect(statusRetweet, SIGNAL(error(ErrorCode,QString)),
+                this, SLOT(retweetError()));
+    }
+}
+
+void MainWindow::retweetFinished(const QTweetStatus &status)
+{
+    QTweetStatusRetweet *statusRetweet = qobject_cast<QTweetStatusRetweet*>(sender());
+
+    if (statusRetweet) {
+        emit showNotification("Retweeted.");
+
+        statusRetweet->deleteLater();
+    }
+}
+
+void MainWindow::retweetError()
+{
+    QTweetStatusRetweet *statusRetweet = qobject_cast<QTweetStatusRetweet*>(sender());
+
+    if (statusRetweet) {
+        emit showNotification("Retweet error!");
+
+        statusRetweet->deleteLater();
+    }
 }
