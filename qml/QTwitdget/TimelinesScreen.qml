@@ -4,6 +4,7 @@
 //maybe later
 
 import QtQuick 1.0
+import 'timelinesScreenScripts.js' as StateFunctions
 
 Item {
     property alias homeTimelineModel: homeTimelineList.model
@@ -30,23 +31,6 @@ Item {
         tweetUpdate.state = 'show'
     }
 
-    function showConversation(id) {
-        timelines.state = 'conversation'
-        conversationList.model.followConversation(id)
-    }
-
-    function showUser(screenname) {
-        // ### TODO Shouldn't be separated
-        userInfo.fetchByName(screenname)
-        userTimelineListModel.fetch(screenname)
-        timelines.state = 'userinfo'
-    }
-
-    function searchHashtag(hashtag) {
-        searchResultList.doSearch(hashtag)
-        timelines.state = 'search'
-    }
-
     Row {
         id: rowTimelines
         anchors.top: topToolbar.bottom
@@ -59,11 +43,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onUserinformation: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: doReply(id, screenname, tweettext)
             onRetweet: doRetweet(text, screenname)
-            onConversation: showConversation(id)
+            onConversation: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -72,11 +56,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onUserinformation: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: doReply(id, screenname, tweettext)
             onRetweet: doRetweet(text, screenname)
-            onConversation: showConversation(id)
+            onConversation: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -86,8 +70,8 @@ Item {
             anchors.bottom: parent.bottom
             //anchors.left: mentionsList.right
 
-            onUserinformation: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onUserinformation: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: {
                 tweetUpdate.setDirectMessage(screenname)
                 tweetUpdate.state = 'show'
@@ -100,11 +84,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: showUser(screenname)
-            onHashtagClicked: searchHashtag(hashtag)
+            onUserinformation: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             onReply: doReply(id, screenname, tweettext)
             onRetweet: doRetweet(text, screenname)
-            onConversation: showConversation(id)
+            onConversation: StateFunctions.showConversation(id)
         }
     }
 
@@ -131,13 +115,15 @@ Item {
 
         onReply: doReply(id, screenname, tweettext)
         onRetweet: doRetweet(text, screenname)
-        onConversation: showConversation(id)
-        onUserinformation: showUser(screenname)
-        onHashTagClicked: searchHashtag(hashtag)
+        onConversation: StateFunctions.showConversation(id)
+        onUserinformation: StateFunctions.showUser(screenname)
+        onHashTagClicked: StateFunctions.searchHashtag(hashtag)
+
         onMessage: {
             tweetUpdate.setDirectMessage(screenname)
             tweetUpdate.state = 'show'
         }
+
         onFollow: userInfo.followUser(screenname)
         onUnfollow: userInfo.unfollowUser(screenname)
         //onFavoriteButtonClicked: userInfo.createFavorite(statusid)
@@ -154,8 +140,8 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onUserinformation: showUser(screenname)
-        onHashtagClicked: searchHashtag(hashtag)
+        onUserinformation: StateFunctions.showUser(screenname)
+        onHashtagClicked: StateFunctions.searchHashtag(hashtag)
         onReply: doReply(id, screenname, tweettext)
         onRetweet: doRetweet(text, screenname)
 
@@ -220,12 +206,24 @@ Item {
         }
 
         ButtonImage {
+            id: backButton
+            buttonImageUrl: 'images/back.png'
+            pressedButtonImageUrl: 'images/back_pressed.png'
+            width: 87; height: 39
+            //sourceSizeHeight: 87; sourceSizeWidth: 39
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left; anchors.leftMargin: 4
+
+            onClicked: StateFunctions.goBack()
+        }
+
+        ButtonImage {
             id: statusUpdateButton
 
-            anchors.top: parent.top; anchors.topMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
             width: 39; height: 39
-            anchors.right: usernameButton.left
-            anchors.rightMargin: 5
+            anchors.left: backButton.right
+            anchors.leftMargin: 5
 
             buttonImageUrl: "images/statusupdate.png"
             pressedButtonImageUrl: "images/statusupdate_pressed.png"
@@ -244,27 +242,22 @@ Item {
         ButtonText {
             id: usernameButton
 
-            width: 145; height: 39
+            width: 125; height: 39
 
             buttonImageUrl: "images/username.png"
             pressedButtonImageUrl: "images/username_pressed.png"
             text: timelines.username
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: statusUpdateButton.right; anchors.leftMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
 
-            onClicked: {
-                userInfo.fetchByName(text)
-                userTimelineListModel.fetch(text)
-                timelines.state = 'userinfo'
-            }
+            onClicked: StateFunctions.showUser(text)
         }
 
         ButtonImage {
             id: settingsButton
 
-            anchors.top: parent.top; anchors.topMargin: 5
-            anchors.left: usernameButton.right; anchors.leftMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: closeButton.left; anchors.rightMargin: 5
             width: 39; height: 39
 
             buttonImageUrl: "images/settings.png"
@@ -331,10 +324,7 @@ Item {
                 toggled: true
                 showNotification: homeTimelineModel.numNewTweets
 
-                onClicked: {
-                    homeTimelineModel.showNewTweets();
-                    timelines.state = "";   //default state
-                }
+                onClicked: StateFunctions.showHometimeline()
             }
 
             ButtonWithNotification {
@@ -344,10 +334,7 @@ Item {
                 pressedButtonImageUrl: "images/replies_pressed.png"
                 showNotification: mentionsModel.numNewTweets
 
-                onClicked: {
-                    mentionsModel.showNewTweets();
-                    timelines.state = "mentions";
-                }
+                onClicked: StateFunctions.showMentions()
             }
 
             ButtonWithNotification {
@@ -357,10 +344,7 @@ Item {
                 pressedButtonImageUrl: "images/directmessages_pressed.png"
                 showNotification: directMessagesModel.numNewDirectMessages
 
-                onClicked: {
-                    dmList.model.showNewTweets();
-                    timelines.state = "directMessages"
-                }
+                onClicked: StateFunctions.showDirectMessages()
             }
 
             ButtonWithNotification {
@@ -369,9 +353,7 @@ Item {
                 buttonImageUrl: "images/search.png"
                 pressedButtonImageUrl: "images/search_pressed.png"
 
-                onClicked: {
-                    timelines.state = "search"
-                }
+                onClicked: StateFunctions.showSearch()
             }
         }
     }
