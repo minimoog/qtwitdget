@@ -2,6 +2,7 @@
 #include <QtDeclarative>
 #include "mainwindow.h"
 #include "shorturlsitem.h"
+#include "tweetentitylistmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,6 +11,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     qmlRegisterType<ShortUrlsItem>("qtwitdget.components", 1, 0, "ShortUrlsComponent");
+    qmlRegisterType<TweetEntityListModel>("qtwitdget.components", 1, 0, "TweetEntityListModel");
 
     MainWindow mainWindow;
     mainWindow.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
