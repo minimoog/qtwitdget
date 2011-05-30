@@ -54,6 +54,8 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
+            onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+
             //onUserinformation: StateFunctions.showUser(screenname)
             //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
             //onReply: doReply(id, screenname, tweettext)
@@ -81,6 +83,8 @@ Item {
             width: parent.width
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+
+            onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
 
             //onUserinformation: StateFunctions.showUser(screenname)
             //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
