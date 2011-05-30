@@ -7,6 +7,8 @@ Rectangle {
     property string tweetText : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
     property string tweetSinceTime : "Sometimes ago"
 
+    signal tweetClicked
+
 //    signal replyClicked
 //    signal retweetClicked
 //    signal favoriteClicked
@@ -64,6 +66,14 @@ Rectangle {
         anchors.topMargin: 5
         font.family: "Segoe UI"
         font.pointSize: 5
+    }
+
+    MouseArea {
+        id: tweetArea
+
+        anchors.fill: parent
+
+        onClicked: tweetClicked()
     }
 
     //    Image {
@@ -175,15 +185,15 @@ Rectangle {
 //        }
 //    }
 
-    states: State {
-        name: 'showButtons'
-        PropertyChanges { target: buttonLoader; sourceComponent: buttonRow }
-        PropertyChanges { target: container; height: container.height + 23; explicit: true }
-        PropertyChanges { target: rightArrow; rotation: 90 }
-    }
+//    states: State {
+//        name: 'showButtons'
+//        PropertyChanges { target: buttonLoader; sourceComponent: buttonRow }
+//        PropertyChanges { target: container; height: container.height + 23; explicit: true }
+//        PropertyChanges { target: rightArrow; rotation: 90 }
+//    }
 
-    transitions: Transition {
-            NumberAnimation { target: container; property: "height"; duration: 200 }
-            NumberAnimation { target: rightArrow; property: "rotation"; duration: 200 }
-    }
+//    transitions: Transition {
+//            NumberAnimation { target: container; property: "height"; duration: 200 }
+//            NumberAnimation { target: rightArrow; property: "rotation"; duration: 200 }
+//    }
 }

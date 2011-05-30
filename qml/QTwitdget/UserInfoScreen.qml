@@ -13,34 +13,10 @@ Item {
     property string description
     property bool isFriend
 
-    signal reply(string id, string screenname, string tweettext)
-    signal retweet(string text, string screenname)
-    signal conversation(string id)
-    signal hashTagClicked(string hashtag)
-    signal userinformation(string screenname)
     signal message
     signal follow
     signal unfollow
-
-    function addTags(str) {
-        //surrounds http links with html link tags
-        var ret1 = str.replace(/@[a-zA-Z0-9_]+/g, '<a href="mention://$&">$&</a>');
-        var ret2 = ret1.replace(/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, "<a href='$1'>$1</a>");
-        var ret3 = ret2.replace(/[#]+[A-Za-z0-9-_]+/g, '<a href="tag://$&">$&</a>')
-        return ret3;
-    }
-
-    function handleLink(link) {
-        if (link.slice(0, 3) == 'tag') {
-            hashTagClicked(link.slice(6))
-        } else if (link.slice(0, 4) == 'http') {
-            Qt.openUrlExternally(link);
-        } else if (link.slice(0, 7) == 'mention') {
-            mentionClicked(link.slice(10));
-        }
-    }
-
-    //width: 360; height: 640
+    signal tweetClicked(string tweetid, string tweettext, string screenname)
 
     Rectangle {
         id: userInfoBackground
@@ -130,11 +106,6 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 
-        // ### TODO rename the signal this is confusing
-        onReplyButtonClicked: reply(statusid, screenname, statustext)
-        onRetweet: container.retweet(tweettext, screenname)
-        onConversation: container.conversation(id)
-        onUserinformation: container.userinformation(screenname)
-        onHashtagClicked: container.hashTagClicked(hashtag)
+        onTweetClicked: container.tweetClicked(tweetid, tweettext, container.screenname)
     }
 }

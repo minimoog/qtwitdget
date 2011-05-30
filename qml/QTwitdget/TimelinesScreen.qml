@@ -115,12 +115,6 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onReply: doReply(id, screenname, tweettext)
-        onRetweet: retweet(tweetid)
-        onConversation: StateFunctions.showConversation(id)
-        onUserinformation: StateFunctions.showUser(screenname)
-        onHashTagClicked: StateFunctions.searchHashtag(hashtag)
-
         onMessage: {
             tweetUpdate.setDirectMessage(screenname)
             tweetUpdate.state = 'show'
@@ -129,6 +123,7 @@ Item {
         onFollow: userInfo.followUser(screenname)
         onUnfollow: userInfo.unfollowUser(screenname)
         //onFavoriteButtonClicked: userInfo.createFavorite(statusid)
+        onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
     }
 
     TweetList {

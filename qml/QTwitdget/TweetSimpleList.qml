@@ -1,13 +1,17 @@
 import QtQuick 1.0
 
 Rectangle {
+    id: container
+
     property alias model: tweetListView.model
 
-    signal replyButtonClicked(string statusid, string statustext)
-    signal retweet(string tweettext)
-    signal conversation(string id)
-    signal userinformation(string screenname)
-    signal hashtagClicked(string hashtag)
+    signal tweetClicked(string tweetid, string tweettext)
+
+//    signal replyButtonClicked(string statusid, string statustext)
+//    signal retweet(string tweettext)
+//    signal conversation(string id)
+//    signal userinformation(string screenname)
+//    signal hashtagClicked(string hashtag)
 
     color: "#ffffff"
 
@@ -20,6 +24,8 @@ Rectangle {
             tweetid: statusIdRole
             tweetText: statusTextRole
             tweetSinceTime: sinceTimeRole
+
+            onTweetClicked: container.tweetClicked(tweetid, tweetText)
 
 //            onReplyClicked: replyButtonClicked(tweetid, tweetText)
 //            onRetweetClicked: retweet(tweetText)
