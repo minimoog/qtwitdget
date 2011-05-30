@@ -152,7 +152,9 @@ Item {
         anchors.top: topToolbar.bottom
         anchors.bottom: bottomToolbar.top
 
-        Behavior on opacity { SmoothedAnimation { } }
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
 
         onReplyClicked: doReply(tweetid, screenname, tweettext)
         onRetweetClicked: retweet(tweetid)
