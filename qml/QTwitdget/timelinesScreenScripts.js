@@ -25,6 +25,10 @@ function goBack() {
             searchResultList.doSearch(stateSlot.hashtag);
     } else if (stateSlot.statename == 'conversation') {
         conversationList.model.followConversation(stateSlot.id);
+    } else if (stateSlot.statename == 'tweetinfo') {
+        tweetScreen.text = stateSlot.text;
+        tweetScreen.tweetid = stateSlot.tweetid;
+        tweetScreen.screenname = stateSlot.name;
     }
 }
 
@@ -110,4 +114,22 @@ function showSearch() {         // ### TODO: Needs to remember search query?
     stateSlot.statename = 'search';
 
     stateStack.push(stateSlot);
+}
+
+function showTweetInfo(id, text, name) {
+    if (timelines.state != 'tweetinfo') {
+
+        var stateSlot = {};
+        stateSlot.statename = 'tweetinfo';
+        stateSlot.text = text;
+        stateSlot.tweetid = id;
+        stateSlot.name = name;
+
+        stateStack.push(stateSlot);
+    }
+
+    tweetScreen.text = text;
+    tweetScreen.tweetid = id;
+    tweetScreen.screenname = name;
+    timelines.state = 'tweetinfo';
 }

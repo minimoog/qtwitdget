@@ -11,22 +11,25 @@ Rectangle  {
     property bool isOwnTweet: false
     property bool isNewTweet: false
 
-    signal replyClicked
-    signal retweetClicked
-    signal favoriteClicked
-    signal conversationClicked
-    signal mentionLinkClicked(string screenname)
-    signal hashtagLinkClicked(string hashtag)
+    signal avatarClicked
+    signal tweetClicked
 
-    function handleLink(link) {
-        if (link.slice(0, 3) == 'tag') {
-            hashtagLinkClicked(link.slice(6))
-        } else if (link.slice(0, 4) == 'http') {
-            Qt.openUrlExternally(link);
-        } else if (link.slice(0, 7) == 'mention') {
-            mentionLinkClicked(link.slice(10));
-        }
-    }
+    //signal replyClicked
+    //signal retweetClicked
+    //signal favoriteClicked
+    //signal conversationClicked
+    //signal mentionLinkClicked(string screenname)
+    //signal hashtagLinkClicked(string hashtag)
+
+//    function handleLink(link) {
+//        if (link.slice(0, 3) == 'tag') {
+//            hashtagLinkClicked(link.slice(6))
+//        } else if (link.slice(0, 4) == 'http') {
+//            Qt.openUrlExternally(link);
+//        } else if (link.slice(0, 7) == 'mention') {
+//            mentionLinkClicked(link.slice(10));
+//        }
+//    }
 
     width: ListView.view.width;
     //width: 360;
@@ -61,40 +64,31 @@ Rectangle  {
             source: tweetAvatar
         }
 
-        MouseArea {
-            id: avatarMouseArea
-            anchors.fill: parent
+//        MouseArea {
+//            id: avatarMouseArea
+//            anchors.fill: parent
 
-            onClicked: mentionLinkClicked(tweetScreenName)
-        }
+//            //onClicked: mentionLinkClicked(tweetScreenName)
+//            onClicked: avatarClicked()
+//        }
     }
 
-    MouseArea {
-        id: moreArea
-        anchors.bottomMargin: 0
-        anchors.leftMargin: -20
-        anchors.top: parent.top
-        anchors.bottom: buttonLoader.top
-        anchors.left: rightArrow.left
-        anchors.right: parent.right
+//    MouseArea {
+//        id: moreArea
+//        anchors.bottomMargin: 0
+//        anchors.leftMargin: -20
+//        anchors.top: parent.top
+//        anchors.bottom: buttonLoader.top
+//        anchors.left: rightArrow.left
+//        anchors.right: parent.right
 
-        onClicked: {
-            if (container.state == 'showButtons')
-                container.state = ''
-            else
-                container.state = 'showButtons'
-        }
-    }
-
-    Image {
-        id: rightArrow
-        source: "images/right_arrow.png"
-        width: 11; height: 16
-        sourceSize.width: 11; sourceSize.height: 16
-        anchors.right: parent.right
-        anchors.rightMargin: 4
-        anchors.verticalCenter: parent.verticalCenter
-    }
+//        onClicked: {
+//            if (container.state == 'showButtons')
+//                container.state = ''
+//            else
+//                container.state = 'showButtons'
+//        }
+//    }
 
     Text {
         id: statusText
@@ -102,14 +96,14 @@ Rectangle  {
         text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
         anchors.topMargin: 0
         anchors.top: parent.top;
-        anchors.right: rightArrow.left; anchors.rightMargin: 0
+        anchors.right: parent.right
         anchors.left: avatarBackground.right; anchors.leftMargin: 4
         textFormat: Text.RichText
         wrapMode: "WordWrap"
         font.family: "Segoe UI"
         font.pointSize: 6
 
-        onLinkActivated: container.handleLink(link);
+        //onLinkActivated: container.handleLink(link);
     }
 
     Text {
@@ -123,98 +117,105 @@ Rectangle  {
         font.pointSize: 5
     }
 
-    Loader {
-        id: buttonLoader
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+    MouseArea {
+        id: tweetArea
+        anchors.fill: parent
+
+        onClicked: tweetClicked()
     }
 
-    Connections { target: buttonLoader.item; onReplyButtonClicked: replyClicked() }
-    Connections { target: buttonLoader.item; onRetweetButtonClicked: retweetClicked() }
-    Connections { target: buttonLoader.item; onFavoriteButtonClicked: favoriteClicked() }
-    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationClicked() }
+//    Loader {
+//        id: buttonLoader
+//        anchors.left: parent.left
+//        anchors.right: parent.right
+//        anchors.bottom: parent.bottom
+//    }
 
-    Component {
-        id: buttonRow
+//    Connections { target: buttonLoader.item; onReplyButtonClicked: replyClicked() }
+//    Connections { target: buttonLoader.item; onRetweetButtonClicked: retweetClicked() }
+//    Connections { target: buttonLoader.item; onFavoriteButtonClicked: favoriteClicked() }
+//    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationClicked() }
 
-        Item {
-            id: buttonContainer
+//    Component {
+//        id: buttonRow
 
-            signal replyButtonClicked()
-            signal retweetButtonClicked()
-            signal favoriteButtonClicked()
-            signal conversationButtonClicked()
+//        Item {
+//            id: buttonContainer
 
-            ButtonImage {
-                id: replyButton
-                width: 76; height: 40
-                sourceSizeWidth: 76; sourceSizeHeight: 40
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.right: retweetButton.left
-                anchors.rightMargin: 5
-                pressedButtonImageUrl: "images/reply_button_pressed.png"
-                buttonImageUrl: "images/reply_button.png"
+//            signal replyButtonClicked()
+//            signal retweetButtonClicked()
+//            signal favoriteButtonClicked()
+//            signal conversationButtonClicked()
 
-                onClicked: replyButtonClicked()
-            }
+//            ButtonImage {
+//                id: replyButton
+//                width: 76; height: 40
+//                sourceSizeWidth: 76; sourceSizeHeight: 40
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.right: retweetButton.left
+//                anchors.rightMargin: 5
+//                pressedButtonImageUrl: "images/reply_button_pressed.png"
+//                buttonImageUrl: "images/reply_button.png"
 
-            ButtonImage {
-                id: retweetButton
-                width: 76; height: 40
-                sourceSizeWidth: 76; sourceSizeHeight: 40
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
-                pressedButtonImageUrl: "images/retweet_button_pressed.png"
-                buttonImageUrl: "images/retweet_button.png"
+//                onClicked: replyButtonClicked()
+//            }
 
-                onClicked: retweetButtonClicked()
-            }
+//            ButtonImage {
+//                id: retweetButton
+//                width: 76; height: 40
+//                sourceSizeWidth: 76; sourceSizeHeight: 40
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.right: parent.horizontalCenter
+//                anchors.rightMargin: 2
+//                pressedButtonImageUrl: "images/retweet_button_pressed.png"
+//                buttonImageUrl: "images/retweet_button.png"
 
-            ButtonImage {
-                id: favouriteButton
-                width: 76; height: 40
-                sourceSizeWidth: 76; sourceSizeHeight: 40
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.left: retweetButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/favourite_button_pressed.png"
-                buttonImageUrl: "images/favourite_button.png"
+//                onClicked: retweetButtonClicked()
+//            }
 
-                onClicked: favoriteButtonClicked()
-            }
+//            ButtonImage {
+//                id: favouriteButton
+//                width: 76; height: 40
+//                sourceSizeWidth: 76; sourceSizeHeight: 40
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.left: retweetButton.right
+//                anchors.leftMargin: 5
+//                pressedButtonImageUrl: "images/favourite_button_pressed.png"
+//                buttonImageUrl: "images/favourite_button.png"
 
-            ButtonImage {
-                id: conversationButton
-                width: 76; height: 40
-                sourceSizeWidth: 76; sourceSizeHeight: 40
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.left: favouriteButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/conversation_button_pressed.png"
-                buttonImageUrl: "images/conversation_button.png"
+//                onClicked: favoriteButtonClicked()
+//            }
 
-                onClicked: conversationButtonClicked()
-            }
-        }
-    }
+//            ButtonImage {
+//                id: conversationButton
+//                width: 76; height: 40
+//                sourceSizeWidth: 76; sourceSizeHeight: 40
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.left: favouriteButton.right
+//                anchors.leftMargin: 5
+//                pressedButtonImageUrl: "images/conversation_button_pressed.png"
+//                buttonImageUrl: "images/conversation_button.png"
 
-    states: State {
-        name: 'showButtons'
-        PropertyChanges { target: buttonLoader; sourceComponent: buttonRow }
-        PropertyChanges { target: container; height: container.height + 40; explicit: true }
-        PropertyChanges { target: rightArrow; rotation: 90 }
-    }
+//                onClicked: conversationButtonClicked()
+//            }
+//        }
+//    }
 
-    transitions: Transition {
-            NumberAnimation { target: container; property: "height"; duration: 200 }
-            NumberAnimation { target: rightArrow; property: "rotation"; duration: 200 }
-    }
+//    states: State {
+//        name: 'showButtons'
+//        PropertyChanges { target: buttonLoader; sourceComponent: buttonRow }
+//        PropertyChanges { target: container; height: container.height + 40; explicit: true }
+//        PropertyChanges { target: rightArrow; rotation: 90 }
+//    }
+
+//    transitions: Transition {
+//            NumberAnimation { target: container; property: "height"; duration: 200 }
+//            NumberAnimation { target: rightArrow; property: "rotation"; duration: 200 }
+//    }
 
     ListView.onAdd: SequentialAnimation {
         ParallelAnimation {

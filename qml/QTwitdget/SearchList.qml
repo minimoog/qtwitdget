@@ -5,13 +5,15 @@ Item {
 
     property alias model: searchListView.model
 
+    signal tweetClicked(string tweetid)
+
     //signal searchClicked
 
-    signal reply(string id, string screenname, string tweettext)
-    signal retweet(string text, string screenname)
-    signal conversation(string id)
-    signal userinformation(string screenname)
-    signal hashtagClicked(string hashtag)
+    //signal reply(string id, string screenname, string tweettext)
+    //signal retweet(string text, string screenname)
+    //signal conversation(string id)
+    //signal userinformation(string screenname)
+    //signal hashtagClicked(string hashtag)
 
     function doSearch(query) {
         queryInput.text = query
@@ -82,11 +84,13 @@ Item {
             tweetText: statusTextRole
             tweetid: statusIdRole
 
-            onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
-            onRetweetClicked: retweet(tweetText, tweetScreenName)
-            onConversationClicked: conversation(tweetid)
-            onMentionLinkClicked: userinformation(screenname)
-            onHashtagLinkClicked: hashtagClicked(hashtag)
+            onTweetClicked: container.tweetClicked(tweetid)
+
+            //onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
+            //onRetweetClicked: retweet(tweetText, tweetScreenName)
+            //onConversationClicked: conversation(tweetid)
+            //onMentionLinkClicked: userinformation(screenname)
+            //onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 

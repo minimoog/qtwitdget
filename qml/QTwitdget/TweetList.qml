@@ -5,16 +5,18 @@ Rectangle {
 
     property alias model: tweetListView.model
 
-    signal reply(string id, string screenname, string tweettext)
-    signal retweet(string tweetid)
-    signal conversation(string id)
-    signal userinformation(string screenname)
+    signal tweetClicked(string tweetid, string tweettext, string screenname)
+
+    //signal reply(string id, string screenname, string tweettext)
+    //signal retweet(string tweetid)
+    //signal conversation(string id)
+    //signal userinformation(string screenname)
     //signal deleteClicked(string id)
 
     //since time is not updated
 
     //right arrow pressed or mention clicked
-    signal hashtagClicked(string hashtag)
+   //signal hashtagClicked(string hashtag)
 
      color: "#ffffff"
 
@@ -32,11 +34,13 @@ Rectangle {
             isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
-            onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
-            onRetweetClicked: retweet(tweetid)
-            onConversationClicked: conversation(tweetid)
-            onMentionLinkClicked: userinformation(screenname)
-            onHashtagLinkClicked: hashtagClicked(hashtag)
+            onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)
+
+            //onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
+            //onRetweetClicked: retweet(tweetid)
+            //onConversationClicked: conversation(tweetid)
+            //onMentionLinkClicked: userinformation(screenname)
+            //onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 

@@ -39,11 +39,13 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: StateFunctions.showUser(screenname)
-            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            onReply: doReply(id, screenname, tweettext)
-            onRetweet: timelines.retweet(tweetid)
-            onConversation: StateFunctions.showConversation(id)
+            onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+
+            //onUserinformation: StateFunctions.showUser(screenname)
+            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
+            //onReply: doReply(id, screenname, tweettext)
+            //onRetweet: timelines.retweet(tweetid)
+            //onConversation: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -52,11 +54,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: StateFunctions.showUser(screenname)
-            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            onReply: doReply(id, screenname, tweettext)
-            onRetweet: timelines.retweet(tweetid)
-            onConversation: StateFunctions.showConversation(id)
+            //onUserinformation: StateFunctions.showUser(screenname)
+            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
+            //onReply: doReply(id, screenname, tweettext)
+            //onRetweet: timelines.retweet(tweetid)
+            //onConversation: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -66,12 +68,12 @@ Item {
             anchors.bottom: parent.bottom
             //anchors.left: mentionsList.right
 
-            onUserinformation: StateFunctions.showUser(screenname)
-            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            onReply: {
-                tweetUpdate.setDirectMessage(screenname)
-                tweetUpdate.state = 'show'
-            }
+            //onUserinformation: StateFunctions.showUser(screenname)
+            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
+            //onReply: {
+            //    tweetUpdate.setDirectMessage(screenname)
+            //   tweetUpdate.state = 'show'
+            //}
         }
 
         SearchList {
@@ -80,11 +82,11 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            onUserinformation: StateFunctions.showUser(screenname)
-            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            onReply: doReply(id, screenname, tweettext)
-            onRetweet: timelines.retweet(tweetid)
-            onConversation: StateFunctions.showConversation(id)
+            //onUserinformation: StateFunctions.showUser(screenname)
+            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
+            //onReply: doReply(id, screenname, tweettext)
+            //onRetweet: timelines.retweet(tweetid)
+            //onConversation: StateFunctions.showConversation(id)
         }
     }
 
@@ -136,12 +138,28 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
-        onUserinformation: StateFunctions.showUser(screenname)
-        onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-        onReply: doReply(id, screenname, tweettext)
-        onRetweet: timelines.retweet(tweetid)
+        //onUserinformation: StateFunctions.showUser(screenname)
+        //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
+        //onReply: doReply(id, screenname, tweettext)
+        //onRetweet: timelines.retweet(tweetid)
 
         // ### TODO add conversation
+    }
+
+    TweetScreen {
+        id: tweetScreen
+        opacity: 0
+        width: parent.width
+        anchors.top: topToolbar.bottom
+        anchors.bottom: bottomToolbar.top
+
+        Behavior on opacity { SmoothedAnimation { } }
+
+        onReplyClicked: doReply(tweetid, screenname, tweettext)
+        onRetweetClicked: retweet(tweetid)
+        onConversationClicked: StateFunctions.showConversation(tweetid)
+        onEntityMentionClicked: StateFunctions.showUser(screenname)
+        onEntityHashtagClicked: StateFunctions.searchHashtag(hashtag)
     }
 
     StatusUpdate {
@@ -392,6 +410,14 @@ Item {
         State {
             name: "conversation"
             PropertyChanges { target: conversationList; opacity: 1 }
+            PropertyChanges { target: homeTimelineButton; toggled: false }
+            PropertyChanges { target: mentionsButton; toggled: false }
+            PropertyChanges { target: directMessagesButton; toggled: false }
+            PropertyChanges { target: searchButton; toggled: false }
+        },
+        State {
+            name: 'tweetinfo'
+            PropertyChanges { target: tweetScreen; opacity: 1 }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
