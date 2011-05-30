@@ -21,11 +21,11 @@ Rectangle {
             tweetText: statusTextRole
             tweetSinceTime: sinceTimeRole
 
-            onReplyClicked: replyButtonClicked(tweetid, tweetText)
-            onRetweetClicked: retweet(tweetText)
-            onConversationClicked: conversation(tweetid)
-            onMentionLinkClicked: userinformation(screenname)
-            onHashtagLinkClicked: hashtagClicked(hashtag)
+//            onReplyClicked: replyButtonClicked(tweetid, tweetText)
+//            onRetweetClicked: retweet(tweetText)
+//            onConversationClicked: conversation(tweetid)
+//            onMentionLinkClicked: userinformation(screenname)
+//            onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 

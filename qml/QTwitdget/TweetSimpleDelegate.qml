@@ -7,22 +7,22 @@ Rectangle {
     property string tweetText : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ac venenatis ante. Ut euismod tempor erat, eget tincidunt elit ultricies sed."
     property string tweetSinceTime : "Sometimes ago"
 
-    signal replyClicked
-    signal retweetClicked
-    signal favoriteClicked
-    signal conversationClicked
-    signal mentionLinkClicked(string screenname)
-    signal hashtagLinkClicked(string hashtag)
+//    signal replyClicked
+//    signal retweetClicked
+//    signal favoriteClicked
+//    signal conversationClicked
+//    signal mentionLinkClicked(string screenname)
+//    signal hashtagLinkClicked(string hashtag)
 
-    function handleLink(link) {
-        if (link.slice(0, 3) == 'tag') {
-            hashtagLinkClicked(link.slice(6))
-        } else if (link.slice(0, 4) == 'http') {
-            Qt.openUrlExternally(link);
-        } else if (link.slice(0, 7) == 'mention') {
-            mentionLinkClicked(link.slice(10));
-        }
-    }
+//    function handleLink(link) {
+//        if (link.slice(0, 3) == 'tag') {
+//            hashtagLinkClicked(link.slice(6))
+//        } else if (link.slice(0, 4) == 'http') {
+//            Qt.openUrlExternally(link);
+//        } else if (link.slice(0, 7) == 'mention') {
+//            mentionLinkClicked(link.slice(10));
+//        }
+//    }
 
     width: ListView.view.width;
     //width: 360
@@ -42,7 +42,7 @@ Rectangle {
         id: statusText
         text: tweetText
         textFormat: Text.RichText
-        anchors.right: rightArrow.left
+        anchors.right: parent.right
         anchors.rightMargin: 5
         anchors.left: parent.left
         anchors.leftMargin: 5
@@ -52,7 +52,7 @@ Rectangle {
         font.pointSize: 6
         font.family: "Segoe UI"
 
-        onLinkActivated: container.handleLink(link)
+//        onLinkActivated: container.handleLink(link)
     }
 
     Text {
@@ -66,114 +66,114 @@ Rectangle {
         font.pointSize: 5
     }
 
-    Image {
-        id: rightArrow
-        source: "images/right_arrow.png"
-        width: 11; height: 16
-        anchors.right: parent.right
-        anchors.rightMargin: 4
-        anchors.verticalCenter: parent.verticalCenter
-    }
+    //    Image {
+    //        id: rightArrow
+    //        source: "images/right_arrow.png"
+    //        width: 11; height: 16
+    //        anchors.right: parent.right
+    //        anchors.rightMargin: 4
+    //        anchors.verticalCenter: parent.verticalCenter
+    //    }
 
-    MouseArea {
-        id: moreMouseArea
-        anchors.left: rightArrow.right
-        anchors.leftMargin: -20
-        anchors.bottom: buttonLoader.top
-        anchors.bottomMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
+    //    MouseArea {
+    //        id: moreMouseArea
+    //        anchors.left: rightArrow.right
+    //        anchors.leftMargin: -20
+    //        anchors.bottom: buttonLoader.top
+    //        anchors.bottomMargin: 0
+    //        anchors.top: parent.top
+    //        anchors.topMargin: 0
+    //        anchors.right: parent.right
+    //        anchors.rightMargin: 0
 
-        onClicked: {
-            if (container.state == 'showButtons')
-                container.state = ''
-            else
-                container.state = 'showButtons'
-        }
-    }
+    //        onClicked: {
+    //            if (container.state == 'showButtons')
+    //                container.state = ''
+    //            else
+    //                container.state = 'showButtons'
+    //        }
+    //    }
 
-    Loader {
-        id: buttonLoader
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-    }
+//    Loader {
+//        id: buttonLoader
+//        anchors.left: parent.left
+//        anchors.right: parent.right
+//        anchors.bottom: parent.bottom
+//    }
 
-    Connections { target: buttonLoader.item; onReplyButtonClicked: replyClicked() }
-    Connections { target: buttonLoader.item; onRetweetButtonClicked: retweetClicked() }
-    Connections { target: buttonLoader.item; onFavoriteButtonClicked: favoriteClicked() }
-    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationClicked() }
+//    Connections { target: buttonLoader.item; onReplyButtonClicked: replyClicked() }
+//    Connections { target: buttonLoader.item; onRetweetButtonClicked: retweetClicked() }
+//    Connections { target: buttonLoader.item; onFavoriteButtonClicked: favoriteClicked() }
+//    Connections { target: buttonLoader.item; onConversationButtonClicked: conversationClicked() }
 
-    Component {
-        id: buttonRow
+//    Component {
+//        id: buttonRow
 
-        Item {
-            id: buttonContainer
+//        Item {
+//            id: buttonContainer
 
-            signal replyButtonClicked()
-            signal retweetButtonClicked()
-            signal favoriteButtonClicked()
-            signal conversationButtonClicked()
+//            signal replyButtonClicked()
+//            signal retweetButtonClicked()
+//            signal favoriteButtonClicked()
+//            signal conversationButtonClicked()
 
-            ButtonImage {
-                id: replyButton
-                width: 84
-                height: 23
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/reply_button_pressed.png"
-                buttonImageUrl: "images/reply_button.png"
+//            ButtonImage {
+//                id: replyButton
+//                width: 84
+//                height: 23
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.left: parent.left
+//                anchors.leftMargin: 5
+//                pressedButtonImageUrl: "images/reply_button_pressed.png"
+//                buttonImageUrl: "images/reply_button.png"
 
-                onClicked: replyButtonClicked()
-            }
+//                onClicked: replyButtonClicked()
+//            }
 
-            ButtonImage {
-                id: retweetButton
-                width: 84
-                height: 23
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.left: replyButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/retweet_button_pressed.png"
-                buttonImageUrl: "images/retweet_button.png"
+//            ButtonImage {
+//                id: retweetButton
+//                width: 84
+//                height: 23
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.left: replyButton.right
+//                anchors.leftMargin: 5
+//                pressedButtonImageUrl: "images/retweet_button_pressed.png"
+//                buttonImageUrl: "images/retweet_button.png"
 
-                onClicked: retweetButtonClicked()
-            }
+//                onClicked: retweetButtonClicked()
+//            }
 
-            ButtonImage {
-                id: favouriteButton
-                width: 84
-                height: 23
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.left: retweetButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/favourite_button_pressed.png"
-                buttonImageUrl: "images/favourite_button.png"
+//            ButtonImage {
+//                id: favouriteButton
+//                width: 84
+//                height: 23
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.left: retweetButton.right
+//                anchors.leftMargin: 5
+//                pressedButtonImageUrl: "images/favourite_button_pressed.png"
+//                buttonImageUrl: "images/favourite_button.png"
 
-                onClicked: favoriteButtonClicked()
-            }
+//                onClicked: favoriteButtonClicked()
+//            }
 
-            ButtonImage {
-                id: conversationButton
-                width: 84
-                height: 23
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 4
-                anchors.left: favouriteButton.right
-                anchors.leftMargin: 5
-                pressedButtonImageUrl: "images/conversation_button_pressed.png"
-                buttonImageUrl: "images/conversation_button.png"
+//            ButtonImage {
+//                id: conversationButton
+//                width: 84
+//                height: 23
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 4
+//                anchors.left: favouriteButton.right
+//                anchors.leftMargin: 5
+//                pressedButtonImageUrl: "images/conversation_button_pressed.png"
+//                buttonImageUrl: "images/conversation_button.png"
 
-                onClicked: conversationButtonClicked()
-            }
-        }
-    }
+//                onClicked: conversationButtonClicked()
+//            }
+//        }
+//    }
 
     states: State {
         name: 'showButtons'
