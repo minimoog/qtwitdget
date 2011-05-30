@@ -22,8 +22,11 @@ Item {
 
         Text {
             id: btnText
+            width: parent.width
+            elide: Text.ElideRight
             anchors.centerIn: parent
             text: container.text
+            horizontalAlignment: Text.AlignHCenter
             color: "#F0F0F0"
             font.pixelSize: 12
         }
