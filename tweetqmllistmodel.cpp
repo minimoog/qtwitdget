@@ -479,12 +479,18 @@ void TweetQmlListModel::clear()
 QString TweetQmlListModel::addTags(const QString &text)
 {
     QString tweet(text);
+    //QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"),
+    //                                 "<a href=\"mention://\\1\" style=\"color:rgb(0,129,230)\">\\1</a>");
     QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"),
-                                     "<a href=\"mention://\\1\" style=\"color:rgb(0,129,230)\">\\1</a>");
+                                     "<b>\\1</b>");
+    //QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
+    //                                        "<a href='\\1' style=\"color:rgb(0,129,230)\">\\1</a>");
     QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
-                                            "<a href='\\1' style=\"color:rgb(0,129,230)\">\\1</a>");
+                                            "<b>\\1</b>");
+    //QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"),
+    //                                     "<a href=\"tag://\\1\" style=\"color:rgb(0,129,230)\">\\1</a>");
     QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"),
-                                         "<a href=\"tag://\\1\" style=\"color:rgb(0,129,230)\">\\1</a>");
+                                         "<b>\\1</b>");
     return hashtags;
 }
 
