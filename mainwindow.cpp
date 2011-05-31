@@ -253,18 +253,11 @@ void MainWindow::createDatabase(const QString& databaseName)
                 "id INTEGER, "
                 "text TEXT, "
                 "replyToStatusId INTEGER, "
-                "replyToUserId INTEGER, "
                 "favorited INTEGER, "
-                "replyToScreenName TEXT, "
                 "userId INTEGER, "
-                "name TEXT, "
                 "screenName TEXT, "
-                "location TEXT, "
-                "description TEXT, "
                 "profileImageUrl TEXT, "
-                "url TEXT, "
                 "mention INTEGER, "
-                "isRead INTEGER, "
                 "UNIQUE (id));");
 
     query.exec("CREATE TABLE IF NOT EXISTS directmessages "
