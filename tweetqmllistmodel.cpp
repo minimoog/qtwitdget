@@ -296,7 +296,6 @@ void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
     if (status.isRetweet()) {
         QString retweetedText = status.retweetedStatus().text();
         text = "RT @" + status.retweetedStatus().screenName() + ": " + retweetedText;
-        qDebug() << "r?r? " << text;
     } else {
         text = status.text();
     }
