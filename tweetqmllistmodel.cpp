@@ -278,18 +278,28 @@ void TweetQmlListModel::showNewTweets()
 void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
     QSqlQuery query;
+    QString text;
 
     query.prepare("INSERT OR ABORT INTO status "
                   "(id, text, screenName, profileImageUrl, userId, created, replyToStatusId) "
                   "VALUES "
                   "(:id, :text, :screenName, :profileImageUrl, :userId, :created, :replyToStatusId);");
     query.bindValue(":id", status.id());
-    query.bindValue(":text", status.text());
     query.bindValue(":userId", status.userid());
     query.bindValue(":screenName", status.user().screenName());
     query.bindValue(":profileImageUrl", status.user().profileImageUrl());
     query.bindValue(":created", status.createdAt());
     query.bindValue(":replyToStatusId", status.inReplyToStatusId());
+
+    if (status.isRetweet()) {
+        QString retweetedText = status.retweetedStatus().text();
+        text = "RT @" + status.retweetedStatus().user().screenName() + ": " + retweetedText;
+    } else {
+        text = status.text();
+    }
+
+    query.bindValue(":text", text);
+
     query.exec();
 
     m_newStatuses.prepend(status);
@@ -419,16 +429,24 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
             QListIterator<QTweetStatus> i(statuses);
             i.toBack();
             while (i.hasPrevious()) {
+                QString text;
                 QTweetStatus s = i.previous();
                 query.bindValue(":id", s.id());
-                query.bindValue(":text", s.text());
                 query.bindValue(":replyToStatusId", s.inReplyToStatusId());
-                //query.bindValue(":replyToUserId", s.replyToUserId());
-                //query.bindValue(":replyToScreenName", s.replyToScreenName());
                 query.bindValue(":userId", s.user().id());
                 query.bindValue(":screenName", s.user().screenName());
                 query.bindValue(":profileImageUrl", s.user().profileImageUrl());
                 query.bindValue(":created", s.createdAt());
+
+                if (s.isRetweet()) {
+                    QString retweetedText = s.retweetedStatus().text();
+                    text = "RT @" + s.retweetedStatus().user().screenName() + ": " + retweetedText;
+                } else {
+                    text = s.text();
+                }
+
+                query.bindValue(":text", text);
+
                 query.exec();
 
                 m_newStatuses.prepend(s);
