@@ -279,22 +279,34 @@ void TweetQmlListModel::showNewTweets()
 void TweetQmlListModel::onStatusesStream(const QTweetStatus &status)
 {
     QSqlQuery query;
+    QString text;
 
     query.prepare("INSERT OR ABORT INTO status "
                   "(id, text, screenName, profileImageUrl, userId, created, replyToStatusId) "
                   "VALUES "
                   "(:id, :text, :screenName, :profileImageUrl, :userId, :created, :replyToStatusId);");
     query.bindValue(":id", status.id());
-    query.bindValue(":text", status.text());
     query.bindValue(":userId", status.userid());
     query.bindValue(":screenName", status.screenName());
     query.bindValue(":profileImageUrl", status.profileImageUrl());
     query.bindValue(":created", status.createdAt());
     query.bindValue(":replyToStatusId", status.inReplyToStatusId());
+
+    //show/store full retweet text
+    if (status.isRetweet()) {
+        QString retweetedText = status.retweetedStatus().text();
+        text = "RT @" + status.retweetedStatus().screenName() + ": " + retweetedText;
+        qDebug() << "r?r? " << text;
+    } else {
+        text = status.text();
+    }
+
+    query.bindValue(":text", text);
+
     query.exec();
 
     QTweetStatus copyStatus(status);
-    QString textWithTags = addTags(copyStatus.text());
+    QString textWithTags = addTags(text);
     copyStatus.setText(textWithTags);
 
     m_newStatuses.prepend(copyStatus);
@@ -421,20 +433,29 @@ void TweetQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &statuses)
             QListIterator<QTweetStatus> i(statuses);
             i.toBack();
             while (i.hasPrevious()) {
+                QString text;
+
                 QTweetStatus s = i.previous();
                 query.bindValue(":id", s.id());
-                query.bindValue(":text", s.text());
                 query.bindValue(":replyToStatusId", s.inReplyToStatusId());
-                //query.bindValue(":replyToUserId", s.replyToUserId());
-                //query.bindValue(":replyToScreenName", s.replyToScreenName());
                 query.bindValue(":userId", s.userid());
                 query.bindValue(":screenName", s.screenName());
                 query.bindValue(":profileImageUrl", s.profileImageUrl());
                 query.bindValue(":created", s.createdAt());
+
+                if (s.isRetweet()) {
+                    QString retweetedText = s.retweetedStatus().text();
+                    text = "RT @" + s.retweetedStatus().screenName() + ": " + retweetedText;
+                } else {
+                    text = s.text();
+                }
+
+                query.bindValue(":text", text);
+
                 query.exec();
 
                 QTweetStatus copys(s);
-                QString textWithTags = addTags(copys.text());
+                QString textWithTags = addTags(text);
                 copys.setText(textWithTags);
 
                 m_newStatuses.prepend(copys);
@@ -479,16 +500,9 @@ void TweetQmlListModel::clear()
 QString TweetQmlListModel::addTags(const QString &text)
 {
     QString tweet(text);
-    //QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"),
-    //                                 "<a href=\"mention://\\1\" style=\"color:rgb(0,129,230)\">\\1</a>");
-    QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"),
-                                     "<b>\\1</b>");
-    //QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
-    //                                        "<a href='\\1' style=\"color:rgb(0,129,230)\">\\1</a>");
+    QString mentions = tweet.replace(QRegExp("(@[a-zA-Z0-9_]+)"), "<b>\\1</b>");
     QString httpLinks = mentions.replace(QRegExp("(\\b(https?|ftp)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])", Qt::CaseInsensitive),
                                             "<b>\\1</b>");
-    //QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"),
-    //                                     "<a href=\"tag://\\1\" style=\"color:rgb(0,129,230)\">\\1</a>");
     QString hashtags = httpLinks.replace(QRegExp("([#]+[A-Za-z0-9-_]+)"),
                                          "<b>\\1</b>");
     return hashtags;
