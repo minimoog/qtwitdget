@@ -59,19 +59,29 @@ void MentionsQmlListModel::onStatusesStream(const QTweetStatus &status)
     for (int i = 0; i < entityUserMentions.count(); ++i) {
         if (entityUserMentions.at(i).userid() == userID()) {    //check if is mention
             QSqlQuery query;
+            QString text;
 
             query.prepare("INSERT OR REPLACE INTO status "
                           "(id, text, screenName, profileImageUrl, userId, mention, created, replyToStatusId) "
                           "VALUES "
                           "(:id, :text, :screenName, :profileImageUrl, :userId, :mention, :created, :replyToStatusId);");
             query.bindValue(":id", status.id());
-            query.bindValue(":text", status.text());
             query.bindValue(":userId", status.user().id());
             query.bindValue(":screenName", status.user().screenName());
             query.bindValue(":profileImageUrl", status.user().profileImageUrl());
             query.bindValue(":mention", 1);
             query.bindValue(":created", status.createdAt());
             query.bindValue(":replyToStatusId", status.inReplyToStatusId());
+
+            if (status.isRetweet()) {
+                QString retweetedText = status.retweetedStatus().text();
+                text = "RT @" + status.retweetedStatus().user().screenName() + ": " + retweetedText;
+            } else {
+                text = status.text();
+            }
+
+             query.bindValue(":text", text);
+
             query.exec();
 
             m_newStatuses.prepend(status);
@@ -183,17 +193,25 @@ void MentionsQmlListModel::finishedFetchTweets(const QList<QTweetStatus> &status
             QListIterator<QTweetStatus> i(statuses);
             i.toBack();
             while (i.hasPrevious()) {
+                QString text;
                 QTweetStatus s = i.previous();
                 query.bindValue(":id", s.id());
-                query.bindValue(":text", s.text());
                 query.bindValue(":replyToStatusId", s.inReplyToStatusId());
-                //query.bindValue(":replyToUserId", s.replyToUserId());
-                //query.bindValue(":replyToScreenName", s.replyToScreenName());
                 query.bindValue(":userId", s.user().id());
                 query.bindValue(":screenName", s.user().screenName());
                 query.bindValue(":profileImageUrl", s.user().profileImageUrl());
                 query.bindValue(":mention", 1);
                 query.bindValue(":created", s.createdAt());
+
+                if (s.isRetweet()) {
+                    QString retweetedText = s.retweetedStatus().text();
+                    text = "RT @" + s.retweetedStatus().user().screenName() + ": " + retweetedText;
+                } else {
+                    text = s.text();
+                }
+
+                query.bindValue(":text", text);
+
                 query.exec();
 
                 m_newStatuses.prepend(s);
