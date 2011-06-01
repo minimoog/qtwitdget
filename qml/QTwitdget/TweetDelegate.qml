@@ -122,8 +122,6 @@ Rectangle  {
         wrapMode: "WordWrap"
         font.family: "Segoe UI"
         font.pointSize: 6
-
-        //onLinkActivated: container.handleLink(link);
     }
 
     Text {
@@ -138,10 +136,25 @@ Rectangle  {
     }
 
     MouseArea {
-        id: tweetArea
-        anchors.fill: parent
+        id: tweetMouseArea
+        anchors.left: avatarMouseArea.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+        anchors.leftMargin: 0
 
         onClicked: tweetClicked()
+    }
+
+    MouseArea {
+        id: avatarMouseArea
+        width: 100
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.right: avatarBackground.right
+
+        onClicked: avatarClicked()
     }
 
 //    Loader {

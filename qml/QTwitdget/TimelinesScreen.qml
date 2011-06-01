@@ -60,6 +60,7 @@ Item {
             anchors.bottom: parent.bottom
 
             onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+            onAvatarClicked: StateFunctions.showUser(screenname)
 
             //onUserinformation: StateFunctions.showUser(screenname)
             //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
@@ -75,6 +76,7 @@ Item {
             anchors.bottom: parent.bottom
 
             onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+            onAvatarClicked: StateFunctions.showUser(screenname)
 
             //onUserinformation: StateFunctions.showUser(screenname)
             //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
@@ -105,6 +107,7 @@ Item {
             anchors.bottom: parent.bottom
 
             onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+            onAvatarClicked: StateFunctions.showUser(screenname)
 
             //onUserinformation: StateFunctions.showUser(screenname)
             //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
@@ -158,6 +161,7 @@ Item {
         }
 
         onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+        onAvatarClicked: StateFunctions.showUser(screenname)
 
         //onUserinformation: StateFunctions.showUser(screenname)
         //onHashtagClicked: StateFunctions.searchHashtag(hashtag)

@@ -26,6 +26,7 @@ Rectangle {
     property alias model: tweetListView.model
 
     signal tweetClicked(string tweetid, string tweettext, string screenname)
+    signal avatarClicked(string screenname)
 
     //signal reply(string id, string screenname, string tweettext)
     //signal retweet(string tweetid)
@@ -55,6 +56,7 @@ Rectangle {
             tweetSinceTime: sinceTimeRole
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)
+            onAvatarClicked: container.avatarClicked(tweetScreenName)
 
             //onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
             //onRetweetClicked: retweet(tweetid)

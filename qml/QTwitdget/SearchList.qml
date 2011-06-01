@@ -26,6 +26,7 @@ Item {
     property alias model: searchListView.model
 
     signal tweetClicked(string tweetid, string tweettext, string screenname)
+    signal avatarClicked(string screenname)
 
     //signal searchClicked
 
@@ -105,6 +106,7 @@ Item {
             tweetid: statusIdRole
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)
+            onAvatarClicked: container.avatarClicked(tweetScreenName)
 
             //onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
             //onRetweetClicked: retweet(tweetText, tweetScreenName)
