@@ -157,6 +157,8 @@ Item {
             NumberAnimation { duration: 500 }
         }
 
+        onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
+
         //onUserinformation: StateFunctions.showUser(screenname)
         //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
         //onReply: doReply(id, screenname, tweettext)
