@@ -228,7 +228,20 @@ void ConversationListModel::onParsedStatus(const QTweetStatus &status)
 
     if (statusShow) {
         beginInsertRows(QModelIndex(), m_statuses.count(), m_statuses.count());
-        m_statuses.append(status);
+
+        QString text;
+
+        if (status.isRetweet()) {
+            QString retweetedText = status.retweetedStatus().text();
+            text = "RT @" + status.retweetedStatus().user().screenName() + ": " + retweetedText;
+        } else {
+            text = status.text();
+        }
+
+        QTweetStatus copyStatus(status);
+        copyStatus.setText(text);
+
+        m_statuses.append(copyStatus);
         endInsertRows();
 
         qint64 replyID = status.inReplyToStatusId();
