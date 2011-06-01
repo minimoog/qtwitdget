@@ -225,8 +225,17 @@ void ConversationListModel::onParsedStatus(const QTweetStatus &status)
     if (statusShow) {
         beginInsertRows(QModelIndex(), m_statuses.count(), m_statuses.count());
 
+        QString text;
+
+        if (status.isRetweet()) {
+            QString retweetedText = status.retweetedStatus().text();
+            text = "RT @" + status.retweetedStatus().screenName() + ": " + retweetedText;
+        } else {
+            text = status.text();
+        }
+
         QTweetStatus copyStatus(status);
-        QString textWithTags = addTags(status.text());
+        QString textWithTags = addTags(text);
         copyStatus.setText(textWithTags);
 
         m_statuses.append(copyStatus);
