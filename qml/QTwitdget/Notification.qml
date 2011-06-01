@@ -47,7 +47,7 @@ Rectangle {
         }
     }
 
-    Behavior on y { NumberAnimation { duration: 200 } }
+    Behavior on y { NumberAnimation { duration: 500 } }
 
     Text {
         id: notificationText

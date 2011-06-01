@@ -61,7 +61,7 @@ Rectangle  {
             return (index % 2) ? '#ffffff' : '#d9d9d9'
     }
 
-    Behavior on color { ColorAnimation { duration: 300 } }
+    Behavior on color { ColorAnimation { easing.type: Easing.OutExpo; duration: 500 } }
 
     Rectangle {
         id: avatarBackground
@@ -256,16 +256,16 @@ Rectangle  {
             PropertyAction { target: container; property: "x"; value: container.width }
             PropertyAction { target: container; property: "opacity"; value: 0 }
         }
-        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutExpo; from: 0; to: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 4); duration: 300 }
+        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutExpo; from: 0; to: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 4); duration: 500 }
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
-        NumberAnimation { target: container; property: "x"; easing.type: Easing.InOutBack; to: 0; duration: 500 }
+        NumberAnimation { target: container; property: "x"; easing.type: Easing.OutBack; to: 0; duration: 500 }
     }
 
     ListView.onRemove: SequentialAnimation {
         PropertyAction { target: container; property: "ListView.delayRemove"; value: true }
-        NumberAnimation { target: container; property: "opacity"; to: 0; duration: 300 }
-        NumberAnimation { target: container; property: "height"; to: 0; duration: 300 }
+        NumberAnimation { target: container; property: "opacity"; to: 0; duration: 500 }
+        NumberAnimation { target: container; property: "height"; to: 0; duration: 500 }
         PropertyAction { target: container; property: "ListView.delayRemove"; value: false }
     }
 }

@@ -135,7 +135,7 @@ Item {
         model: userTimelineListModel
 
         Behavior on opacity {
-            NumberAnimation { duration: 500 }
+            NumberAnimation { easing.type: Easing.OutExpo; duration: 500 }
         }
 
         onMessage: {
@@ -157,7 +157,7 @@ Item {
         anchors.bottom: bottomToolbar.top
 
         Behavior on opacity {
-            NumberAnimation { duration: 500 }
+            NumberAnimation { easing.type: Easing.OutExpo; duration: 500 }
         }
 
         onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
@@ -179,7 +179,7 @@ Item {
         anchors.bottom: bottomToolbar.top
 
         Behavior on opacity {
-            NumberAnimation { duration: 500 }
+            NumberAnimation { easing.type: Easing.OutExpo; duration: 500 }
         }
 
         onReplyClicked: doReply(tweetid, screenname, tweettext)
@@ -454,7 +454,7 @@ Item {
 
     transitions: [
         Transition {
-            NumberAnimation { properties: "x"; duration: 500; easing.type: Easing.InOutExpo }
+            NumberAnimation { properties: "x"; duration: 500; easing.type: Easing.OutExpo }
         }
     ]
 }
