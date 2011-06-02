@@ -49,16 +49,8 @@ Rectangle {
     width: ListView.view.width;
     //width: 360
     height: statusText.paintedHeight + 30
-    gradient: Gradient {
-        GradientStop {
-            position: 0
-            color: "#ffffff"
-        }
-        GradientStop {
-            position: 1
-            color: "#d9d9d9"
-        }
-    }
+
+    color: (index % 2) ? '#ffffff' : '#d9d9d9'
 
     Text {
         id: statusText
