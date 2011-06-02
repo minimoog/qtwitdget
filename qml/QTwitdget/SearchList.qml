@@ -30,12 +30,6 @@ Item {
 
     //signal searchClicked
 
-    //signal reply(string id, string screenname, string tweettext)
-    //signal retweet(string text, string screenname)
-    //signal conversation(string id)
-    //signal userinformation(string screenname)
-    //signal hashtagClicked(string hashtag)
-
     function doSearch(query) {
         queryInput.text = query
         model.startSearch(query)
@@ -107,12 +101,6 @@ Item {
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)
             onAvatarClicked: container.avatarClicked(tweetScreenName)
-
-            //onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
-            //onRetweetClicked: retweet(tweetText, tweetScreenName)
-            //onConversationClicked: conversation(tweetid)
-            //onMentionLinkClicked: userinformation(screenname)
-            //onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 

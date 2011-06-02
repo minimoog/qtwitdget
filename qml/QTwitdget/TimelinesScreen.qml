@@ -61,12 +61,6 @@ Item {
 
             onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
             onAvatarClicked: StateFunctions.showUser(screenname)
-
-            //onUserinformation: StateFunctions.showUser(screenname)
-            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            //onReply: doReply(id, screenname, tweettext)
-            //onRetweet: timelines.retweet(tweetid)
-            //onConversation: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -77,12 +71,6 @@ Item {
 
             onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
             onAvatarClicked: StateFunctions.showUser(screenname)
-
-            //onUserinformation: StateFunctions.showUser(screenname)
-            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            //onReply: doReply(id, screenname, tweettext)
-            //onRetweet: timelines.retweet(tweetid)
-            //onConversation: StateFunctions.showConversation(id)
         }
 
         TweetList {
@@ -108,12 +96,6 @@ Item {
 
             onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
             onAvatarClicked: StateFunctions.showUser(screenname)
-
-            //onUserinformation: StateFunctions.showUser(screenname)
-            //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            //onReply: doReply(id, screenname, tweettext)
-            //onRetweet: timelines.retweet(tweetid)
-            //onConversation: StateFunctions.showConversation(id)
         }
     }
 
@@ -162,13 +144,6 @@ Item {
 
         onTweetClicked: StateFunctions.showTweetInfo(tweetid, tweettext, screenname)
         onAvatarClicked: StateFunctions.showUser(screenname)
-
-        //onUserinformation: StateFunctions.showUser(screenname)
-        //onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-        //onReply: doReply(id, screenname, tweettext)
-        //onRetweet: timelines.retweet(tweetid)
-
-        // ### TODO add conversation
     }
 
     TweetScreen {

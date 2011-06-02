@@ -27,12 +27,6 @@ Rectangle {
 
     signal tweetClicked(string tweetid, string tweettext)
 
-//    signal replyButtonClicked(string statusid, string statustext)
-//    signal retweet(string tweettext)
-//    signal conversation(string id)
-//    signal userinformation(string screenname)
-//    signal hashtagClicked(string hashtag)
-
     color: "#ffffff"
 
     ListView {
@@ -46,12 +40,6 @@ Rectangle {
             tweetSinceTime: sinceTimeRole
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText)
-
-//            onReplyClicked: replyButtonClicked(tweetid, tweetText)
-//            onRetweetClicked: retweet(tweetText)
-//            onConversationClicked: conversation(tweetid)
-//            onMentionLinkClicked: userinformation(screenname)
-//            onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 

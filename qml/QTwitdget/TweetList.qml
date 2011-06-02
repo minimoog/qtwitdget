@@ -28,16 +28,7 @@ Rectangle {
     signal tweetClicked(string tweetid, string tweettext, string screenname)
     signal avatarClicked(string screenname)
 
-    //signal reply(string id, string screenname, string tweettext)
-    //signal retweet(string tweetid)
-    //signal conversation(string id)
-    //signal userinformation(string screenname)
-    //signal deleteClicked(string id)
-
     //since time is not updated
-
-    //right arrow pressed or mention clicked
-   //signal hashtagClicked(string hashtag)
 
      color: "#ffffff"
 
@@ -57,12 +48,6 @@ Rectangle {
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)
             onAvatarClicked: container.avatarClicked(tweetScreenName)
-
-            //onReplyClicked: reply(tweetid, tweetScreenName, tweetText)
-            //onRetweetClicked: retweet(tweetid)
-            //onConversationClicked: conversation(tweetid)
-            //onMentionLinkClicked: userinformation(screenname)
-            //onHashtagLinkClicked: hashtagClicked(hashtag)
         }
     }
 
