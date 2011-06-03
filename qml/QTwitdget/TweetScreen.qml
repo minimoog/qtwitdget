@@ -21,7 +21,7 @@
 import QtQuick 1.0
 import qtwitdget.components 1.0
 
-Item {
+Rectangle {
     id: container
 
     property string text
@@ -43,61 +43,49 @@ Item {
             Qt.openUrlExternally(entity);
     }
 
-    Rectangle {
-        id: textBackground
-        height: 4 + tweettext.paintedHeight + 4
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#A8E3FF"
-            }
-            GradientStop {
-                position: 0.7
-                color: "#DBF3FF"
-            }
-        }
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: parent.top
-
-        Text {
-            id: tweettext
-            text: container.text
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignTop
-            anchors.top: parent.top; anchors.topMargin: 4
-            anchors.left: parent.left; anchors.leftMargin: 4
-            anchors.right: parent.right; anchors.rightMargin: 4
-            font.pointSize: 8
-        }
+    gradient: Gradient {
+        GradientStop { position: 0; color: '#d9d9d9' }
+        GradientStop { position: 1; color: '#ffffff' }
     }
 
-    Rectangle {
-        id: background
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#d9d9d9"
+    VisualItemModel {
+        id: itemModel
+
+        Rectangle {
+            id: textBackground
+            height: 4 + tweettext.paintedHeight + 4
+            width: view.width
+
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#A8E3FF"
+                }
+                GradientStop {
+                    position: 0.7
+                    color: "#DBF3FF"
+                }
             }
 
-            GradientStop {
-                position: 1
-                color: "#ffffff"
+            Text {
+                id: tweettext
+                text: container.text
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignTop
+                anchors.top: parent.top; anchors.topMargin: 4
+                anchors.left: parent.left; anchors.leftMargin: 4
+                anchors.right: parent.right; anchors.rightMargin: 4
+                font.pointSize: 8
             }
         }
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: textBackground.bottom
 
         Row {
             id: rowMainButtons
             x: 6
-            anchors.horizontalCenter: parent.horizontalCenter
+            height: 40
+            width: view.width
             spacing: 5
-            //height: 200
-            anchors.top: parent.top
 
             ButtonImage {
                 id: replyButton
@@ -140,26 +128,32 @@ Item {
 
         GridView {
             id: gridView
-            width: {
-                var numCells = Math.floor(parent.width / cellWidth);
-                return numCells * cellWidth;
+            width: view.width
+            height: {
+                var numHorizontalCells = Math.floor(width / cellWidth);
+                console.log('hor: ' + numHorizontalCells);
+                var numVerticallCells = Math.ceil(entityModel.count / numHorizontalCells);
+                console.log('ver: ' + numVerticallCells);
+                return numVerticallCells * cellHeight;
             }
-
-            anchors.topMargin: 4
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: rowMainButtons.bottom
             cellWidth: 132
             cellHeight: 44
             delegate: EntityDelegate {
                 entityText: display
                 onClicked: handleEntity(entityText)
             }
+            interactive: false
 
             model: TweetEntityListModel {
                 id: entityModel
                 tweetid: container.tweetid
             }
         }
+    }
+
+    ListView {
+        id: view
+        anchors.fill: parent
+        model: itemModel
     }
 }
