@@ -33,6 +33,7 @@ class TweetEntityListModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QString tweetid READ tweetid WRITE setTweetid /*NOTIFY tweetidChanged*/)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     explicit TweetEntityListModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent) const;
@@ -42,6 +43,11 @@ public:
 
     QString tweetid() const { return m_tweetid; }
     void setTweetid(const QString& id);
+
+    int count() const;
+
+signals:
+    void countChanged();
 
 private slots:
     void finishedStatusShow(const QTweetStatus& status);

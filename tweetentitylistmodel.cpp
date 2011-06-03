@@ -44,6 +44,11 @@ int TweetEntityListModel::rowCount(const QModelIndex &parent) const
     return m_entities.count();
 }
 
+int TweetEntityListModel::count() const
+{
+    return m_entities.count();
+}
+
 /**
  *  @reimp
  */
@@ -159,4 +164,6 @@ void TweetEntityListModel::captureEntities(const QString &text)
         beginInsertRows(QModelIndex(), 0, m_entities.count() - 1);
         endInsertRows();
     }
+
+    emit countChanged();
 }
