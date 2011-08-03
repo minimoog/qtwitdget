@@ -18,6 +18,7 @@ QML_IMPORT_PATH =
 #DEFINES += NETWORKACCESS
 
 symbian:TARGET.UID3 = 0xEDDF745F
+symbian:DEPLOYMENT.installer_header = 0xA000D7CE
 
 # Define QMLJSDEBUGGER to allow debugging of QML in debug builds
 # (This might significantly increase build time)
