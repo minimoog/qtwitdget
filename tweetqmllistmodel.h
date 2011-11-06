@@ -22,8 +22,8 @@
 #define TWEETQMLLISTMODEL_H
 
 #include <QAbstractListModel>
+#include "qtweetlib/qtweetstatus.h"
 
-class QTweetStatus;
 class QTweetNetBase;
 class OAuthTwitter;
 

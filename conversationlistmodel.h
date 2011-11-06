@@ -22,9 +22,9 @@
 #define CONVERSATIONLISTMODEL_H
 
 #include <QAbstractListModel>
+#include "qtweetlib/qtweetstatus.h"
 
 class OAuthTwitter;
-class QTweetStatus;
 
 /**
  *  Model list class for twitter conversation (replies of replies
