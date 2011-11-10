@@ -24,6 +24,7 @@
 #include "oauth.h"
 
 class QNetworkAccessManager;
+class QSslError;
 
 /**
  *   OAuth Twitter authorization class
@@ -51,6 +52,7 @@ signals:
 
 private slots:
     void finishedAuthorization();
+    void sslErrors(const QList<QSslError>& errors);
 
 private:
 	QNetworkAccessManager *m_netManager;

@@ -93,6 +93,7 @@ private slots:
     void replyReadyRead();
     void replyTimeout();
     void parsingFinished(const QVariant& json, bool ok, const QString& errorMsg);
+    void sslErrors(const QList<QSslError>& errors);
 
 private:
     void parseStream(const QByteArray& );
