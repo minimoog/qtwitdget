@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_database = QSqlDatabase::addDatabase("QSQLITE");
 
 
-    engine()->setNetworkAccessManagerFactory(new NAMFactory);
+    //engine()->setNetworkAccessManagerFactory(new NAMFactory);
     createDeclarativeView();
 }
 
