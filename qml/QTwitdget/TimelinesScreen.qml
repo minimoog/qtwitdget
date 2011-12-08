@@ -251,6 +251,7 @@ Item {
                 else {
                     tweetUpdate.state = 'show'
                     tweetUpdate.clear()
+                    tweetUpdate.focus = false
                 }
             }
         }
@@ -373,6 +374,33 @@ Item {
             }
         }
     }
+
+//    Item {
+//        id: splitViewInput
+
+//        anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
+
+//        Behavior on height { PropertyAnimation { duration: 500 } }
+
+//        states: [
+//            State {
+//                name: "visible"
+//                when: inputContext.visible
+//                PropertyChanges {
+//                    target: splitViewInput
+//                    height: inputContext.height
+//                }
+//            },
+//            State {
+//                name: "hidden"
+//                when: !inputContext.visible
+//                PropertyChanges {
+//                    target: splitViewInput
+//                    height: 0
+//                }
+//            }
+//        ]
+//    }
 
     //need some work
 
