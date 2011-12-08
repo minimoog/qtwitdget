@@ -64,7 +64,6 @@ Rectangle  {
             sourceSize.height: 48
             anchors.centerIn: parent
             fillMode: Image.Stretch
-            source: tweetAvatar
         }
     }
 
@@ -125,6 +124,7 @@ Rectangle  {
         PropertyAction { target: container; property: "opacity"; value: 1 }
         PauseAnimation { duration: index * 20 }
         NumberAnimation { target: container; property: "x"; easing.type: Easing.OutBack; to: 0; duration: 500 }
+        PropertyAction { target: avatarImage; property: "source"; value: tweetAvatar }
     }
 
     ListView.onRemove: SequentialAnimation {
