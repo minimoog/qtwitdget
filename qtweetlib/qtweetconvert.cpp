@@ -63,9 +63,11 @@ QTweetStatus QTweetConvert::cJSONToStatus(cJSON *root)
 
         cJSON *userObject = cJSON_GetObjectItem(root, "user");
 
-        QTweetUser user = cJSONToUser(userObject);
+        if (userObject) {
+            QTweetUser user = cJSONToUser(userObject);
+            status.setUser(user);
+        }
 
-        status.setUser(user);
         status.setSource(QString::fromUtf8(cJSON_GetObjectItem(root, "source")->valuestring));
         status.setInReplyToStatusId((qint64)cJSON_GetObjectItem(root, "in_reply_to_status_id")->valuedouble);
 
