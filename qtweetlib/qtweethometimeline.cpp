@@ -29,7 +29,15 @@
  *  Constructor
  */
 QTweetHomeTimeline::QTweetHomeTimeline(QObject *parent) :
-    QTweetNetBase(parent)
+    QTweetNetBase(parent),
+    m_sinceid(0),
+    m_maxid(0),
+    m_count(0),
+    m_page(0),
+    m_trimUser(false),
+    m_includeEntities(false),
+    m_excludeReplies(false),
+    m_contributorDetails(false)
 {
 }
 
@@ -39,7 +47,15 @@ QTweetHomeTimeline::QTweetHomeTimeline(QObject *parent) :
  *  @param parent parent QObject
  */
 QTweetHomeTimeline::QTweetHomeTimeline(OAuthTwitter *oauthTwitter, QObject *parent) :
-        QTweetNetBase(oauthTwitter, parent)
+    QTweetNetBase(oauthTwitter, parent),
+    m_sinceid(0),
+    m_maxid(0),
+    m_count(0),
+    m_page(0),
+    m_trimUser(false),
+    m_includeEntities(false),
+    m_excludeReplies(false),
+    m_contributorDetails(false)
 {
 }
 
@@ -51,6 +67,8 @@ QTweetHomeTimeline::QTweetHomeTimeline(OAuthTwitter *oauthTwitter, QObject *pare
  *   @param page page number
  *   @param skipUser true to include only status authors numerical ID
  *   @param includeEntities true to include a node called "entities"
+ *   @param excludeReplies true to prevent replies from appearing in the returned timeline
+ *   @param contributorDetails true to enhance the contributors element of the status response
  *   @remarks Setting parameter to default value will not be put in a querys
  */
 void QTweetHomeTimeline::fetch(qint64 sinceid,
@@ -58,14 +76,16 @@ void QTweetHomeTimeline::fetch(qint64 sinceid,
                                int count,
                                int page,
                                bool trimUser,
-                               bool includeEntities)
+                               bool includeEntities,
+                               bool excludeReplies,
+                               bool contributorDetails)
 {
     if (!isAuthenticationEnabled()) {
         qCritical("Needs authentication to be enabled");
         return;
     }
 
-    QUrl url("http://api.twitter.com/1/statuses/home_timeline.json");
+    QUrl url("https://api.twitter.com/1/statuses/home_timeline.json");
 
     if (sinceid != 0)
         url.addQueryItem("since_id", QString::number(sinceid));
@@ -85,6 +105,12 @@ void QTweetHomeTimeline::fetch(qint64 sinceid,
     if (includeEntities)
         url.addQueryItem("include_entities", "true");
 
+    if (excludeReplies)
+        url.addQueryItem("exclude_replies", "true");
+
+    if (contributorDetails)
+        url.addQueryItem("contributor_details", "true");
+
     QNetworkRequest req(url);
 
     QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
@@ -94,16 +120,14 @@ void QTweetHomeTimeline::fetch(qint64 sinceid,
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetHomeTimeline::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetHomeTimeline::get()
 {
-    if (ok) {
-        QList<QTweetStatus> statuses = QTweetConvert::variantToStatusList(json);
-
-        emit parsedStatuses(statuses);
-    } else {
-        qDebug() << "QTweetHomeTimeline JSON parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
-    }
+    fetch(m_sinceid, m_maxid, m_count, m_page, m_trimUser, m_includeEntities, m_excludeReplies, m_contributorDetails);
 }
 
+void QTweetHomeTimeline::parseJsonFinished(cJSON *root)
+{
+    QList<QTweetStatus> statuses = QTweetConvert::cJSONToStatusList(root);
+
+    emit parsedStatuses(statuses);
+}

@@ -34,6 +34,7 @@ class QTweetList;
 class QTweetSearchResult;
 class QTweetSearchPageResults;
 class QTweetPlace;
+struct cJSON;
 
 /**
  *   Base class for Twitter API classes
@@ -89,13 +90,13 @@ signals:
      *                   In that case check response.
      *  @remarks DOESN'T emit finished signal
      */
-    void error(ErrorCode code, const QString& errorMsg);
+    void error(QTweetNetBase::ErrorCode code, const QString& errorMsg);
 
 protected slots:
-    virtual void parsingJsonFinished(const QVariant& json, bool ok, const QString& errorMsg) = 0;
     virtual void reply();
 
 protected:
+    virtual void parseJsonFinished(cJSON *root) = 0;
     void parseJson(const QByteArray& jsonData);
     void setLastErrorMessage(const QString& errMsg);
 

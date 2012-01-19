@@ -31,13 +31,6 @@ symbian:TARGET.UID3 = 0xEDDF745F
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    qjson/serializerrunnable.cpp \
-    qjson/serializer.cpp \
-    qjson/qobjecthelper.cpp \
-    qjson/parserrunnable.cpp \
-    qjson/parser.cpp \
-    qjson/json_scanner.cpp \
-    qjson/json_parser.cc \
     qtweetlib/qtweetuserstream.cpp \
     qtweetlib/qtweetuser.cpp \
     qtweetlib/qtweetstatusupdate.cpp \
@@ -80,29 +73,14 @@ SOURCES += main.cpp \
     qtweetlib/qtweetfavoritescreate.cpp \
     shorturlsitem.cpp \
     userlogins.cpp \
-    namsingleton.cpp
+    namsingleton.cpp \
+    qtweetlib/cJSON.c
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qjson/json_parser.yy
-
 HEADERS += \
-    qjson/stack.hh \
-    qjson/serializerrunnable.h \
-    qjson/serializer.h \
-    qjson/qobjecthelper.h \
-    qjson/qjson_export.h \
-    qjson/qjson_debug.h \
-    qjson/position.hh \
-    qjson/parserrunnable.h \
-    qjson/parser_p.h \
-    qjson/parser.h \
-    qjson/location.hh \
-    qjson/json_scanner.h \
-    qjson/json_parser.hh \
     qtweetlib/qtweetuserstream.h \
     qtweetlib/qtweetuser.h \
     qtweetlib/qtweetstatusupdate.h \
@@ -147,6 +125,7 @@ HEADERS += \
     shorturlsitem.h \
     userlogins.h \
     namsingleton.h \
-    namfactory.h
+    namfactory.h \
+    qtweetlib/cJSON.h
 
 ICON = qtwitdget.icns

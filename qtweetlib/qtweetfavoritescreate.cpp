@@ -64,20 +64,15 @@ void QTweetFavoritesCreate::create(qint64 statusid, bool includeEntities)
 
     QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->post(req, QByteArray());
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetFavoritesCreate::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetFavoritesCreate::parseJsonFinished(cJSON *root)
 {
-    if (ok) {
-        QTweetStatus status = QTweetConvert::variantMapToStatus(json.toMap());
+    QTweetStatus status = QTweetConvert::cJSONToStatus(root);
 
-        emit parsedStatus(status);
-    } else {
-        qDebug() << "QTweetFavoritesCreate parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
-    }
+    emit parsedStatus(status);
 }

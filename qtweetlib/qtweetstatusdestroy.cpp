@@ -66,6 +66,7 @@ void QTweetStatusDestroy::destroy(qint64 id,
 
     QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QByteArray postBody = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
     postBody.remove(0, 1);
@@ -74,16 +75,9 @@ void QTweetStatusDestroy::destroy(qint64 id,
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetStatusDestroy::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetStatusDestroy::parseJsonFinished(cJSON *root)
 {
-    if (ok) {
-        QTweetStatus status = QTweetConvert::variantMapToStatus(json.toMap());
+    QTweetStatus status = QTweetConvert::cJSONToStatus(root);
 
-        emit deletedStatus(status);
-    } else {
-        qDebug() << "QTweetStatusDestroy parse error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
-    }
+    emit deletedStatus(status);
 }
-

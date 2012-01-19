@@ -73,10 +73,10 @@ QString QTweetEntityUrl::url() const
 
 void QTweetEntityUrl::setExpandedUrl(const QString &url)
 {
-    data->expandedUrl = url;
+    data->url = url;
 }
 
 QString QTweetEntityUrl::expandedUrl() const
 {
-    return data->expandedUrl;
+    return data->url;
 }

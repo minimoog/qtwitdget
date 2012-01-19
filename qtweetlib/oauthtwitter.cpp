@@ -24,6 +24,8 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QNetworkAccessManager>
+#include <QEventLoop>
+#include <QDesktopServices>
 #include <QSslError>
 
 #define TWITTER_REQUEST_TOKEN_URL "https://twitter.com/oauth/request_token"
@@ -44,6 +46,17 @@ OAuthTwitter::OAuthTwitter(QObject *parent)
  */
 OAuthTwitter::OAuthTwitter(QNetworkAccessManager *netManager, QObject *parent) :
     OAuth(parent), m_netManager(netManager)
+{
+}
+
+/**
+ *  Constructor
+ *  @param consumerKey OAuth consumer key
+ *  @param consumerSecret OAuth consumer secret
+ *  @param parent parent object
+ */
+OAuthTwitter::OAuthTwitter(const QByteArray &consumerKey, const QByteArray &consumerSecret, QObject *parent) :
+    OAuth(consumerKey, consumerSecret, parent), m_netManager(0)
 {
 }
 
@@ -75,10 +88,8 @@ void OAuthTwitter::authorizeXAuth(const QString &username, const QString &passwo
     Q_ASSERT(m_netManager != 0);
 
     QUrl url(TWITTER_ACCESS_TOKEN_XAUTH_URL);
-    //url.addQueryItem("x_auth_username", username);
-    url.addEncodedQueryItem("x_auth_username", QUrl::toPercentEncoding(username));
-    //url.addQueryItem("x_auth_password", password);
-    url.addEncodedQueryItem("x_auth_password", QUrl::toPercentEncoding(password));
+    url.addEncodedQueryItem("x_auth_username", username.toUtf8().toPercentEncoding());
+    url.addEncodedQueryItem("x_auth_password", password.toUtf8().toPercentEncoding());
     url.addQueryItem("x_auth_mode", "client_auth");
 
     QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
@@ -110,9 +121,114 @@ void OAuthTwitter::finishedAuthorization()
             emit authorizeXAuthError();
 
         }
-
         reply->deleteLater();
     }
+}
+
+/**
+ *  Starts PIN based OAuth authorization
+ */
+void OAuthTwitter::authorizePin()
+{
+    Q_ASSERT(m_netManager != 0);
+
+    QUrl url(TWITTER_REQUEST_TOKEN_URL);
+
+    QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
+
+    QNetworkRequest req(url);
+    req.setRawHeader(AUTH_HEADER, oauthHeader);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    //enters event loop, simulate blocking io
+    QEventLoop q;
+    QTimer t;
+    t.setSingleShot(true);
+    connect(&t, SIGNAL(timeout()), &q, SLOT(quit()));
+
+    QNetworkReply *reply = m_netManager->post(req, QByteArray());
+    connect(reply, SIGNAL(finished()), &q, SLOT(quit()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+
+    t.start(5000);
+    q.exec();
+
+    if (t.isActive()) {
+        t.stop();
+        QByteArray response = reply->readAll();
+        parseTokens(response);
+
+        reply->deleteLater();
+        requestAuthorization();
+
+        int pin = authorizationWidget();
+        if (pin) {
+            requestAccessToken(pin);
+        }
+    } else {
+        qDebug() << "Timeout";
+    }
+}
+
+/**
+ *  Opens authorization url
+ *  @remarks Override if you want to show another browser
+ */
+void OAuthTwitter::requestAuthorization()
+{
+    QUrl authorizeUrl(TWITTER_AUTHORIZE_URL);
+    authorizeUrl.addEncodedQueryItem("oauth_token", oauthToken());
+    authorizeUrl.addEncodedQueryItem("oauth_callback", "oob");
+
+    QDesktopServices::openUrl(authorizeUrl);
+}
+
+/**
+ *  Gets access tokens for user entered pin number
+ *  @param pin entered pin number
+ */
+void OAuthTwitter::requestAccessToken(int pin)
+{
+    Q_ASSERT(m_netManager != 0);
+
+    QUrl url(TWITTER_ACCESS_TOKEN_URL);
+    url.addEncodedQueryItem("oauth_verifier", QByteArray::number(pin));
+
+    QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
+
+    QEventLoop q;
+    QTimer t;
+    t.setSingleShot(true);
+
+    connect(&t, SIGNAL(timeout()), &q, SLOT(quit()));
+
+    QNetworkRequest req(url);
+    req.setRawHeader(AUTH_HEADER, oauthHeader);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    QNetworkReply *reply = m_netManager->post(req, QByteArray());
+    connect(reply, SIGNAL(finished()), &q, SLOT(quit()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error()));
+
+    t.start(5000);
+    q.exec();
+
+    if(t.isActive()){
+        QByteArray response = reply->readAll();
+        parseTokens(response);
+        reply->deleteLater();
+    } else {
+        qDebug() << "Timeout";
+    }
+}
+
+/**
+ *  Override to show the authorization widget where users enters pin number
+ *  @return entered pin number by the user
+ */
+int OAuthTwitter::authorizationWidget()
+{
+    return 0;
 }
 
 void OAuthTwitter::sslErrors(const QList<QSslError> &errors)

@@ -74,6 +74,7 @@ void QTweetFriendshipCreate::create(qint64 userid,
 
     QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QByteArray postBody = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
     postBody.remove(0, 1);
@@ -113,6 +114,7 @@ void QTweetFriendshipCreate::create(const QString &screenName,
 
     QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QByteArray postBody = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
     postBody.remove(0, 1);
@@ -121,15 +123,9 @@ void QTweetFriendshipCreate::create(const QString &screenName,
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetFriendshipCreate::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetFriendshipCreate::parseJsonFinished(cJSON *root)
 {
-    if (ok) {
-        QTweetUser user = QTweetConvert::variantMapToUserInfo(json.toMap());
+    QTweetUser user = QTweetConvert::cJSONToUser(root);
 
-        emit parsedUser(user);
-    } else {
-        qDebug() << "QTweetFriendshipCreate parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
-    }
+    emit parsedUser(user);
 }

@@ -21,8 +21,6 @@
 #ifndef QTWEETUSERSTREAM_H
 #define QTWEETUSERSTREAM_H
 
-#define STREAM_LOGGER 1
-
 #include <QObject>
 #include <QNetworkReply>
 #include "qtweetlib_global.h"
@@ -38,6 +36,7 @@ class QAuthenticator;
 class QTimer;
 class QTweetStatus;
 class QTweetDMStatus;
+struct cJSON;
 
 /**
  *   Class for fetching user stream
@@ -91,15 +90,15 @@ public slots:
 private slots:
     void replyFinished();
     void replyReadyRead();
-    void replyTimeout();
-    void parsingFinished(const QVariant& json, bool ok, const QString& errorMsg);
-    void sslErrors(const QList<QSslError>& errors);
+    void replyTimeout();void sslErrors(const QList<QSslError>& errors);
+
 
 private:
     void parseStream(const QByteArray& );
-    void parseFriendsList(const QVariantMap& streamObject);
-    void parseDirectMessage(const QVariantMap& streamObject);
-    void parseDeleteStatus(const QVariantMap& streamObject);
+    void parsingFinished(cJSON *root);
+    void parseFriendsList(cJSON *root);
+    void parseDirectMessage(cJSON *root);
+    void parseDeleteStatus(cJSON *root);
 
     QByteArray m_cachedResponse;
     OAuthTwitter *m_oauthTwitter;
