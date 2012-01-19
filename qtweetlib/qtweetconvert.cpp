@@ -253,7 +253,7 @@ QTweetDMStatus QTweetConvert::cJSONToDirectMessage(cJSON *root)
         directMessage.setRecipient(recipient);
 
         directMessage.setRecipientId(cJSONGetInt64(root, "recipient_id"));
-        directMessage.setSenderId(cJSONGetID64(root, "sender_id"));
+        directMessage.setSenderId(cJSONGetInt64(root, "sender_id"));
     }
 
     return directMessage;
@@ -348,7 +348,10 @@ QTweetSearchPageResults QTweetConvert::cJSONToSearchPageResults(cJSON *root)
 
     if (root->type == cJSON_Object) {
         page.setMaxId(cJSONGetID(root, "max_id_str"));
-        page.setNextPage(cJSONGetByteArray(root, "next_page"));
+
+        if (cJSON_GetObjectItem(root, "next_page"))
+            page.setNextPage(cJSONGetByteArray(root, "next_page"));
+
         page.setPage(cJSONGetInt(root, "page"));
         page.setQuery(cJSONGetByteArray(root, "query"));
         page.setRefreshUrl(cJSONGetByteArray(root, "refresh_url"));
@@ -402,7 +405,7 @@ QTweetPlace QTweetConvert::cJSONToPlace(cJSON *root)
             place.setType(QTweetPlace::Neighborhood);   //twitter default
 
         cJSON *bboxObject = cJSON_GetObjectItem(root, "bounding_box");
-        if (bboxObject) {
+        if (bboxObject && bboxObject->type != cJSON_NULL) {
             QString type = cJSONGetString(bboxObject, "type");
 
             if (type == "Polygon") {
@@ -465,7 +468,7 @@ QTweetPlace QTweetConvert::cJSONToPlaceRecursive(cJSON *root)
             place.setType(QTweetPlace::Neighborhood);   //twitter default
 
         cJSON *bboxObject = cJSON_GetObjectItem(root, "bounding_box");
-        if (bboxObject) {
+        if (bboxObject && bboxObject->type != cJSON_NULL) {
             QString type = cJSONGetString(bboxObject, "type");
 
             if (type == "Polygon") {
