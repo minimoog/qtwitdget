@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TweetEntityListModel>("qtwitdget.components", 1, 0, "TweetEntityListModel");
 
     MainWindow mainWindow;
-    mainWindow.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    mainWindow.setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);
     mainWindow.setAttribute(Qt::WA_NoSystemBackground); //Symbian^3
     //mainWindow.setMainQmlFile(QLatin1String("qml/QTwitdget/main.qml"));
     mainWindow.show();
