@@ -18,6 +18,6 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
-#include <namsingleton.h>
+#include "namsingleton.h"
 
 NAMSingleton* NAMSingleton::m_namInstance = 0;
