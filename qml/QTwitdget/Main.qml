@@ -33,8 +33,49 @@ import com.nokia.meego 1.0
 PageStackWindow {
     id: appWindow
 
-    initialPage: PageTweetList {
+    initialPage: homePage
+
+    HomePage {
+        id: homePage
         model: hometimelineListModel
+
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-send-email"; onClicked: { pageStack.push(mentionsPage) } }
+            ToolIcon { iconId: "toolbar-new-message"; onClicked: { pageStack.push(directMessagesPage) } }
+            ToolIcon { iconId: "toolbar-search"; onClicked: { pageStack.push(searchPage) } }
+            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
+        }
+    }
+
+    MentionPage {
+        id: mentionsPage
+        model: mentionsListModel
+
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
+        }
+    }
+
+    DirectMessagesPage {
+        id: directMessagesPage
+        model: directMessagesListModel
+
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
+        }
+    }
+
+    SearchPage {
+        id: searchPage
+        model: searchListModel
+
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
+        }
     }
 
 //    Page {
