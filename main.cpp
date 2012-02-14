@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<TweetEntityListModel>("qtwitdget.components", 1, 0, "TweetEntityListModel");
 
     MainWindow mainWindow;
-    mainWindow.setMainQmlFile(QLatin1String("qml/QTwitdget/Main.qml"));
     mainWindow.startUp();
     mainWindow.showExpanded();
 

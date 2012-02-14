@@ -52,7 +52,7 @@ PageStackWindow {
         model: hometimelineListModel
 
         tools: ToolBarLayout {
-            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop() } }
+            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { hometimelineListModel.showNewTweets() } }
             ToolIcon { iconId: "toolbar-send-email"; onClicked: { pageStack.push(mentionsPage) } }
             ToolIcon { iconId: "toolbar-new-message"; onClicked: { pageStack.push(directMessagesPage) } }
             ToolIcon { iconId: "toolbar-search"; onClicked: { pageStack.push(searchPage) } }
@@ -66,6 +66,7 @@ PageStackWindow {
 
         tools: ToolBarLayout {
             ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { mentionsListModel.showNewTweets() } }
             ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
         }
     }
@@ -76,6 +77,7 @@ PageStackWindow {
 
         tools: ToolBarLayout {
             ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { directMessagesListModel.showNewTweets() } }
             ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
         }
     }
