@@ -50,7 +50,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
     m_oauthTwitter(new OAuthTwitter(this)),
-    m_userStream(new QTweetUserStream(this))
+    m_userStream(new QTweetUserStream(this)),
+    m_authed(false)
 {
     m_oauthTwitter->setNetworkAccessManager(NAMSingleton::instance()->qnam());
     m_userStream->setOAuthTwitter(m_oauthTwitter);

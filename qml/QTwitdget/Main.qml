@@ -33,14 +33,26 @@ import com.nokia.meego 1.0
 PageStackWindow {
     id: appWindow
 
-    initialPage: homePage
+    initialPage: authPage
+
+    Connections {
+        target: rootWindow
+        onAuthedChanged: {
+            if (rootWindow.authed)
+                pageStack.replace(homePage)
+        }
+    }
+
+    AuthPage {
+        id: authPage
+    }
 
     HomePage {
         id: homePage
         model: hometimelineListModel
 
         tools: ToolBarLayout {
-            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop() } }
             ToolIcon { iconId: "toolbar-send-email"; onClicked: { pageStack.push(mentionsPage) } }
             ToolIcon { iconId: "toolbar-new-message"; onClicked: { pageStack.push(directMessagesPage) } }
             ToolIcon { iconId: "toolbar-search"; onClicked: { pageStack.push(searchPage) } }
@@ -77,63 +89,4 @@ PageStackWindow {
             ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
         }
     }
-
-//    Page {
-//        id: mainPage
-//        orientationLock: PageOrientation.LockPortrait
-
-//        AuthScreen {
-//            id: authorizepage
-//            anchors.fill: parent
-//            opacity: 0
-
-//            onLoginClicked: {
-//                //if user clicks Login at the moment of auth, there are problems
-//                //### TODO disable somehow login button when doing auth process
-//                rootWindow.authorize(username, password);
-//            }
-//        }
-
-//        TimelinesScreen {
-//            id: timelines
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//            width: parent.width
-
-//            homeTimelineModel: hometimelineListModel
-//            mentionsModel: mentionsListModel
-//            directMessagesModel: directMessagesListModel
-//            searchModel: searchListModel
-//            conversationModel: conversationListModel
-//            username: rootWindow.userScreenName
-
-//            onSendClicked: rootWindow.updateButtonClicked(tweetid, text, screenname)
-//            onRetweet: rootWindow.retweet(tweetid)
-//        }
-
-//        states: [
-//            State {
-//                name: "authscreen"
-//                when: !rootWindow.authed
-//                PropertyChanges { target: timelines; x: appWindow.width }
-//                PropertyChanges { target: timelines; opacity: 0 }
-//                PropertyChanges { target: authorizepage; opacity: 1 }
-//            },
-
-//            State {
-//                name: "timelinesscreen"
-//                when:  rootWindow.authed
-//                StateChangeScript { script: authorizepage.clear() }
-//                PropertyChanges { target: timelines; x: 0 }
-//                PropertyChanges { target: timelines; opacity: 1 }
-//                PropertyChanges { target: authorizepage; opacity: 0 }
-//            }
-//        ]
-
-//        transitions: [
-//            Transition {
-//                PropertyAnimation { properties: "x"; duration: 250; target: timelines }
-//            }
-//        ]
-//    }
 }

@@ -31,22 +31,4 @@ Page {
             onAvatarClicked: container.avatarClicked(tweetScreenName)
         }
     }
-
-//    ToolBarLayout {
-//        id: buttonTools
-
-//        ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
-//        ToolIcon { iconId: "toolbar-send-email"
-//            onClicked: {
-//                pageStack.push(Qt.resolvedUrl('MentionPage.qml'), { model: mentionsListModel })
-//            }
-//        }
-//        ToolIcon { iconId: "toolbar-new-message"
-//            onClicked: {
-//                pageStack.push(Qt.resolvedUrl('DirectMessagesPage.qml'), {model: directMessagesListModel })
-//            }
-//        }
-//        ToolIcon { iconId: "toolbar-search"; onClicked: { console.debug('search') } }
-//        ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
-//    }
 }
