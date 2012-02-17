@@ -18,7 +18,7 @@
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
-import QtQuick 1.0
+import QtQuick 1.1
 
 Rectangle  {
     id: container
@@ -28,7 +28,6 @@ Rectangle  {
     property string tweetText
     property string tweetAvatar
     property string tweetSinceTime
-    property bool isOwnTweet: false
     property bool isNewTweet: false
 
     signal avatarClicked
@@ -36,15 +35,15 @@ Rectangle  {
 
     width: ListView.view.width;
     //width: 360;
-    height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
-    color: {
-        if (isNewTweet)
-            return (index % 2) ? '#ffd954' : '#ffb300'
-        else
-            return (index % 2) ? '#ffffff' : '#d9d9d9'
-    }
-
-    Behavior on color { ColorAnimation { easing.type: Easing.OutExpo; duration: 500 } }
+    //height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
+    height: 90
+    color: '#d9d9d9'
+//    color: {
+//        if (isNewTweet)
+//            return (index % 2) ? '#ffd954' : '#ffb300'
+//        else
+//            return (index % 2) ? '#ffffff' : '#d9d9d9'
+//    }
 
     Rectangle {
         id: avatarBackground
@@ -52,9 +51,9 @@ Rectangle  {
         height: 52
         color:  '#2bace2'
         anchors.top: parent.top
-        anchors.topMargin: 4
+        anchors.topMargin: 8
         anchors.left: parent.left
-        anchors.leftMargin: 4
+        anchors.leftMargin: 8
 
         Image {
             id: avatarImage
@@ -64,6 +63,7 @@ Rectangle  {
             sourceSize.height: 48
             anchors.centerIn: parent
             fillMode: Image.Stretch
+            source: tweetAvatar
         }
     }
 
@@ -71,25 +71,26 @@ Rectangle  {
         id: statusText
         color: "#333333"
         text: '<b>' + tweetScreenName + ':<\/b><br \/> ' + tweetText
-        anchors.topMargin: 0
         anchors.top: parent.top;
+        anchors.topMargin: 4
         anchors.right: parent.right
-        anchors.left: avatarBackground.right; anchors.leftMargin: 4
+        anchors.rightMargin: 8
+        anchors.left: avatarBackground.right; anchors.leftMargin: 8
         textFormat: Text.RichText
         wrapMode: "WordWrap"
-        font.family: "Segoe UI"
-        font.pointSize: 6
+        font.family: "Nokia Pure"
+        font.pixelSize: 18
     }
 
     Text {
         id: sinceText
         text: tweetSinceTime
         anchors.top: avatarBackground.bottom
-        anchors.leftMargin: 10
-        anchors.topMargin: 4
+        anchors.leftMargin: 8
+        anchors.topMargin: 8
         anchors.left: parent.left
-        font.family: "Segoe UI"
-        font.pointSize: 5
+        font.family: "Nokia Pure"
+        font.pixelSize: 14
     }
 
     MouseArea {
@@ -112,25 +113,5 @@ Rectangle  {
         anchors.right: avatarBackground.right
 
         onClicked: avatarClicked()
-    }
-
-    ListView.onAdd: SequentialAnimation {
-        ParallelAnimation {
-            PropertyAction { target: container; property: "height"; value:  0 }
-            PropertyAction { target: container; property: "x"; value: container.width }
-            PropertyAction { target: container; property: "opacity"; value: 0 }
-        }
-        NumberAnimation { target: container; property: "height"; easing.type: Easing.OutExpo; from: 0; to: (statusText.paintedHeight < 87) ? 95 : (statusText.paintedHeight + 4); duration: 500 }
-        PropertyAction { target: container; property: "opacity"; value: 1 }
-        PauseAnimation { duration: index * 20 }
-        NumberAnimation { target: container; property: "x"; easing.type: Easing.OutBack; to: 0; duration: 500 }
-        PropertyAction { target: avatarImage; property: "source"; value: tweetAvatar }
-    }
-
-    ListView.onRemove: SequentialAnimation {
-        PropertyAction { target: container; property: "ListView.delayRemove"; value: true }
-        NumberAnimation { target: container; property: "opacity"; to: 0; duration: 500 }
-        NumberAnimation { target: container; property: "height"; to: 0; duration: 500 }
-        PropertyAction { target: container; property: "ListView.delayRemove"; value: false }
     }
 }
