@@ -23,7 +23,6 @@ Page {
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
             tweetid:  statusIdRole
-            isOwnTweet: ownTweetRole
             isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
