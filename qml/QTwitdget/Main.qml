@@ -58,6 +58,10 @@ PageStackWindow {
             HomePage {
                 id: homeTab
                 model: hometimelineListModel
+
+                onTweetClicked: {
+                    appWindow.pageStack.push(Qt.resolvedUrl("TweetPage.qml"), { text: tweettext, tweetid: tweetid, screenname: screenname })
+                }
             }
 
             MentionPage {

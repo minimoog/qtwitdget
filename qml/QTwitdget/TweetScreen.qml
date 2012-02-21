@@ -131,9 +131,8 @@ Rectangle {
             width: view.width
             height: {
                 var numHorizontalCells = Math.floor(width / cellWidth);
-                console.log('hor: ' + numHorizontalCells);
                 var numVerticallCells = Math.ceil(entityModel.count / numHorizontalCells);
-                console.log('ver: ' + numVerticallCells);
+
                 return numVerticallCells * cellHeight;
             }
             cellWidth: 132
