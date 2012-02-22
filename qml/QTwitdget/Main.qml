@@ -62,6 +62,11 @@ PageStackWindow {
                 onTweetClicked: {
                     appWindow.pageStack.push(Qt.resolvedUrl("TweetPage.qml"), { text: tweettext, tweetid: tweetid, screenname: screenname })
                 }
+
+                onAvatarClicked: {
+                    userInfo.fetchByName(screenname)
+                    appWindow.pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"))
+                }
             }
 
             MentionPage {

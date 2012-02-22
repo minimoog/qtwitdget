@@ -39,6 +39,7 @@ Page {
             anchors.top: parent.top
 
             readOnly: true
+            font.pixelSize: 32
             text: container.text
             wrapMode: TextEdit.WordWrap
         }
