@@ -59,8 +59,6 @@ ConversationListModel::ConversationListModel(QObject *parent) :
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
     roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 }
@@ -74,8 +72,6 @@ ConversationListModel::ConversationListModel(OAuthTwitter *oauthTwitter, QObject
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
     roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 }

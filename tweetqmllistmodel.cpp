@@ -67,8 +67,6 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
     roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 }
@@ -88,8 +86,6 @@ TweetQmlListModel::TweetQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
     roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 

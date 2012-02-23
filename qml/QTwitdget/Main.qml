@@ -39,7 +39,7 @@ PageStackWindow {
         target: rootWindow
         onAuthedChanged: {
             if (rootWindow.authed)
-                pageStack.replace(timelines)
+                pageStack.replace(homePage)
         }
     }
 
@@ -47,96 +47,57 @@ PageStackWindow {
         id: authPage
     }
 
-    Page {
-        id: timelines
+    HomePage {
+        id: homePage
+        model: hometimelineListModel
 
-        TabGroup {
-            id: tabGroup
+        onTweetClicked: {
+            appWindow.pageStack.push(Qt.resolvedUrl("TweetPage.qml"), { text: tweettext, tweetid: tweetid, screenname: screenname })
+        }
 
-            currentTab: homeTab
-
-            HomePage {
-                id: homeTab
-                model: hometimelineListModel
-
-                onTweetClicked: {
-                    appWindow.pageStack.push(Qt.resolvedUrl("TweetPage.qml"), { text: tweettext, tweetid: tweetid, screenname: screenname })
-                }
-
-                onAvatarClicked: {
-                    userInfo.fetchByName(screenname)
-                    appWindow.pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"))
-                }
-            }
-
-            MentionPage {
-                id: mentionsTab
-                model: mentionsListModel
-            }
-
-            DirectMessagesPage {
-                id: dmTab
-                model: directMessagesListModel
-            }
-
-            SearchPage {
-                id: searchTab
-                model: searchListModel
-            }
+        onAvatarClicked: {
+            userInfo.fetchByName(screenname)
+            appWindow.pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"))
         }
 
         tools: ToolBarLayout {
-            ButtonRow {
-                TabButton { text: "tst"; tab: homeTab }
-                TabButton { text: "tst"; tab: mentionsTab }
-                TabButton { text: "tst"; tab: dmTab }
-                TabButton { text: "tst"; tab: searchTab }
-            }
+            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { hometimelineListModel.showNewTweets() } }
+            ToolIcon { iconId: "toolbar-send-email"; onClicked: { pageStack.push(mentionsPage) } }
+            ToolIcon { iconId: "toolbar-new-message"; onClicked: { pageStack.push(dmPage) } }
+            ToolIcon { iconId: "toolbar-search"; onClicked: { pageStack.push(searchPage) } }
+            ToolIcon { iconId: "toolbar-edit"; onClicked: { console.log('kejfoj') } }
         }
     }
 
-//    HomePage {
-//        id: homePage
-//        model: hometimelineListModel
+    MentionPage {
+        id: mentionsPage
+        model: mentionsListModel
 
-//        tools: ToolBarLayout {
-//            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { hometimelineListModel.showNewTweets() } }
-//            ToolIcon { iconId: "toolbar-send-email"; onClicked: { pageStack.push(mentionsPage) } }
-//            ToolIcon { iconId: "toolbar-new-message"; onClicked: { pageStack.push(directMessagesPage) } }
-//            ToolIcon { iconId: "toolbar-search"; onClicked: { pageStack.push(searchPage) } }
-//            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
-//        }
-//    }
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { mentionsListModel.showNewTweets() } }
+            ToolIcon { iconId: "toolbar-edit"; onClicked: console.debug('crap') }
+        }
+    }
 
-//    MentionPage {
-//        id: mentionsPage
-//        model: mentionsListModel
+    DirectMessagesPage {
+        id: dmPage
+        model: directMessagesListModel
 
-//        tools: ToolBarLayout {
-//            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
-//            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { mentionsListModel.showNewTweets() } }
-//            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
-//        }
-//    }
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { directMessagesListModel.showNewTweets() } }
+            ToolIcon { iconId: "toolbar-edit"; onClicked: console.debug('crap') }
+        }
+    }
 
-//    DirectMessagesPage {
-//        id: directMessagesPage
-//        model: directMessagesListModel
+    SearchPage {
+        id: searchPage
+        model: searchListModel
 
-//        tools: ToolBarLayout {
-//            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
-//            ToolIcon { iconId: "toolbar-refresh1"; onClicked: { directMessagesListModel.showNewTweets() } }
-//            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
-//        }
-//    }
-
-//    SearchPage {
-//        id: searchPage
-//        model: searchListModel
-
-//        tools: ToolBarLayout {
-//            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
-//            ToolIcon { iconId: "toolbar-view-menu"; onClicked: console.debug('crap') }
-//        }
-//    }
+        tools: ToolBarLayout {
+            ToolIcon { iconId: "toolbar-back"; onClicked: { pageStack.pop(); } }
+            ToolIcon { iconId: "toolbar-edit"; onClicked: console.debug('crap') }
+        }
+    }
 }

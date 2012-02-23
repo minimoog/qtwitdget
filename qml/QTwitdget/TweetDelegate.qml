@@ -28,7 +28,6 @@ Rectangle  {
     property string tweetText
     property string tweetAvatar
     property string tweetSinceTime
-    property bool isNewTweet: false
 
     signal avatarClicked
     signal tweetClicked
@@ -38,12 +37,6 @@ Rectangle  {
     //height: (statusText.paintedHeight < 87) ? 97 : (statusText.paintedHeight + 3)
     height: 90
     color: '#d9d9d9'
-//    color: {
-//        if (isNewTweet)
-//            return (index % 2) ? '#ffd954' : '#ffb300'
-//        else
-//            return (index % 2) ? '#ffffff' : '#d9d9d9'
-//    }
 
     Rectangle {
         id: avatarBackground

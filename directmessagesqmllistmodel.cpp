@@ -61,8 +61,6 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
     roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 }
@@ -80,8 +78,6 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(OAuthTwitter *oauthTwitte
     roles[StatusTextRole] = "statusTextRole";
     roles[AvatarUrlRole] = "avatarUrlRole";
     roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
     roles[SinceTimeRole] = "sinceTimeRole";
     setRoleNames(roles);
 

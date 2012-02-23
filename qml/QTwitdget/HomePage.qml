@@ -11,8 +11,6 @@ Page {
 
     //since time is not updated
 
-    //tools: buttonTools
-
     ListView {
         id: tweetListView
         anchors.fill: parent
@@ -23,7 +21,6 @@ Page {
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
             tweetid:  statusIdRole
-            isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)

@@ -21,7 +21,6 @@ Page {
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
             tweetid:  statusIdRole
-            isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
             onTweetClicked: container.tweetClicked(tweetid, tweetText, tweetScreenName)

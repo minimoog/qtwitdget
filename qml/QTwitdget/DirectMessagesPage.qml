@@ -17,7 +17,6 @@ Page {
             tweetText: statusTextRole
             tweetAvatar: avatarUrlRole
             tweetid:  statusIdRole
-            isNewTweet: newTweetRole
             tweetSinceTime: sinceTimeRole
 
             //onReplyButtonClicked: replyClicked(tweetScreenName)
