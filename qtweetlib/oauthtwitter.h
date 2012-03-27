@@ -24,23 +24,24 @@
 #include "oauth.h"
 
 class QNetworkAccessManager;
-class QSslError;
 
 /**
  *   OAuth Twitter authorization class
  */
 class QTWEETLIBSHARED_EXPORT OAuthTwitter : public OAuth
 {
-	Q_OBJECT
+    Q_OBJECT
     Q_PROPERTY(QNetworkAccessManager* networkAccessManager
                READ networkAccessManager
                WRITE setNetworkAccessManager)
 public:
-	OAuthTwitter(QObject *parent = 0);
+    OAuthTwitter(QObject *parent = 0);
     OAuthTwitter(QNetworkAccessManager* netManager, QObject *parent = 0);
-	void setNetworkAccessManager(QNetworkAccessManager* netManager);
-	QNetworkAccessManager* networkAccessManager() const;
+    OAuthTwitter(const QByteArray& consumerKey, const QByteArray& consumerSecret, QObject *parent = 0);
+    void setNetworkAccessManager(QNetworkAccessManager* netManager);
+    QNetworkAccessManager* networkAccessManager() const;
     void authorizeXAuth(const QString& username, const QString& password);
+    void authorizePin();
 
 signals:
     /** Emited when XAuth authorization is finished */
@@ -50,12 +51,16 @@ signals:
     // Sigh, bad documentation on errors in twitter api
     void authorizeXAuthError();
 
+protected:
+    virtual const QString authorizationWidget();
+    virtual void requestAuthorization();
+
 private slots:
     void finishedAuthorization();
-    void sslErrors(const QList<QSslError>& errors);
+    void requestAccessToken(const QString& pin);
 
 private:
-	QNetworkAccessManager *m_netManager;
+    QNetworkAccessManager *m_netManager;
 };	
 
 #endif //OAUTHTWITTER_H

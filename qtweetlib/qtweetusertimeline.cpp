@@ -26,12 +26,32 @@
 #include "qtweetconvert.h"
 
 QTweetUserTimeline::QTweetUserTimeline(QObject *parent) :
-    QTweetNetBase(parent)
+    QTweetNetBase(parent),
+    m_userid(0),
+    m_sinceid(0),
+    m_maxid(0),
+    m_count(0),
+    m_page(0),
+    m_trimUser(false),
+    m_includeRts(false),
+    m_includeEntities(false),
+    m_excludeReplies(false),
+    m_contributorDetails(false)
 {
 }
 
 QTweetUserTimeline::QTweetUserTimeline(OAuthTwitter *oauthTwitter, QObject *parent) :
-        QTweetNetBase(oauthTwitter, parent)
+    QTweetNetBase(oauthTwitter, parent),
+    m_userid(0),
+    m_sinceid(0),
+    m_maxid(0),
+    m_count(0),
+    m_page(0),
+    m_trimUser(false),
+    m_includeRts(false),
+    m_includeEntities(false),
+    m_excludeReplies(false),
+    m_contributorDetails(false)
 {
 }
 
@@ -46,6 +66,8 @@ QTweetUserTimeline::QTweetUserTimeline(OAuthTwitter *oauthTwitter, QObject *pare
  *   @param skipUser true to include only status authors numerical ID
  *   @param includeRts timeline contains native retweets if true
  *   @param includeEntities each tweet include node "entities"
+ *   @param excludeReplies true to prevent replies from appearing in the returned timeline
+ *   @param contributorDetails true to enhance the contributors element of the status response
  */
 void QTweetUserTimeline::fetch(qint64 userid,
                                const QString &screenName,
@@ -55,7 +77,9 @@ void QTweetUserTimeline::fetch(qint64 userid,
                                int page,
                                bool trimUser,
                                bool includeRts,
-                               bool includeEntities)
+                               bool includeEntities,
+                               bool excludeReplies,
+                               bool contributorDetails)
 {
     QUrl url("http://api.twitter.com/1/statuses/user_timeline.json");
 
@@ -86,6 +110,12 @@ void QTweetUserTimeline::fetch(qint64 userid,
     if (includeEntities)
         url.addQueryItem("include_entities", "true");
 
+    if (excludeReplies)
+        url.addQueryItem("exclude_replies", "true");
+
+    if (contributorDetails)
+        url.addQueryItem("contributor_details", "true");
+
     QNetworkRequest req(url);
 
     if (isAuthenticationEnabled()) {
@@ -95,6 +125,21 @@ void QTweetUserTimeline::fetch(qint64 userid,
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->get(req);
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
+}
+
+void QTweetUserTimeline::get()
+{
+    fetch(m_userid,
+          m_screenName,
+          m_sinceid,
+          m_maxid,
+          m_count,
+          m_page,
+          m_trimUser,
+          m_includeRts,
+          m_includeEntities,
+          m_excludeReplies,
+          m_contributorDetails);
 }
 
 void QTweetUserTimeline::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)

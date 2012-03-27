@@ -61,6 +61,7 @@ QTweetStatus QTweetConvert::variantMapToStatus(const QVariantMap &var)
     status.setId(var["id"].toLongLong());
     status.setInReplyToUserId(var["in_reply_to_user_id"].toLongLong());
     status.setInReplyToScreenName(var["in_reply_to_screen_name"].toString());
+    status.setFavorited(var["favorited"].toBool());
 
     QVariantMap userMap = var["user"].toMap();
     QTweetUser user = variantMapToUserInfo(userMap);
@@ -490,10 +491,14 @@ QList<QTweetPlace> QTweetConvert::variantToPlaceList(const QVariant& fromParser)
 
 QTweetEntityUrl QTweetConvert::variantMapToEntityUrl(const QVariantMap &var)
 {
+    QString url = var["url"].toString();
+    QString displayUrl = var["display_url"].toString();
+    QString expandedUrl = var["expanded_url"].toString();
+
     QTweetEntityUrl urlEntity;
-    urlEntity.setUrl(var["url"].toString());
-    urlEntity.setDisplayUrl(var["display_url"].toString());
-    urlEntity.setExpandedUrl(var["expanded_url"].toString());
+    urlEntity.setUrl(url);
+    urlEntity.setDisplayUrl(displayUrl);
+    urlEntity.setExpandedUrl(expandedUrl);
 
     return urlEntity;
 }
