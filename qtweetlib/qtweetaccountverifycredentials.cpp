@@ -24,6 +24,8 @@
 #include "qtweetaccountverifycredentials.h"
 #include "qtweetuser.h"
 #include "qtweetconvert.h"
+#include "json/qjsondocument.h"
+#include "json/qjsonobject.h"
 
 /**
  *  Constructor
@@ -54,7 +56,7 @@ void QTweetAccountVerifyCredentials::verify(bool includeEntities)
         return;
     }
 
-    QUrl url("https://api.twitter.com/1/account/verify_credentials.json");
+    QUrl url("http://api.twitter.com/1/account/verify_credentials.json");
 
     if (includeEntities)
         url.addQueryItem("include_entities", "true");
@@ -68,15 +70,11 @@ void QTweetAccountVerifyCredentials::verify(bool includeEntities)
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetAccountVerifyCredentials::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetAccountVerifyCredentials::parseJsonFinished(const QJsonDocument &jsonDoc)
 {
-    if (ok) {
-        QTweetUser user = QTweetConvert::variantMapToUserInfo(json.toMap());
+    if (jsonDoc.isObject()) {
+        QTweetUser user = QTweetConvert::jsonObjectToUser(jsonDoc.object());
 
         emit parsedUser(user);
-    } else {
-        qDebug() << "QTweetAccountVerifyCredentials parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
     }
 }

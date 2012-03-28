@@ -31,13 +31,6 @@ symbian:TARGET.UID3 = 0xEDDF745F
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    qjson/serializerrunnable.cpp \
-    qjson/serializer.cpp \
-    qjson/qobjecthelper.cpp \
-    qjson/parserrunnable.cpp \
-    qjson/parser.cpp \
-    qjson/json_scanner.cpp \
-    qjson/json_parser.cc \
     qtweetlib/qtweetuserstream.cpp \
     qtweetlib/qtweetuser.cpp \
     qtweetlib/qtweetstatusupdate.cpp \
@@ -80,29 +73,66 @@ SOURCES += main.cpp \
     qtweetlib/qtweetfavoritescreate.cpp \
     shorturlsitem.cpp \
     userlogins.cpp \
-    namsingleton.cpp
+    namsingleton.cpp \
+    qtweetlib/json/qjsonwriter.cpp \
+    qtweetlib/json/qjsonvalue.cpp \
+    qtweetlib/json/qjsonparser.cpp \
+    qtweetlib/json/qjsonobject.cpp \
+    qtweetlib/json/qjsondocument.cpp \
+    qtweetlib/json/qjsonarray.cpp \
+    qtweetlib/json/qjson.cpp \
+    qtweetlib/qtweetuserstatusesfriends.cpp \
+    qtweetlib/qtweetuserstatusesfollowers.cpp \
+    qtweetlib/qtweetusersearch.cpp \
+    qtweetlib/qtweetuserlookup.cpp \
+    qtweetlib/qtweetstatusretweets.cpp \
+    qtweetlib/qtweetstatusretweetedby.cpp \
+    qtweetlib/qtweetstatusretweetbyid.cpp \
+    qtweetlib/qtweetstatusretweet.cpp \
+    qtweetlib/qtweetretweettouser.cpp \
+    qtweetlib/qtweetretweettome.cpp \
+    qtweetlib/qtweetretweetsofme.cpp \
+    qtweetlib/qtweetretweetbyuser.cpp \
+    qtweetlib/qtweetretweetbyme.cpp \
+    qtweetlib/qtweetpublictimeline.cpp \
+    qtweetlib/qtweetlistupdate.cpp \
+    qtweetlib/qtweetlistunsubscribe.cpp \
+    qtweetlib/qtweetlistsubscriptions.cpp \
+    qtweetlib/qtweetlistsubscribers.cpp \
+    qtweetlib/qtweetlistsubscribe.cpp \
+    qtweetlib/qtweetliststatuses.cpp \
+    qtweetlib/qtweetlistshowlist.cpp \
+    qtweetlib/qtweetlistmemberships.cpp \
+    qtweetlib/qtweetlistgetmembers.cpp \
+    qtweetlib/qtweetlistgetlists.cpp \
+    qtweetlib/qtweetlistdeletemember.cpp \
+    qtweetlib/qtweetlistdeletelist.cpp \
+    qtweetlib/qtweetlistcreate.cpp \
+    qtweetlib/qtweetlistaddmember.cpp \
+    qtweetlib/qtweetgeosimilarplaces.cpp \
+    qtweetlib/qtweetgeosearch.cpp \
+    qtweetlib/qtweetgeoreversegeocode.cpp \
+    qtweetlib/qtweetgeoplaceid.cpp \
+    qtweetlib/qtweetgeoplacecreate.cpp \
+    qtweetlib/qtweetfriendstimeline.cpp \
+    qtweetlib/qtweetfriendsid.cpp \
+    qtweetlib/qtweetfollowersid.cpp \
+    qtweetlib/qtweetfavoritesdestroy.cpp \
+    qtweetlib/qtweetfavorites.cpp \
+    qtweetlib/qtweetdirectmessagessent.cpp \
+    qtweetlib/qtweetdirectmessagedestroy.cpp \
+    qtweetlib/qtweetblocksexists.cpp \
+    qtweetlib/qtweetblocksdestroy.cpp \
+    qtweetlib/qtweetblockscreate.cpp \
+    qtweetlib/qtweetblocksblockingids.cpp \
+    qtweetlib/qtweetblocksblocking.cpp \
+    qtweetlib/qtweetaccountratelimitstatus.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qjson/json_parser.yy
-
 HEADERS += \
-    qjson/stack.hh \
-    qjson/serializerrunnable.h \
-    qjson/serializer.h \
-    qjson/qobjecthelper.h \
-    qjson/qjson_export.h \
-    qjson/qjson_debug.h \
-    qjson/position.hh \
-    qjson/parserrunnable.h \
-    qjson/parser_p.h \
-    qjson/parser.h \
-    qjson/location.hh \
-    qjson/json_scanner.h \
-    qjson/json_parser.hh \
     qtweetlib/qtweetuserstream.h \
     qtweetlib/qtweetuser.h \
     qtweetlib/qtweetstatusupdate.h \
@@ -147,6 +177,60 @@ HEADERS += \
     shorturlsitem.h \
     userlogins.h \
     namsingleton.h \
-    namfactory.h
+    namfactory.h \
+    qtweetlib/json/qjsonwriter_p.h \
+    qtweetlib/json/qjsonvalue.h \
+    qtweetlib/json/qjsonparser_p.h \
+    qtweetlib/json/qjsonobject.h \
+    qtweetlib/json/qjsonexport.h \
+    qtweetlib/json/qjsondocument.h \
+    qtweetlib/json/qjsonarray.h \
+    qtweetlib/json/qjson_p.h \
+    qtweetlib/qtweetuserstatusesfriends.h \
+    qtweetlib/qtweetuserstatusesfollowers.h \
+    qtweetlib/qtweetusersearch.h \
+    qtweetlib/qtweetuserlookup.h \
+    qtweetlib/qtweetstatusretweets.h \
+    qtweetlib/qtweetstatusretweetedby.h \
+    qtweetlib/qtweetstatusretweetbyid.h \
+    qtweetlib/qtweetstatusretweet.h \
+    qtweetlib/qtweetretweettouser.h \
+    qtweetlib/qtweetretweettome.h \
+    qtweetlib/qtweetretweetsofme.h \
+    qtweetlib/qtweetretweetbyuser.h \
+    qtweetlib/qtweetretweetbyme.h \
+    qtweetlib/qtweetpublictimeline.h \
+    qtweetlib/qtweetlistupdate.h \
+    qtweetlib/qtweetlistunsubscribe.h \
+    qtweetlib/qtweetlistsubscriptions.h \
+    qtweetlib/qtweetlistsubscribers.h \
+    qtweetlib/qtweetlistsubscribe.h \
+    qtweetlib/qtweetliststatuses.h \
+    qtweetlib/qtweetlistshowlist.h \
+    qtweetlib/qtweetlistmemberships.h \
+    qtweetlib/qtweetlistgetmembers.h \
+    qtweetlib/qtweetlistgetlists.h \
+    qtweetlib/qtweetlistdeletemember.h \
+    qtweetlib/qtweetlistdeletelist.h \
+    qtweetlib/qtweetlistcreate.h \
+    qtweetlib/qtweetlistaddmember.h \
+    qtweetlib/qtweetgeosimilarplaces.h \
+    qtweetlib/qtweetgeosearch.h \
+    qtweetlib/qtweetgeoreversegeocode.h \
+    qtweetlib/qtweetgeoplaceid.h \
+    qtweetlib/qtweetgeoplacecreate.h \
+    qtweetlib/qtweetfriendstimeline.h \
+    qtweetlib/qtweetfriendsid.h \
+    qtweetlib/qtweetfollowersid.h \
+    qtweetlib/qtweetfavoritesdestroy.h \
+    qtweetlib/qtweetfavorites.h \
+    qtweetlib/qtweetdirectmessagessent.h \
+    qtweetlib/qtweetdirectmessagedestroy.h \
+    qtweetlib/qtweetblocksexists.h \
+    qtweetlib/qtweetblocksdestroy.h \
+    qtweetlib/qtweetblockscreate.h \
+    qtweetlib/qtweetblocksblockingids.h \
+    qtweetlib/qtweetblocksblocking.h \
+    qtweetlib/qtweetaccountratelimitstatus.h
 
 ICON = qtwitdget.icns
