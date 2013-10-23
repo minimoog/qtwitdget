@@ -1,4 +1,4 @@
-QT += network sql opengl
+QT += network sql declarative
 
 RESOURCES = qtwitdget.qrc
 win32:RC_FILE = qtwitdget.rc
@@ -9,7 +9,7 @@ folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
 # Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
+QML2_IMPORT_PATH =
 
 # Avoid auto screen rotation
 #DEFINES += ORIENTATIONLOCK
@@ -77,7 +77,7 @@ SOURCES += main.cpp \
     qtweetlib/qtweetstatusesshowid.cpp
 
 # Please do not modify the following two lines. Required for deployment.
-include(qmlapplicationviewer/qmlapplicationviewer.pri)
+include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES +=

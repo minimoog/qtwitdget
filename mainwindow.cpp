@@ -27,8 +27,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QSqlQuery>
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
+#include <QQmlContext>
 #include <QApplication>
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetuserstream.h"
@@ -48,8 +47,8 @@
 #include "userlogins.h"
 #include "namsingleton.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QmlApplicationViewer(parent),
+MainWindow::MainWindow(QWindow *parent) :
+    QtQuick2ApplicationViewer(parent),
     m_oauthTwitter(new OAuthTwitter(this)),
     m_userStream(new QTweetUserStream(this))
 {
@@ -62,8 +61,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_oauthTwitter, SIGNAL(authorizeXAuthError()), this, SLOT(authorizationFailed()));
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
-
-    setupTrayIcon();
 
     readSettings();
 
@@ -240,38 +237,6 @@ void MainWindow::statusUpdateFinished(const QTweetStatus &status)
     }
 }
 
-void MainWindow::setupTrayIcon()
-{
-    QAction *actionMinimize = new QAction(this);
-    actionMinimize->setText(tr("Minimize"));
-    connect(actionMinimize, SIGNAL(triggered()), this, SLOT(showMinimized()));
-
-    QAction *actionRestore = new QAction(this);
-    actionRestore->setText(tr("Restore"));
-    connect(actionRestore, SIGNAL(triggered()), this, SLOT(showNormal()));
-
-    QAction *actionQuit = new QAction(this);
-    actionQuit->setText("Quit");
-
-    QAction *actionLogout = new QAction(this);
-    actionLogout->setText("Logout");
-    connect(actionLogout, SIGNAL(triggered()), this, SLOT(changeUserPass()));
-
-    m_trayIconMenu = new QMenu(this);
-    m_trayIconMenu->addAction(actionMinimize);
-    m_trayIconMenu->addAction(actionRestore);
-    m_trayIconMenu->addSeparator();
-    m_trayIconMenu->addAction(actionLogout);
-    m_trayIconMenu->addAction(actionQuit);
-
-    m_trayIcon = new QSystemTrayIcon(this);
-    m_trayIcon->setIcon(QIcon(":/qtwidget_icon.ico"));
-    m_trayIcon->setContextMenu(m_trayIconMenu);
-    m_trayIcon->show();
-
-    connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-}
-
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     writeSettings();
@@ -404,12 +369,12 @@ void MainWindow::readSettings()
     QPoint pos = settings.value("pos", QPoint(200, 50)).toPoint();
     QSize size = settings.value("size", QSize(480, 880)).toSize();
     resize(size);
-    move(pos);
+    setPosition(pos);
 }
 
 void MainWindow::writeSettings()
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QTwitdget", "QTwitdget_2");
-    settings.setValue("pos", pos());
+    settings.setValue("pos", position());
     settings.setValue("size", size());
 }

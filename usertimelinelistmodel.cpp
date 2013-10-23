@@ -130,10 +130,8 @@ void UserTimelineListModel::fetch(const QString &screenname)
 {
     QTweetUserTimeline *userTimeline = new QTweetUserTimeline(m_oauthTwitter, this);
     userTimeline->fetch(0, screenname, 0, 0, 20);
-    connect(userTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
-            this, SLOT(finishedFetching(QList<QTweetStatus>)));
-    connect(userTimeline, SIGNAL(error(ErrorCode,QString)),
-            this, SLOT(errorFetching()));
+    connect(userTimeline, SIGNAL(statusList(QList<QTweetStatus>)), this, SLOT(finishedFetching(QList<QTweetStatus>)));
+    connect(userTimeline, SIGNAL(error(QTweetNetBase::ErrorCode,QString)), this, SLOT(errorFetching()));
 }
 
 /**

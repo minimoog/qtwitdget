@@ -23,7 +23,7 @@
 
 #include <QSqlDatabase>
 #include <QSystemTrayIcon>
-#include "qmlapplicationviewer.h"
+#include "qtquick2applicationviewer.h"
 
 class NetworkAccessManagerFactory;
 class OAuthTwitter;
@@ -40,13 +40,13 @@ class UserTimelineListModel;
 class ConversationListModel;
 class QMenu;
 
-class MainWindow : public QmlApplicationViewer
+class MainWindow : public QtQuick2ApplicationViewer
 {
     Q_OBJECT
     Q_PROPERTY(QString userScreenName READ userScreenName NOTIFY userScreenNameChanged)
     Q_PROPERTY(bool authed READ authed NOTIFY authedChanged)
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWindow *parent = 0);
     void startUp();
 
     Q_INVOKABLE void authorize(const QString& username, const QString& password);
@@ -72,7 +72,6 @@ protected:
     //void changeEvent(QEvent *e);
 
 private:
-    void setupTrayIcon();
     void createDatabase(const QString& databaseName);
     void updateCurrentPage();
     void createDeclarativeView();

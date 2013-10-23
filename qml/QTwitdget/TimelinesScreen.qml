@@ -3,7 +3,7 @@
 //UserInfoScreen properties should be exposed in Main.qml, too many properties
 //maybe later
 
-import QtQuick 1.0
+import QtQuick 2.0
 import 'timelinesScreenScripts.js' as StateFunctions
 
 Item {
