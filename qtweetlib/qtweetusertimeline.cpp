@@ -1,156 +1,73 @@
-/* Copyright (c) 2010, Antonie Jovanoski
- *
- * All rights reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
- *
- * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
- */
-
-#include <QtDebug>
+#include "qtweetusertimeline.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include "qtweetusertimeline.h"
+#include <QUrlQuery>
 #include "qtweetstatus.h"
 #include "qtweetconvert.h"
+#include <QJsonDocument>
+#include <QJsonArray>
 
-QTweetUserTimeline::QTweetUserTimeline(QObject *parent) :
-    QTweetNetBase(parent),
-    m_userid(0),
-    m_sinceid(0),
-    m_maxid(0),
-    m_count(0),
-    m_page(0),
-    m_trimUser(false),
-    m_includeRts(false),
-    m_includeEntities(false),
-    m_excludeReplies(false),
-    m_contributorDetails(false)
+QTweetUserTimeline::QTweetUserTimeline(QObject *parent) : QTweetNetBase(parent)
 {
 }
 
-QTweetUserTimeline::QTweetUserTimeline(OAuthTwitter *oauthTwitter, QObject *parent) :
-    QTweetNetBase(oauthTwitter, parent),
-    m_userid(0),
-    m_sinceid(0),
-    m_maxid(0),
-    m_count(0),
-    m_page(0),
-    m_trimUser(false),
-    m_includeRts(false),
-    m_includeEntities(false),
-    m_excludeReplies(false),
-    m_contributorDetails(false)
+QTweetUserTimeline::QTweetUserTimeline(OAuthTwitter *oauthTwitter, QObject *parent) : QTweetNetBase(oauthTwitter, parent)
 {
 }
 
-/**
- *   Starts fetching
- *   @param userid user ID
- *   @param screenName user screen name
- *   @param sinceid fetches tweets with ID greater (more recent) then sinceid
- *   @param maxid fetches tweets with ID less (older) then maxid
- *   @param count number of tweets to fetch (up to 200)
- *   @param page page number
- *   @param skipUser true to include only status authors numerical ID
- *   @param includeRts timeline contains native retweets if true
- *   @param includeEntities each tweet include node "entities"
- *   @param excludeReplies true to prevent replies from appearing in the returned timeline
- *   @param contributorDetails true to enhance the contributors element of the status response
- */
-void QTweetUserTimeline::fetch(qint64 userid,
-                               const QString &screenName,
-                               qint64 sinceid,
-                               qint64 maxid,
-                               int count,
-                               int page,
-                               bool trimUser,
-                               bool includeRts,
-                               bool includeEntities,
-                               bool excludeReplies,
-                               bool contributorDetails)
+void QTweetUserTimeline::fetch(qint64 user_id, const QString& screen_name, qint64 since_id, int count, qint64 max_id, bool trim_user, bool exclude_replies, bool contributor_details, bool include_rts)
 {
-    QUrl url("http://api.twitter.com/1/statuses/user_timeline.json");
+    if (!isAuthenticationEnabled()) {
+        qCritical("Needs authentication to be enabled");
+        return;
+    }
 
-    if (userid != 0)
-        url.addQueryItem("user_id", QString::number(userid));
+    QUrl url("https://api.twitter.com/1.1/statuses/user_timeline.json");
+    QUrlQuery urlQuery;
 
-    if (!screenName.isEmpty())
-        url.addQueryItem("screen_name", screenName);
+    if (user_id != 0)
+        urlQuery.addQueryItem("user_id", QString::number(user_id));
 
-    if (sinceid != 0)
-        url.addQueryItem("since_id", QString::number(sinceid));
+    if (!screen_name.isEmpty())
+        urlQuery.addQueryItem("screen_name", screen_name);
 
-    if (maxid != 0)
-        url.addQueryItem("max_id", QString::number(maxid));
+    if (since_id != 0)
+        urlQuery.addQueryItem("since_id", QString::number(since_id));
 
     if (count != 0)
-        url.addQueryItem("count", QString::number(count));
+        urlQuery.addQueryItem("count", QString::number(count));
 
-    if (page != 0)
-        url.addQueryItem("page", QString::number(page));
+    if (max_id != 0)
+        urlQuery.addQueryItem("max_id", QString::number(max_id));
 
-    if (trimUser)
-        url.addQueryItem("trim_user", "true");
+    if (trim_user)
+        urlQuery.addQueryItem("trim_user", "true");
 
-    if (includeRts)
-        url.addQueryItem("include_rts", "true");
+    if (exclude_replies)
+        urlQuery.addQueryItem("exclude_replies", "true");
 
-    if (includeEntities)
-        url.addQueryItem("include_entities", "true");
+    if (contributor_details)
+        urlQuery.addQueryItem("contributor_details", "true");
 
-    if (excludeReplies)
-        url.addQueryItem("exclude_replies", "true");
+    if (include_rts)
+        urlQuery.addQueryItem("include_rts", "true");
 
-    if (contributorDetails)
-        url.addQueryItem("contributor_details", "true");
+    url.setQuery(urlQuery);
 
     QNetworkRequest req(url);
 
-    if (isAuthenticationEnabled()) {
-        QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
-        req.setRawHeader(AUTH_HEADER, oauthHeader);
-    }
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
+    req.setRawHeader(AUTH_HEADER, oauthHeader);
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->get(req);
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetUserTimeline::get()
+void QTweetUserTimeline::parseJsonFinished(const QJsonDocument &jsonDoc)
 {
-    fetch(m_userid,
-          m_screenName,
-          m_sinceid,
-          m_maxid,
-          m_count,
-          m_page,
-          m_trimUser,
-          m_includeRts,
-          m_includeEntities,
-          m_excludeReplies,
-          m_contributorDetails);
-}
+    if (jsonDoc.isArray()) {
+        QList<QTweetStatus> statuses = QTweetConvert::jsonArrayToStatusList(jsonDoc.array());
 
-void QTweetUserTimeline::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
-{
-    if (ok) {
-        QList<QTweetStatus> statuses = QTweetConvert::variantToStatusList(json);
-
-        emit parsedStatuses(statuses);
-    } else {
-        qDebug() << "QTweetUserTimeline JSON parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
+        emit statusList(statuses);
     }
 }

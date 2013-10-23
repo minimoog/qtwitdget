@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -21,6 +18,7 @@
 #include "oauthtwitter.h"
 #include <QtDebug>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QNetworkReply>
 #include <QTimer>
 #include <QNetworkAccessManager>
@@ -87,9 +85,12 @@ void OAuthTwitter::authorizeXAuth(const QString &username, const QString &passwo
     Q_ASSERT(m_netManager != 0);
 
     QUrl url(TWITTER_ACCESS_TOKEN_XAUTH_URL);
-    url.addEncodedQueryItem("x_auth_username", username.toUtf8().toPercentEncoding());
-    url.addEncodedQueryItem("x_auth_password", password.toUtf8().toPercentEncoding());
-    url.addQueryItem("x_auth_mode", "client_auth");
+
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem("x_auth_username", username);
+    urlQuery.addQueryItem("x_auth_password", password);
+    urlQuery.addQueryItem("x_auth_mode", "client_auth");
+    url.setQuery(urlQuery);
 
     QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
 
@@ -159,24 +160,28 @@ void OAuthTwitter::authorizePin()
         reply->deleteLater();
         requestAuthorization();
 
-        const QString pin = authorizationWidget();
-        if (!pin.isEmpty()) {
-            requestAccessToken(pin);
-        }
     } else {
         qDebug() << "Timeout";
     }
 }
 
 /**
- *  Opens authorization url
+ *  Opens authorization url, this will open browser, Twitter will return PIN number
+ *  Please call with returned PIN to requestAccessToken slot to get access tokens
+ *
  *  @remarks Override if you want to show another browser
+ *
  */
 void OAuthTwitter::requestAuthorization()
 {
     QUrl authorizeUrl(TWITTER_AUTHORIZE_URL);
-    authorizeUrl.addEncodedQueryItem("oauth_token", oauthToken());
-    authorizeUrl.addEncodedQueryItem("oauth_callback", "oob");
+
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem("oauth_token", oauthToken());
+    urlQuery.addQueryItem("oauth_callback", "oob");
+    authorizeUrl.setQuery(urlQuery);
+
+    emit authorizePinFinished();
 
     QDesktopServices::openUrl(authorizeUrl);
 }
@@ -190,7 +195,10 @@ void OAuthTwitter::requestAccessToken(const QString& pin)
     Q_ASSERT(m_netManager != 0);
 
     QUrl url(TWITTER_ACCESS_TOKEN_URL);
-    url.addEncodedQueryItem("oauth_verifier", pin.toAscii()); 
+
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem("oauth_verifier", pin);
+    url.setQuery(urlQuery);
 
     QByteArray oauthHeader = generateAuthorizationHeader(url, OAuth::POST);
 
@@ -215,16 +223,9 @@ void OAuthTwitter::requestAccessToken(const QString& pin)
         QByteArray response = reply->readAll();
         parseTokens(response);
         reply->deleteLater();
+
+        emit accessTokenGranted();
     } else {
         qDebug() << "Timeout";
     }
-}
-
-/**
- *  Override to show the authorization widget where users enters pin number
- *  @return entered pin number by the user
- */
-const QString OAuthTwitter::authorizationWidget()
-{
-    return QString();
 }

@@ -54,6 +54,7 @@ public:
     void setOAuthTwitter(OAuthTwitter *oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QHash<int, QByteArray> roleNames() const;
     void setUserID(qint64 id);
 
     int numNewDirectMessages() const;
@@ -78,6 +79,7 @@ signals:
 private:   
     QList<QTweetDMStatus> m_directMessages;
     QList<QTweetDMStatus> m_newDirectMessages; //doesn't show in the model
+    QHash<int, QByteArray> m_roles;
     qint64 m_userid;
     int m_numNewDirectMessages;
     int m_numUnreadDirectMessages;

@@ -49,13 +49,11 @@ static QString SinceTimeString(const QDateTime& from)
 SearchQmlListModel::SearchQmlListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
-    roles[SinceTimeRole] = "sinceTimeRole";
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[StatusIdRole] = "statusIdRole";
-    setRoleNames(roles);
+    m_roles[SinceTimeRole] = "sinceTimeRole";
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[StatusIdRole] = "statusIdRole";
 }
 
 /**
@@ -64,13 +62,11 @@ SearchQmlListModel::SearchQmlListModel(QObject *parent) :
 SearchQmlListModel::SearchQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
     QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
-    roles[SinceTimeRole] = "sinceTimeRole";
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[StatusIdRole] = "statusIdRole";
-    setRoleNames(roles);
+    m_roles[SinceTimeRole] = "sinceTimeRole";
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[StatusIdRole] = "statusIdRole";
 
     m_oauthTwitter = oauthTwitter;
 }
@@ -115,6 +111,11 @@ QVariant SearchQmlListModel::data(const QModelIndex &index, int role) const
         return QString::number(searchResult.id());
 
     return QVariant();
+}
+
+QHash<int, QByteArray> SearchQmlListModel::roleNames() const
+{
+    return m_roles;
 }
 
 /**

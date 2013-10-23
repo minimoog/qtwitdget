@@ -25,8 +25,7 @@
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetuser.h"
-#include "qtweetlib/qtweetstatusshow.h"
-
+#include "qtweetlib/qtweetstatusesshowid.h"
 // ### TODO: Inheritance from TweetQmlListModel?
 
 static QString SinceTimeString(const QDateTime& from)
@@ -54,30 +53,26 @@ static QString SinceTimeString(const QDateTime& from)
 ConversationListModel::ConversationListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    setRoleNames(roles);
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusIdRole] = "statusIdRole";
+    m_roles[OwnTweetRole] = "ownTweetRole";
+    m_roles[NewTweetRole] = "newTweetRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
 }
 
 ConversationListModel::ConversationListModel(OAuthTwitter *oauthTwitter, QObject *parent) :
     QAbstractListModel(parent),
     m_oauthTwitter(oauthTwitter)
 {
-    QHash<int, QByteArray> roles;
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    setRoleNames(roles);
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusIdRole] = "statusIdRole";
+    m_roles[OwnTweetRole] = "ownTweetRole";
+    m_roles[NewTweetRole] = "newTweetRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
 }
 
 void ConversationListModel::setOAuthTwitter(OAuthTwitter *oauthTwitter)
@@ -133,6 +128,11 @@ QVariant ConversationListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+QHash<int, QByteArray> ConversationListModel::roleNames() const
+{
+    return m_roles;
+}
+
 /**
  *  Updates the converstaion tweet model
  *  @param statusID tweet id to follow conversation
@@ -170,7 +170,7 @@ void ConversationListModel::fetchConversation(qint64 statusID)
     if (status.id() == 0) {
         //not found in db
         //fetch from twitter
-        QTweetStatusShow *statusShow = new QTweetStatusShow(m_oauthTwitter);
+        QTweetStatusesShowId *statusShow = new QTweetStatusesShowId(m_oauthTwitter);
         statusShow->fetch(statusID);
         connect(statusShow, SIGNAL(parsedStatus(QTweetStatus)),
                 this, SLOT(onParsedStatus(QTweetStatus)));
@@ -224,7 +224,7 @@ QTweetStatus ConversationListModel::findInDatabase(qint64 id)
 
 void ConversationListModel::onParsedStatus(const QTweetStatus &status)
 {
-    QTweetStatusShow *statusShow = qobject_cast<QTweetStatusShow*>(sender());
+    QTweetStatusesShowId *statusShow = qobject_cast<QTweetStatusesShowId *>(sender());
 
     if (statusShow) {
         beginInsertRows(QModelIndex(), m_statuses.count(), m_statuses.count());

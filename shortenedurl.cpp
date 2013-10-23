@@ -21,6 +21,7 @@
 #include "shortenedurl.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
 #include "namsingleton.h"
 
 /**
@@ -38,11 +39,15 @@ ShortenedUrl::ShortenedUrl(QObject *parent)
 void ShortenedUrl::shortUrl(const QString &url)
 {
     //TODO: Add other services for shortening
-    QUrl urlService("http://api.bit.ly/v3/shorten");
-    urlService.addQueryItem("login", "minimoog");
-    urlService.addQueryItem("apiKey", "R_17b8dfb25efd629d31c8c8f93ea51b9e");
-    urlService.addQueryItem("longUrl", url);
-    urlService.addQueryItem("format", "txt");
+
+    QUrlQuery urlQuery("http://api.bit.ly/v3/shorten");
+    urlQuery.addQueryItem("login", "minimoog");
+    urlQuery.addQueryItem("apiKey", "R_17b8dfb25efd629d31c8c8f93ea51b9e");
+    urlQuery.addQueryItem("longUrl", url);
+    urlQuery.addQueryItem("format", "txt");
+
+    QUrl urlService;
+    urlService.setQuery(urlQuery);
 
     QNetworkRequest req(urlService);
 

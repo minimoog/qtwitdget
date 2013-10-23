@@ -24,6 +24,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 #include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 #include <QSqlQuery>
 #include <QDeclarativeContext>
@@ -46,7 +47,6 @@
 #include "conversationlistmodel.h"
 #include "userlogins.h"
 #include "namsingleton.h"
-#include "namfactory.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QmlApplicationViewer(parent),
@@ -66,8 +66,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setupTrayIcon();
 
     readSettings();
-
-    engine()->setNetworkAccessManagerFactory(new NAMFactory);
 
     createDeclarativeView();
 }
@@ -291,7 +289,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::createDatabase(const QString& databaseName)
 {
-    QString workdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+    QString workdir = QStandardPaths::displayName(QStandardPaths::DataLocation);
 
     QDir dir;
     dir.setPath(workdir);

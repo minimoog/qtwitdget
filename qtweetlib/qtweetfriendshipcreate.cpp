@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -21,9 +18,12 @@
 #include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
 #include "qtweetfriendshipcreate.h"
 #include "qtweetuser.h"
 #include "qtweetconvert.h"
+#include <QJsonDocument>
+#include "QJsonObject"
 
 /**
  *  Constructor
@@ -59,8 +59,8 @@ void QTweetFriendshipCreate::create(qint64 userid,
     }
 
     QUrl url("http://api.twitter.com/1/friendships/create.json");
-
-    QUrl urlQuery(url);
+    QUrl urlPost(url);
+    QUrlQuery urlQuery;
 
     urlQuery.addQueryItem("user_id", QString::number(userid));
 
@@ -70,13 +70,15 @@ void QTweetFriendshipCreate::create(qint64 userid,
     if (includeEntities)
         urlQuery.addQueryItem("include_entities", "true");
 
+    urlPost.setQuery(urlQuery);
+
     QNetworkRequest req(url);
 
-    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlPost, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    QByteArray postBody = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
+    QByteArray postBody = urlPost.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
     postBody.remove(0, 1);
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->post(req, postBody);
@@ -99,8 +101,8 @@ void QTweetFriendshipCreate::create(const QString &screenName,
     }
 
     QUrl url("http://api.twitter.com/1/friendships/create.json");
-
-    QUrl urlQuery(url);
+    QUrl urlPost(url);
+    QUrlQuery urlQuery;
 
     urlQuery.addQueryItem("screen_name", QUrl::toPercentEncoding(screenName));
 
@@ -110,28 +112,26 @@ void QTweetFriendshipCreate::create(const QString &screenName,
     if (includeEntities)
         urlQuery.addQueryItem("include_entities", "true");
 
+    urlPost.setQuery(urlQuery);
+
     QNetworkRequest req(url);
 
-    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlPost, OAuth::POST);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    QByteArray postBody = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
+    QByteArray postBody = urlPost.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
     postBody.remove(0, 1);
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->post(req, postBody);
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetFriendshipCreate::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetFriendshipCreate::parseJsonFinished(const QJsonDocument &jsonDoc)
 {
-    if (ok) {
-        QTweetUser user = QTweetConvert::variantMapToUserInfo(json.toMap());
+    if (jsonDoc.isObject()) {
+        QTweetUser user = QTweetConvert::jsonObjectToUser(jsonDoc.object());
 
         emit parsedUser(user);
-    } else {
-        qDebug() << "QTweetFriendshipCreate parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
     }
 }

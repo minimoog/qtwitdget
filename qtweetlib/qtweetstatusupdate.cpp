@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -21,10 +18,13 @@
 #include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
 #include "qtweetstatusupdate.h"
 #include "qtweetstatus.h"
 #include "qtweetgeocoord.h"
 #include "qtweetconvert.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 QTweetStatusUpdate::QTweetStatusUpdate(QObject *parent) :
     QTweetNetBase(parent)
@@ -57,11 +57,11 @@ void QTweetStatusUpdate::post(const QString &status,
         return;
     }
 
-    QUrl url("http://api.twitter.com/1/statuses/update.json");
+    QUrl url("https://api.twitter.com/1.1/statuses/update.json");
+    QUrl urlPost("https://api.twitter.com/1.1/statuses/update.json");
+    QUrlQuery urlQuery;
 
-    QUrl urlQuery("http://api.twitter.com/1/statuses/update.json");
-
-    urlQuery.addEncodedQueryItem("status", QUrl::toPercentEncoding(status));
+    urlQuery.addQueryItem("status", status);
 
     if (inReplyToStatus != 0)
         urlQuery.addQueryItem("in_reply_to_status_id", QString::number(inReplyToStatus));
@@ -83,13 +83,15 @@ void QTweetStatusUpdate::post(const QString &status,
     if (includeEntities)
         urlQuery.addQueryItem("include_entities", "true");
 
-    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlQuery, OAuth::POST);
+    urlPost.setQuery(urlQuery);
+
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(urlPost, OAuth::POST);
     QNetworkRequest req(url);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     //build status post array
-    QByteArray statusPost = urlQuery.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
+    QByteArray statusPost = urlPost.toEncoded(QUrl::RemoveScheme | QUrl::RemoveAuthority | QUrl::RemovePath);
 
     //remove '?'
     statusPost.remove(0, 1);
@@ -98,16 +100,12 @@ void QTweetStatusUpdate::post(const QString &status,
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetStatusUpdate::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetStatusUpdate::parseJsonFinished(const QJsonDocument &jsonDoc)
 {
-    if (ok) {
-        QTweetStatus status = QTweetConvert::variantMapToStatus(json.toMap());
+    if (jsonDoc.isObject()) {
+        QTweetStatus status = QTweetConvert::jsonObjectToStatus(jsonDoc.object());
 
         emit postedStatus(status);
-    } else {
-        qDebug() << "QTweetStatusUpdate JSON parser error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
     }
 }
 

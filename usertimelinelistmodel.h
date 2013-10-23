@@ -45,6 +45,7 @@ public:
     void setOAuthTwitter(OAuthTwitter *oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void fetch(qint64 userid);
     Q_INVOKABLE void fetch(const QString& screenname);
@@ -56,6 +57,7 @@ private slots:
 private:
     OAuthTwitter* m_oauthTwitter;
     QList<QTweetStatus> m_statuses;
+    QHash<int, QByteArray> m_roles;
 };
 
 #endif // USERTIMELINELISTMODEL_H

@@ -55,15 +55,13 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(QObject *parent) :
     m_numNewDirectMessages(0),
     m_numUnreadDirectMessages(0)
 {
-    QHash<int, QByteArray> roles;
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    setRoleNames(roles);
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusIdRole] = "statusIdRole";
+    m_roles[OwnTweetRole] = "ownTweetRole";
+    m_roles[NewTweetRole] = "newTweetRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
 }
 
 /**
@@ -74,15 +72,13 @@ DirectMessagesQmlListModel::DirectMessagesQmlListModel(OAuthTwitter *oauthTwitte
     m_numNewDirectMessages(0),
     m_numUnreadDirectMessages(0)
 {
-    QHash<int, QByteArray> roles;
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    setRoleNames(roles);
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusIdRole] = "statusIdRole";
+    m_roles[OwnTweetRole] = "ownTweetRole";
+    m_roles[NewTweetRole] = "newTweetRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
 
     m_oauthTwitter = oauthTwitter;
 }
@@ -133,6 +129,11 @@ QVariant DirectMessagesQmlListModel::data(const QModelIndex &index, int role) co
         return SinceTimeString(st.createdAt());
 
     return QVariant();
+}
+
+QHash<int, QByteArray> DirectMessagesQmlListModel::roleNames() const
+{
+    return m_roles;
 }
 
 /**

@@ -48,6 +48,7 @@ public:
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void startSearch(const QString& query);
 
@@ -57,6 +58,7 @@ private slots:
 private:
     OAuthTwitter *m_oauthTwitter;
     QTweetSearchPageResults m_searchPageResult;
+    QHash<int, QByteArray> m_roles;
 };
 
 #endif // SEARCHQMLLISTMODEL_H

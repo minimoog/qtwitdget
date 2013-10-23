@@ -24,7 +24,7 @@
 #include "qtweetlib/oauthtwitter.h"
 #include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetuser.h"
-#include "qtweetlib/qtweetstatusdestroy.h"
+#include "qtweetlib/qtweetstatusesdestroy.h"
 #include "tweetqmllistmodel.h"
 #include "qtweetlib/qtweetentityurl.h"
 #include "qtweetlib/qtweetentityusermentions.h"
@@ -61,15 +61,13 @@ TweetQmlListModel::TweetQmlListModel(QObject *parent) :
     m_numNewTweets(0),
     m_numUnreadTweets(0)
 {
-    QHash<int, QByteArray> roles;
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    setRoleNames(roles);
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusIdRole] = "statusIdRole";
+    m_roles[OwnTweetRole] = "ownTweetRole";
+    m_roles[NewTweetRole] = "newTweetRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
 }
 
 /**
@@ -82,17 +80,20 @@ TweetQmlListModel::TweetQmlListModel(OAuthTwitter *oauthTwitter, QObject *parent
     m_numNewTweets(0),
     m_numUnreadTweets(0)
 {
-    QHash<int, QByteArray> roles;
-    roles[ScreenNameRole] = "screenNameRole";
-    roles[StatusTextRole] = "statusTextRole";
-    roles[AvatarUrlRole] = "avatarUrlRole";
-    roles[StatusIdRole] = "statusIdRole";
-    roles[OwnTweetRole] = "ownTweetRole";
-    roles[NewTweetRole] = "newTweetRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    setRoleNames(roles);
-
     m_oauthTwitter = oauthTwitter;
+
+    m_roles[ScreenNameRole] = "screenNameRole";
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[AvatarUrlRole] = "avatarUrlRole";
+    m_roles[StatusIdRole] = "statusIdRole";
+    m_roles[OwnTweetRole] = "ownTweetRole";
+    m_roles[NewTweetRole] = "newTweetRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
+}
+
+QHash<int, QByteArray> TweetQmlListModel::roleNames() const
+{
+    return m_roles;
 }
 
 /**
@@ -175,9 +176,9 @@ void TweetQmlListModel::destroyTweet(const QString &tweetid)
     qint64 id = tweetid.toLongLong(&ok);
 
     if (ok) {
-        QTweetStatusDestroy *tweetDestroy = new QTweetStatusDestroy;
+        QTweetStatusesDestroy *tweetDestroy = new QTweetStatusesDestroy;
         tweetDestroy->setOAuthTwitter(m_oauthTwitter);
-        tweetDestroy->destroy(id);
+        tweetDestroy->fetch(id);
         connect(tweetDestroy, SIGNAL(deletedStatus(QTweetStatus)), this, SLOT(finishedDestroyTweet(QTweetStatus)));
     }
 }
@@ -189,7 +190,7 @@ void TweetQmlListModel::finishedDestroyTweet(const QTweetStatus& status)
 {
     qDebug() << "Finished destroying: " << status.id();
 
-    QTweetStatusDestroy *tweetDestroy = qobject_cast<QTweetStatusDestroy*>(sender());
+    QTweetStatusesDestroy *tweetDestroy = qobject_cast<QTweetStatusesDestroy*>(sender());
     if (tweetDestroy) {
         int i;
         for (i = 0; i < m_statuses.count(); ++i) {

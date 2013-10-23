@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -21,9 +18,12 @@
 #include <QtDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
 #include "qtweetsearch.h"
 #include "qtweetsearchpageresults.h"
 #include "qtweetconvert.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 QTweetSearch::QTweetSearch(QObject *parent) :
     QTweetNetBase(parent)
@@ -51,23 +51,26 @@ void QTweetSearch::start(const QString &query,
                          qint64 sinceid)
 {
     QUrl url("http://search.twitter.com/search.json");
+    QUrlQuery urlQuery;
 
-    url.addEncodedQueryItem("q", QUrl::toPercentEncoding(query));
+    urlQuery.addQueryItem("q", query);
 
     if (!lang.isEmpty())
-        url.addQueryItem("lang", lang);
+        urlQuery.addQueryItem("lang", lang);
 
     // if (!locale.isEmpty())
     //     url.addQueryItem("locale", locale);
 
     if (rpp)
-        url.addQueryItem("rpp", QString::number(rpp));
+        urlQuery.addQueryItem("rpp", QString::number(rpp));
 
     if (page)
-        url.addQueryItem("page", QString::number(page));
+        urlQuery.addQueryItem("page", QString::number(page));
 
     if (sinceid)
-        url.addQueryItem("since_id", QString::number(sinceid));
+        urlQuery.addQueryItem("since_id", QString::number(sinceid));
+
+    url.setQuery(urlQuery);
 
     QNetworkRequest req(url);
 
@@ -83,10 +86,9 @@ void QTweetSearch::start(const QString &query,
 void QTweetSearch::startWithCustomQuery(const QByteArray &encodedQuery)
 {
     QUrl url("http://search.twitter.com/search.json");
+    QUrlQuery urlQuery(encodedQuery);
 
-    //remove ?
-    QByteArray query(encodedQuery);
-    url.setEncodedQuery(query.remove(0, 1));
+    url.setQuery(urlQuery);
 
     QNetworkRequest req(url);
 
@@ -97,15 +99,11 @@ void QTweetSearch::startWithCustomQuery(const QByteArray &encodedQuery)
     connect(reply, SIGNAL(finished()), this, SLOT(reply()));
 }
 
-void QTweetSearch::parsingJsonFinished(const QVariant &json, bool ok, const QString &errorMsg)
+void QTweetSearch::parseJsonFinished(const QJsonDocument &jsonDoc)
 {
-    if (ok) {
-        QTweetSearchPageResults pageResults = QTweetConvert::variantToSearchPageResults(json);
+    if (jsonDoc.isObject()) {
+        QTweetSearchPageResults pageResults = QTweetConvert::jsonObjectToSearchPageResults(jsonDoc.object());
 
         emit parsedPageResults(pageResults);
-    } else {
-        qDebug() << "QTweetSearch parsing error: " << errorMsg;
-        setLastErrorMessage(errorMsg);
-        emit error(JsonParsingError, errorMsg);
     }
 }

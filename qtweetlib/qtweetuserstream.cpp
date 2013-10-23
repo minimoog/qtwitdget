@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -23,13 +20,15 @@
 #include <QAuthenticator>
 #include <QTimer>
 #include <QThreadPool>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include "oauthtwitter.h"
 #include "qtweetuserstream.h"
 #include "qtweetstatus.h"
 #include "qtweetdmstatus.h"
 #include "qtweetuser.h"
 #include "qtweetconvert.h"
-#include "qjson/parserrunnable.h"
 
 #define TWITTER_USERSTREAM_URL "https://userstream.twitter.com/2/user.json"
 
@@ -209,73 +208,63 @@ void QTweetUserStream::replyTimeout()
 
 void QTweetUserStream::parseStream(const QByteArray& data)
 {
-    QJson::ParserRunnable *jsonParser = new QJson::ParserRunnable();
-    jsonParser->setData(data);
-    connect(jsonParser, SIGNAL(parsingFinished(QVariant,bool,QString)),
-        this, SLOT(parsingFinished(QVariant,bool,QString)));
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
 
-    QThreadPool::globalInstance()->start(jsonParser);
-}
-
-void QTweetUserStream::parsingFinished(const QVariant &json, bool ok, const QString &errorMsg)
-{
-    if (!ok) {
-        qDebug() << "JSON parsing error: " << errorMsg;
-#ifdef STREAM_LOGGER
-        m_streamLog.write("***** JSON parsing error *****\n");
-#endif
-        return;
-    }
-
-    QVariantMap result = json.toMap();
-
-    //find it what stream element is
-    if (result.contains("friends")) {    //friends element
-        parseFriendsList(result);
-    } else if (result.contains("direct_message")) { //direct message element
-        parseDirectMessage(result);
-    } else if (result.contains("text")) {  //status element
-        QTweetStatus status = QTweetConvert::variantMapToStatus(result);
-        emit statusesStream(status);
-    } else if (result.contains("delete")) {
-        parseDeleteStatus(result);
+    if (jsonDoc.isObject()) {
+        if (jsonDoc.object().contains("friends"))
+            parseFriendsList(jsonDoc.object());
+        else if (jsonDoc.object().contains("direct_message"))
+            parseDirectMessage(jsonDoc.object());
+        else if (jsonDoc.object().contains("text")) {
+            QTweetStatus status = QTweetConvert::jsonObjectToStatus(jsonDoc.object());
+            emit statusesStream(status);
+        } else if (jsonDoc.object().contains("delete")) {
+            parseDeleteStatus(jsonDoc.object());
+        }
     }
 }
 
-void QTweetUserStream::parseFriendsList(const QVariantMap& streamObject)
+void QTweetUserStream::parseFriendsList(const QJsonObject& jsonObject)
 {
     QList<qint64> friends;
 
-    QVariantList friendsVarList = streamObject["friends"].toList();
+    QJsonValue jsonValue = jsonObject.value("friends");
 
-    foreach (const QVariant& idVar, friendsVarList)
-        friends.append(idVar.toLongLong());
+    if (jsonValue.isArray()) {
+        QJsonArray jsonArray = jsonValue.toArray();
 
-    emit friendsList(friends);
+        for (int i = 0; i < jsonArray.size(); ++i) {
+            friends.push_back(static_cast<qint64>(jsonArray.at(i).toDouble()));
+        }
+
+        emit friendsList(friends);
+    }
 }
 
-void QTweetUserStream::parseDirectMessage(const QVariantMap &streamObject)
+void QTweetUserStream::parseDirectMessage(const QJsonObject& json)
 {
-    QVariantMap directMessageVarMap = streamObject["direct_message"].toMap();
+    QJsonObject directMessageJson = json["direct_message"].toObject();
 
-    QTweetDMStatus directMessage = QTweetConvert::variantMapToDirectMessage(directMessageVarMap);
+    QTweetDMStatus directMessage = QTweetConvert::jsonObjectToDirectMessage(directMessageJson);
 
     emit directMessageStream(directMessage);
 }
 
-void QTweetUserStream::parseDeleteStatus(const QVariantMap &streamObject)
+void QTweetUserStream::parseDeleteStatus(const QJsonObject &json)
 {
-    QVariantMap deleteStatusVarMap = streamObject["delete"].toMap();
-    QVariantMap statusVarMap = deleteStatusVarMap["status"].toMap();
+    QJsonObject deleteStatusJson = json["delete"].toObject();
+    QJsonObject statusJson = deleteStatusJson["status"].toObject();
 
-    qint64 id = statusVarMap["id"].toLongLong();
-    qint64 userid = statusVarMap["user_id"].toLongLong();
+    qint64 id = static_cast<qint64>(statusJson["id"].toDouble());
+    qint64 userid = static_cast<qint64>(statusJson["user_id"].toDouble());
 
     emit deleteStatusStream(id, userid);
 }
 
 void QTweetUserStream::sslErrors(const QList<QSslError> &errors)
 {
+    Q_UNUSED(errors);
+
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
     if (reply) {

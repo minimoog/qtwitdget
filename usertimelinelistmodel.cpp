@@ -49,11 +49,9 @@ static QString SinceTimeString(const QDateTime& from)
 UserTimelineListModel::UserTimelineListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roles;
-    roles[StatusTextRole] = "statusTextRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    roles[StatusIdRole] = "statusIdRole";
-    setRoleNames(roles);
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
+    m_roles[StatusIdRole] = "statusIdRole";
 }
 
 /**
@@ -63,11 +61,9 @@ UserTimelineListModel::UserTimelineListModel(OAuthTwitter *oauthTwitter, QObject
     QAbstractListModel(parent),
     m_oauthTwitter(oauthTwitter)
 {
-    QHash<int, QByteArray> roles;
-    roles[StatusTextRole] = "statusTextRole";
-    roles[SinceTimeRole] = "sinceTimeRole";
-    roles[StatusIdRole] = "statusIdRole";
-    setRoleNames(roles);
+    m_roles[StatusTextRole] = "statusTextRole";
+    m_roles[SinceTimeRole] = "sinceTimeRole";
+    m_roles[StatusIdRole] = "statusIdRole";
 }
 
 /**
@@ -105,6 +101,11 @@ QVariant UserTimelineListModel::data(const QModelIndex &index, int role) const
         return QString::number(st.id());
 
     return QVariant();
+}
+
+QHash<int, QByteArray> UserTimelineListModel::roleNames() const
+{
+    return m_roles;
 }
 
 /**

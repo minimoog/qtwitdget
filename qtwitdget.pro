@@ -31,17 +31,9 @@ symbian:TARGET.UID3 = 0xEDDF745F
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    qjson/serializerrunnable.cpp \
-    qjson/serializer.cpp \
-    qjson/qobjecthelper.cpp \
-    qjson/parserrunnable.cpp \
-    qjson/parser.cpp \
-    qjson/json_scanner.cpp \
-    qjson/json_parser.cc \
     qtweetlib/qtweetuserstream.cpp \
     qtweetlib/qtweetuser.cpp \
     qtweetlib/qtweetstatusupdate.cpp \
-    qtweetlib/qtweetstatusdestroy.cpp \
     qtweetlib/qtweetstatus.cpp \
     qtweetlib/qtweetsearchresult.cpp \
     qtweetlib/qtweetsearchpageresults.cpp \
@@ -72,7 +64,6 @@ SOURCES += main.cpp \
     userinfo.cpp \
     qtweetlib/qtweetusertimeline.cpp \
     usertimelinelistmodel.cpp \
-    qtweetlib/qtweetstatusshow.cpp \
     conversationlistmodel.cpp \
     directmessagesqmllistmodel.cpp \
     qtweetlib/qtweetfriendshipdestroy.cpp \
@@ -80,33 +71,21 @@ SOURCES += main.cpp \
     qtweetlib/qtweetfavoritescreate.cpp \
     shorturlsitem.cpp \
     userlogins.cpp \
-    namsingleton.cpp
+    namsingleton.cpp \
+    qtweetlib/qtweetstatusesdestroy.cpp \
+    qtweetlib/qtweetentitymedia.cpp \
+    qtweetlib/qtweetstatusesshowid.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qjson/json_parser.yy
+OTHER_FILES +=
 
 HEADERS += \
-    qjson/stack.hh \
-    qjson/serializerrunnable.h \
-    qjson/serializer.h \
-    qjson/qobjecthelper.h \
-    qjson/qjson_export.h \
-    qjson/qjson_debug.h \
-    qjson/position.hh \
-    qjson/parserrunnable.h \
-    qjson/parser_p.h \
-    qjson/parser.h \
-    qjson/location.hh \
-    qjson/json_scanner.h \
-    qjson/json_parser.hh \
     qtweetlib/qtweetuserstream.h \
     qtweetlib/qtweetuser.h \
     qtweetlib/qtweetstatusupdate.h \
-    qtweetlib/qtweetstatusdestroy.h \
     qtweetlib/qtweetstatus.h \
     qtweetlib/qtweetsearchresult.h \
     qtweetlib/qtweetsearchpageresults.h \
@@ -139,7 +118,6 @@ HEADERS += \
     userinfo.h \
     qtweetlib/qtweetusertimeline.h \
     usertimelinelistmodel.h \
-    qtweetlib/qtweetstatusshow.h \
     conversationlistmodel.h \
     qtweetlib/qtweetfriendshipdestroy.h \
     qtweetlib/qtweetfriendshipcreate.h \
@@ -147,6 +125,8 @@ HEADERS += \
     shorturlsitem.h \
     userlogins.h \
     namsingleton.h \
-    namfactory.h
+    qtweetlib/qtweetstatusesdestroy.h \
+    qtweetlib/qtweetentitymedia.h \
+    qtweetlib/qtweetstatusesshowid.h
 
 ICON = qtwitdget.icns

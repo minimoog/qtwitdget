@@ -21,6 +21,7 @@
 #ifndef SHORTENEDURL_H
 #define SHORTENEDURL_H
  
+#include <QObject>
 #include <QUrl>
 
 /**

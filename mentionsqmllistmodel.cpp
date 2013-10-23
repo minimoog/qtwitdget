@@ -21,7 +21,7 @@
 #include <QtDebug>
 #include <QSqlQuery>
 #include <QDateTime>
-#include "qtweetlib/qtweetstatusdestroy.h"
+#include "qtweetlib/qtweetstatusesdestroy.h"
 #include "qtweetlib/qtweetstatus.h"
 #include "qtweetlib/qtweetuser.h"
 #include "qtweetlib/qtweetentityusermentions.h"

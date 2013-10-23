@@ -51,6 +51,7 @@ public:
     void setOAuthTwitter(OAuthTwitter* oauthTwitter);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QHash<int, QByteArray> roleNames() const;
     void setUserID(qint64 userid);
     qint64 userID() const;
     Q_INVOKABLE void destroyTweet(const QString& tweetid);
@@ -80,6 +81,7 @@ protected:
     OAuthTwitter* m_oauthTwitter;
     QList<QTweetStatus> m_statuses;
     QList<QTweetStatus> m_newStatuses; //doesn't show in the model
+    QHash<int, QByteArray> m_roles;
     int m_numNewTweets;
     int m_numUnreadTweets;
 

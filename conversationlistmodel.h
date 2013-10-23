@@ -50,6 +50,7 @@ public:
     void setUserID(qint64 userid);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() const;
 
     void followConversation(qint64 statusID);
     Q_INVOKABLE void followConversation(const QString& statusID);
@@ -64,6 +65,7 @@ private:
     OAuthTwitter* m_oauthTwitter;
     QList<QTweetStatus> m_statuses;
     qint64 m_userid;
+    QHash<int, QByteArray> m_roles;
 };
 
 #endif // CONVERSATIONLISTMODEL_H

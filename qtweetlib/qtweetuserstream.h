@@ -1,27 +1,22 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
 
 #ifndef QTWEETUSERSTREAM_H
 #define QTWEETUSERSTREAM_H
-
-#define STREAM_LOGGER 1
 
 #include <QObject>
 #include <QNetworkReply>
@@ -38,6 +33,7 @@ class QAuthenticator;
 class QTimer;
 class QTweetStatus;
 class QTweetDMStatus;
+class QJsonObject;
 
 /**
  *   Class for fetching user stream
@@ -92,14 +88,13 @@ private slots:
     void replyFinished();
     void replyReadyRead();
     void replyTimeout();
-    void parsingFinished(const QVariant& json, bool ok, const QString& errorMsg);
     void sslErrors(const QList<QSslError>& errors);
 
 private:
     void parseStream(const QByteArray& );
-    void parseFriendsList(const QVariantMap& streamObject);
-    void parseDirectMessage(const QVariantMap& streamObject);
-    void parseDeleteStatus(const QVariantMap& streamObject);
+    void parseFriendsList(const QJsonObject& streamObject);
+    void parseDirectMessage(const QJsonObject &json);
+    void parseDeleteStatus(const QJsonObject& json);
 
     QByteArray m_cachedResponse;
     OAuthTwitter *m_oauthTwitter;

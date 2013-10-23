@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -40,24 +37,28 @@ public:
     OAuthTwitter(const QByteArray& consumerKey, const QByteArray& consumerSecret, QObject *parent = 0);
     void setNetworkAccessManager(QNetworkAccessManager* netManager);
     QNetworkAccessManager* networkAccessManager() const;
-    void authorizeXAuth(const QString& username, const QString& password);
-    void authorizePin();
 
 signals:
     /** Emited when XAuth authorization is finished */
     void authorizeXAuthFinished();
+    /** Emited when pin authorization is finished. This is where user should enter PIN number */
+    void authorizePinFinished();
+    /** Emited when access token is taken after entering PIN. This means that we can use Twitter services */
+    void accessTokenGranted();
     /** Emited when there is error in XAuth authorization */
     // ### TODO Error detection
-    // Sigh, bad documentation on errors in twitter api
     void authorizeXAuthError();
 
+public slots:
+    void requestAccessToken(const QString& pin);
+    void authorizeXAuth(const QString& username, const QString& password);
+    void authorizePin();
+
 protected:
-    virtual const QString authorizationWidget();
     virtual void requestAuthorization();
 
 private slots:
     void finishedAuthorization();
-    void requestAccessToken(const QString& pin);
 
 private:
     QNetworkAccessManager *m_netManager;

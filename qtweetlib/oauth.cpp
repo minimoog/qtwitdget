@@ -1,19 +1,16 @@
-/* Copyright (c) 2010, Antonie Jovanoski
+/* Copyright 2010 Antonie Jovanoski
  *
- * All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * Contact e-mail: Antonie Jovanoski <minimoog77_at_gmail.com>
  */
@@ -22,6 +19,7 @@
 #include <QtAlgorithms>
 #include <QCryptographicHash>
 #include <QtDebug>
+#include <QUrlQuery>
 #include "oauth.h"
 
 #ifndef CONSUMER_KEY
@@ -119,8 +117,8 @@ static QByteArray generateNonce()
  */
 OAuth::OAuth(QObject *parent)
     : QObject(parent),
-      m_oauthConsumerKey(CONSUMER_KEY),
-      m_oauthConsumerSecret(CONSUMER_SECRET)
+      m_oauthConsumerSecret(CONSUMER_SECRET),
+      m_oauthConsumerKey(CONSUMER_KEY)
 {
     QDateTime current = QDateTime::currentDateTime();
     qsrand(current.toTime_t());
@@ -134,8 +132,8 @@ OAuth::OAuth(QObject *parent)
  */
 OAuth::OAuth(const QByteArray &consumerKey, const QByteArray &consumerSecret, QObject *parent)
     : QObject(parent),
-      m_oauthConsumerKey(consumerKey),
-      m_oauthConsumerSecret(consumerSecret)
+      m_oauthConsumerSecret(consumerSecret),
+      m_oauthConsumerKey(consumerKey)
 {
     QDateTime current = QDateTime::currentDateTime();
     qsrand(current.toTime_t());
@@ -149,13 +147,10 @@ OAuth::OAuth(const QByteArray &consumerKey, const QByteArray &consumerSecret, QO
 void OAuth::parseTokens(const QByteArray& response)
 {
     //OAuth spec 5.3, 6.1.2, 6.3.2
-    //use QUrl for parsing
-    QByteArray parseQuery("http://parse.com?");
+    QUrlQuery urlQuery(response);
 
-    QUrl parseUrl = QUrl::fromEncoded(parseQuery + response);
-
-    m_oauthToken = parseUrl.encodedQueryItemValue("oauth_token");
-    m_oauthTokenSecret = parseUrl.encodedQueryItemValue("oauth_token_secret");
+    m_oauthToken = urlQuery.queryItemValue("oauth_token").toLatin1();
+    m_oauthTokenSecret = urlQuery.queryItemValue("oauth_token_secret").toLatin1();
 }
 
 /**
@@ -230,35 +225,39 @@ QByteArray OAuth::generateSignatureHMACSHA1(const QByteArray& signatureBase)
  */
 QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, const QByteArray& timestamp, const QByteArray& nonce)
 {
+    // ### TODO: Return parameter should be QSTring
+
     //OAuth spec. 9.1 http://oauth.net/core/1.0/#anchor14
 
     //OAuth spec. 9.1.1
-    QList<QPair<QByteArray, QByteArray> > urlParameters = url.encodedQueryItems();
-    QList<QByteArray> normParameters;
+    QUrlQuery urlQuery(url);
 
-    QListIterator<QPair<QByteArray, QByteArray> > i(urlParameters);
+    QList<QPair<QString, QString> > urlParameters = urlQuery.queryItems();
+    QList<QString> normParameters;
+
+    QListIterator<QPair<QString, QString> > i(urlParameters);
     while(i.hasNext()){
-            QPair<QByteArray, QByteArray> queryItem = i.next();
-            QByteArray normItem = queryItem.first + '=' + queryItem.second;
+            QPair<QString, QString> queryItem = i.next();
+            QString normItem = queryItem.first + '=' + queryItem.second;
             normParameters.append(normItem);
     }
 
     //consumer key
-    normParameters.append(QByteArray("oauth_consumer_key=") + m_oauthConsumerKey);
+    normParameters.append("oauth_consumer_key=" + m_oauthConsumerKey);
 
     //token
     if(!m_oauthToken.isEmpty()){
-            normParameters.append(QByteArray("oauth_token=") + m_oauthToken);
+            normParameters.append("oauth_token=" + m_oauthToken);
     }
 
     //signature method, only HMAC_SHA1
-    normParameters.append(QByteArray("oauth_signature_method=HMAC-SHA1"));
+    normParameters.append("oauth_signature_method=HMAC-SHA1");
     //time stamp
-    normParameters.append(QByteArray("oauth_timestamp=") + timestamp);
+    normParameters.append("oauth_timestamp=" + timestamp);
     //nonce
-    normParameters.append(QByteArray("oauth_nonce=") + nonce);
+    normParameters.append("oauth_nonce=" + nonce);
     //version
-    normParameters.append(QByteArray("oauth_version=1.0"));
+    normParameters.append("oauth_version=1.0");
 
     //OAuth spec. 9.1.1.1
     qSort(normParameters);
@@ -272,10 +271,10 @@ QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, cons
     //}
     //normString.chop(1);
 
-    QByteArray normString;
-    QListIterator<QByteArray> j(normParameters);
+    QString normString;
+    QListIterator<QString> j(normParameters);
     while (j.hasNext()) {
-        normString += j.next().toPercentEncoding();
+        normString += j.next().toLatin1().toPercentEncoding();
         normString += "%26";
     }
     normString.chop(3);
@@ -284,9 +283,9 @@ QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, cons
     QString urlScheme = url.scheme();
     QString urlPath = url.path();
     QString urlHost = url.host();
-    QByteArray normUrl = urlScheme.toUtf8() + "://" + urlHost.toUtf8() + urlPath.toUtf8();
+    QString normUrl = urlScheme.toUtf8() + "://" + urlHost.toUtf8() + urlPath.toUtf8();
 
-    QByteArray httpm;
+    QString httpm;
 
     switch (method)
     {
@@ -305,7 +304,7 @@ QByteArray OAuth::generateSignatureBase(const QUrl& url, HttpMethod method, cons
     }
 
     //OAuth spec. 9.1.3
-    return httpm + '&' + normUrl.toPercentEncoding() + '&' + normString;
+    return httpm.toLatin1() + '&' + normUrl.toLatin1().toPercentEncoding() + '&' + normString.toLatin1();
 }
 
 /**
