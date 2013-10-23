@@ -165,10 +165,8 @@ void MentionsQmlListModel::fetchLastTweets()
 
     mentions->fetch(lastMentionID, 0, 200);
 
-    connect(mentions, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
-            this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
-    connect(mentions, SIGNAL(error(ErrorCode,QString)),
-            this, SLOT(errorFetchingTweets()));
+    connect(mentions, SIGNAL(statusList(QList<QTweetStatus>)), this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
+    connect(mentions, SIGNAL(error(QTweetNetBase::ErrorCode,QString)), this, SLOT(errorFetchingTweets()));
 }
 
 /**

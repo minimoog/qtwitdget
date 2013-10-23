@@ -403,10 +403,8 @@ void TweetQmlListModel::fetchLastTweets()
     QTweetHomeTimeline *homeTimeline = new QTweetHomeTimeline(m_oauthTwitter);
     homeTimeline->fetch(lastTweetID, 0, 200);
 
-    connect(homeTimeline, SIGNAL(parsedStatuses(QList<QTweetStatus>)),
-            this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
-    connect(homeTimeline, SIGNAL(error(ErrorCode,QString)),
-            this, SLOT(errorFetchingTweets()));
+    connect(homeTimeline, SIGNAL(statusList(QList<QTweetStatus>)), this, SLOT(finishedFetchTweets(QList<QTweetStatus>)));
+    connect(homeTimeline, SIGNAL(error(QTweetNetBase::ErrorCode,QString)), this, SLOT(errorFetchingTweets()));
 }
 
 /**
