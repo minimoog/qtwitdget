@@ -90,65 +90,55 @@ Item {
             onRetweetClicked: doRetweet(text, screenname)
             onConversationClicked: StateFunctions.showConversation(id)
         }
-    }
 
-    UserInfoScreen {
-        id: userinformation
-        opacity: 0
-        width: parent.width
-        anchors.top: topToolbar.bottom
-        anchors.bottom: bottomToolbar.top
+        UserInfoScreen {
+            id: userinformation
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        //should be exposed in Main.qml
-        avatar: userInfo.avatarUrl
-        screenname: userInfo.screenName
-        name: userInfo.name
-        url: userInfo.url
-        location: userInfo.location
-        description: userInfo.description
-        numTweets: userInfo.numTweets
-        numFollowers: userInfo.numFollowers
-        numFollowing: userInfo.numFollowing
-        numFavorites: userInfo.numFavorites
-        isFriend: userInfo.isFriend
-        model: userTimelineListModel
+            //should be exposed in Main.qml
+            avatar: userInfo.avatarUrl
+            screenname: userInfo.screenName
+            name: userInfo.name
+            url: userInfo.url
+            location: userInfo.location
+            description: userInfo.description
+            numTweets: userInfo.numTweets
+            numFollowers: userInfo.numFollowers
+            numFollowing: userInfo.numFollowing
+            numFavorites: userInfo.numFavorites
+            isFriend: userInfo.isFriend
+            model: userTimelineListModel
 
-        Behavior on opacity {
-            NumberAnimation { duration: 500 }
+            onConversationButtonClicked: StateFunctions.showConversation(id)
+            onRetweetButtonClicked: doRetweet(text, name)
+            onReplyButtonClicked: doReply(id, name, text)
+            onHashtagLinkClicked: StateFunctions.searchHashtag(hashtag)
+            onMentionLinkClicked: StateFunctions.showUser(screenname)
+
+            onMessageButtonClicked: {
+                tweetUpdate.setDirectMessage(screenname)
+                tweetUpdate.state = 'show'
+            }
+
+            onFollowButtonClicked: userInfo.followUser(screenname)
+            onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
+            onFavoriteButtonClicked: userInfo.createFavorite(statusid)
         }
 
-        onConversationButtonClicked: StateFunctions.showConversation(id)
-        onRetweetButtonClicked: doRetweet(text, name)
-        onReplyButtonClicked: doReply(id, name, text)
-        onHashtagLinkClicked: StateFunctions.searchHashtag(hashtag)
-        onMentionLinkClicked: StateFunctions.showUser(screenname)
+        TweetList {
+            id: conversationList
+            width: parent.width
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        onMessageButtonClicked: {
-            tweetUpdate.setDirectMessage(screenname)
-            tweetUpdate.state = 'show'
+            onMoreClicked: StateFunctions.showUser(screenname)
+            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
+            onReplyClicked: doReply(id, screenname, tweettext)
+            onRetweetClicked: doRetweet(text, screenname)
+            // ### todo conversation
         }
-
-        onFollowButtonClicked: userInfo.followUser(screenname)
-        onUnfollowButtonClicked: userInfo.unfollowUser(screenname)
-        onFavoriteButtonClicked: userInfo.createFavorite(statusid)
-    }
-
-    TweetList {
-        id: conversationList
-        opacity: 0
-        width: parent.width
-        anchors.top: topToolbar.bottom
-        anchors.bottom: bottomToolbar.top
-
-        Behavior on opacity {
-            NumberAnimation { duration: 500 }
-        }
-
-        onMoreClicked: StateFunctions.showUser(screenname)
-        onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-        onReplyClicked: doReply(id, screenname, tweettext)
-        onRetweetClicked: doRetweet(text, screenname)
-        // ### todo conversation
     }
 
     StatusUpdate {
@@ -380,7 +370,7 @@ Item {
         },
         State {
             name: "userinfo"
-            PropertyChanges { target: userinformation; opacity: 1}
+            PropertyChanges { target: rowTimelines; x: - 4 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
@@ -388,7 +378,7 @@ Item {
         },
         State {
             name: "conversation"
-            PropertyChanges { target: conversationList; opacity: 1 }
+            PropertyChanges { target: rowTimelines; x: - 5 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }

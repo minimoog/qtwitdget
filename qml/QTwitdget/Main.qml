@@ -50,6 +50,7 @@ Item {
             PropertyChanges { target: timelines; x: mainview.width }
             PropertyChanges { target: timelines; opacity: 0 }
             PropertyChanges { target: authorizepage; opacity: 1 }
+            PropertyChanges { target: authorizepage; visible: true }
         },
 
         State {
@@ -59,6 +60,7 @@ Item {
             PropertyChanges { target: timelines; x: 0 }
             PropertyChanges { target: timelines; opacity: 1 }
             PropertyChanges { target: authorizepage; opacity: 0 }
+            PropertyChanges { target: authorizepage; visible: false }
         }
     ]
 
