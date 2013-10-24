@@ -65,7 +65,6 @@ SOURCES += main.cpp \
     qtweetlib/qtweetusertimeline.cpp \
     usertimelinelistmodel.cpp \
     conversationlistmodel.cpp \
-    directmessagesqmllistmodel.cpp \
     qtweetlib/qtweetfriendshipdestroy.cpp \
     qtweetlib/qtweetfriendshipcreate.cpp \
     qtweetlib/qtweetfavoritescreate.cpp \
@@ -110,7 +109,6 @@ HEADERS += \
     tweetqmllistmodel.h \
     shortenedurl.h \
     mentionsqmllistmodel.h \
-    directmessagesqmllistmodel.h \
     mainwindow.h \
     qtweetlib/qtweetsearch.h \
     searchqmllistmodel.h \

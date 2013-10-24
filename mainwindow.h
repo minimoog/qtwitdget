@@ -33,7 +33,6 @@ class QTweetDMStatus;
 class QTweetStatus;
 class TweetQmlListModel;
 class MentionsQmlListModel;
-class DirectMessagesQmlListModel;
 class SearchQmlListModel;
 class UserInfo;
 class UserTimelineListModel;
@@ -83,7 +82,6 @@ private:
 
     TweetQmlListModel* m_tweetListModel;
     MentionsQmlListModel* m_mentionsListModel;
-    DirectMessagesQmlListModel *m_directMessagesListModel;
     SearchQmlListModel *m_searchListModel;
     UserTimelineListModel *m_userTimelineListModel;
     UserInfo *m_userInfo;

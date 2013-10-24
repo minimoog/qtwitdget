@@ -9,7 +9,6 @@ import 'timelinesScreenScripts.js' as StateFunctions
 Item {
     property alias homeTimelineModel: homeTimelineList.model
     property alias mentionsModel: mentionsList.model
-    property alias directMessagesModel: dmList.model
     property alias searchModel: searchResultList.model
     property alias conversationModel: conversationList.model
     property string username
@@ -18,8 +17,6 @@ Item {
     signal sendClicked(string tweetid, string text, string screenname)
 
     id: timelines
-
-    //width: 360; height: 640
 
     function doReply(id, name, text) {
         tweetUpdate.setReply(id, name, text)
@@ -39,7 +36,7 @@ Item {
 
         TweetList {
             id: homeTimelineList
-            width: parent.width
+            width: 360
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
@@ -52,7 +49,7 @@ Item {
 
         TweetList {
             id: mentionsList
-            width: parent.width
+            width: 360
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
@@ -63,24 +60,9 @@ Item {
             onConversationClicked: StateFunctions.showConversation(id)
         }
 
-        TweetList {
-            id: dmList
-            width: parent.width
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            //anchors.left: mentionsList.right
-
-            onMoreClicked: StateFunctions.showUser(screenname)
-            onHashtagClicked: StateFunctions.searchHashtag(hashtag)
-            onReplyClicked: {
-                tweetUpdate.setDirectMessage(screenname)
-                tweetUpdate.state = 'show'
-            }
-        }
-
         SearchList {
             id: searchResultList
-            width: parent.width
+            width: 360
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
@@ -93,7 +75,7 @@ Item {
 
         UserInfoScreen {
             id: userinformation
-            width: parent.width
+            width: 360
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
@@ -129,7 +111,7 @@ Item {
 
         TweetList {
             id: conversationList
-            width: parent.width
+            width: 360
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
@@ -346,7 +328,6 @@ Item {
     states: [
         State {
             name: "mentions"
-            PropertyChanges { target: rowTimelines; x: - rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: true }
             PropertyChanges { target: directMessagesButton; toggled: false }
@@ -354,7 +335,6 @@ Item {
         },
         State {
             name: "directMessages"
-            PropertyChanges { target: rowTimelines; x: - 2 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: true }
@@ -362,7 +342,6 @@ Item {
         },
         State {
             name: "search"
-            PropertyChanges { target: rowTimelines; x: - 3 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
@@ -370,7 +349,6 @@ Item {
         },
         State {
             name: "userinfo"
-            PropertyChanges { target: rowTimelines; x: - 4 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }
@@ -378,7 +356,6 @@ Item {
         },
         State {
             name: "conversation"
-            PropertyChanges { target: rowTimelines; x: - 5 * rowTimelines.width }
             PropertyChanges { target: homeTimelineButton; toggled: false }
             PropertyChanges { target: mentionsButton; toggled: false }
             PropertyChanges { target: directMessagesButton; toggled: false }

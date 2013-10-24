@@ -39,7 +39,6 @@
 #include "qtweetlib/qtweetstatus.h"
 #include "tweetqmllistmodel.h"
 #include "mentionsqmllistmodel.h"
-#include "directmessagesqmllistmodel.h"
 #include "searchqmllistmodel.h"
 #include "userinfo.h"
 #include "usertimelinelistmodel.h"
@@ -127,8 +126,6 @@ void MainWindow::changeUserPass()
     m_userStream->streamDisconnect();
     m_tweetListModel->clear();
     m_mentionsListModel->clear();
-    m_directMessagesListModel->clear();
-
     // ### TODO Clear tokens in .ini?
 }
 
@@ -162,18 +159,15 @@ void MainWindow::startUp()
         //set user id in the models
         m_tweetListModel->setUserID(m_userId);
         m_mentionsListModel->setUserID(m_userId);
-        m_directMessagesListModel->setUserID(m_userId);
         m_conversationListModel->setUserID(m_userId);
 
         //show last tweets from database
         m_tweetListModel->loadTweetsFromDatabase();
         m_mentionsListModel->loadTweetsFromDatabase();
-        m_directMessagesListModel->loadTweetsFromDatabase();
 
         //then fetch last 200 tweets
         m_tweetListModel->fetchLastTweets();
         m_mentionsListModel->fetchLastTweets();
-        m_directMessagesListModel->fetchLastTweets();
 
         m_userStream->startFetching();
 
@@ -325,10 +319,6 @@ void MainWindow::createDeclarativeView()
     connect(m_userStream, SIGNAL(reconnected()),
             m_mentionsListModel, SLOT(fetchLastTweets()));
 
-    m_directMessagesListModel = new DirectMessagesQmlListModel(m_oauthTwitter);
-    connect(m_userStream, SIGNAL(directMessageStream(QTweetDMStatus)),
-            m_directMessagesListModel, SLOT(onDirectMessageStream(QTweetDMStatus)));
-
     m_searchListModel = new SearchQmlListModel(m_oauthTwitter);
 
     m_userInfo = new UserInfo;
@@ -342,7 +332,6 @@ void MainWindow::createDeclarativeView()
 
     rootContext()->setContextProperty("hometimelineListModel", m_tweetListModel);
     rootContext()->setContextProperty("mentionsListModel", m_mentionsListModel);
-    rootContext()->setContextProperty("directMessagesListModel", m_directMessagesListModel);
     rootContext()->setContextProperty("searchListModel", m_searchListModel);
     rootContext()->setContextProperty("userInfo", m_userInfo);
     rootContext()->setContextProperty("userTimelineListModel", m_userTimelineListModel);

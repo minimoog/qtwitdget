@@ -99,7 +99,6 @@ function showDirectMessages() {
         stateStack.push(stateSlot);
     }
 
-    dmList.model.showNewTweets();
     timelines.state = 'directMessages';
 }
 

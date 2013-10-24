@@ -35,7 +35,6 @@ Item {
 
         homeTimelineModel: hometimelineListModel
         mentionsModel: mentionsListModel
-        directMessagesModel: directMessagesListModel
         searchModel: searchListModel
         conversationModel: conversationListModel
         username: rootWindow.userScreenName
